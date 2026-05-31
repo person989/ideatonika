@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справочник формул • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .main-container {
+            max-width: 1100px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #c0b090;
+            font-style: italic;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #5d4a3a;
+            padding-bottom: 1rem;
+        }
+        .section {
+            margin-top: 2.5rem;
+        }
+        .section-title {
+            font-size: 1.8rem;
+            color: #e3b87c;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #e3b87c;
+            padding-left: 1rem;
+        }
+        .subsection-title {
+            font-size: 1.3rem;
+            color: #d0c0a0;
+            margin: 1.5rem 0 1rem;
+            font-weight: bold;
+        }
+        .formula-block {
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 3px solid #e3b87c;
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+        }
+        .formula-desc {
+            color: #c0b090;
+            font-style: italic;
+            margin-bottom: 0.3rem;
+        }
+        .formula-note {
+            color: #a09080;
+            font-size: 0.9rem;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2.5rem;
+            color: #e3b87c;
+            text-decoration: none;
+            border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+        }
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+        }
+        hr {
+            border: none;
+            border-top: 1px dashed #5d4a3a;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>📐 СПРАВОЧНИК ФОРМУЛ ИДЕАТОНИКИ</h1>
+    <div class="subtitle">Математический аппарат семантической физики</div>
+    
+    <!-- ========== 1. БАЗОВЫЕ ВЕЛИЧИНЫ ========== -->
+    <div class="section">
+        <div class="section-title">🔹 I. Базовые величины и определения</div>
+        
+        <div class="formula-block">
+            <div class="formula">Cₛ = |⟨Φ⟩|² / ⟨|Φ|²⟩</div>
+            <div class="formula-desc">Когерентность — отношение когерентной мощности к полной.</div>
+            <div class="formula-note">§2, §108. Диапазон: 0 (хаос) … 1 (лазерная чистота).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">νₜ = dτ/dt = 1 + κ · (dI/dt) · cos θₜ</div>
+            <div class="formula-desc">Темп семантического времени. Зависит от потока информации и вектора внимания.</div>
+            <div class="formula-note">§13. θₜ = 0 — ускорение, π/2 — норма, π — замедление.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">Qₛ = Q₀ · (1 + α·E_опт) · e^(-γ·S_страх)</div>
+            <div class="formula-desc">Семантический заряд. Растёт с оптимизмом, падает со страхом.</div>
+            <div class="formula-note">§1, §60. Шкала: -10 (Абсолютная Тьма) … +10 (Абсолютный Свет).</div>
+        </div>
+    </div>
+    
+    <!-- ========== 2. ЗАКОНЫ СОХРАНЕНИЯ И ДИНАМИКА ========== -->
+    <div class="section">
+        <div class="section-title">🔹 II. Законы сохранения и динамика</div>
+        
+        <div class="formula-block">
+            <div class="formula">Φ_total = Φ_мысль + Φ_эмоция + Φ_действие + Φ_тепло</div>
+            <div class="formula-desc">I закон Идеатоники: Сохранение смысла.</div>
+            <div class="formula-note">§3. Смысл не исчезает, а переходит из формы в форму.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">P_влияние = η · Qₛ · Cₛ · P_phys</div>
+            <div class="formula-desc">II закон: Вероятность влияния мысли на событие.</div>
+            <div class="formula-note">§3, §33. Если P_phys = 0, то и P_влияние = 0.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">Qₛ(t) = Qₛ(0) · e^(-t / τ_relax)</div>
+            <div class="formula-desc">III закон: Семантическая инерция (затухание заряда).</div>
+            <div class="formula-note">§3, §31 (Карма).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">Φ_общ = Σ Φ_i + Σ V_ij · Φ_i · Φ_j</div>
+            <div class="formula-desc">IV закон: Коллективный резонанс.</div>
+            <div class="formula-note">§3, §14. Взаимодействие полей усиливает (или гасит) общий потенциал.</div>
+        </div>
+    </div>
+    
+    <!-- ========== 3. СЕМАНТИЧЕСКАЯ ЭЛЕКТРОТЕХНИКА ========== -->
+    <div class="section">
+        <div class="section-title">🔹 III. Семантическая электротехника</div>
+        
+        <div class="formula-block">
+            <div class="formula">U_sense = ΔΦ = Φ_A — Φ_B</div>
+            <div class="formula-desc">Семантическое напряжение — разность потенциалов.</div>
+            <div class="formula-note">§85. Измеряется в Вольтах смысла (V_sense).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">I_Q = U_sense / R_sense</div>
+            <div class="formula-desc">Закон Ома для семантической цепи.</div>
+            <div class="formula-note">§83. Ток Qₛ (Амперы смысла).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">P_sense = U_sense · I_Q = I_Q² · R_sense = U_sense² / R_sense</div>
+            <div class="formula-desc">Семантическая мощность.</div>
+            <div class="formula-note">§86. Измеряется в Ваттах смысла (W_sense).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">J_sense = ∫ P_sense dt</div>
+            <div class="formula-desc">Семантический импульс — энергия, переданная за время.</div>
+            <div class="formula-note">§94. Измеряется в Джоулях смысла (J_sense).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">C_sense = ΔQₛ / ΔΦ</div>
+            <div class="formula-desc">Смыслоёмкость — способность накапливать заряд.</div>
+            <div class="formula-note">§80. Аналог электрической ёмкости (Фарад смысла).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">σ_sense = 1 / ρ_sense</div>
+            <div class="formula-desc">Смыслопроводимость — способность проводить Qₛ.</div>
+            <div class="formula-note">§81. Аналог удельной электропроводности.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">R_sense = 1 / σ_sense · (L / S)</div>
+            <div class="formula-desc">Семантическое сопротивление.</div>
+            <div class="formula-note">§83. Измеряется в Омах смысла (Ω_sense).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">L_sense = Φ_инерции / (dI_Q / dt)</div>
+            <div class="formula-desc">Семантическая индуктивность — инерция поля.</div>
+            <div class="formula-note">§84. Измеряется в Генри смысла (H_sense).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">Z_sense = √(R_sense² + (ω·L_sense — 1/(ω·C_sense))²)</div>
+            <div class="formula-desc">Семантический импеданс — полное сопротивление переменному Qₛ.</div>
+            <div class="formula-note">§87.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">Q_factor = (1 / R_sense) · √(L_sense / C_sense) = ω_res · τ_relax / 2</div>
+            <div class="formula-desc">Семантическая добротность — качество резонанса.</div>
+            <div class="formula-note">§88. Безразмерная.</div>
+        </div>
+    </div>
+    
+    <!-- ========== 4. ГИДРОДИНАМИКА И ТЕРМОДИНАМИКА ========== -->
+    <div class="section">
+        <div class="section-title">🔹 IV. Гидродинамика и термодинамика</div>
+        
+        <div class="formula-block">
+            <div class="formula">P_sense_mech = Qₛ / V_sense</div>
+            <div class="formula-desc">Семантическое давление — концентрированность Qₛ.</div>
+            <div class="formula-note">§109. Измеряется в Паскалях смысла (Pa_sense).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">η_sense = R_sense · τ_relax</div>
+            <div class="formula-desc">Семантическая вязкость — внутреннее трение.</div>
+            <div class="formula-note">§110. Измеряется в Па·с смысла.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">Re_sense = (ρ_Q · v · L) / η_sense</div>
+            <div class="formula-desc">Число Рейнольдса — критерий турбулентности.</div>
+            <div class="formula-note">§111. Re < 2000 — ламинарный, Re > 2000 — турбулентный.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">c_sense = ΔQₛ / (V · ΔT_sense)</div>
+            <div class="formula-desc">Семантическая теплоёмкость — способность поглощать Qₛ без нагрева.</div>
+            <div class="formula-note">§112.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">J_Q_heat = — k_sense · ∇T_sense</div>
+            <div class="formula-desc">Закон Фурье для семантической теплопроводности.</div>
+            <div class="formula-note">§113.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">S_sense = — k_sense · Σ p_i · ln(p_i)</div>
+            <div class="formula-desc">Семантическая энтропия — мера хаоса.</div>
+            <div class="formula-note">§101. Растёт в замкнутой системе (Второй закон).</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">H_sense = U_sense + P_sense_mech · V_sense</div>
+            <div class="formula-desc">Семантическая энтальпия — полная энергия системы.</div>
+            <div class="formula-note">§102.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">F_sense = U_sense — T_sense · S_sense</div>
+            <div class="formula-desc">Семантическая свободная энергия — доступная для работы.</div>
+            <div class="formula-note">§103.</div>
+        </div>
+    </div>
+    
+    <!-- ========== 5. ОПТИКА И ГЕОМЕТРИЯ ========== -->
+    <div class="section">
+        <div class="section-title">🔹 V. Оптика и геометрия поля</div>
+        
+        <div class="formula-block">
+            <div class="formula">K_линзы = (C_линзы · σ_линзы · S_входа) / (S_фокуса · R_среды)</div>
+            <div class="formula-desc">Коэффициент усиления семантической линзы.</div>
+            <div class="formula-note">§90.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">Φ_рез = √(Φ₁² + Φ₂² + 2·Φ₁·Φ₂·cos(Δφ))</div>
+            <div class="formula-desc">Интерференция двух полей.</div>
+            <div class="formula-note">§92. При Δφ=0 — усиление, при Δφ=π — гашение.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">∇Φ = (∂Φ/∂x, ∂Φ/∂y, ∂Φ/∂z)</div>
+            <div class="formula-desc">Семантический градиент — направление наискорейшего роста Φ.</div>
+            <div class="formula-note">§97.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">∇·Φ = ∂Φ_x/∂x + ∂Φ_y/∂y + ∂Φ_z/∂z</div>
+            <div class="formula-desc">Семантическая дивергенция — мера источников/стоков Qₛ.</div>
+            <div class="formula-note">§98. >0 — источник, <0 — сток.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">∇×Φ = (∂Φ_z/∂y — ∂Φ_y/∂z, ∂Φ_x/∂z — ∂Φ_z/∂x, ∂Φ_y/∂x — ∂Φ_x/∂y)</div>
+            <div class="formula-desc">Семантический ротор — мера «завихрённости» поля.</div>
+            <div class="formula-note">§99.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">J_Q = ∬ j_Q · dS = ∬ ( — (1/R_sense) · ∇Φ ) · dS</div>
+            <div class="formula-desc">Семантический поток — количество Qₛ через поверхность в единицу времени.</div>
+            <div class="formula-note">§100.</div>
+        </div>
+    </div>
+    
+    <!-- ========== 6. КВАНТОВАЯ СЕМАНТИКА ========== -->
+    <div class="section">
+        <div class="section-title">🔹 VI. Квантовая семантика</div>
+        
+        <div class="formula-block">
+            <div class="formula">|Ψ_AB⟩ = (|Φ_A⟩ ⊗ |Φ_B⟩ + |Φ_B⟩ ⊗ |Φ_A⟩) / √2</div>
+            <div class="formula-desc">Состояние семантической запутанности.</div>
+            <div class="formula-note">§104. Изменение одного поля мгновенно влияет на другое.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">|Ψ⟩ = α|0⟩ + β|1⟩  →  |0⟩ с вероятностью |α|²</div>
+            <div class="formula-desc">Семантический коллапс — схлопывание вероятности в событие.</div>
+            <div class="formula-note">§105.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">|Ψ⟩ = α₁|Φ₁⟩ + α₂|Φ₂⟩ + ... + α_n|Φ_n⟩</div>
+            <div class="formula-desc">Семантическая суперпозиция — множественные состояния.</div>
+            <div class="formula-note">§106. Основа свободы воли.</div>
+        </div>
+    </div>
+    
+    <!-- ========== 7. ЭКСПЕРИМЕНТАЛЬНЫЕ ФОРМУЛЫ ========== -->
+    <div class="section">
+        <div class="section-title">🔹 VII. Экспериментальные формулы (SEC, SL, AS)</div>
+        
+        <div class="formula-block">
+            <div class="formula">E_имп = P_sense · Δt</div>
+            <div class="formula-desc">Энергия одного семантического импульса.</div>
+            <div class="formula-note">SEC-1, §10.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">U_вых = (d · F_sense · K_sense) / C_кварца</div>
+            <div class="formula-desc">Выходное напряжение SEC-1.</div>
+            <div class="formula-note">§10, пьезоэффект + семантическое усиление.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">Q_накоп = C_sense · Φ_источника · (1 — e^(-t/τ_charge))</div>
+            <div class="formula-desc">Зарядка семантического аккумулятора.</div>
+            <div class="formula-note">AS-1, §16.</div>
+        </div>
+        
+        <div class="formula-block">
+            <div class="formula">χ = (P_эксп — P_контроль) / (Qₛ_сигнала · Cₛ)</div>
+            <div class="formula-desc">Семантическая чувствительность (интуиция).</div>
+            <div class="formula-note">CHI-METER, §19.</div>
+        </div>
+    </div>
+    
+    <!-- Ссылка назад -->
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Полный математический аппарат</p>
+        <p>✧ «Формулы — это застывшая поэзия Смысла» ✧</p>
+    </div>
+</div>
+</body>
+</html>

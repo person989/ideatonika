@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Семантический Паспорт Материалов | Идеатоника</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: #f5ede0;
+            padding: 30px 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .main-container {
+            max-width: 1400px;
+            width: 100%;
+            background: #f5ede0;
+            border-radius: 16px;
+            border: 2px solid #8b7355;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            padding: 2rem 1.5rem;
+        }
+        h1 {
+            text-align: center;
+            margin: 0 0 0.5rem 0;
+            color: #2c1e0e;
+            font-style: italic;
+            font-size: 2.2rem;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: #3b2a1f;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 25px;
+            background: #3b2a1f;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #5d4037;
+            transform: scale(1.02);
+        }
+        .btn-secondary {
+            background: #5d4037;
+        }
+        .btn-secondary:hover {
+            background: #3b2a1f;
+        }
+        .sort-indicator {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #5d4037;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            background: #fdf8f0;
+            border-radius: 12px;
+            border: 1px solid #d4c4a8;
+            margin-bottom: 1.5rem;
+        }
+        .material-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            background: #fdf8f0;
+            min-width: 1200px;
+        }
+        .material-table th {
+            background: #3b2a1f;
+            color: white;
+            padding: 10px 4px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #5d4037;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+        .material-table td {
+            border: 1px solid #8b7355;
+            padding: 8px 4px;
+            vertical-align: middle;
+        }
+        .material-table tr:nth-child(even) {
+            background: #f5ede0;
+        }
+        
+        /* Цвета строк по рангу */
+        /* Цвета строк по рангу */
+.rank-p10 { background: linear-gradient(135deg, #fff9c4, #fff8e1); }
+.rank-p9 { background: linear-gradient(135deg, #fff8e1, #ffecb3); }
+.rank-p8 { background: linear-gradient(135deg, #ffecb3, #ffe082); }
+.rank-p7 { background: linear-gradient(135deg, #fff9c4, #fff59d); }
+.rank-p6 { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+.rank-p5 { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+.rank-p4 { background: linear-gradient(135deg, #e8eaf6, #c5cae9); }
+.rank-p3 { background: linear-gradient(135deg, #e0e0e0, #eeeeee); }
+.rank-p2 { background: linear-gradient(135deg, #f5f5f5, #e0e0e0); }
+.rank-p1 { background: linear-gradient(135deg, #fafafa, #f5f5f5); }
+.rank-0 { background: linear-gradient(135deg, #efebe9, #d7ccc8); }
+.rank-m1 { background: linear-gradient(135deg, #d7ccc8, #bcaaa4); }
+.rank-m2 { background: linear-gradient(135deg, #ffccbc, #ffab91); }
+.rank-m3 { background: linear-gradient(135deg, #b0bec5, #90a4ae); }
+.rank-m4 { background: linear-gradient(135deg, #a1887f, #8d6e63); }
+.rank-m5 { background: linear-gradient(135deg, #ef9a9a, #e57373); }
+.rank-m6 { background: linear-gradient(135deg, #ce93d8, #ab47bc); }
+.rank-m7 { background: linear-gradient(135deg, #7986cb, #5c6bc0); }
+.rank-m8 { background: linear-gradient(135deg, #616161, #424242); color: #eee; }
+.rank-m9 { background: linear-gradient(135deg, #424242, #212121); color: #ddd; }
+.rank-m10 { background: #000000; color: #ccc; }
+        
+        .badge-cat {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .cat-generator { background: #ffd54f; color: #3b2a1f; }
+        .cat-accumulator { background: #bbdefb; color: #0d47a1; }
+        .cat-conductor { background: #c8e6c9; color: #1b5e20; }
+        .cat-isolator { background: #ef9a9a; color: #b71c1c; }
+        .cat-special { background: #ce93d8; color: #4a148c; }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-badge {
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #5d4037;
+            font-style: italic;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #8b7355;
+        }
+        .add-material-hint {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px dashed #8b7355;
+            font-size: 0.8rem;
+        }
+        .add-material-hint summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: #3b2a1f;
+        }
+        .add-material-hint pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.75rem;
+        }
+        .cat-neg-generator { background: #ff8a80; color: #b71c1c; }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <h1>📊 ВЕЛИКАЯ ТАБЛИЦА МАТЕРИАЛОВ</h1>
+    <p class="subtitle">Полный семантический паспорт материалов: от генераторов Света до изоляторов</p>
+    
+    <!-- Кнопки сортировки -->
+    <div class="button-group">
+        <button id="sortByRankBtn" class="btn">📊 По РАНГУ (от +10 к -3)</button>
+        <button id="sortByNameBtn" class="btn btn-secondary">🔤 По АЛФАВИТУ (А → Я)</button>
+    </div>
+    <p id="currentSortIndicator" class="sort-indicator">Текущая сортировка: по РАНГУ</p>
+    
+    <!-- Контейнер для таблицы -->
+    <div id="materialTableWrapper" class="table-wrapper">
+        <!-- Таблица будет сгенерирована JavaScript -->
+    </div>
+    
+    <!-- Легенда -->
+    <div class="legend">
+    <div class="legend-item"><span class="legend-badge" style="background: #ffd54f;">🌟 Генератор</span> — сам производит +Qₛ</div>
+    <div class="legend-item"><span class="legend-badge" style="background: #ff8a80; color: #b71c1c;">☢️ Отриц. генератор</span> — производит -Qₛ (разрушает)</div>
+    <div class="legend-item"><span class="legend-badge" style="background: #bbdefb;">🔋 Накопитель</span> — высокая C_sense</div>
+    <div class="legend-item"><span class="legend-badge" style="background: #c8e6c9;">⚡ Проводник</span> — высокая σ_sense</div>
+    <div class="legend-item"><span class="legend-badge" style="background: #ef9a9a;">🚫 Изолятор</span> — низкие C_sense и σ_sense</div>
+    <div class="legend-item"><span class="legend-badge" style="background: #ce93d8;">🪨 Особый</span> — уникальные свойства</div>
+</div>
+    
+    <!-- Инструкция по добавлению материалов -->
+<!--    <details class="add-material-hint">
+        <summary>📝 Как добавить новый материал (для продвинутых)</summary>
+        <p>Откройте этот HTML-файл в блокноте или редакторе кода. Найдите массив <code>materialsData</code> (он начинается с <code>const materialsData = [</code>). Добавьте новую строку по шаблону:</p>
+        <pre>{ name: "НАЗВАНИЕ", category: "КАТЕГОРИЯ", C_sense: ЗНАЧЕНИЕ, σ_sense: ЗНАЧЕНИЕ, R_sense: ЗНАЧЕНИЕ, L_sense: ЗНАЧЕНИЕ, Q_factor: ЗНАЧЕНИЕ, Gen: ЗНАЧЕНИЕ, rank: ЗНАЧЕНИЕ, comment: "КОММЕНТАРИЙ" },</pre>
+        <p>Сохраните файл и обновите страницу в браузере. Новый материал автоматически появится в таблице!</p>
+        <p><strong>Категории:</strong> "🌟 Генератор", "🔋 Накопитель", "⚡ Проводник", "🚫 Изолятор", "🪨 Особый", "🟰 Нейтральный" (можно комбинировать через " / ").</p>
+    </details>
+     -->
+    
+    <div class="footer-note">
+        ⚡ C_sense — смыслоёмкость (1-10) | σ_sense — смыслопроводимость (1-10) | R_sense — сопротивление (Ω) | L_sense — индуктивность (H) | Q_factor — добротность | Gen — генерация Qₛ (0-10)<br>
+        ✧ «Знай материалы — знай, из чего строить свою крепость Света.» ✧
+    </div>
+</div>
+
+<script>
+(function() {
+    // ========== БАЗА ДАННЫХ МАТЕРИАЛОВ ==========
+    // Добавляйте новые материалы сюда!
+    
+    const materialsData = [
+        // 🌟 ГЕНЕРАТОРЫ
+        { name: "Мощи святых (нетленные)", category: "🌟 Генератор", C_sense: 10, σ_sense: 9, R_sense: 0.01, L_sense: 999, Q_factor: 999, Gen: 10, rank: 10, comment: "Вечный генератор Света. Абсолютный эталон." },
+        { name: "Храм (во время службы)", category: "🌟 Генератор", C_sense: 9, σ_sense: 9, R_sense: 0.1, L_sense: 1000, Q_factor: 141, Gen: 9, rank: 9, comment: "Коллективный резонанс. Пиковая генерация." },
+        { name: "Человек (Cₛ→1, святой)", category: "🌟 Генератор", C_sense: 9, σ_sense: 9, R_sense: 0.2, L_sense: 500, Q_factor: 50, Gen: 8, rank: 9, comment: "Живой генератор. Самовосстанавливающийся." },
+        { name: "Живое дерево (дуб, кедр)", category: "🌟 Генератор", C_sense: 7, σ_sense: 6, R_sense: 0.3, L_sense: 200, Q_factor: 15, Gen: 3, rank: 7, comment: "Связь с Землёй и Небом. Чем старше, тем мощнее." },
+        { name: "Место силы (природное)", category: "🌟 Генератор", C_sense: 7, σ_sense: 6, R_sense: 0.4, L_sense: 300, Q_factor: 10, Gen: 4, rank: 7, comment: "Горы, родники, дольмены. Земля «дышит» Qₛ." },
+        { name: "Огонь (костёр, свеча)", category: "🌟 Генератор", C_sense: 2, σ_sense: 8, R_sense: 0.5, L_sense: 1, Q_factor: 2, Gen: 2, rank: 6, comment: "Высвобождает Qₛ при горении. Очищает." },
+        { name: "Вода движущаяся (река, водопад)", category: "🌟 Генератор", C_sense: 3, σ_sense: 9, R_sense: 0.1, L_sense: 1, Q_factor: 1, Gen: 1, rank: 5, comment: "Гидро-семантический эффект. Очищает и заряжает." },
+        // ========== НОВЫЕ ГЕНЕРАТОРЫ (ДОБАВИТЬ К СУЩЕСТВУЮЩИМ) ==========
+{ name: "Живое дерево (плодовое - яблоня, вишня)", category: "🌟 Генератор", C_sense: 6, σ_sense: 6, R_sense: 0.3, L_sense: 120, Q_factor: 12, Gen: 2, rank: 6, comment: "Генератор изобилия и радости. Цветение и плодоношение — пики генерации." },
+{ name: "Живое дерево (священное - баньян, бодхи)", category: "🌟 Генератор", C_sense: 8, σ_sense: 7, R_sense: 0.25, L_sense: 300, Q_factor: 20, Gen: 4, rank: 8, comment: "Дерево, под которым достигли просветления. Мощный духовный генератор." },
+{ name: "Живой мох (сфагнум)", category: "🌟 Генератор", C_sense: 5, σ_sense: 5, R_sense: 0.4, L_sense: 60, Q_factor: 8, Gen: 2, rank: 5, comment: "Генератор влаги и жизни. Очищает воздух и поле." },
+{ name: "Живая трава (газон, луг)", category: "🌟 Генератор", C_sense: 4, σ_sense: 5, R_sense: 0.4, L_sense: 40, Q_factor: 6, Gen: 1, rank: 4, comment: "Слабый, но обширный генератор жизни. Заземляет и успокаивает." },
+{ name: "Магнит (естественный, магнетит)", category: "🌟 Генератор", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 1, rank: 5, comment: "Генерирует структурирующее поле. Упорядочивает Qₛ вокруг себя." },
+{ name: "Янтарь (натуральный, необработанный)", category: "🌟 Генератор / 🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 2, rank: 6, comment: "Окаменевшая смола. «Живой» камень. Генерирует тепло и уют." },
+{ name: "Коралл (живой в море)", category: "🌟 Генератор", C_sense: 6, σ_sense: 5, R_sense: 0.3, L_sense: 80, Q_factor: 5, Gen: 2, rank: 5, comment: "Живой организм. Генерирует энергию океана и жизни." },
+{ name: "Мёд (сырой, непастеризованный)", category: "🌟 Генератор / ⚡ Проводник", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 60, Q_factor: 7, Gen: 2, rank: 6, comment: "Живой продукт. Генерирует сладость жизни, исцеление." },
+{ name: "Зерно (живое, способное прорасти)", category: "🌟 Генератор", C_sense: 6, σ_sense: 5, R_sense: 0.3, L_sense: 80, Q_factor: 6, Gen: 3, rank: 6, comment: "Символ воскресения. Всплеск генерации при прорастании." },
+{ name: "Грибница (живая, под землёй)", category: "🌟 Генератор", C_sense: 6, σ_sense: 7, R_sense: 0.25, L_sense: 120, Q_factor: 8, Gen: 2, rank: 5, comment: "Скрытая сеть жизни. Генерирует связь и разложение старого в новое." },
+{ name: "Вулканическая лава (жидкая)", category: "🌟 Генератор", C_sense: 8, σ_sense: 4, R_sense: 0.3, L_sense: 200, Q_factor: 4, Gen: 5, rank: 7, comment: "Мощнейший природный генератор. Созидание новой земли. Очень опасен." },
+{ name: "Гейзер (кипящая вода из недр)", category: "🌟 Генератор", C_sense: 6, σ_sense: 8, R_sense: 0.15, L_sense: 40, Q_factor: 6, Gen: 3, rank: 6, comment: "Генератор глубинной энергии Земли. Очищает и наполняет силой." },
+        
+        // ========== ☢️ ОТРИЦАТЕЛЬНЫЕ ГЕНЕРАТОРЫ (РАДИОАКТИВНЫЕ МАТЕРИАЛЫ) ==========
+{ name: "Уран (природная руда)", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 5, R_sense: 0.3, L_sense: 150, Q_factor: 0.2, Gen: 2, rank: -2, comment: "Слабая, но вечная генерация разрушения. «Проклятие Земли»." },
+{ name: "Уран (обогащённый)", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 6, R_sense: 0.2, L_sense: 200, Q_factor: 0.1, Gen: 5, rank: -5, comment: "Мощный источник разрушительного Qₛ. Требует крайней осторожности." },
+{ name: "Плутоний-239", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 7, R_sense: 0.15, L_sense: 250, Q_factor: 0.05, Gen: 8, rank: -7, comment: "Оружейный материал. Колоссальная деструктивная генерация." },
+{ name: "Радий-226", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 6, R_sense: 0.2, L_sense: 180, Q_factor: 0.1, Gen: 7, rank: -6, comment: "«Светящаяся смерть». Исторически использовался в красках." },
+{ name: "Цезий-137", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 0.2, Gen: 6, rank: -5, comment: "Радиоактивные осадки. Загрязняет воду и пищу." },
+{ name: "Йод-131", category: "☢️ Отриц. генератор", C_sense: 2, σ_sense: 4, R_sense: 0.3, L_sense: 50, Q_factor: 0.5, Gen: 4, rank: -4, comment: "Короткоживущий, но накапливается в щитовидной железе." },
+{ name: "Радон-222 (газ)", category: "☢️ Отриц. генератор", C_sense: 1, σ_sense: 8, R_sense: 0.125, L_sense: 10, Q_factor: 0.3, Gen: 3, rank: -3, comment: "Невидимый газ. Проникает в подвалы. «Дыхание Тьмы»." },
+{ name: "Торий-232", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 5, R_sense: 0.25, L_sense: 160, Q_factor: 0.1, Gen: 4, rank: -4, comment: "Относительно «мягкий», но вечный источник -Qₛ." },
+{ name: "Стронций-90", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 0.2, Gen: 5, rank: -5, comment: "Накапливается в костях. «Костный разрушитель»." },
+{ name: "Кобальт-60", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Мощный гамма-излучатель. Используется в медицине и технике." },
+// ========== ☢️ ОТРИЦАТЕЛЬНЫЕ ГЕНЕРАТОРЫ (100 ШТУК) — ПОЛНЫЙ СПИСОК ==========
+{ name: "Уран-235 (оружейный)", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.15, L_sense: 250, Q_factor: 0.05, Gen: 9, rank: -8, comment: "Основа ядерного оружия. Колоссальная деструктивная генерация." },
+{ name: "Уран-238 (обеднённый)", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 300, Q_factor: 0.1, Gen: 4, rank: -5, comment: "Используется в броне и снарядах. Тяжёлый, токсичный, вечный." },
+{ name: "Плутоний-238", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 200, Q_factor: 0.1, Gen: 8, rank: -7, comment: "Используется в космических источниках энергии. Очень горячий и опасный." },
+{ name: "Плутоний-240", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 6, R_sense: 0.15, L_sense: 220, Q_factor: 0.1, Gen: 7, rank: -7, comment: "Примесь в оружейном плутонии. Спонтанное деление." },
+{ name: "Радий-226 (светящаяся краска)", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 150, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Исторический источник «вечного света». Смертельная опасность." },
+{ name: "Цезий-137 (радиоактивные осадки)", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 0.2, Gen: 6, rank: -5, comment: "Загрязняет почву и воду после аварий. Накапливается в организмах." },
+{ name: "Стронций-90", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 0.2, Gen: 5, rank: -5, comment: "«Костный искатель». Замещает кальций, разрушает костный мозг." },
+{ name: "Йод-131", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 5, R_sense: 0.3, L_sense: 50, Q_factor: 0.5, Gen: 4, rank: -4, comment: "Накапливается в щитовидной железе. Вызывает рак." },
+{ name: "Кобальт-60", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 7, R_sense: 0.15, L_sense: 120, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Мощный гамма-излучатель. Используется в стерилизации и лучевой терапии." },
+{ name: "Торий-232", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 200, Q_factor: 0.1, Gen: 4, rank: -4, comment: "Относительно «мягкий», но вечный источник альфа-частиц." },
+{ name: "Радон-222 (газ)", category: "☢️ Отриц. генератор", C_sense: 2, σ_sense: 8, R_sense: 0.125, L_sense: 10, Q_factor: 0.3, Gen: 3, rank: -3, comment: "Невидимый газ. Проникает в подвалы. «Дыхание Тьмы»." },
+{ name: "Америций-241", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 150, Q_factor: 0.1, Gen: 6, rank: -5, comment: "Используется в детекторах дыма. Источник альфа-частиц." },
+{ name: "Калифорний-252", category: "☢️ Отриц. генератор", C_sense: 8, σ_sense: 7, R_sense: 0.1, L_sense: 100, Q_factor: 0.05, Gen: 10, rank: -9, comment: "Мощнейший источник нейтронов. Используется в реакторах и медицине. Крайне опасен." },
+{ name: "Тритий (сверхтяжёлый водород)", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 8, R_sense: 0.125, L_sense: 30, Q_factor: 0.5, Gen: 2, rank: -3, comment: "Используется в термоядерном оружии и подсветке. Слабый бета-излучатель." },
+{ name: "Полоний-210", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 6, R_sense: 0.15, L_sense: 80, Q_factor: 0.1, Gen: 8, rank: -7, comment: "Известен отравлением Литвиненко. Один из самых токсичных веществ." },
+{ name: "Нептуний-237", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 250, Q_factor: 0.1, Gen: 5, rank: -5, comment: "Трансурановый элемент. Очень долгоживущий (2 млн лет)." },
+{ name: "Технеций-99", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 0.2, Gen: 4, rank: -4, comment: "Продукт деления урана. Используется в ядерной медицине." },
+{ name: "Прометий-147", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 60, Q_factor: 0.3, Gen: 3, rank: -3, comment: "Использовался в «вечных» батарейках и светящихся красках." },
+{ name: "Актиний-227", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 120, Q_factor: 0.2, Gen: 5, rank: -4, comment: "Продукт распада урана. Мощный альфа-излучатель." },
+{ name: "Протактиний-231", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 200, Q_factor: 0.1, Gen: 4, rank: -4, comment: "Редкий, высокорадиоактивный элемент." },
+{ name: "Радий-228 (мезоторий)", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 120, Q_factor: 0.1, Gen: 6, rank: -5, comment: "Продукт распада тория. Использовался в медицине." },
+{ name: "Торий-228 (радиоторий)", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 0.1, Gen: 6, rank: -5, comment: "Очень активный изотоп тория." },
+{ name: "Актиний-225", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 6, R_sense: 0.15, L_sense: 80, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Используется в таргетной альфа-терапии рака. Мощный, но контролируемый." },
+{ name: "Висмут-213", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 50, Q_factor: 0.2, Gen: 6, rank: -5, comment: "Короткоживущий изотоп для медицинских процедур." },
+{ name: "Свинец-210", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 4, R_sense: 0.3, L_sense: 100, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Накапливается в табаке. Вносит вклад в рак лёгких." },
+{ name: "Полоний-218", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 20, Q_factor: 0.3, Gen: 5, rank: -4, comment: "Короткоживущий продукт распада радона." },
+{ name: "Радон-220 (торон)", category: "☢️ Отриц. генератор", C_sense: 2, σ_sense: 8, R_sense: 0.125, L_sense: 10, Q_factor: 0.3, Gen: 3, rank: -3, comment: "Изотоп радона из цепочки тория." },
+{ name: "Криптон-85", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 7, R_sense: 0.14, L_sense: 40, Q_factor: 0.4, Gen: 3, rank: -3, comment: "Радиоактивный благородный газ. Выбрасывается при переработке топлива." },
+{ name: "Ксенон-135", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 7, R_sense: 0.14, L_sense: 30, Q_factor: 0.5, Gen: 4, rank: -3, comment: "«Отравитель» ядерных реакторов. Сильный поглотитель нейтронов." },
+{ name: "Церий-144", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 0.2, Gen: 4, rank: -4, comment: "Продукт деления. Использовался в источниках тепла." },
+{ name: "Рутений-106", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 60, Q_factor: 0.2, Gen: 4, rank: -4, comment: "Образуется при авариях. Может концентрироваться в организме." },
+{ name: "Цирконий-95", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 60, Q_factor: 0.2, Gen: 4, rank: -4, comment: "Продукт деления. Среднеживущий изотоп." },
+{ name: "Ниобий-95", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 50, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Дочерний продукт циркония-95." },
+{ name: "Барий-140", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 5, R_sense: 0.3, L_sense: 40, Q_factor: 0.3, Gen: 3, rank: -3, comment: "Продукт деления. Использовался в медицине." },
+{ name: "Лантан-140", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 5, R_sense: 0.3, L_sense: 40, Q_factor: 0.3, Gen: 3, rank: -3, comment: "Дочерний продукт бария-140." },
+{ name: "Празеодим-144", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 50, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Продукт деления." },
+{ name: "Неодим-147", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 50, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Использовался для определения возраста метеоритов." },
+{ name: "Самарий-151", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 120, Q_factor: 0.1, Gen: 2, rank: -3, comment: "Долгоживущий продукт деления." },
+{ name: "Европий-155", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 0.2, Gen: 2, rank: -3, comment: "Продукт деления." },
+{ name: "Гадолиний-153", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 0.2, Gen: 2, rank: -3, comment: "Используется в медицине для лечения костных метастазов." },
+{ name: "Тербий-160", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 50, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Продукт деления." },
+{ name: "Диспрозий-165", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 40, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Используется в медицине для лечения артрита." },
+{ name: "Гольмий-166", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 40, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Используется в медицине." },
+{ name: "Эрбий-169", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 40, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Используется в медицине." },
+{ name: "Тулий-170", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 60, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Используется в портативных рентгеновских установках." },
+{ name: "Иттербий-169", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 50, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Используется в медицине." },
+{ name: "Лютеций-177", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 60, Q_factor: 0.2, Gen: 4, rank: -4, comment: "Важный медицинский изотоп для терапии рака." },
+{ name: "Гафний-181", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 0.2, Gen: 2, rank: -3, comment: "Долгоживущий изотоп." },
+{ name: "Тантал-182", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 60, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Используется как радиоактивная метка." },
+{ name: "Вольфрам-185", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 60, Q_factor: 0.2, Gen: 2, rank: -3, comment: "Долгоживущий изотоп." },
+{ name: "Рений-187", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 300, Q_factor: 0.1, Gen: 1, rank: -2, comment: "Очень долгоживущий (42 млрд лет). Слабая генерация." },
+{ name: "Осмий-194", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 150, Q_factor: 0.1, Gen: 2, rank: -3, comment: "Долгоживущий изотоп." },
+{ name: "Иридий-192", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 7, R_sense: 0.15, L_sense: 80, Q_factor: 0.2, Gen: 5, rank: -5, comment: "Мощный гамма-излучатель. Используется в дефектоскопии и брахитерапии." },
+{ name: "Платина-193", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 0.2, Gen: 2, rank: -3, comment: "Долгоживущий изотоп." },
+{ name: "Золото-198", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 50, Q_factor: 0.3, Gen: 4, rank: -4, comment: "Использовалось в медицине для лечения рака." },
+{ name: "Ртуть-203", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 6, R_sense: 0.2, L_sense: 60, Q_factor: 0.3, Gen: 3, rank: -3, comment: "Использовалась как радиоактивная метка." },
+{ name: "Таллий-204", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 60, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Использовался в промышленности." },
+{ name: "Свинец-212", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 30, Q_factor: 0.3, Gen: 4, rank: -4, comment: "Продукт распада тория. Используется в медицине." },
+{ name: "Висмут-212", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 40, Q_factor: 0.3, Gen: 5, rank: -4, comment: "Продукт распада. Используется в таргетной терапии." },
+{ name: "Полоний-212", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 20, Q_factor: 0.2, Gen: 6, rank: -5, comment: "Очень короткоживущий, но мощный альфа-излучатель." },
+{ name: "Радий-224", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 60, Q_factor: 0.2, Gen: 6, rank: -5, comment: "Используется в медицине для лечения костных метастазов." },
+{ name: "Торий-227", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 0.2, Gen: 5, rank: -4, comment: "Продукт распада актиния." },
+{ name: "Уран-233", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 6, R_sense: 0.15, L_sense: 200, Q_factor: 0.1, Gen: 6, rank: -6, comment: "Искусственный изотоп. Использовался в ядерном топливном цикле." },
+{ name: "Нептуний-236", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 250, Q_factor: 0.1, Gen: 5, rank: -5, comment: "Долгоживущий трансурановый элемент." },
+{ name: "Плутоний-241", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 6, R_sense: 0.15, L_sense: 150, Q_factor: 0.1, Gen: 6, rank: -6, comment: "Распадается на америций-241. Вносит вклад в долговременную радиотоксичность." },
+{ name: "Плутоний-242", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 300, Q_factor: 0.1, Gen: 4, rank: -5, comment: "Долгоживущий изотоп." },
+{ name: "Плутоний-244", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 400, Q_factor: 0.1, Gen: 3, rank: -4, comment: "Очень долгоживущий (80 млн лет). Следы в природе." },
+{ name: "Америций-243", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 6, R_sense: 0.2, L_sense: 200, Q_factor: 0.1, Gen: 5, rank: -5, comment: "Используется в источниках нейтронов." },
+{ name: "Кюрий-244", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 150, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Мощный источник альфа-частиц и тепла." },
+{ name: "Кюрий-248", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 250, Q_factor: 0.1, Gen: 6, rank: -6, comment: "Очень долгоживущий изотоп кюрия." },
+{ name: "Берклий-249", category: "☢️ Отриц. генератор", C_sense: 6, σ_sense: 6, R_sense: 0.15, L_sense: 120, Q_factor: 0.1, Gen: 6, rank: -5, comment: "Используется для синтеза более тяжёлых элементов." },
+{ name: "Калифорний-249", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 150, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Мощный нейтронный источник." },
+{ name: "Калифорний-251", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 7, R_sense: 0.1, L_sense: 120, Q_factor: 0.1, Gen: 8, rank: -7, comment: "Используется в нейтронной радиографии и медицине." },
+{ name: "Эйнштейний-253", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 100, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Трансурановый элемент. Мощный альфа-излучатель." },
+{ name: "Эйнштейний-254", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 80, Q_factor: 0.1, Gen: 8, rank: -7, comment: "Короткоживущий, но очень активный." },
+{ name: "Фермий-257", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 90, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Продукт ядерных взрывов." },
+{ name: "Менделевий-258", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 80, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Синтезированный элемент." },
+{ name: "Нобелий-259", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 70, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Короткоживущий трансурановый элемент." },
+{ name: "Лоуренсий-266", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 60, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Последний элемент актиноидного ряда." },
+{ name: "Резерфордий-267", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый синтезированный элемент." },
+{ name: "Дубний-268", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Сиборгий-269", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Борий-270", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Хассий-277", category: "☢️ Отриц. генератор", C_sense: 8, σ_sense: 6, R_sense: 0.1, L_sense: 50, Q_factor: 0.1, Gen: 8, rank: -7, comment: "Сверхтяжёлый элемент. Очень нестабилен." },
+{ name: "Мейтнерий-278", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Дармштадтий-281", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Рентгений-282", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Коперниций-285", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Нихоний-286", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Флеровий-289", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Московий-290", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Ливерморий-293", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Сверхтяжёлый элемент." },
+{ name: "Теннессин-294", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 6, R_sense: 0.15, L_sense: 50, Q_factor: 0.1, Gen: 7, rank: -6, comment: "Самый тяжёлый из синтезированных галогенов." },
+{ name: "Оганезон-294", category: "☢️ Отриц. генератор", C_sense: 8, σ_sense: 6, R_sense: 0.1, L_sense: 50, Q_factor: 0.1, Gen: 8, rank: -7, comment: "Самый тяжёлый известный элемент. Имя в честь Юрия Оганесяна." },
+{ name: "Осколки деления (смесь)", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 0.2, Gen: 6, rank: -5, comment: "Сложная смесь изотопов из реактора или взрыва. Крайне опасны." },
+{ name: "Радиоактивные отходы (остеклованные)", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 300, Q_factor: 0.1, Gen: 5, rank: -5, comment: "Смесь долгоживущих изотопов, заключённая в стекло. «Проклятие в саркофаге»." },
+{ name: "Чернобыльская лава (кориум)", category: "☢️ Отриц. генератор", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 250, Q_factor: 0.1, Gen: 8, rank: -8, comment: "Стекловидная масса из расплавленного реактора. Смертельно опасна на века." },
+{ name: "Рентгеновская трубка (старая, без защиты)", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 6, R_sense: 0.2, L_sense: 30, Q_factor: 0.3, Gen: 3, rank: -3, comment: "Генерирует рентген при подаче напряжения. В выключенном состоянии — нейтральна." },
+{ name: "ЭЛТ-монитор (старый, включённый)", category: "☢️ Отриц. генератор", C_sense: 2, σ_sense: 5, R_sense: 0.3, L_sense: 20, Q_factor: 0.3, Gen: 1, rank: -1, comment: "Слабый источник рентгена и электромагнитного шума. Усталость глаз и поля." },
+{ name: "Гранит (с высоким содержанием урана)", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 3, R_sense: 0.33, L_sense: 200, Q_factor: 0.2, Gen: 2, rank: -2, comment: "Природный камень с повышенным фоном. «Фонит» незаметно." },
+{ name: "Глинозём (красный шлам)", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 100, Q_factor: 0.2, Gen: 1, rank: -2, comment: "Отходы алюминиевого производства. Содержит торий и уран. Щелочной и токсичный." },
+{ name: "Фосфогипс", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 80, Q_factor: 0.2, Gen: 1, rank: -2, comment: "Отходы производства удобрений. Содержит радий. Используется в стройматериалах." },
+{ name: "Зола угольная (с высоким содержанием радионуклидов)", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 0.2, Gen: 1, rank: -2, comment: "Уголь концентрирует уран и торий. Зола «фонит»." },
+{ name: "Светящаяся краска (на основе радия, старинная)", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 120, Q_factor: 0.1, Gen: 5, rank: -5, comment: "Смертельная красота прошлого. Хранить в музее за стеклом." },
+{ name: "Светящаяся краска (на основе трития, современная)", category: "☢️ Отриц. генератор", C_sense: 2, σ_sense: 4, R_sense: 0.3, L_sense: 30, Q_factor: 0.5, Gen: 2, rank: -2, comment: "Используется в часах и прицелах. Слабый, но постоянный источник." },
+{ name: "Светящийся брелок (тритиевый)", category: "☢️ Отриц. генератор", C_sense: 2, σ_sense: 4, R_sense: 0.3, L_sense: 20, Q_factor: 0.5, Gen: 1, rank: -1, comment: "Миниатюрный источник света. Безопасен, пока герметичен." },
+{ name: "Керамика (с урановой глазурью, старинная)", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 4, R_sense: 0.3, L_sense: 100, Q_factor: 0.2, Gen: 2, rank: -2, comment: "Оранжевая или жёлтая глазурь. «Фонит», но обычно безопасна при использовании." },
+{ name: "Стекло (урановое, вазелиновое)", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 0.2, Gen: 2, rank: -2, comment: "Светится в ультрафиолете. Красиво, но содержит уран." },
+{ name: "Объектив фотоаппарата (с ториевым стеклом)", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 5, R_sense: 0.3, L_sense: 60, Q_factor: 0.3, Gen: 1, rank: -2, comment: "Старые объективы с добавкой оксида тория. Слабый фон." },
+{ name: "Электроды для TIG-сварки (торированные)", category: "☢️ Отриц. генератор", C_sense: 4, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 0.2, Gen: 3, rank: -3, comment: "Содержат 1-2% тория. Опасны при заточке (пыль)." },
+{ name: "Камень (радиоактивный, эканит, торианит)", category: "☢️ Отриц. генератор", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 150, Q_factor: 0.1, Gen: 3, rank: -3, comment: "Редкие коллекционные минералы. Лучше хранить в контейнере." },
+{ name: "Вода из глубокой скважины (с радоном)", category: "☢️ Отриц. генератор", C_sense: 2, σ_sense: 7, R_sense: 0.14, L_sense: 10, Q_factor: 0.5, Gen: 2, rank: -2, comment: "Может содержать растворённый радон. Опасно для питья без очистки." },
+        
+        // 🔋 НАКОПИТЕЛИ
+        { name: "Золото (освящённое)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 6, R_sense: 0.17, L_sense: 300, Q_factor: 5, Gen: 0, rank: 8, comment: "Огромная ёмкость. Символ чистоты." },
+        { name: "Серебро (освящённое)", category: "🔋 Накопитель / ⚡ Проводник", C_sense: 8, σ_sense: 9, R_sense: 0.11, L_sense: 100, Q_factor: 40, Gen: 0, rank: 8, comment: "Лучший искусственный проводник и накопитель." },
+        { name: "Гранит (природный)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 2, R_sense: 0.5, L_sense: 800, Q_factor: 5, Gen: 0, rank: 7, comment: "Огромная инерция. «Камень вечности»." },
+        { name: "Кварц (горный хрусталь)", category: "🔋 Накопитель / 🪨 Особый", C_sense: 8, σ_sense: 5, R_sense: 0.2, L_sense: 150, Q_factor: 15, Gen: 1, rank: 7, comment: "«Камень памяти». Пьезо-семантический эффект." },
+        { name: "Мрамор", category: "🔋 Накопитель", C_sense: 7, σ_sense: 3, R_sense: 0.33, L_sense: 400, Q_factor: 4, Gen: 0, rank: 6, comment: "Тёплый, податливый камень. Храмы, статуи." },
+        { name: "Шунгит", category: "🔋 Накопитель / 🪨 Особый", C_sense: 7, σ_sense: 4, R_sense: 0.25, L_sense: 120, Q_factor: 6, Gen: 2, rank: 6, comment: "Аномальный защитник. Экранирует негатив." },
+        { name: "Дерево (сухое, обработанное)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 80, Q_factor: 4, Gen: 0, rank: 5, comment: "Традиционный материал. Требует подзарядки." },
+        { name: "Шерсть, лён (натуральные)", category: "🔋 Накопитель / ⚡ Проводник", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 50, Q_factor: 5, Gen: 0, rank: 5, comment: "Лучшие ткани для практик." },
+        // ========== НОВЫЕ НАКОПИТЕЛИ (30 штук) ==========
+{ name: "Авантюрин", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.3, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень удачи и оптимизма. Мягко накапливает радость." },
+{ name: "Агат (моховой)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 3, R_sense: 0.35, L_sense: 110, Q_factor: 4, Gen: 1, rank: 5, comment: "Связь с природой. Заземляет и успокаивает." },
+{ name: "Агат (полосчатый)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.3, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Гармонизирует энергии. Защитный камень." },
+{ name: "Азурит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень интуиции и ясновидения. Стимулирует «третий глаз»." },
+{ name: "Аквамарин", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 70, Q_factor: 7, Gen: 0, rank: 6, comment: "Камень спокойствия и чистоты. Охлаждает эмоции." },
+{ name: "Александрит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 5, R_sense: 0.2, L_sense: 120, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень перемен. Усиливает интуицию в переходные периоды." },
+{ name: "Алмаз (неогранённый)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 7, R_sense: 0.15, L_sense: 200, Q_factor: 8, Gen: 0, rank: 7, comment: "Чистейший накопитель. Усиливает любое намерение." },
+{ name: "Амазонит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень надежды и успокоения. Фильтрует стресс." },
+{ name: "Аметист", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень духовности и трезвости. Защищает от опьянения." },
+{ name: "Аметрин", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Сочетание аметиста и цитрина. Баланс духовного и материального." },
+{ name: "Ангелит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.2, L_sense: 60, Q_factor: 6, Gen: 1, rank: 5, comment: "Камень ангельской связи. Мягко утешает и успокаивает." },
+{ name: "Апатит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень мотивации и ясности. Помогает в обучении." },
+{ name: "Арагонит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 110, Q_factor: 4, Gen: 0, rank: 5, comment: "Заземляющий камень. Успокаивает, снимает стресс." },
+{ name: "Берилл (золотистый)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень уверенности и защиты. Укрепляет волю." },
+{ name: "Бирюза", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень защиты и мудрости. Амулет путешественников." },
+{ name: "Бронзит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.3, L_sense: 80, Q_factor: 4, Gen: 0, rank: 4, comment: "Камень вежливости и гармонии. Возвращает негатив отправителю." },
+{ name: "Гагат (чёрный янтарь)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.25, L_sense: 120, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень скорби и защиты. Впитывает тяжёлые эмоции." },
+{ name: "Гелиотроп (кровавик)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень мужества и защиты. Останавливает кровотечение (метафорически)." },
+{ name: "Гематит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 110, Q_factor: 4, Gen: 0, rank: 5, comment: "Заземляющий камень. Укрепляет волю, «запечатывает» ауру." },
+{ name: "Говлит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень спокойствия. Снижает тревожность, помогает при бессоннице." },
+{ name: "Гранат (альмандин)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень страсти и жизненной силы. Восстанавливает энергию." },
+{ name: "Жадеит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 4, R_sense: 0.25, L_sense: 150, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень мудрости и спокойствия. Защищает от сглаза." },
+{ name: "Жемчуг (натуральный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 1, rank: 6, comment: "Живой камень. Символ чистоты и невинности. Успокаивает." },
+{ name: "Змеевик (серпентин)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.3, L_sense: 90, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень защиты от тёмных сил. «Высасывает» негатив из ауры." },
+{ name: "Изумруд", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 130, Q_factor: 7, Gen: 1, rank: 7, comment: "Камень любви и мудрости. Укрепляет память и верность." },
+{ name: "Иолит (кордиерит)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень внутреннего видения. Помогает в медитации." },
+{ name: "Кальцит (оптический)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 7, R_sense: 0.15, L_sense: 50, Q_factor: 7, Gen: 0, rank: 5, comment: "Усиливает энергию. Очищает другие камни." },
+{ name: "Кианит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень равновесия. Не накапливает негатив, самоочищается." },
+{ name: "Коралл (красный)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 5, Gen: 1, rank: 5, comment: "Живой камень моря. Укрепляет жизненную силу и эмоции." },
+{ name: "Лабрадор", category: "🔋 Накопитель", C_sense: 8, σ_sense: 5, R_sense: 0.2, L_sense: 140, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень магии и интуиции. Усиливает связь с тонким миром." },
+// ========== НАКОПИТЕЛИ (ПАРТИЯ 2: 70 ШТУК) ==========
+{ name: "Лазурит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 5, R_sense: 0.2, L_sense: 130, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень королей. Укрепляет волю, ясность ума, связь с Высшим." },
+{ name: "Ларимар", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень спокойствия моря. Умиротворяет, снимает стресс, помогает выражать эмоции." },
+{ name: "Лепидолит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень перехода и покоя. Содержит литий, снимает тревогу и депрессию." },
+{ name: "Лунный камень", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 1, rank: 6, comment: "Камень интуиции и женской энергии. Связан с Луной, успокаивает эмоции." },
+{ name: "Малахит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень трансформации. Впитывает негатив, но требует частой очистки." },
+{ name: "Молдавит (влтавин)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 6, R_sense: 0.15, L_sense: 180, Q_factor: 7, Gen: 2, rank: 7, comment: "Космическое стекло. Мощный ускоритель духовной эволюции. Очень высокая вибрация." },
+{ name: "Моховой агат", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 110, Q_factor: 4, Gen: 1, rank: 5, comment: "Камень садоводов и целителей. Связь с природой, заземление, изобилие." },
+{ name: "Нефрит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 4, R_sense: 0.25, L_sense: 160, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень спокойствия и долголетия. Очень прочный накопитель. Символ мудрости." },
+{ name: "Обсидиан (снежный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 120, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень чистоты и защиты. Мягче чёрного обсидиана, помогает в период перемен." },
+{ name: "Обсидиан (чёрный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 3, R_sense: 0.35, L_sense: 130, Q_factor: 3, Gen: 0, rank: 5, comment: "Мощный защитник и «чистильщик». Вскрывает теневые стороны, требует осторожности." },
+{ name: "Оникс", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 110, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень силы и самоконтроля. Укрепляет дисциплину, защищает от стресса." },
+{ name: "Опал (благородный)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень вдохновения и магии. Усиливает творчество, но капризен в уходе." },
+{ name: "Опал (огненный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень страсти и энергии. Стимулирует действие, привлекает удачу в делах." },
+{ name: "Перидот (хризолит)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень радости и солнца. Очищает от обид, привлекает изобилие." },
+{ name: "Петерсит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень «третьего глаза». Усиливает интуицию и визионерский опыт." },
+{ name: "Пирит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "«Золото дураков». Привлекает изобилие, но требует активных действий. Не накапливает негатив." },
+{ name: "Празем (зелёный кварц)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 1, rank: 6, comment: "Камень сострадания и связи с природой. Успокаивает, заземляет." },
+{ name: "Пренит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень мира и гармонии. Усиливает предвидение, помогает отпустить ненужное." },
+{ name: "Раухтопаз (дымчатый кварц)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.25, L_sense: 110, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень заземления и защиты. Впитывает негатив, трансформирует его." },
+{ name: "Родонит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень прощения и сострадания. Исцеляет душевные раны, укрепляет любовь." },
+{ name: "Родохрозит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень нежной любви и исцеления внутреннего ребёнка. Дарит радость." },
+{ name: "Розовый кварц", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 1, rank: 6, comment: "Камень безусловной любви. Исцеляет сердце, привлекает любовь, успокаивает." },
+{ name: "Рубеллит (розовый турмалин)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень любви и творчества. Усиливает страсть, вдохновение, радость жизни." },
+{ name: "Рубин", category: "🔋 Накопитель", C_sense: 9, σ_sense: 6, R_sense: 0.15, L_sense: 150, Q_factor: 7, Gen: 0, rank: 7, comment: "Царь камней. Камень страсти, власти, жизненной силы. Укрепляет волю и сердце." },
+{ name: "Рутиловый кварц (волосатик)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 120, Q_factor: 7, Gen: 1, rank: 7, comment: "Усилитель намерений. «Антенна» для связи с Высшим. Ускоряет материализацию мыслей." },
+{ name: "Сапфир (синий)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 7, R_sense: 0.15, L_sense: 160, Q_factor: 8, Gen: 0, rank: 7, comment: "Камень мудрости и королевской власти. Укрепляет дисциплину, ясность ума, связь с Небом." },
+{ name: "Сардоникс", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.3, L_sense: 90, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень защиты и счастья в браке. Привлекает удачу, укрепляет отношения." },
+{ name: "Селенит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 7, R_sense: 0.15, L_sense: 50, Q_factor: 7, Gen: 1, rank: 5, comment: "Камень ангелов и чистоты. Очищает пространство и другие камни. Не мочить!" },
+{ name: "Сердолик (карнеол)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень радости, творчества и жизненной силы. Привлекает удачу, защищает от зависти." },
+{ name: "Содалит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень логики и интуиции. Успокаивает ум, помогает в обучении и медитации." },
+{ name: "Соколиный глаз", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень ясновидения и защиты. Усиливает интуицию, помогает видеть суть вещей." },
+{ name: "Ставролит (крестовый камень)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 110, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень защиты и заземления. Символ веры, помогает в трудные времена." },
+{ name: "Суглинит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень духовной любви и интуиции. Усиливает связь с Высшим Я." },
+{ name: "Танзанит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 120, Q_factor: 7, Gen: 0, rank: 7, comment: "Камень трансформации и высоких вибраций. Связывает сердце и ум, ускоряет духовный рост." },
+{ name: "Тигровый глаз", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень защиты и уверенности. Заземляет, помогает достигать целей, отражает негатив." },
+{ name: "Топаз (голубой)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.2, L_sense: 110, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень ясности и коммуникации. Помогает выражать мысли, успокаивает ум." },
+{ name: "Топаз (империал)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 130, Q_factor: 7, Gen: 0, rank: 7, comment: "Камень изобилия и проявления. Усиливает намерение, привлекает успех и признание." },
+{ name: "Турмалин (арбузный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 1, rank: 6, comment: "Камень радости и баланса. Сочетает энергию сердца (розовый) и воли (зелёный)." },
+{ name: "Турмалин (чёрный, шерл)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 120, Q_factor: 4, Gen: 0, rank: 5, comment: "Мощный защитник и заземлитель. Отражает негатив, очищает ауру." },
+{ name: "Уваровит (зелёный гранат)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень изобилия и процветания. Укрепляет связь с природой, привлекает богатство." },
+{ name: "Унакит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень исцеления и баланса. Помогает отпустить прошлое, успокаивает." },
+{ name: "Флюорит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень порядка и ясности. Структурирует хаос, помогает в учёбе, очищает от электромагнитного смога." },
+{ name: "Фуксит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень здоровья и восстановления. Усиливает целительные способности." },
+{ name: "Халцедон", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень доброты и мира. Успокаивает, смягчает конфликты, привлекает удачу." },
+{ name: "Хризоколла", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень мудрости и коммуникации. Успокаивает, помогает выражать истину с любовью." },
+{ name: "Хризопраз", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень радости, надежды и изобилия. Привлекает успех, исцеляет сердце." },
+{ name: "Целестин", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 1, rank: 6, comment: "Камень ангельского контакта. Успокаивает, приносит мир, усиливает связь с Небом." },
+{ name: "Церуссит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень света и духовного руководства. Помогает найти свой путь." },
+{ name: "Цитрин", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень изобилия и радости. Не накапливает негатив, самоочищается. Привлекает деньги и успех." },
+{ name: "Чароит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 5, R_sense: 0.2, L_sense: 140, Q_factor: 6, Gen: 0, rank: 6, comment: "Редкий русский камень. Камень трансформации и принятия. Успокаивает, снимает страхи." },
+{ name: "Шпинель", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 120, Q_factor: 7, Gen: 0, rank: 7, comment: "Камень обновления и жизненной силы. Укрепляет волю, помогает преодолевать трудности." },
+{ name: "Эвдиалит (лопарская кровь)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень любви и страсти. Укрепляет жизненную силу, защищает от врагов." },
+{ name: "Эпидот", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень усиления. Увеличивает энергию других камней и намерений." },
+{ name: "Янтарь", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 2, rank: 6, comment: "Окаменевшая смола. Тёплый, живой камень. Очищает, исцеляет, поднимает настроение." },
+{ name: "Яшма (красная)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 110, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень стабильности и защиты. Заземляет, даёт силы в трудные времена." },
+{ name: "Яшма (леопардовая)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 110, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень путешественников и шаманов. Усиливает связь с животными и природой." },
+{ name: "Яшма (пейзажная)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 110, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень связи с Землёй. Успокаивает, заземляет, помогает чувствовать себя в безопасности." },
+{ name: "Алебастр", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.3, L_sense: 70, Q_factor: 4, Gen: 0, rank: 4, comment: "Мягкий камень. Используется для сакральных сосудов. Хранит прохладу и покой." },
+{ name: "Гипс (селенит - волокнистый)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 6, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 1, rank: 5, comment: "Природный очиститель. Мягко рассеивает негатив, приносит свет." },
+{ name: "Камень (речной, морской - крупный)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.3, L_sense: 100, Q_factor: 4, Gen: 0, rank: 4, comment: "Природный накопитель. Медленно заряжается от солнца и воды. Символ постоянства." },
+{ name: "Кость (резная, старая)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 3, R_sense: 0.35, L_sense: 120, Q_factor: 3, Gen: 0, rank: 4, comment: "Хранит память предков. Требует уважения и осторожности." },
+{ name: "Перламутр", category: "🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.2, L_sense: 70, Q_factor: 6, Gen: 1, rank: 5, comment: "Радужный защитник. Отражает негатив, усиливает интуицию." },
+{ name: "Ракушка (крупная, целая)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 1, rank: 5, comment: "Дом морского существа. Хранит энергию океана, успокаивает, защищает." },
+{ name: "Рог (оленя, быка)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.3, L_sense: 130, Q_factor: 4, Gen: 0, rank: 5, comment: "Символ силы и плодородия. Мощный мужской накопитель." },
+{ name: "Слоновая кость (старая)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 5, R_sense: 0.25, L_sense: 150, Q_factor: 5, Gen: 0, rank: 6, comment: "Символ мудрости и чистоты. Очень ёмкий накопитель, но этически спорный материал." },
+        
+        // ⚡ ПРОВОДНИКИ
+        { name: "Святая вода", category: "⚡ Проводник", C_sense: 5, σ_sense: 10, R_sense: 0.1, L_sense: 2, Q_factor: 5, Gen: 2, rank: 9, comment: "Идеальный очиститель и проводник." },
+        { name: "Медь", category: "⚡ Проводник", C_sense: 6, σ_sense: 8, R_sense: 0.125, L_sense: 40, Q_factor: 8, Gen: 0, rank: 6, comment: "Отличный доступный проводник." },
+        { name: "Родниковая вода", category: "⚡ Проводник", C_sense: 3, σ_sense: 9, R_sense: 0.11, L_sense: 1, Q_factor: 2, Gen: 1, rank: 5, comment: "Природный очиститель." },
+        { name: "Железо", category: "⚡ Проводник", C_sense: 5, σ_sense: 7, R_sense: 0.14, L_sense: 30, Q_factor: 5, Gen: 0, rank: 4, comment: "Хороший проводник, но склонен к «ржавчине» (накоплению негатива)." },
+        // ========== ПРОВОДНИКИ (100 ШТУК) ==========
+{ name: "Алюминий", category: "⚡ Проводник", C_sense: 4, σ_sense: 7, R_sense: 0.14, L_sense: 20, Q_factor: 5, Gen: 0, rank: 4, comment: "Лёгкий металл. Хороший проводник, но быстро «остывает». Используется в технике." },
+{ name: "Ацетон", category: "⚡ Проводник", C_sense: 2, σ_sense: 6, R_sense: 0.17, L_sense: 1, Q_factor: 1, Gen: 0, rank: 2, comment: "Растворитель. Очищает физически, но семантически «смывает» всё подряд, включая хорошее." },
+{ name: "Базальт", category: "⚡ Проводник", C_sense: 6, σ_sense: 3, R_sense: 0.33, L_sense: 200, Q_factor: 3, Gen: 0, rank: 4, comment: "Вулканическая порода. Проводит заземляющую энергию Земли. Хорош для фундамента." },
+{ name: "Бамбук (живой)", category: "⚡ Проводник / 🌟 Генератор", C_sense: 6, σ_sense: 7, R_sense: 0.15, L_sense: 60, Q_factor: 6, Gen: 2, rank: 6, comment: "Быстрорастущий проводник жизненной силы. Гибкий, упругий, символ стойкости." },
+{ name: "Бензин", category: "⚡ Проводник", C_sense: 2, σ_sense: 5, R_sense: 0.2, L_sense: 1, Q_factor: 1, Gen: 0, rank: 1, comment: "Топливо. Проводит энергию огня, но очень нестабилен и токсичен." },
+{ name: "Бериллий", category: "⚡ Проводник", C_sense: 6, σ_sense: 8, R_sense: 0.125, L_sense: 30, Q_factor: 7, Gen: 0, rank: 5, comment: "Лёгкий, прочный металл. Отличный проводник, но токсичен в обработке." },
+{ name: "Бронза", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 60, Q_factor: 6, Gen: 0, rank: 5, comment: "Сплав меди и олова. Тёплый, «исторический» проводник. Колокола, статуи." },
+{ name: "Вермикулит", category: "⚡ Проводник", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 4, Gen: 0, rank: 3, comment: "Слоистый минерал. Хорошо впитывает и медленно отдаёт влагу и Qₛ." },
+{ name: "Висмут", category: "⚡ Проводник", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Радужный металл. Проводник трансформации и связи между уровнями." },
+{ name: "Вода (дистиллированная)", category: "⚡ Проводник", C_sense: 2, σ_sense: 8, R_sense: 0.125, L_sense: 1, Q_factor: 2, Gen: 0, rank: 3, comment: "Чистейший растворитель. Отлично проводит, но «пустая», без памяти." },
+{ name: "Вода (колодезная)", category: "⚡ Проводник", C_sense: 4, σ_sense: 8, R_sense: 0.125, L_sense: 3, Q_factor: 3, Gen: 1, rank: 5, comment: "Вода из глубин. Проводит заземляющую, тёмную, спокойную энергию Земли." },
+{ name: "Вода (озёрная - стоячая)", category: "⚡ Проводник", C_sense: 4, σ_sense: 6, R_sense: 0.17, L_sense: 5, Q_factor: 2, Gen: 0, rank: 3, comment: "Накапливает энергию места, но без течения может «застаиваться»." },
+{ name: "Вода (святая - из храма)", category: "⚡ Проводник / 🌟 Генератор", C_sense: 6, σ_sense: 10, R_sense: 0.1, L_sense: 5, Q_factor: 8, Gen: 3, rank: 9, comment: "Высший водный проводник. Структурирована молитвой, несёт благодать." },
+{ name: "Вода (талая - снеговая)", category: "⚡ Проводник", C_sense: 4, σ_sense: 8, R_sense: 0.125, L_sense: 2, Q_factor: 3, Gen: 1, rank: 4, comment: "Структурированная природой вода. Мягкая, «живая», полезна для организма." },
+{ name: "Воздух (горный)", category: "⚡ Проводник", C_sense: 3, σ_sense: 7, R_sense: 0.14, L_sense: 1, Q_factor: 3, Gen: 1, rank: 4, comment: "Чистый, ионизированный воздух. Прекрасный проводник для молитвы и медитации." },
+{ name: "Воздух (морской)", category: "⚡ Проводник", C_sense: 4, σ_sense: 8, R_sense: 0.125, L_sense: 1, Q_factor: 3, Gen: 1, rank: 4, comment: "Насыщен солью и влагой. Очищает и наполняет энергией." },
+{ name: "Воздух (после грозы)", category: "⚡ Проводник", C_sense: 3, σ_sense: 9, R_sense: 0.11, L_sense: 1, Q_factor: 4, Gen: 2, rank: 5, comment: "Насыщен озоном. Мощный очиститель и «перезагрузчик» атмосферы." },
+{ name: "Воск (пчелиный)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 50, Q_factor: 5, Gen: 1, rank: 5, comment: "Живой материал. Хранит тепло и свет. Основа для свечей." },
+{ name: "Галенит (свинцовая руда)", category: "⚡ Проводник", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 80, Q_factor: 4, Gen: 0, rank: 4, comment: "Тяжёлый камень. Проводит заземление, но может «утяжелять» поле." },
+{ name: "Германий", category: "⚡ Проводник", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 40, Q_factor: 5, Gen: 0, rank: 5, comment: "Полупроводник. Используется в электронике. Усиливает тонкие сигналы." },
+{ name: "Глет (оксид свинца)", category: "⚡ Проводник", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 60, Q_factor: 3, Gen: 0, rank: 3, comment: "Используется в хрустале. Проводит, но с «тяжёлой» энергией." },
+{ name: "Глина (гончарная)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Пластичный материал Земли. Формует и проводит намерение. Хранит тепло." },
+{ name: "Глина (голубая)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 80, Q_factor: 6, Gen: 0, rank: 5, comment: "Целебная глина. Проводит очищение и восстановление." },
+{ name: "Графен", category: "⚡ Проводник", C_sense: 8, σ_sense: 10, R_sense: 0.1, L_sense: 50, Q_factor: 10, Gen: 0, rank: 8, comment: "Наноматериал будущего. Идеальный проводник, сверхпрочный, сверхлёгкий." },
+{ name: "Графит", category: "⚡ Проводник", C_sense: 5, σ_sense: 7, R_sense: 0.14, L_sense: 20, Q_factor: 5, Gen: 0, rank: 4, comment: "Углерод. Проводит электричество и Qₛ. Используется в карандашах — проводит мысль на бумагу." },
+{ name: "Дерево (вяз)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Крепкое, вязкое дерево. Проводит устойчивость и защиту." },
+{ name: "Дерево (ива)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 7, R_sense: 0.15, L_sense: 70, Q_factor: 6, Gen: 1, rank: 5, comment: "Дерево воды и Луны. Проводит интуицию, гибкость, исцеление от печали." },
+{ name: "Дерево (клён)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Дерево равновесия и щедрости. Проводит гармонию и баланс." },
+{ name: "Дерево (липа)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 70, Q_factor: 6, Gen: 0, rank: 5, comment: "Мягкое, «женское» дерево. Проводит успокоение, уют, исцеление." },
+{ name: "Дерево (ольха)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 70, Q_factor: 6, Gen: 0, rank: 5, comment: "Дерево защиты и перехода. Проводит связь между мирами." },
+{ name: "Дерево (орех)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Дерево мудрости и плодородия. Проводит ясность ума и изобилие." },
+{ name: "Дерево (осина)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 80, Q_factor: 6, Gen: 0, rank: 5, comment: "Дерево-«громоотвод». Впитывает негатив, особенно страхи и болезни." },
+{ name: "Дерево (рябина)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 90, Q_factor: 6, Gen: 0, rank: 5, comment: "Дерево защиты и женской магии. Проводит связь с предками, оберегает." },
+{ name: "Дерево (сосна)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 90, Q_factor: 6, Gen: 1, rank: 6, comment: "Светлое, прямое дерево. Проводит энергию Солнца, радость, очищение." },
+{ name: "Дерево (тис)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 8, σ_sense: 4, R_sense: 0.25, L_sense: 150, Q_factor: 4, Gen: 0, rank: 5, comment: "Дерево смерти и вечности. Проводит связь с ушедшими, требует уважения." },
+{ name: "Дерево (ясень)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Мировое древо скандинавов. Проводит связь между Небом, Землёй и Подземным миром." },
+{ name: "Дождевая вода (собранная в чистом месте)", category: "⚡ Проводник", C_sense: 5, σ_sense: 8, R_sense: 0.125, L_sense: 2, Q_factor: 4, Gen: 1, rank: 5, comment: "Вода, прошедшая небесный цикл. Мягкая, живая, хороша для ритуалов очищения." },
+{ name: "Дым (от благовоний)", category: "⚡ Проводник", C_sense: 3, σ_sense: 9, R_sense: 0.11, L_sense: 1, Q_factor: 4, Gen: 1, rank: 5, comment: "Тонкий проводник молитвы и намерения. Очищает пространство." },
+{ name: "Дым (от костра)", category: "⚡ Проводник", C_sense: 4, σ_sense: 8, R_sense: 0.125, L_sense: 1, Q_factor: 3, Gen: 1, rank: 4, comment: "Мощный очиститель. Уносит негатив, связывает с Небом." },
+{ name: "Железо (кованое)", category: "⚡ Проводник", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 50, Q_factor: 6, Gen: 0, rank: 5, comment: "Традиционный защитный металл. Отгоняет нечисть, заземляет." },
+{ name: "Железо (метеоритное)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 9, σ_sense: 8, R_sense: 0.125, L_sense: 200, Q_factor: 8, Gen: 1, rank: 8, comment: "Космический металл. Мощнейший проводник, связь с внеземными энергиями." },
+{ name: "Зола (древесная)", category: "⚡ Проводник", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 10, Q_factor: 3, Gen: 0, rank: 3, comment: "Остаток после огня. Проводит очищение и трансформацию. Используется в щёлоке." },
+{ name: "Золото (сусальное)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 8, R_sense: 0.125, L_sense: 60, Q_factor: 8, Gen: 0, rank: 7, comment: "Тончайшие листы золота. Проводник Божественного света в иконописи." },
+{ name: "Индий", category: "⚡ Проводник", C_sense: 5, σ_sense: 8, R_sense: 0.125, L_sense: 20, Q_factor: 6, Gen: 0, rank: 5, comment: "Мягкий металл. Используется в электронике. Хороший проводник." },
+{ name: "Иридий", category: "⚡ Проводник", C_sense: 8, σ_sense: 7, R_sense: 0.14, L_sense: 150, Q_factor: 6, Gen: 0, rank: 6, comment: "Тяжёлый, прочный металл. Проводник несокрушимой воли и долговечности." },
+{ name: "Кадмий", category: "⚡ Проводник", C_sense: 4, σ_sense: 6, R_sense: 0.17, L_sense: 20, Q_factor: 4, Gen: 0, rank: 3, comment: "Токсичный металл. Проводит, но отравляет поле. Избегать." },
+{ name: "Калий", category: "⚡ Проводник", C_sense: 5, σ_sense: 7, R_sense: 0.14, L_sense: 10, Q_factor: 5, Gen: 0, rank: 4, comment: "Активный щелочной металл. Важен для нервной системы. Проводит жизненность." },
+{ name: "Кальций", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 60, Q_factor: 4, Gen: 0, rank: 4, comment: "Основа костей и раковин. Проводит структурность, прочность, заземление." },
+{ name: "Камень (кремень)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.25, L_sense: 120, Q_factor: 4, Gen: 0, rank: 5, comment: "Камень, высекающий огонь. Проводит искру творения, защиту." },
+{ name: "Камень (песчаник)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 4, Gen: 0, rank: 4, comment: "Спрессованное время. Проводит связь с прошлым, терпение." },
+{ name: "Кварц (розовый)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 90, Q_factor: 6, Gen: 1, rank: 6, comment: "Камень любви. Проводит нежные, сердечные энергии." },
+{ name: "Керамика (обожжённая глина)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 5, Gen: 0, rank: 4, comment: "Преображённая огнём глина. Хранит и проводит тепло, уют, традицию." },
+{ name: "Киноварь", category: "⚡ Проводник", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 80, Q_factor: 4, Gen: 0, rank: 4, comment: "Ртутная руда. Мощный, но токсичный проводник. Использовалась в алхимии." },
+{ name: "Кобальт", category: "⚡ Проводник", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 40, Q_factor: 5, Gen: 0, rank: 5, comment: "Металл глубокого синего цвета. Проводит интуицию, творчество, связь с Небом." },
+{ name: "Кожа (натуральная)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Материал животного происхождения. Проводит защиту, заземление, выносливость." },
+{ name: "Кремний", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 80, Q_factor: 6, Gen: 0, rank: 6, comment: "Основа электроники и кварца. Проводит и хранит информацию. Структурирует." },
+{ name: "Кровь (как символ)", category: "⚡ Проводник / 🌟 Генератор", C_sense: 9, σ_sense: 9, R_sense: 0.11, L_sense: 200, Q_factor: 9, Gen: 5, rank: 9, comment: "Носитель жизни. Мощнейший проводник родства, жертвы, завета. (Сакральный символ)." },
+{ name: "Лава (застывшая)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 8, σ_sense: 4, R_sense: 0.25, L_sense: 180, Q_factor: 4, Gen: 0, rank: 5, comment: "Застывшая энергия Земли. Проводит первозданную мощь, трансформацию." },
+{ name: "Латунь", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 50, Q_factor: 6, Gen: 0, rank: 5, comment: "Сплав меди и цинка. «Солнечный» металл. Проводит радость, оптимизм, общительность." },
+{ name: "Лёд (природный)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 30, Q_factor: 5, Gen: 0, rank: 4, comment: "Замороженная вода. Проводит холод, остановку, кристаллизацию намерения." },
+{ name: "Лён (ткань)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 50, Q_factor: 5, Gen: 0, rank: 5, comment: "Традиционная сакральная ткань. Проводит чистоту, свет, отталкивает грязь." },
+{ name: "Литий", category: "⚡ Проводник", C_sense: 5, σ_sense: 7, R_sense: 0.14, L_sense: 20, Q_factor: 5, Gen: 0, rank: 4, comment: "Лёгкий металл. Проводит спокойствие, стабилизирует настроение (используется в психиатрии)." },
+{ name: "Магний", category: "⚡ Проводник", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 20, Q_factor: 4, Gen: 0, rank: 4, comment: "Лёгкий, горючий металл. Проводит энергию, быстро вспыхивает и гаснет." },
+{ name: "Магнетит (магнитный железняк)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Природный магнит. Проводит притяжение и отталкивание. Структурирует поле." },
+{ name: "Марганец", category: "⚡ Проводник", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 4, Gen: 0, rank: 4, comment: "Металл, важный для метаболизма. Проводит энергию трансформации." },
+{ name: "Масло (оливковое, освящённое - елей)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 8, R_sense: 0.125, L_sense: 60, Q_factor: 7, Gen: 2, rank: 7, comment: "Сакральное масло. Проводит благодать, исцеление, помазание. Символ Святого Духа." },
+{ name: "Масло (эфирное - лаванда)", category: "⚡ Проводник", C_sense: 5, σ_sense: 7, R_sense: 0.14, L_sense: 10, Q_factor: 5, Gen: 1, rank: 5, comment: "Проводит успокоение, расслабление, гармонизацию." },
+{ name: "Масло (эфирное - мята)", category: "⚡ Проводник", C_sense: 5, σ_sense: 8, R_sense: 0.125, L_sense: 10, Q_factor: 5, Gen: 1, rank: 5, comment: "Проводит бодрость, ясность, охлаждение." },
+{ name: "Масло (эфирное - роза)", category: "⚡ Проводник", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 20, Q_factor: 7, Gen: 2, rank: 6, comment: "Проводит любовь, красоту, женскую энергию, исцеление сердца." },
+{ name: "Мел", category: "⚡ Проводник", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 4, Gen: 0, rank: 3, comment: "Мягкий известняк. Проводит чистоту, используется для очерчивания защитных кругов." },
+{ name: "Мёд", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 60, Q_factor: 7, Gen: 2, rank: 6, comment: "Живой продукт. Проводит сладость жизни, исцеление, связь с природой." },
+{ name: "Молибден", category: "⚡ Проводник", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 40, Q_factor: 6, Gen: 0, rank: 5, comment: "Тугоплавкий металл. Проводит устойчивость к высоким нагрузкам." },
+{ name: "Морская вода", category: "⚡ Проводник", C_sense: 5, σ_sense: 9, R_sense: 0.11, L_sense: 3, Q_factor: 4, Gen: 1, rank: 5, comment: "Солёная, живая вода. Мощный очиститель и проводник, смывает негатив." },
+{ name: "Мраморная крошка", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 5, Gen: 0, rank: 4, comment: "Используется в ландшафте. Проводит чистоту и структуру." },
+{ name: "Мыло (натуральное)", category: "⚡ Проводник", C_sense: 3, σ_sense: 6, R_sense: 0.17, L_sense: 5, Q_factor: 3, Gen: 0, rank: 3, comment: "Очищает физически. Семантически — смывает поверхностный негатив." },
+{ name: "Мышьяк", category: "⚡ Проводник", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 3, Gen: 0, rank: 2, comment: "Сильный яд. Проводит разрушение. Категорически избегать." },
+{ name: "Натрий", category: "⚡ Проводник", C_sense: 5, σ_sense: 8, R_sense: 0.125, L_sense: 10, Q_factor: 5, Gen: 0, rank: 4, comment: "Активный металл. Проводит жизненную силу, важен для нервных импульсов." },
+{ name: "Нейзильбер (мельхиор)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 50, Q_factor: 6, Gen: 0, rank: 5, comment: "Сплав меди, никеля, цинка. «Серебро для бедных». Хороший проводник." },
+{ name: "Никель", category: "⚡ Проводник", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 40, Q_factor: 6, Gen: 0, rank: 5, comment: "Прочный, блестящий металл. Проводит стойкость, защиту от коррозии." },
+{ name: "Ниобий", category: "⚡ Проводник", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 40, Q_factor: 6, Gen: 0, rank: 5, comment: "Тугоплавкий металл. Используется в сплавах. Проводит высокие энергии." },
+{ name: "Нихром", category: "⚡ Проводник", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 30, Q_factor: 4, Gen: 0, rank: 4, comment: "Сплав для нагревателей. Проводит тепло, трансформирует энергию." },
+{ name: "Олово", category: "⚡ Проводник", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 50, Q_factor: 6, Gen: 0, rank: 5, comment: "Мягкий, «добрый» металл. Символ Юпитера. Проводит мудрость, авторитет, защиту." },
+{ name: "Осмий", category: "⚡ Проводник", C_sense: 8, σ_sense: 6, R_sense: 0.17, L_sense: 160, Q_factor: 5, Gen: 0, rank: 6, comment: "Тяжелейший металл. Проводит несокрушимость, абсолютную плотность." },
+{ name: "Палладий", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 8, σ_sense: 8, R_sense: 0.125, L_sense: 100, Q_factor: 8, Gen: 0, rank: 7, comment: "Благородный металл. Проводит чистоту, духовность, связь с Высшим." },
+{ name: "Парафин", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 4, Gen: 0, rank: 3, comment: "Продукт переработки нефти. Нейтральный накопитель для свечей." },
+{ name: "Песок (кварцевый)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Сыпучий накопитель. Проводит время, текучесть, бесконечность." },
+{ name: "Песок (речной)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 50, Q_factor: 5, Gen: 0, rank: 4, comment: "Окатанный водой камень. Проводит мягкость, течение жизни." },
+{ name: "Плазма (огненная)", category: "⚡ Проводник / 🌟 Генератор", C_sense: 6, σ_sense: 10, R_sense: 0.1, L_sense: 10, Q_factor: 8, Gen: 5, rank: 7, comment: "Ионизированный газ. Мощнейший проводник и генератор. Состояние Благодатного Огня." },
+{ name: "Платина", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 9, σ_sense: 8, R_sense: 0.125, L_sense: 180, Q_factor: 8, Gen: 0, rank: 8, comment: "Король металлов. Проводит высшую чистоту, несокрушимость, вечность." },
+{ name: "Проволока (медная, изолированная)", category: "⚡ Проводник", C_sense: 5, σ_sense: 8, R_sense: 0.125, L_sense: 20, Q_factor: 6, Gen: 0, rank: 5, comment: "Направленный проводник. Используется для создания семантических цепей." },
+{ name: "Ртуть", category: "⚡ Проводник", C_sense: 6, σ_sense: 9, R_sense: 0.11, L_sense: 30, Q_factor: 7, Gen: 0, rank: 5, comment: "Жидкий металл. Проводит трансформацию, текучесть, но очень токсична. Символ алхимии." },
+{ name: "Рубин (синтетический)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 80, Q_factor: 7, Gen: 0, rank: 6, comment: "Выращенный камень. Проводит те же энергии, что и природный, но без «души»." },
+{ name: "Свинец", category: "⚡ Проводник", C_sense: 7, σ_sense: 3, R_sense: 0.33, L_sense: 150, Q_factor: 3, Gen: 0, rank: 4, comment: "Тяжёлый, «тёмный» металл. Проводит заземление, защиту от радиации, но «утяжеляет»." },
+{ name: "Сера", category: "⚡ Проводник", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 4, Gen: 0, rank: 4, comment: "Элемент вулканов. Проводит трансформацию, очищение огнём. Используется в ладане." },
+{ name: "Серебро (неосвящённое)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 8, R_sense: 0.125, L_sense: 80, Q_factor: 7, Gen: 0, rank: 6, comment: "Хороший проводник, но без сакральной настройки. Требует освящения для полной силы." },
+{ name: "Серебро (чернёное)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Оксидированное серебро. Проводит защиту, скрытность, связь с прошлым." },
+{ name: "Слюда (мусковит)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Слоистый минерал. Проводит ясность, отражение, использовалась как стекло." },
+{ name: "Снег (свежевыпавший)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 5, σ_sense: 7, R_sense: 0.14, L_sense: 20, Q_factor: 5, Gen: 1, rank: 4, comment: "Замороженная структурированная вода. Проводит чистоту, обновление, тишину." },
+{ name: "Спирт (этиловый)", category: "⚡ Проводник", C_sense: 3, σ_sense: 7, R_sense: 0.14, L_sense: 2, Q_factor: 3, Gen: 0, rank: 3, comment: "Растворитель и консервант. Проводит очищение, но также и опьянение, размытие границ." },
+{ name: "Сталь (нержавеющая)", category: "⚡ Проводник", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Современный прочный сплав. Проводит волю, структуру, но «холодновата»." },
+{ name: "Стекло (обычное)", category: "⚡ Проводник", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 20, Q_factor: 4, Gen: 0, rank: 3, comment: "Аморфный материал. Проводит свет, но задерживает Qₛ. Прозрачный изолятор." },
+{ name: "Стекло (хрустальное)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 70, Q_factor: 6, Gen: 0, rank: 5, comment: "Стекло с добавлением свинца. Лучше проводит и преломляет Qₛ, чем обычное." },
+{ name: "Сурьма", category: "⚡ Проводник", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 3, Gen: 0, rank: 3, comment: "Хрупкий металл. Использовалась в алхимии. Проводит очищение и защиту." },
+{ name: "Тальк", category: "⚡ Проводник", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 30, Q_factor: 3, Gen: 0, rank: 3, comment: "Мягкий минерал. Проводит мягкость, скольжение, используется в детских присыпках." },
+{ name: "Тантал", category: "⚡ Проводник", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 100, Q_factor: 7, Gen: 0, rank: 6, comment: "Тугоплавкий, устойчивый металл. Проводит стойкость, неподверженность коррозии." },
+{ name: "Теллур", category: "⚡ Проводник", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 3, Gen: 0, rank: 3, comment: "Редкий элемент. Проводит связь с Землёй, используется в сплавах." },
+{ name: "Титан", category: "⚡ Проводник", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 90, Q_factor: 7, Gen: 0, rank: 6, comment: "Сверхпрочный, лёгкий металл. Проводит несокрушимую силу, волю, защиту." },
+{ name: "Торий", category: "⚡ Проводник", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 4, Gen: 0, rank: 4, comment: "Радиоактивный элемент. Проводит мощную, но опасную энергию. Избегать." },
+{ name: "Торф", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 100, Q_factor: 3, Gen: 0, rank: 4, comment: "Спрессованные остатки растений. Проводит связь с прошлым, болотную, застойную энергию." },
+{ name: "Углерод (активированный уголь)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Мощный абсорбент. Впитывает токсины и негативный Qₛ. Требует замены." },
+{ name: "Уголь (древесный)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 50, Q_factor: 4, Gen: 0, rank: 4, comment: "Остаток после огня. Проводит тепло, трансформацию, используется для рисования." },
+{ name: "Уран", category: "⚡ Проводник", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 120, Q_factor: 4, Gen: 0, rank: 4, comment: "Радиоактивный элемент. Проводит колоссальную, но разрушительную энергию. Опасно!" },
+{ name: "Фарфор", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 5, Gen: 0, rank: 4, comment: "Высококачественная керамика. Проводит чистоту, изысканность, ритуал." },
+{ name: "Фосфор", category: "⚡ Проводник", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 30, Q_factor: 5, Gen: 0, rank: 4, comment: "Элемент жизни и света. Проводит энергию, свечение, но может быть токсичен." },
+{ name: "Хлопок (ткань)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Натуральная, дышащая ткань. Проводит комфорт, простоту, чистоту." },
+{ name: "Хром", category: "⚡ Проводник", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 50, Q_factor: 6, Gen: 0, rank: 5, comment: "Блестящий, твёрдый металл. Проводит блеск, защиту, устойчивость." },
+{ name: "Целлюлоза", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 4, Gen: 0, rank: 4, comment: "Основа бумаги и дерева. Проводит информацию, структуру." },
+{ name: "Церий", category: "⚡ Проводник", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 4, Gen: 0, rank: 4, comment: "Редкоземельный металл. Используется в сплавах. Проводит искру (в зажигалках)." },
+{ name: "Цинк", category: "⚡ Проводник", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 30, Q_factor: 5, Gen: 0, rank: 4, comment: "Металл защиты от коррозии. Проводит ограждение, барьер, иммунитет." },
+{ name: "Цирконий", category: "⚡ Проводник", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 80, Q_factor: 7, Gen: 0, rank: 6, comment: "Прочный, устойчивый металл. Проводит стабильность, долговечность." },
+{ name: "Чугун", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 4, Gen: 0, rank: 4, comment: "Тяжёлый, прочный сплав железа. Проводит заземление, традицию, но хрупок." },
+{ name: "Шерсть (войлок)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Спрессованная шерсть. Проводит тепло, защиту, звукоизоляцию (и семантическую)." },
+{ name: "Шёлк (натуральный)", category: "⚡ Проводник / 🔋 Накопитель", C_sense: 7, σ_sense: 7, R_sense: 0.14, L_sense: 60, Q_factor: 7, Gen: 1, rank: 6, comment: "Живая нить. Проводит чистоту, мягкость, роскошь, связь с природой." },
+{ name: "Эбонит", category: "⚡ Проводник", C_sense: 5, σ_sense: 3, R_sense: 0.33, L_sense: 50, Q_factor: 3, Gen: 0, rank: 3, comment: "Твёрдая резина. Изолятор, но может накапливать статическое электричество." },
+        
+        // 🟰 НЕЙТРАЛЬНЫЕ / ОСОБЫЕ
+        { name: "Бумага (старая, намоленная)", category: "🪨 Особый", C_sense: 4, σ_sense: 3, R_sense: 0.33, L_sense: 20, Q_factor: 2, Gen: 0, rank: 3, comment: "Хранит информацию и слабый Qₛ." },
+        { name: "Соль", category: "🪨 Особый", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 5, Q_factor: 5, Gen: 0, rank: 3, comment: "Впитывает негатив, консервирует." },
+        { name: "Ладан", category: "🪨 Особый", C_sense: 3, σ_sense: 8, R_sense: 0.125, L_sense: 1, Q_factor: 8, Gen: 2, rank: 4, comment: "При горении очищает и проводит молитву." },
+        { name: "Обычная вода", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 5, R_sense: 0.2, L_sense: 1, Q_factor: 1, Gen: 0, rank: 1, comment: "Нейтральный растворитель." },
+        { name: "Воздух", category: "🟰 Нейтральный", C_sense: 1, σ_sense: 4, R_sense: 0.25, L_sense: 0.5, Q_factor: 0.5, Gen: 0, rank: 0, comment: "Всё рассеивается." },
+        // ========== 🟰 НЕЙТРАЛЬНЫЕ / 🪨 ОСОБЫЕ МАТЕРИАЛЫ (100 ШТУК) ==========
+{ name: "Абразив (наждак)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 3, R_sense: 0.33, L_sense: 10, Q_factor: 2, Gen: 0, rank: 1, comment: "Материал для шлифовки. Удаляет шероховатости, в том числе семантические." },
+{ name: "Авантюриновое стекло", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 20, Q_factor: 4, Gen: 0, rank: 2, comment: "Имитация камня. Внешне блестит, но семантически пустое." },
+{ name: "Акварель (краска)", category: "🪨 Особый", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 10, Q_factor: 4, Gen: 0, rank: 3, comment: "Проводник творческой энергии. Прозрачность и текучесть." },
+{ name: "Акрил (краска)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 15, Q_factor: 2, Gen: 0, rank: 1, comment: "Синтетическая краска. Яркая, но «глухая» семантически." },
+{ name: "Алебастр", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 70, Q_factor: 4, Gen: 0, rank: 4, comment: "Мягкий камень. Используется для сакральных сосудов. Хранит прохладу." },
+{ name: "Алмазная пыль", category: "🪨 Особый", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 80, Q_factor: 7, Gen: 0, rank: 5, comment: "Мельчайшие частицы алмаза. Усиливает абразивные и режущие свойства." },
+{ name: "Алюминиевая фольга", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 6, R_sense: 0.17, L_sense: 5, Q_factor: 3, Gen: 0, rank: 2, comment: "Тонкий металл. Отражает, но легко мнётся. Используется для экранирования." },
+{ name: "Асбест", category: "🚫 Изолятор", C_sense: 3, σ_sense: 1, R_sense: 1.0, L_sense: 40, Q_factor: 0.5, Gen: 0, rank: -1, comment: "Огнеупорный изолятор. Очень вреден для физического здоровья." },
+{ name: "Асфальт", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 1, Gen: 0, rank: -1, comment: "Искусственное покрытие. Блокирует связь с Землёй." },
+{ name: "Базальтовая вата", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 50, Q_factor: 2, Gen: 0, rank: -1, comment: "Теплоизолятор. Хорошо блокирует и физическое, и семантическое тепло." },
+{ name: "Бальзам (звёздчатый анис)", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 20, Q_factor: 5, Gen: 1, rank: 4, comment: "Ароматическая смола. Проводит защиту и очищение." },
+{ name: "Бамбук (сухой)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 60, Q_factor: 5, Gen: 0, rank: 4, comment: "Лёгкий, прочный, полый. Проводит звук и ветер. Символ стойкости." },
+{ name: "Берёста", category: "🔋 Накопитель / 🪨 Особый", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 4, Gen: 0, rank: 4, comment: "Кора берёзы. Водостойкая, использовалась для писем и оберегов." },
+{ name: "Битум", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 1, Gen: 0, rank: -1, comment: "Природный асфальт. Консервирует, но «душит». Использовался при мумификации." },
+{ name: "Бронзовая пудра", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 20, Q_factor: 5, Gen: 0, rank: 4, comment: "Добавляет «золотой» блеск. Используется в декоре для имитации богатства." },
+{ name: "Бумага (газетная)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 4, R_sense: 0.25, L_sense: 5, Q_factor: 3, Gen: 0, rank: 1, comment: "Недолговечный носитель информации. Быстро накапливает шум." },
+{ name: "Бумага (пергамент)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 80, Q_factor: 4, Gen: 0, rank: 4, comment: "Выделанная кожа. Долговечный и уважаемый носитель сакральных текстов." },
+{ name: "Бумага (рисовая)", category: "🪨 Особый", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 5, Gen: 0, rank: 3, comment: "Тонкая, полупрозрачная. Используется в азиатских ритуалах и каллиграфии." },
+{ name: "Вата (хлопковая)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 10, Q_factor: 3, Gen: 0, rank: 2, comment: "Мягкий, впитывающий материал. Используется для очистки и ухода." },
+{ name: "Верёвка (пеньковая)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 30, Q_factor: 3, Gen: 0, rank: 2, comment: "Связующий материал. Символ уз и соединения." },
+{ name: "Винил (пластинка)", category: "🪨 Особый", C_sense: 4, σ_sense: 3, R_sense: 0.33, L_sense: 40, Q_factor: 3, Gen: 0, rank: 2, comment: "Аналоговый носитель звука. Хранит «тепло» и «шероховатость» записи." },
+{ name: "Вискоза", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 15, Q_factor: 3, Gen: 0, rank: 2, comment: "Искусственная ткань из целлюлозы. Лучше синтетики, но хуже натуральной." },
+{ name: "Войлок", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 60, Q_factor: 4, Gen: 0, rank: 4, comment: "Спрессованная шерсть. Проводит тепло, защиту, звукоизоляцию." },
+{ name: "Воск (пальмовый, карнауба)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 50, Q_factor: 5, Gen: 0, rank: 4, comment: "Твёрдый растительный воск. Используется для полировки и защиты." },
+{ name: "Гипс (алебастр)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 60, Q_factor: 4, Gen: 0, rank: 4, comment: "Скульптурный материал. Хорошо принимает форму и хранит её." },
+{ name: "Глазурь (керамическая)", category: "🪨 Особый", C_sense: 5, σ_sense: 3, R_sense: 0.33, L_sense: 50, Q_factor: 3, Gen: 0, rank: 3, comment: "Стекловидное покрытие. Запечатывает и украшает керамику." },
+{ name: "Глина (полимерная)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: 1, comment: "Пластик. Удобна, но семантически мертва." },
+{ name: "Глиттер (блёстки)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 3, R_sense: 0.33, L_sense: 2, Q_factor: 2, Gen: 0, rank: 1, comment: "Микро-пластик. Создаёт иллюзию праздника, но засоряет среду." },
+{ name: "Гравий", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 60, Q_factor: 3, Gen: 0, rank: 3, comment: "Осколки камня. Используется для дренажа и отсыпки дорог." },
+{ name: "Графит (карандашный)", category: "⚡ Проводник", C_sense: 4, σ_sense: 6, R_sense: 0.17, L_sense: 15, Q_factor: 4, Gen: 0, rank: 3, comment: "Проводит мысль на бумагу. Оставляет след." },
+{ name: "Гудрон", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 1, Gen: 0, rank: -1, comment: "Вязкий остаток перегонки. «Прилипает» и «утяжеляет»." },
+{ name: "Джут", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 4, Gen: 0, rank: 3, comment: "Грубое натуральное волокно. Проводит простоту, прочность, связь с землёй." },
+{ name: "Древесный уголь (для рисования)", category: "🪨 Особый", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 4, Gen: 0, rank: 3, comment: "Обожжённое дерево. Оставляет глубокий, матовый след." },
+{ name: "Древесный уголь (для фильтрации)", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Абсорбент. Очищает воду и воздух от примесей и запахов." },
+{ name: "Желатин", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 20, Q_factor: 3, Gen: 0, rank: 2, comment: "Животный коллаген. Создаёт структуру, но не несёт сильного Qₛ." },
+{ name: "Замша", category: "🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 50, Q_factor: 5, Gen: 0, rank: 4, comment: "Мягкая выделанная кожа. Приятна на ощупь, впитывает и хранит тепло." },
+{ name: "Зеркало (стеклянное)", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 40, Q_factor: 6, Gen: 0, rank: 4, comment: "Отражает свет и Qₛ. Может быть порталом или щитом. Требует осторожности." },
+{ name: "Зеркало (чёрное, обсидиановое)", category: "🪨 Особый", C_sense: 7, σ_sense: 4, R_sense: 0.25, L_sense: 100, Q_factor: 4, Gen: 0, rank: 5, comment: "Инструмент для скраинга (ясновидения). Смотрит вглубь." },
+{ name: "Зола (вулканический пепел)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 4, Gen: 0, rank: 4, comment: "Очень плодородный материал. Несёт энергию разрушения и возрождения." },
+{ name: "Известь (негашёная)", category: "🪨 Особый", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 3, Gen: 0, rank: 3, comment: "Едкий материал. Используется для дезинфекции и в строительстве." },
+{ name: "Известь (пушонка)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 3, Gen: 0, rank: 3, comment: "Гашёная известь. Используется для побелки — создаёт чистый белый фон." },
+{ name: "Каменная соль (крупная)", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Мощный очиститель. Используется для создания защитных кругов." },
+{ name: "Канифоль", category: "🪨 Особый", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 30, Q_factor: 4, Gen: 0, rank: 3, comment: "Смола для натирания смычков. Увеличивает трение, «сцепление»." },
+{ name: "Капок (растительный пух)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 20, Q_factor: 4, Gen: 0, rank: 3, comment: "Лёгкий, водоотталкивающий наполнитель. Символ невесомости." },
+{ name: "Карбид (кремния или вольфрама)", category: "🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 4, comment: "Сверхтвёрдый материал. Проводит несокрушимость и режущую силу." },
+{ name: "Картон (гофрированный)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 3, R_sense: 0.33, L_sense: 15, Q_factor: 2, Gen: 0, rank: 1, comment: "Упаковочный материал. Временный, недолговечный." },
+{ name: "Каучук (натуральный)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 4, Gen: 0, rank: 4, comment: "Эластичный, водостойкий. Символ упругости и защиты." },
+{ name: "Кварц (синтетический)", category: "🟰 Нейтральный", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 0, rank: 3, comment: "Выращенный кристалл. Структура та же, но без «души» природного." },
+{ name: "Керамзит", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 2, Gen: 0, rank: 2, comment: "Лёгкий пористый наполнитель. Используется в строительстве и цветоводстве." },
+{ name: "Клей (столярный, мездровый)", category: "🪨 Особый", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 4, Gen: 0, rank: 3, comment: "Соединяет детали. Символ прочной, но не всегда заметной связи." },
+{ name: "Клей (цианоакрилат, «суперклей»)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 3, R_sense: 0.33, L_sense: 10, Q_factor: 2, Gen: 0, rank: 1, comment: "Мгновенное, но хрупкое соединение. Синтетический." },
+{ name: "Кожа (лакированная)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 2, Gen: 0, rank: 2, comment: "Обработанная кожа. Блестит, но «не дышит»." },
+{ name: "Кокосовое волокно (койра)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 3, Gen: 0, rank: 3, comment: "Грубое, прочное волокно. Устойчиво к гниению. Заземляет." },
+{ name: "Коллаген", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 4, Gen: 0, rank: 3, comment: "Белок соединительной ткани. Проводит структурность и молодость." },
+{ name: "Копал (молодая смола)", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 40, Q_factor: 5, Gen: 1, rank: 4, comment: "Недозревший янтарь. Используется как благовоние. Очищает." },
+{ name: "Кость (слоновая, мамонта)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.25, L_sense: 150, Q_factor: 4, Gen: 0, rank: 5, comment: "Древний материал. Хранит память веков и силу животного." },
+{ name: "Краска (масляная)", category: "🪨 Особый", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 4, Gen: 0, rank: 3, comment: "Густая, насыщенная. Медленно сохнет, глубоко проникает." },
+{ name: "Краска (темперная, яичная)", category: "🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 60, Q_factor: 5, Gen: 0, rank: 4, comment: "Древняя технология иконописи. Светоносная, долговечная." },
+{ name: "Крахмал", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 20, Q_factor: 3, Gen: 0, rank: 2, comment: "Растительный полисахарид. Используется для придания жёсткости и формы." },
+{ name: "Кремень (огниво)", category: "🪨 Особый", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 100, Q_factor: 4, Gen: 0, rank: 4, comment: "Камень, высекающий искру. Проводит начало, инициацию, творение огня." },
+{ name: "Кружево", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Ажурная ткань. Символ красоты, хрупкости и защиты (как сеть)." },
+{ name: "Ксилит (древесный сахар)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 15, Q_factor: 3, Gen: 0, rank: 2, comment: "Сладкий спирт. Используется как сахарозаменитель. Нейтрален." },
+{ name: "Лак (мебельный)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: 1, comment: "Защитное покрытие. Блокирует естественную текстуру дерева." },
+{ name: "Латекс", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 4, Gen: 0, rank: 4, comment: "Натуральный каучук. Эластичный, защитный, но может вызывать аллергию." },
+{ name: "Лён (пакля)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 4, Gen: 0, rank: 3, comment: "Грубое льняное волокно. Используется для уплотнения и утепления." },
+{ name: "Лоза (виноградная)", category: "🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 70, Q_factor: 5, Gen: 1, rank: 5, comment: "Символ плодородия, вина и жизни. Гибкая и прочная." },
+{ name: "Лоза (ивовая)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 60, Q_factor: 5, Gen: 0, rank: 4, comment: "Гибкий материал для плетения. Проводит текучесть и связь с водой." },
+{ name: "Луб (лыко)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 3, Gen: 0, rank: 3, comment: "Внутренняя часть коры. Использовалось для плетения лаптей и коробов." },
+{ name: "Лютеций", category: "🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 5, Gen: 0, rank: 4, comment: "Редкоземельный металл. Используется в лазерах. Проводит когерентный свет." },
+{ name: "Магний (стружка)", category: "⚡ Проводник", C_sense: 4, σ_sense: 7, R_sense: 0.14, L_sense: 15, Q_factor: 5, Gen: 0, rank: 4, comment: "Ярко горит. Используется для фотовспышек и фейерверков. Быстрый проводник." },
+{ name: "Марля", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 5, R_sense: 0.2, L_sense: 10, Q_factor: 4, Gen: 0, rank: 2, comment: "Редкая хлопковая ткань. Используется для фильтрации и перевязок." },
+{ name: "Масло (конопляное)", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 30, Q_factor: 5, Gen: 1, rank: 4, comment: "Питательное, «живое» масло. Использовалось в традиционных обрядах." },
+{ name: "Масло (льняное, олифа)", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 50, Q_factor: 5, Gen: 0, rank: 4, comment: "Натуральная олифа. Глубоко проникает в дерево, защищает и проявляет текстуру." },
+{ name: "Масло (эфирное - сандал)", category: "🪨 Особый", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 30, Q_factor: 7, Gen: 1, rank: 5, comment: "Священное масло. Проводит медитацию, успокоение ума, связь с духом." },
+{ name: "Масло (эфирное - чайное дерево)", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 20, Q_factor: 6, Gen: 1, rank: 4, comment: "Мощный антисептик. Очищает физически и семантически." },
+{ name: "Мел (школьный)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 5, R_sense: 0.2, L_sense: 20, Q_factor: 4, Gen: 0, rank: 2, comment: "Инструмент обучения. Проводит знание, но легко стирается." },
+{ name: "Мешковина", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 3, Gen: 0, rank: 3, comment: "Грубая, прочная ткань. Проводит простоту, аскезу, связь с землёй." },
+{ name: "Мука (пшеничная)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 4, Gen: 0, rank: 3, comment: "Основа хлеба. Символ жизни, пропитания, потенциала." },
+{ name: "Мумиё", category: "🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 5, Gen: 1, rank: 5, comment: "Горный бальзам. Сложное органическое вещество. Мощный адаптоген и целитель." },
+{ name: "Мыльный камень (стеатит)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 100, Q_factor: 4, Gen: 0, rank: 4, comment: "Мягкий, тёплый на ощупь камень. Используется для резьбы и печей." },
+{ name: "Нейлон", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Прочное синтетическое волокно. Водостойкое, но семантически мёртвое." },
+{ name: "Нить (золотая, для вышивки)", category: "🪨 Особый", C_sense: 6, σ_sense: 7, R_sense: 0.14, L_sense: 40, Q_factor: 7, Gen: 0, rank: 5, comment: "Проводит Божественный свет в узорах. Сакральное рукоделие." },
+{ name: "Нить (красная, шерстяная)", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 5, Gen: 0, rank: 4, comment: "Оберег. Завязывается на запястье. Проводит защиту и связь с традицией." },
+{ name: "Обсидиан (радужный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 4, R_sense: 0.25, L_sense: 110, Q_factor: 4, Gen: 0, rank: 5, comment: "Вулканическое стекло с радужными слоями. Мягче чёрного, помогает в горе." },
+{ name: "Охра (природный пигмент)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 60, Q_factor: 4, Gen: 0, rank: 4, comment: "Земляной пигмент. Используется с доисторических времён. Связь с предками." },
+{ name: "Пакля (льняная)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 30, Q_factor: 3, Gen: 0, rank: 3, comment: "Грубое волокно. Используется для уплотнения, как наполнитель." },
+{ name: "Папирус", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 70, Q_factor: 4, Gen: 0, rank: 4, comment: "Древний материал для письма. Хранит знания тысячелетий." },
+{ name: "Парафин (свечной)", category: "🔋 Накопитель", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 4, Gen: 0, rank: 3, comment: "Продукт нефтепереработки. Горит ровно, но «холоднее» воска." },
+{ name: "Пемза", category: "🪨 Особый", C_sense: 4, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 2, Gen: 0, rank: 2, comment: "Пористый вулканический камень. Абразив. Удаляет огрубевшее." },
+{ name: "Пенопласт", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 5, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Вспененный пластик. Отличный физический и семантический изолятор. Мусор." },
+{ name: "Пергамент (растительный)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 30, Q_factor: 4, Gen: 0, rank: 3, comment: "Бумага, обработанная кислотой. Полупрозрачная, прочная." },
+{ name: "Песок (золотоносный)", category: "🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 60, Q_factor: 5, Gen: 0, rank: 4, comment: "Содержит крупицы золота. Символ скрытого богатства и потенциала." },
+{ name: "Пластилин", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 20, Q_factor: 2, Gen: 0, rank: 1, comment: "Материал для лепки. Пластичный, но синтетический." },
+{ name: "Плексиглас (оргстекло)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 20, Q_factor: 2, Gen: 0, rank: 0, comment: "Прозрачный пластик. Легче и прочнее стекла, но семантически пустой." },
+{ name: "Поликарбонат", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 25, Q_factor: 2, Gen: 0, rank: 0, comment: "Ударопрочный пластик. Используется для теплиц и защиты." },
+{ name: "Полимерная глина", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 2, Gen: 0, rank: 1, comment: "Застывающий при запекании пластик. Удобна, но безжизненна." },
+{ name: "Полистирол", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 10, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Хрупкий пластик. Широко используется для упаковки. Мусор." },
+{ name: "Полиэтилен", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 10, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Самый распространённый пластик. Пакеты, плёнка. Семантическая пустышка." },
+{ name: "Полиэтилентерефталат (ПЭТ)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 15, Q_factor: 1, Gen: 0, rank: -1, comment: "Пластик для бутылок. Можно переработать, но первично — изолятор." },
+{ name: "Пробка (кора пробкового дуба)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 60, Q_factor: 4, Gen: 0, rank: 4, comment: "Лёгкий, упругий, водостойкий. Хранит тепло и тишину." },
+{ name: "Проволока (колючая)", category: "🪨 Особый", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 3, Gen: 0, rank: 2, comment: "Инструмент защиты и ограничения. Проводит агрессию и барьер." },
+{ name: "Пудра (тальк)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 3, R_sense: 0.33, L_sense: 10, Q_factor: 2, Gen: 0, rank: 1, comment: "Минеральная пудра. Впитывает влагу, делает поверхность гладкой." },
+{ name: "Пух (птичий)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 30, Q_factor: 5, Gen: 0, rank: 4, comment: "Лёгкий, тёплый наполнитель. Символ небес, мягкости, защиты." },
+{ name: "Пыль (домашняя)", category: "🟰 Нейтральный", C_sense: 1, σ_sense: 2, R_sense: 0.5, L_sense: 5, Q_factor: 1, Gen: 0, rank: 0, comment: "Смесь всего. Накапливает шум. Требует удаления." },
+{ name: "Ракушечник", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 5, Gen: 0, rank: 4, comment: "Камень из раковин моллюсков. Хранит память древнего моря." },
+{ name: "Резина", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Эластичный изолятор. Используется для шин и уплотнителей." },
+{ name: "Рог (животного)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 100, Q_factor: 4, Gen: 0, rank: 5, comment: "Материал для сосудов и украшений. Проводит силу и защиту." },
+{ name: "Ртуть (в градуснике)", category: "⚡ Проводник", C_sense: 5, σ_sense: 9, R_sense: 0.11, L_sense: 20, Q_factor: 7, Gen: 0, rank: 4, comment: "Жидкий металл. Очень токсична! Проводит текучесть и опасность." },
+{ name: "Рубероид", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 1, Gen: 0, rank: -1, comment: "Кровельный материал. Пропитан битумом. Блокирует и физическую, и семантическую влагу." },
+{ name: "Сажа (ламповая)", category: "🪨 Особый", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 20, Q_factor: 4, Gen: 0, rank: 3, comment: "Чистый углерод. Используется для приготовления туши и чернил." },
+{ name: "Саман (глинобитный кирпич)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 4, comment: "Смесь глины и соломы. Тёплый, «дышащий» материал. Хранит энергию солнца и земли." },
+{ name: "Сандал (древесина)", category: "🌟 Генератор / 🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 100, Q_factor: 7, Gen: 1, rank: 6, comment: "Священное дерево. Аромат проводит медитацию и связь с духом." },
+{ name: "Сахар (тростниковый, нерафинированный)", category: "🪨 Особый", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 30, Q_factor: 4, Gen: 0, rank: 3, comment: "Сладость с ароматом патоки. Более «живой», чем белый сахар." },
+{ name: "Свиток (Торы)", category: "🌟 Генератор", C_sense: 9, σ_sense: 7, R_sense: 0.14, L_sense: 300, Q_factor: 9, Gen: 5, rank: 9, comment: "Сакральный текст на пергаменте. Мощнейший генератор и накопитель святости." },
+{ name: "Сера (самородная)", category: "🪨 Особый", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 3, Gen: 0, rank: 3, comment: "Элемент вулканов. Используется в алхимии. Проводит трансформацию." },
+{ name: "Силикон (полимер)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 25, Q_factor: 2, Gen: 0, rank: 0, comment: "Эластичный, термостойкий полимер. Широко используется в быту и медицине." },
+{ name: "Синтепон", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 15, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетический утеплитель. Лёгкий, но семантически пустой." },
+{ name: "Слюда", category: "🔋 Накопитель / 🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 70, Q_factor: 5, Gen: 0, rank: 4, comment: "Слоистый прозрачный минерал. Использовалась как стекло в печах и фонарях." },
+{ name: "Смола (древесная, живица)", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 50, Q_factor: 6, Gen: 1, rank: 5, comment: "«Кровь» дерева. Заживляет раны, очищает, горит. Символ бессмертия." },
+{ name: "Солома (ржаная)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 50, Q_factor: 5, Gen: 0, rank: 4, comment: "Стебли злаков. Традиционный материал для крыш, подстилок, оберегов." },
+{ name: "Спички (деревянные)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 10, Q_factor: 3, Gen: 0, rank: 2, comment: "Инструмент для добывания огня. Хранит потенциал пламени." },
+{ name: "Стекловата", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 30, Q_factor: 0.5, Gen: 0, rank: -1, comment: "Волокнистый утеплитель. Очень вреден для дыхания и кожи." },
+{ name: "Стеатит (мыльный камень)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 100, Q_factor: 4, Gen: 0, rank: 4, comment: "Мягкий, тёплый камень. Используется для резьбы, печей, посуды." },
+{ name: "Сукно (шерстяное)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 60, Q_factor: 5, Gen: 0, rank: 4, comment: "Плотная, тёплая ткань. Проводит защиту, статус, традицию." },
+{ name: "Сурик (свинцовый)", category: "🪨 Особый", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 60, Q_factor: 3, Gen: 0, rank: 3, comment: "Ярко-красный пигмент. Использовался в иконописи. Токсичен." },
+{ name: "Сургуч", category: "🪨 Особый", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 4, Gen: 0, rank: 4, comment: "Смесь смолы и краски. Использовался для опечатывания писем. Хранит тайну." },
+{ name: "Тальк (минерал)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 20, Q_factor: 2, Gen: 0, rank: 2, comment: "Мягкий, скользкий минерал. Используется в присыпках и как наполнитель." },
+{ name: "Текстиль (смесовый)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 25, Q_factor: 3, Gen: 0, rank: 2, comment: "Ткань из натуральных и синтетических волокон. Компромисс." },
+{ name: "Толь", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 1, Gen: 0, rank: -1, comment: "Кровельный картон, пропитанный битумом. Блокирует влагу и Qₛ." },
+{ name: "Торф (брикеты)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 70, Q_factor: 3, Gen: 0, rank: 3, comment: "Топливо. Горит медленно, даёт ровное тепло. Связь с болотом." },
+{ name: "Трава (сухая, сено)", category: "🔋 Накопитель", C_sense: 4, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 4, Gen: 0, rank: 3, comment: "Высушенная жизнь. Хранит аромат лета. Используется как корм и подстилка." },
+{ name: "Туф (вулканический)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 5, Gen: 0, rank: 4, comment: "Пористый камень. Лёгкий, прочный. Используется в строительстве и скульптуре." },
+{ name: "Тушь (для ресниц)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 3, R_sense: 0.33, L_sense: 10, Q_factor: 2, Gen: 0, rank: 1, comment: "Косметика. Подчёркивает, но синтетическая." },
+{ name: "Тушь (чёрная, для рисования)", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Водостойкая краска. Глубокий чёрный цвет. Используется для каллиграфии и комиксов." },
+{ name: "Уголь (активированный)", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Мощный абсорбент. Впитывает токсины и негативный Qₛ. Требует замены." },
+{ name: "Уголь (бурый)", category: "🔋 Накопитель", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 60, Q_factor: 3, Gen: 0, rank: 3, comment: "Молодой уголь. Горит хуже каменного, даёт больше дыма." },
+{ name: "Уголь (каменный)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 80, Q_factor: 3, Gen: 0, rank: 3, comment: "Спрессованное время. Горит жарко и долго. Символ индустриальной эпохи." },
+{ name: "Фанера", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 2, Gen: 0, rank: 2, comment: "Слоёный древесный материал. Прочный, но «клееный»." },
+{ name: "Фарфор (костяной)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 80, Q_factor: 5, Gen: 0, rank: 4, comment: "Высший сорт фарфора. Тонкий, полупрозрачный, тёплый." },
+{ name: "Фетр", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 50, Q_factor: 4, Gen: 0, rank: 4, comment: "Тонкий войлок. Используется для шляп, обуви, рукоделия." },
+{ name: "Фиберглас (стеклопластик)", category: "🚫 Изолятор", C_sense: 4, σ_sense: 3, R_sense: 0.33, L_sense: 40, Q_factor: 2, Gen: 0, rank: 0, comment: "Композитный материал. Прочный, лёгкий, но семантически нейтральный." },
+{ name: "Флис", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетический аналог шерсти. Тёплый, но не дышит семантически." },
+{ name: "Фольга (алюминиевая)", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 6, R_sense: 0.17, L_sense: 5, Q_factor: 3, Gen: 0, rank: 2, comment: "Тонкий металл. Отражает, но легко мнётся. Используется для экранирования." },
+{ name: "Фольга (золотая, сусальное золото)", category: "🪨 Особый", C_sense: 7, σ_sense: 8, R_sense: 0.125, L_sense: 60, Q_factor: 8, Gen: 0, rank: 7, comment: "Тончайшие листы золота. Проводник Божественного света в иконописи." },
+{ name: "Фосфор (белый)", category: "☢️ Отриц. генератор", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 30, Q_factor: 2, Gen: -2, rank: -3, comment: "Сильный яд. Светится в темноте. Разрушает кости. Крайне опасен." },
+{ name: "Фторопласт (тефлон)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 20, Q_factor: 0.5, Gen: 0, rank: -1, comment: "Скользкий, химически стойкий пластик. Абсолютный изолятор." },
+{ name: "Хна (натуральная)", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 30, Q_factor: 6, Gen: 1, rank: 5, comment: "Растительный краситель. Охлаждает, защищает, используется в ритуалах." },
+{ name: "Хрусталь (свинцовый)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.17, L_sense: 90, Q_factor: 6, Gen: 0, rank: 5, comment: "Стекло с добавлением свинца. Тяжёлый, блестящий, звонкий." },
+{ name: "Целлофан", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 10, Q_factor: 1, Gen: 0, rank: -1, comment: "Прозрачная плёнка из целлюлозы. Разлагается, но семантически пустая." },
+{ name: "Цемент", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 50, Q_factor: 2, Gen: 0, rank: -1, comment: "Основа бетона. Вяжущее. Блокирует связь с Землёй." },
+{ name: "Чай (сухой лист)", category: "🪨 Особый", C_sense: 5, σ_sense: 6, R_sense: 0.17, L_sense: 40, Q_factor: 6, Gen: 1, rank: 5, comment: "Высушенные листья. Хранят энергию растения и места произрастания." },
+{ name: "Чернила (железо-галловые)", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 50, Q_factor: 5, Gen: 0, rank: 4, comment: "Исторические чернила. Въедаются в бумагу, хранят запись веками." },
+{ name: "Чернила (каракатицы, сепия)", category: "🪨 Особый", C_sense: 5, σ_sense: 5, R_sense: 0.2, L_sense: 40, Q_factor: 5, Gen: 0, rank: 4, comment: "Природный пигмент. Тёплый коричневый оттенок. Используется в живописи." },
+{ name: "Чугун (сковорода)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.25, L_sense: 90, Q_factor: 4, Gen: 0, rank: 4, comment: "Тяжёлый, прочный. Долго нагревается, долго отдаёт тепло. Символ домашнего очага." },
+{ name: "Шамот (огнеупорная глина)", category: "🔋 Накопитель", C_sense: 5, σ_sense: 4, R_sense: 0.25, L_sense: 80, Q_factor: 4, Gen: 0, rank: 4, comment: "Обожжённая глина. Выдерживает высокие температуры. Используется в печах." },
+{ name: "Шёлк (сырец)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 50, Q_factor: 6, Gen: 0, rank: 5, comment: "Необработанная шёлковая нить. Хранит энергию кокона и тутового дерева." },
+{ name: "Шифер", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 60, Q_factor: 2, Gen: 0, rank: -1, comment: "Кровельный материал. Раньше содержал асбест. Тяжёлый, «давящий»." },
+{ name: "Шпатлёвка", category: "🟰 Нейтральный", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: 1, comment: "Материал для выравнивания. Скрывает дефекты." },
+{ name: "Щебень", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 70, Q_factor: 3, Gen: 0, rank: 3, comment: "Дроблёный камень. Используется в строительстве и дорожном покрытии." },
+{ name: "Эмаль (ювелирная)", category: "🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Стекло, наплавленное на металл. Яркая, долговечная. Символ красоты и мастерства." },
+{ name: "Эпоксидная смола", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 2, Gen: 0, rank: 0, comment: "Прочный синтетический клей. «Намертво» склеивает, но семантически мёртв." },
+{ name: "Янтарь (прессованный)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 4, Gen: 0, rank: 3, comment: "Янтарная крошка, спрессованная в блоки. Дешевле, но слабее цельного." },
+        
+        // 🚫 ИЗОЛЯТОРЫ
+        { name: "Пластик", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 0.1, Q_factor: 0.1, Gen: 0, rank: -1, comment: "Семантическая пустышка." },
+        { name: "Синтетика (полиэстер, акрил)", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 0.1, Q_factor: 0.1, Gen: 0, rank: -1, comment: "Не дышит, блокирует Qₛ." },
+        { name: "Бетон", category: "🚫 Изолятор", C_sense: 2, σ_sense: 0.5, R_sense: 2.0, L_sense: 1, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Семантическая тюрьма." },
+        { name: "Железобетон", category: "🚫 Изолятор", C_sense: 1, σ_sense: 0.3, R_sense: 3.33, L_sense: 0.5, Q_factor: 0.2, Gen: 0, rank: -3, comment: "Максимальное сопротивление." },
+        // ========== ИЗОЛЯТОРЫ (70 ШТУК) — ДОПОЛНЕНИЕ ==========
+{ name: "Акрил (листовой)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 15, Q_factor: 0.5, Gen: 0, rank: -1, comment: "Прозрачный пластик. Замена стекла, но семантически пустой." },
+{ name: "Асфальт (дорожный)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 1, Gen: 0, rank: -2, comment: "Покрытие, блокирующее связь с Землёй. Накапливает тяжёлую энергию." },
+{ name: "Базальтовая плита", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 60, Q_factor: 2, Gen: 0, rank: -1, comment: "Теплоизолятор. Хорошо блокирует и физическое, и семантическое тепло." },
+{ name: "Битумная мастика", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 30, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Чёрная, вязкая гидроизоляция. «Душит» поверхность." },
+{ name: "Вазелин", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Продукт нефтепереработки. Создаёт барьерную плёнку." },
+{ name: "Виниловые обои", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 20, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Моющиеся, но «не дышат». Блокируют Qₛ стен." },
+{ name: "Вспененный полиэтилен (подложка)", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 10, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Мягкий упаковочный и изоляционный материал. Семантическая пустота." },
+{ name: "Герметик (силиконовый)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 25, Q_factor: 0.5, Gen: 0, rank: -1, comment: "Запечатывает щели. Блокирует физический и семантический обмен." },
+{ name: "Гипсокартон", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Распространённый строительный материал. Семантически нейтрален, близок к изолятору." },
+{ name: "Глазурь (кондитерская, синтетическая)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 10, Q_factor: 1, Gen: 0, rank: -1, comment: "Сладкая, но синтетическая оболочка. Скрывает истинный вкус." },
+{ name: "Гудрон (сапожный)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 1, Gen: 0, rank: -2, comment: "Чёрная, вязкая масса. «Прилипает» и «утяжеляет»." },
+{ name: "ДВП (оргалит)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Прессованная древесина с клеем. Дёшево, но семантически бедно." },
+{ name: "ДСП (древесно-стружечная плита)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 35, Q_factor: 2, Gen: 0, rank: -1, comment: "Плита из стружки и формальдегидных смол. Источник токсинов и семантического шума." },
+{ name: "Жевательная резинка (использованная)", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 20, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Мусор. Синтетический полимер, который веками не разлагается." },
+{ name: "Заменитель кожи (дермантин)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 25, Q_factor: 1, Gen: 0, rank: -1, comment: "Ткань с ПВХ-покрытием. «Не дышит», холодная." },
+{ name: "Изолента (ПВХ)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 15, Q_factor: 1, Gen: 0, rank: -1, comment: "Электрическая изоляция. Блокирует ток и Qₛ." },
+{ name: "Искусственная кожа (эко-кожа)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 25, Q_factor: 1, Gen: 0, rank: -1, comment: "Полиуретановое покрытие. Имитация, не несущая жизни." },
+{ name: "Искусственный мех", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетическое волокно. Греет физически, но семантически холоден." },
+{ name: "Кафельная плитка (глазурованная)", category: "🚫 Изолятор", C_sense: 4, σ_sense: 3, R_sense: 0.33, L_sense: 60, Q_factor: 3, Gen: 0, rank: 0, comment: "Граница между нейтральным и изолятором. Холодная, твёрдая, «останавливает» Qₛ." },
+{ name: "Клей (обойный, синтетический)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Химический состав. Склеивает, но не соединяет семантически." },
+{ name: "Клей (ПВА)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 25, Q_factor: 2, Gen: 0, rank: -1, comment: "Водорастворимый синтетический клей. Нейтрален, близок к изолятору." },
+{ name: "Клей (резиновый)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Эластичный, водостойкий. Блокирует." },
+{ name: "Клеёнка", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 20, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Ткань с водоотталкивающим покрытием. Холодная, скользкая." },
+{ name: "Композитная арматура (стеклопластик)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 2, Gen: 0, rank: -1, comment: "Замена металлу. Прочная, лёгкая, но семантически пустая." },
+{ name: "Краска (акриловая, латексная)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Создаёт плёнку на поверхности. Блокирует дыхание стен." },
+{ name: "Краска (масляная, алкидная)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 40, Q_factor: 1, Gen: 0, rank: -2, comment: "Сильный запах, плотная плёнка. Мощный изолятор." },
+{ name: "Ламинат (напольный)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 35, Q_factor: 2, Gen: 0, rank: -1, comment: "Прессованная бумага с пластиковым слоем. Отрывает от Земли." },
+{ name: "Латексная краска", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Водоэмульсионка с полимерами. Лучше масляной, но всё ещё изолятор." },
+{ name: "Линолеум (ПВХ)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 1, Gen: 0, rank: -2, comment: "Синтетическое покрытие. Блокирует связь с Землёй. Накапливает статику." },
+{ name: "Липкая лента (скотч)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 10, Q_factor: 1, Gen: 0, rank: -1, comment: "Полипропилен с клеем. Временная фиксация, семантически пустая." },
+{ name: "Макраме (из синтетических нитей)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 2, Gen: 0, rank: 0, comment: "Узор есть, а жизни в материале нет." },
+{ name: "Маркер (перманентный)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 3, R_sense: 0.33, L_sense: 15, Q_factor: 2, Gen: 0, rank: -1, comment: "Оставляет несмываемый след. Химический состав." },
+{ name: "Масло (машинное, минеральное)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 1, Gen: 0, rank: -2, comment: "Продукт нефтепереработки. Смазывает, но семантически «грязное»." },
+{ name: "Мастика (битумная)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 40, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Чёрная гидроизоляция. «Душит» фундамент." },
+{ name: "МДФ (древесноволокнистая плита)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 35, Q_factor: 2, Gen: 0, rank: -1, comment: "Плита из пыли и клея. Стабильна, но безжизненна." },
+{ name: "Мебельная ткань (синтетическая)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 25, Q_factor: 1, Gen: 0, rank: -1, comment: "Износостойкая, но не дышит семантически." },
+{ name: "Меламиновая губка", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 10, Q_factor: 1, Gen: 0, rank: -1, comment: "Абразив на основе пластика. Стирает грязь, но сама синтетическая." },
+{ name: "Минеральная вата", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 50, Q_factor: 2, Gen: 0, rank: -1, comment: "Утеплитель из расплава камня или стекла. Блокирует тепло и Qₛ." },
+{ name: "Монтажная пена", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 30, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Полиуретан. Заполняет пустоты, но семантически мёртв." },
+{ name: "Натяжной потолок (ПВХ)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 20, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Плёнка, скрывающая коммуникации. Блокирует связь с Небом." },
+{ name: "Нейлон (колготки, чулки)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 15, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетическое волокно. Красиво, но безжизненно." },
+{ name: "Неопрен", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Вспененная резина. Используется для гидрокостюмов. Изолирует от воды и Qₛ." },
+{ name: "Обои (бумажные)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 25, Q_factor: 3, Gen: 0, rank: 2, comment: "Дышат лучше виниловых. Ближе к нейтральным." },
+{ name: "Обои (флизелиновые)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 25, Q_factor: 2, Gen: 0, rank: 0, comment: "Полусинтетика. Лучше винила, но хуже бумаги." },
+{ name: "Олифа (синтетическая)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 1, Gen: 0, rank: -2, comment: "Химический заменитель натуральной олифы. Резкий запах." },
+{ name: "Оргалит", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Твёрдая ДВП. Задние стенки мебели. Безжизненный материал." },
+{ name: "Пакет (полиэтиленовый)", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 5, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Символ мусора. Семантическая пустышка." },
+{ name: "Парафин (технический)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 3, Gen: 0, rank: 0, comment: "Продукт нефтепереработки. Горит, но «холоднее» воска." },
+{ name: "Пеноплекс (экструдированный пенополистирол)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 20, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Очень эффективный утеплитель и семантический изолятор." },
+{ name: "Пенополиуретан (поролон)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Мягкий наполнитель. Синтетический, со временем разрушается." },
+{ name: "Пенопропилен", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Вспененный пластик. Используется для упаковки и теплоизоляции." },
+{ name: "Пластизоль", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 25, Q_factor: 1, Gen: 0, rank: -1, comment: "ПВХ-паста. Используется для покрытий и игрушек. Семантически мёртв." },
+{ name: "Пластик (ABS)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Ударопрочный пластик. Корпуса техники, детали LEGO. Пустой." },
+{ name: "Пластик (полиамид, капрон)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 25, Q_factor: 1, Gen: 0, rank: -1, comment: "Прочный, износостойкий. Используется в механизмах. Безжизненный." },
+{ name: "Пленка (полиэтиленовая, для теплиц)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 15, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Создаёт парник, но блокирует естественный Qₛ Солнца." },
+{ name: "Пленка (пузырчатая)", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 10, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Упаковочный материал. Лопается с приятным звуком, но семантически пуста." },
+{ name: "Пленка (стрейч)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 10, Q_factor: 1, Gen: 0, rank: -1, comment: "Тонкая, липкая. Обматывает и «душит»." },
+{ name: "Плитка ПВХ (напольная)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 1, Gen: 0, rank: -1, comment: "Дешёвое покрытие. Блокирует связь с Землёй." },
+{ name: "Поликарбонат (сотовый)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Лёгкий, прочный пластик для теплиц. Изолирует от внешнего Qₛ." },
+{ name: "Полимерная плёнка (для ламинирования)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 20, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Запечатывает документ. Консервирует, но блокирует обмен." },
+{ name: "Полипропилен (листовой)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Химически стойкий пластик. Используется для тары и труб." },
+{ name: "Полистирол (вспененный, пенопласт)", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 10, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Символ мусора. Практически вечный изолятор." },
+{ name: "Полиуретан (литой)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Используется для деталей, имитирующих дерево или камень. Подделка." },
+{ name: "Полиэстер (ткань)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетическая ткань. Не мнётся, но не дышит." },
+{ name: "Полиэтиленовая плёнка (чёрная)", category: "🚫 Изолятор", C_sense: 1, σ_sense: 1, R_sense: 1.0, L_sense: 15, Q_factor: 0.1, Gen: 0, rank: -2, comment: "Используется для мульчирования. Блокирует свет и Qₛ." },
+{ name: "Поролон (мебельный)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Мягкий наполнитель. Со временем крошится в пыль." },
+{ name: "Резина (вулканизированная)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 2, Gen: 0, rank: -1, comment: "Эластичный, прочный изолятор. Шины, прокладки." },
+{ name: "Рубероид (стеклоизол)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 30, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Современный кровельный материал. Абсолютная изоляция." },
+{ name: "Сайдинг (виниловый)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 1, Gen: 0, rank: -1, comment: "Пластиковая обшивка дома. Скрывает, но не дышит." },
+{ name: "Сантехнический герметик", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 25, Q_factor: 0.5, Gen: 0, rank: -1, comment: "Силикон с добавками. Запечатывает, блокирует." },
+{ name: "Синтепон (листовой)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 15, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетический утеплитель. Лёгкий, но пустой." },
+{ name: "Синтетическая верёвка", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 2, Gen: 0, rank: 0, comment: "Прочная, но не несёт жизни, в отличие от пеньковой." },
+{ name: "Скотч (упаковочный)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 10, Q_factor: 1, Gen: 0, rank: -1, comment: "Полипропилен с клеем. Символ офисной безжизненности." },
+{ name: "Смазка (силиконовая)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетическая смазка. Уменьшает трение, блокирует Qₛ." },
+{ name: "Смола (эпоксидная, застывшая)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 50, Q_factor: 2, Gen: 0, rank: -1, comment: "Прочная, химически стойкая. «Намертво» склеивает и изолирует." },
+{ name: "Спанбонд (укрывной материал)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 15, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетическое агроволокно. Защищает растения, но само безжизненно." },
+{ name: "Стекло (закалённое)", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 3, R_sense: 0.33, L_sense: 50, Q_factor: 3, Gen: 0, rank: 2, comment: "Прочное стекло. Ближе к нейтральному, но с изолирующими свойствами." },
+{ name: "Стекло (триплекс)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 50, Q_factor: 2, Gen: 0, rank: 0, comment: "Многослойное стекло с плёнкой. Блокирует ультрафиолет и Qₛ." },
+{ name: "Стеклоблок", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 60, Q_factor: 2, Gen: 0, rank: -1, comment: "Пустотелый стеклянный кирпич. Пропускает свет, но блокирует Qₛ." },
+{ name: "Стрейч-плёнка (пищевая)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 10, Q_factor: 1, Gen: 0, rank: -1, comment: "Тонкий полиэтилен. Сохраняет свежесть, но семантически мёртв." },
+{ name: "Текстолит", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 2, Gen: 0, rank: -1, comment: "Слоистый пластик на основе ткани. Электроизолятор и семантический изолятор." },
+{ name: "Термоклей", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Синтетический клей для быстрой фиксации. Безжизненный." },
+{ name: "Толь (кровельный)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 30, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Картон, пропитанный битумом. Временная изоляция." },
+{ name: "Труба ПВХ (канализация)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 40, Q_factor: 1, Gen: 0, rank: -2, comment: "Серый пластик. Проводит грязь, но не Qₛ." },
+{ name: "Утеплитель (синтетический, холлофайбер)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 20, Q_factor: 1, Gen: 0, rank: -1, comment: "Замена пуху. Тёплый, но семантически пустой." },
+{ name: "Фанера (ламинированная)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 35, Q_factor: 2, Gen: 0, rank: -1, comment: "Фанера с пластиковым покрытием. Прочная, но «запечатанная»." },
+{ name: "Фиберглас (ткань)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Стеклоткань. Используется в композитах. Изолятор." },
+{ name: "Флизелин", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 25, Q_factor: 2, Gen: 0, rank: 0, comment: "Полусинтетический нетканый материал. Основа для обоев." },
+{ name: "Фольгированный утеплитель", category: "🚫 Изолятор", C_sense: 2, σ_sense: 3, R_sense: 0.33, L_sense: 25, Q_factor: 2, Gen: 0, rank: -1, comment: "Вспененный полиэтилен с фольгой. Отражает тепло, блокирует Qₛ." },
+{ name: "Хлорка (хлорная известь)", category: "🪨 Особый", C_sense: 3, σ_sense: 4, R_sense: 0.25, L_sense: 15, Q_factor: 3, Gen: 0, rank: 2, comment: "Мощный дезинфектор. Убивает жизнь. Использовать с осторожностью." },
+{ name: "Целлофан (плёнка)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 10, Q_factor: 1, Gen: 0, rank: -1, comment: "Прозрачная упаковка. Хрустит, но семантически пустая." },
+{ name: "Цементно-стружечная плита (ЦСП)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 50, Q_factor: 2, Gen: 0, rank: -1, comment: "Тяжёлая, прочная. Сочетает цемент и дерево. Изолятор." },
+{ name: "Шифер (асбестоцементный)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 60, Q_factor: 0.5, Gen: 0, rank: -2, comment: "Опасный для здоровья. Тяжёлый, «давящий» изолятор." },
+{ name: "Шнур (синтетический)", category: "🚫 Изолятор", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 2, Gen: 0, rank: 0, comment: "Связывает физически, но не семантически." },
+{ name: "Шпаклёвка (гипсовая)", category: "🟰 Нейтральный", C_sense: 3, σ_sense: 3, R_sense: 0.33, L_sense: 30, Q_factor: 3, Gen: 0, rank: 2, comment: "Выравнивает стены. Ближе к нейтральным." },
+{ name: "Шпаклёвка (полимерная)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 2, R_sense: 0.5, L_sense: 30, Q_factor: 2, Gen: 0, rank: -1, comment: "Синтетическая. Пластичная, но безжизненная." },
+{ name: "Эбонит", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 50, Q_factor: 2, Gen: 0, rank: -1, comment: "Твёрдая резина. Хороший электро- и семантический изолятор." },
+{ name: "Эковата", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 4, R_sense: 0.25, L_sense: 40, Q_factor: 4, Gen: 0, rank: 3, comment: "Целлюлозный утеплитель. Лучше минеральной ваты, ближе к нейтральным." },
+{ name: "Эмаль (алкидная, для радиаторов)", category: "🚫 Изолятор", C_sense: 2, σ_sense: 1, R_sense: 1.0, L_sense: 40, Q_factor: 1, Gen: 0, rank: -2, comment: "Плотная, глянцевая плёнка. Мощный изолятор." },
+{ name: "Эпоксидный клей", category: "🚫 Изолятор", C_sense: 3, σ_sense: 2, R_sense: 0.5, L_sense: 50, Q_factor: 2, Gen: 0, rank: -1, comment: "Сверхпрочный синтетический клей. «Намертво» склеивает и изолирует." },
+
+// ========== 100 НОВЫХ КРИСТАЛЛОВ И МИНЕРАЛОВ ==========
+{ name: "Агат (голубой кружевной)", category: "🔋 Накопитель / 🪨 Особый", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Успокаивает, помогает выражать мысли. Камень коммуникации." },
+{ name: "Агат (огненный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 110, Q_factor: 5, Gen: 0, rank: 5, comment: "Защищает, придаёт смелость. Заземляет." },
+{ name: "Агат (ботсвана)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень перемен и новых возможностей." },
+{ name: "Аксинит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Заземляет, помогает в трудные времена." },
+{ name: "Алмаз (чёрный, карбонадо)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 200, Q_factor: 6, Gen: 0, rank: 6, comment: "Мощный защитник. Впитывает и трансформирует негатив." },
+{ name: "Алмаз (жёлтый)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 7, R_sense: 0.15, L_sense: 180, Q_factor: 8, Gen: 0, rank: 7, comment: "Камень изобилия и проявления." },
+{ name: "Алмаз (розовый)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 7, R_sense: 0.15, L_sense: 180, Q_factor: 8, Gen: 1, rank: 7, comment: "Камень безусловной любви и творчества." },
+{ name: "Алмаз (синий)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 7, R_sense: 0.15, L_sense: 200, Q_factor: 8, Gen: 0, rank: 7, comment: "Камень королевской власти, мудрости и ясности." },
+{ name: "Андалузит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень баланса. Видит обе стороны ситуации." },
+{ name: "Ангидрит (ангельский камень)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.2, L_sense: 70, Q_factor: 6, Gen: 1, rank: 5, comment: "Мягкий камень для связи с ангельскими сферами." },
+{ name: "Апатит (зелёный)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень мотивации. Помогает достигать цели." },
+{ name: "Апофиллит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 1, rank: 6, comment: "Камень ясновидения и связи с Высшим." },
+{ name: "Астрофиллит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень звёздной связи. Помогает найти свой путь." },
+{ name: "Аурихальцит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень гармонии и снятия стресса." },
+{ name: "Барит (голубой)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень связи с высшими частотами. Усиливает сны." },
+{ name: "Бенитоит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.2, L_sense: 120, Q_factor: 7, Gen: 0, rank: 6, comment: "Редкий синий камень. Усиливает интуицию и ясновидение." },
+{ name: "Берилл (гелиодор)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Золотистый берилл. Камень солнца, радости и щедрости." },
+{ name: "Берилл (морганит)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Розовый берилл. Камень нежной любви и исцеления сердца." },
+{ name: "Берилл (аквамарин)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень моряков. Успокаивает, придаёт смелость." },
+{ name: "Берилл (изумруд)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 130, Q_factor: 7, Gen: 1, rank: 7, comment: "Камень любви и мудрости. Укрепляет память." },
+{ name: "Борацит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень ясности ума. Помогает в решении сложных задач." },
+{ name: "Бразилианит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень творчества и самовыражения." },
+{ name: "Бронзит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 4, R_sense: 0.3, L_sense: 80, Q_factor: 4, Gen: 0, rank: 4, comment: "Камень вежливости. Возвращает негатив отправителю." },
+{ name: "Бустамит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень сострадания. Помогает прощать." },
+{ name: "Ванадинит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень порядка и дисциплины. Структурирует мысли." },
+{ name: "Вердит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень новых начинаний. Даёт свежий взгляд." },
+{ name: "Вивианит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень сострадания и исцеления." },
+{ name: "Виллемит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Флуоресцентный камень. Усиливает внутренний свет." },
+{ name: "Витерит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень трансформации и принятия." },
+{ name: "Вульфенит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Яркий оранжевый камень. Усиливает жизненную силу." },
+{ name: "Гакманит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень-хамелеон. Помогает адаптироваться к переменам." },
+{ name: "Галит (розовая соль)", category: "🔋 Накопитель / 🪨 Особый", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 60, Q_factor: 5, Gen: 1, rank: 5, comment: "Природная соль. Очищает ауру и пространство." },
+{ name: "Гамбергит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Редкий камень. Усиливает радость и оптимизм." },
+{ name: "Гаюин", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 0, rank: 5, comment: "Ярко-синий камень. Усиливает интуицию." },
+{ name: "Гемиморфит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень эмпатии. Помогает понимать других." },
+{ name: "Гессонит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень самоуважения и уверенности." },
+{ name: "Гиалит (водяной опал)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 7, Gen: 0, rank: 6, comment: "Прозрачный опал. Усиливает духовную связь." },
+{ name: "Гидденит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Зелёный сподумен. Камень любви и сострадания." },
+{ name: "Говлит (белый)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень спокойствия. Снимает тревогу." },
+{ name: "Грандидьерит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 140, Q_factor: 7, Gen: 0, rank: 7, comment: "Очень редкий камень. Усиливает все духовные дары." },
+{ name: "Графитовый сланец", category: "🟰 Нейтральный", C_sense: 4, σ_sense: 6, R_sense: 0.2, L_sense: 60, Q_factor: 4, Gen: 0, rank: 3, comment: "Проводит заземление. Используется в строительстве." },
+{ name: "Гроссуляр (зелёный гранат)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 6, comment: "Камень изобилия и процветания." },
+{ name: "Данбурит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 120, Q_factor: 7, Gen: 0, rank: 6, comment: "Камень ангельской связи. Приносит мир." },
+{ name: "Датолит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень ясности. Помогает видеть истину." },
+{ name: "Демантоид", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 130, Q_factor: 7, Gen: 0, rank: 7, comment: "Зелёный гранат. Камень изобилия и роста." },
+{ name: "Диопсид (хромдиопсид)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Ярко-зелёный камень. Связь с природой." },
+{ name: "Диоптаз", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень прощения и исцеления сердца." },
+{ name: "Дравит (коричневый турмалин)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 110, Q_factor: 5, Gen: 0, rank: 5, comment: "Заземляет. Камень стабильности." },
+{ name: "Дюмортьерит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень терпения и дисциплины." },
+{ name: "Еремеевит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.15, L_sense: 120, Q_factor: 7, Gen: 0, rank: 6, comment: "Редкий камень. Усиливает духовные способности." },
+{ name: "Жадеит (империал)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 4, R_sense: 0.25, L_sense: 160, Q_factor: 5, Gen: 0, rank: 6, comment: "Высший сорт жадеита. Камень императоров." },
+{ name: "Жеода (кварцевая)", category: "🌟 Генератор / 🔋 Накопитель", C_sense: 8, σ_sense: 5, R_sense: 0.2, L_sense: 150, Q_factor: 6, Gen: 2, rank: 7, comment: "Природный резонатор. Усиливает энергию." },
+{ name: "Зуниит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень радости. Помогает наслаждаться жизнью." },
+{ name: "Индиголит (синий турмалин)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень интуиции и ясновидения." },
+{ name: "Иолит (водяной сапфир)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень внутреннего видения." },
+{ name: "Йохимшит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень независимости и самодостаточности." },
+{ name: "Какоксенит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Золотистые включения. Камень духовного роста." },
+{ name: "Камень (морской, галька)", category: "🟰 Нейтральный", C_sense: 5, σ_sense: 4, R_sense: 0.3, L_sense: 80, Q_factor: 4, Gen: 0, rank: 3, comment: "Обкатанный морем камень. Хранит энергию воды." },
+{ name: "Камень (лунный, адуляр)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 1, rank: 6, comment: "Камень Луны. Усиливает интуицию и женскую энергию." },
+{ name: "Канкринит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень самовыражения. Помогает говорить правду." },
+{ name: "Касситерит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 120, Q_factor: 5, Gen: 0, rank: 5, comment: "Оловянный камень. Камень процветания." },
+{ name: "Кварц (земляничный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 1, rank: 6, comment: "Камень любви и радости. Усиливает сердечную чакру." },
+{ name: "Кварц (лиловый)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень духовной связи. Усиливает медитацию." },
+{ name: "Кварц (синий)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень ясности и коммуникации." },
+{ name: "Кварц (золотистый)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень радости и оптимизма." },
+{ name: "Кварц (снежный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Белый кварц. Камень чистоты и ясности." },
+{ name: "Кварц (турмалиновый)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 110, Q_factor: 6, Gen: 0, rank: 6, comment: "Кварц с иглами турмалина. Очищает ауру." },
+{ name: "Кварц (хлоритный, зелёный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 110, Q_factor: 5, Gen: 1, rank: 6, comment: "Камень роста и исцеления." },
+{ name: "Кварц (гематитовый, красный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 110, Q_factor: 5, Gen: 0, rank: 5, comment: "Заземляет и защищает." },
+{ name: "Кианит (синий)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень равновесия. Не накапливает негатив." },
+{ name: "Кианит (зелёный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень связи с природой." },
+{ name: "Кианит (чёрный)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 100, Q_factor: 5, Gen: 0, rank: 5, comment: "Мощный защитник. Создаёт щит." },
+{ name: "Клиноклаз", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Тёмно-синий камень. Усиливает интуицию." },
+{ name: "Ковеллит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Переливающийся синий. Камень магии и интуиции." },
+{ name: "Колеманит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.2, L_sense: 70, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень очищения и ясности." },
+{ name: "Кордиерит (иолит)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.2, L_sense: 90, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень навигации. Помогает найти путь." },
+{ name: "Корунд (рубин)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 6, R_sense: 0.15, L_sense: 150, Q_factor: 7, Gen: 0, rank: 7, comment: "Царь камней. Камень страсти и власти." },
+{ name: "Корунд (сапфир)", category: "🔋 Накопитель", C_sense: 9, σ_sense: 7, R_sense: 0.15, L_sense: 160, Q_factor: 8, Gen: 0, rank: 7, comment: "Камень мудрости. Укрепляет дисциплину." },
+{ name: "Кридит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень ясности ума. Помогает в обучении." },
+{ name: "Кунцит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 100, Q_factor: 6, Gen: 0, rank: 6, comment: "Розовый сподумен. Камень безусловной любви." },
+{ name: "Куприт", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 110, Q_factor: 5, Gen: 0, rank: 5, comment: "Тёмно-красный камень. Заземляет." },
+{ name: "Лабрадорит", category: "🔋 Накопитель", C_sense: 8, σ_sense: 5, R_sense: 0.2, L_sense: 140, Q_factor: 6, Gen: 0, rank: 6, comment: "Камень магии. Усиливает связь с тонким миром." },
+{ name: "Ларвикит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 120, Q_factor: 5, Gen: 0, rank: 5, comment: "Норвежский камень. Усиливает интуицию и связь с природой." },
+{ name: "Лепидокрокит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 90, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень гармонии. Снимает стресс." },
+{ name: "Литиофилит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень спокойствия. Помогает при бессоннице." },
+{ name: "Людвигит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень уверенности. Придаёт сил." },
+{ name: "Магнезит", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.2, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень спокойствия. Расслабляет." },
+{ name: "Меланит (чёрный гранат)", category: "🔋 Накопитель", C_sense: 7, σ_sense: 5, R_sense: 0.25, L_sense: 110, Q_factor: 5, Gen: 0, rank: 5, comment: "Мощный защитник. Заземляет." },
+{ name: "Метавольтин", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень перемен. Помогает адаптироваться." },
+{ name: "Микроклин (амазонит)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 5, R_sense: 0.25, L_sense: 80, Q_factor: 5, Gen: 0, rank: 5, comment: "Камень надежды. Фильтрует стресс." },
+{ name: "Молибденит", category: "⚡ Проводник", C_sense: 5, σ_sense: 7, R_sense: 0.14, L_sense: 30, Q_factor: 5, Gen: 0, rank: 4, comment: "Слоистый минерал. Проводит заземление." },
+{ name: "Мусковит (звёздчатый)", category: "🔋 Накопитель", C_sense: 6, σ_sense: 6, R_sense: 0.17, L_sense: 70, Q_factor: 5, Gen: 0, rank: 5, comment: "Золотистая слюда. Отражает негатив." },
+{ name: "Натролит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 0, rank: 5, comment: "Камень чистоты. Очищает пространство." },
+{ name: "Нозеан", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 80, Q_factor: 6, Gen: 0, rank: 5, comment: "Синий камень. Усиливает интуицию." },
+{ name: "Окенит", category: "🔋 Накопитель", C_sense: 7, σ_sense: 6, R_sense: 0.2, L_sense: 70, Q_factor: 7, Gen: 0, rank: 5, comment: "Пушистый белый камень. Камень ангельской чистоты." },
+{ name: "Опал (чёрный)", category: "🔋 Накопитель", C_sense: 8, σ_sense: 6, R_sense: 0.2, L_sense: 120, Q_factor: 7, Gen: 0, rank: 7, comment: "Камень магии и трансформации." },
+
+    ];
+    
+    // ========== ФУНКЦИИ СОРТИРОВКИ И ОТРИСОВКИ ==========
+    
+    let currentSortMode = 'rank';
+    let currentSortDirection = 'desc';
+    
+    const wrapper = document.getElementById('materialTableWrapper');
+    const indicator = document.getElementById('currentSortIndicator');
+    const rankBtn = document.getElementById('sortByRankBtn');
+    const nameBtn = document.getElementById('sortByNameBtn');
+    
+    function getRankClass(rank) {
+    if (rank >= 10) return 'rank-p10';
+    if (rank >= 9) return 'rank-p9';
+    if (rank >= 8) return 'rank-p8';
+    if (rank >= 7) return 'rank-p7';
+    if (rank >= 6) return 'rank-p6';
+    if (rank >= 5) return 'rank-p5';
+    if (rank >= 4) return 'rank-p4';
+    if (rank >= 3) return 'rank-p3';
+    if (rank >= 2) return 'rank-p2';
+    if (rank >= 1) return 'rank-p1';
+    if (rank >= 0) return 'rank-0';
+    if (rank >= -1) return 'rank-m1';
+    if (rank >= -2) return 'rank-m2';
+    if (rank >= -3) return 'rank-m3';
+    if (rank >= -4) return 'rank-m4';
+    if (rank >= -5) return 'rank-m5';
+    if (rank >= -6) return 'rank-m6';
+    if (rank >= -7) return 'rank-m7';
+    if (rank >= -8) return 'rank-m8';
+    if (rank >= -9) return 'rank-m9';
+    return 'rank-m10'; // для -10 и ниже (Абсолютная Тьма)
+}
+    
+    function getCategoryClass(category) {
+    if (category.includes('Отриц. генератор')) return 'cat-neg-generator';
+    if (category.includes('Генератор')) return 'cat-generator';
+    if (category.includes('Накопитель')) return 'cat-accumulator';
+    if (category.includes('Проводник')) return 'cat-conductor';
+    if (category.includes('Изолятор')) return 'cat-isolator';
+    return 'cat-special';
+}
+
+    (function() {
+    const names = materialsData.map(m => m.name.toLowerCase().trim());
+    const duplicates = [];
+    const seen = {};
+    
+    names.forEach((name, index) => {
+        if (seen[name] !== undefined) {
+            duplicates.push({
+                name: materialsData[index].name,
+                firstIndex: seen[name],
+                secondIndex: index
+            });
+        } else {
+            seen[name] = index;
+        }
+    });
+    
+    if (duplicates.length === 0) {
+        console.log('✅ Дублей не найдено! Все ' + materialsData.length + ' материалов уникальны.');
+    } else {
+        console.log('⚠️ НАЙДЕНЫ ДУБЛИКАТЫ (' + duplicates.length + ' шт.):');
+        duplicates.forEach(d => {
+            console.log('❌ "' + d.name + '" — позиции ' + d.firstIndex + ' и ' + d.secondIndex);
+        });
+    }
+})();
+    
+    function renderTable() {
+        const sortedData = [...materialsData].sort((a, b) => {
+            if (currentSortMode === 'rank') {
+                return currentSortDirection === 'desc' ? b.rank - a.rank : a.rank - b.rank;
+            } else {
+                return currentSortDirection === 'asc' 
+                    ? a.name.localeCompare(b.name, 'ru') 
+                    : b.name.localeCompare(a.name, 'ru');
+            }
+        });
+        
+        let html = '<table class="material-table"><thead><tr>';
+        html += '<th>Материал</th><th>Категория</th><th>C_sense</th><th>σ_sense</th><th>R_sense (Ω)</th><th>L_sense (H)</th><th>Q_factor</th><th>Gen</th><th>Ранг</th><th>Комментарий</th>';
+        html += '</tr></thead><tbody>';
+        
+        sortedData.forEach(m => {
+            const rankClass = getRankClass(m.rank);
+            const catClass = getCategoryClass(m.category);
+            html += `<tr class="${rankClass}">`;
+            html += `<td><strong>${m.name}</strong></td>`;
+            html += `<td><span class="badge-cat ${catClass}">${m.category}</span></td>`;
+            html += `<td style="text-align:center;">${m.C_sense}</td>`;
+            html += `<td style="text-align:center;">${m.σ_sense}</td>`;
+            html += `<td style="text-align:center;">${m.R_sense}</td>`;
+            html += `<td style="text-align:center;">${m.L_sense}</td>`;
+            html += `<td style="text-align:center;">${m.Q_factor}</td>`;
+            html += `<td style="text-align:center;">${m.Gen}</td>`;
+            html += `<td style="text-align:center; font-weight:bold;">${m.rank}</td>`;
+            html += `<td style="font-size:0.7rem;">${m.comment}</td>`;
+            html += '</tr>';
+        });
+        
+        html += '</tbody></table>';
+        wrapper.innerHTML = html;
+        
+        const modeText = currentSortMode === 'rank' ? 'РАНГУ (от +10 к -10)' : 'АЛФАВИТУ (А → Я)';
+        indicator.textContent = `Текущая сортировка: по ${modeText}`;
+    }
+    
+    rankBtn.addEventListener('click', () => {
+        currentSortMode = 'rank';
+        currentSortDirection = 'desc';
+        renderTable();
+    });
+    
+    nameBtn.addEventListener('click', () => {
+        currentSortMode = 'name';
+        currentSortDirection = 'asc';
+        renderTable();
+    });
+    
+    renderTable();
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔋 Подробная сборка AS-2 • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #42a5f5; margin: 2.5rem 0 1rem; border-left: 4px solid #42a5f5; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #64b5f6; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #64b5f6; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #42a5f5; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(66,165,245,0.1); border-left: 4px solid #42a5f5; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #90caf9; margin: 0; }
+        .tip-box strong { color: #42a5f5; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #42a5f5; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #42a5f5; text-decoration: none; border: 1px solid #42a5f5; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #42a5f5; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔋 AS-2: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Умная Зарядная Станция с обратной связью</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое AS-2 и чем он отличается от AS-1?</h2>
+    <p>AS-1 (Аккумулятор Смысла) — это простая «банка», которая накапливает Qₛ, когда вы держите на ней руки. Проблема в том, что она не отличает <strong>«вы в потоке»</strong> от <strong>«вы просто сидите с рассеянным умом»</strong>. В результате 70% времени зарядки может проходить впустую.</p>
+    <p>AS-2 решает эту проблему с помощью <strong>обратной связи</strong>. К схеме добавляется ЭЭГ-гарнитура (COH-METER 2.0) и управляемое реле. Когда ваша когерентность Cₛ превышает порог (например, 0.7), реле замыкает цепь, и Qₛ течёт в аккумулятор. Когда Cₛ падает — цепь размыкается.</p>
+    <p>Результат: <strong>за то же время сеанса AS-2 накапливает на 30-50% больше Qₛ</strong>, а оператор получает мгновенную визуальную обратную связь (зелёный светодиод = «молодец, продолжай»).</p>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно купить (дополнительно к AS-1)</h2>
+    <p><strong>Важно:</strong> У вас уже должен быть собран <strong>базовый аккумулятор AS-1</strong> (сосуд из шунгита, смесь кварцевого песка и угля, серебряные электроды, освящённая вода). Если нет — сначала соберите AS-1 по инструкции из Практикума.</p>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал</th><th>Где взять</th><th>Примерная стоимость</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>ЭЭГ-гарнитура</strong> (Muse 2, NeuroSky MindWave)</td><td>Интернет-магазин, б/у с рук</td><td>3000-15000 ₽</td><td>Измерение Cₛ в реальном времени</td></tr>
+            <tr><td><strong>Твердотельное реле</strong> (SSR-5V, 1-канальное)</td><td>Радиомагазин, AliExpress</td><td>150-300 ₽</td><td>Замыкание/размыкание цепи зарядки</td></tr>
+            <tr><td><strong>Микроконтроллер</strong> (Arduino Nano или ESP32-C3)</td><td>Радиомагазин, AliExpress</td><td>200-500 ₽</td><td>Управление реле по сигналу Cₛ</td></tr>
+            <tr><td><strong>Светодиод</strong> (зелёный, 5 мм)</td><td>Радиомагазин</td><td>5 ₽</td><td>Индикатор «Идёт зарядка»</td></tr>
+            <tr><td><strong>Светодиод</strong> (красный, 5 мм)</td><td>Радиомагазин</td><td>5 ₽</td><td>Индикатор «Ожидание»</td></tr>
+            <tr><td><strong>Резисторы</strong> (220 Ом, 2 шт.)</td><td>Радиомагазин</td><td>5 ₽</td><td>Токоограничение для светодиодов</td></tr>
+            <tr><td><strong>Провода-перемычки</strong> («папа-мама», 10 шт.)</td><td>Радиомагазин</td><td>100 ₽</td><td>Соединение компонентов</td></tr>
+            <tr><td><strong>USB-кабель</strong> для Arduino</td><td>В комплекте с Arduino</td><td>0 ₽</td><td>Питание и передача данных</td></tr>
+            <tr><td><strong>Ноутбук или смартфон</strong></td><td>Ваш</td><td>—</td><td>Запуск скрипта мониторинга Cₛ</td></tr>
+        </tbody>
+    </table>
+    <div class="tip-box"><p><strong>💡 Если нет денег на ЭЭГ-гарнитуру:</strong> Используйте <strong>пульсометр</strong> (фитнес-браслет). Высокая вариабельность сердечного ритма (ВСР) коррелирует с низкой Cₛ. Ровный пульс — с высокой Cₛ. Точность ниже, но для первого прототипа сойдёт. Вам понадобится программа, которая считывает данные с браслета по Bluetooth.</p></div>
+
+    <!-- СБОРКА -->
+    <h2>🔨 Этап 1: Сборка электрической части</h2>
+
+    <h3><span class="step-number">1</span> Подготовка реле</h3>
+    <p>Твердотельное реле (SSR-5V) — это электронный «выключатель», который замыкает и размыкает цепь по команде от микроконтроллера. В отличие от механического реле, оно не щёлкает и не создаёт электромагнитных помех.</p>
+    <ol>
+        <li>У реле есть <strong>4 контакта</strong>: два — управляющие (подписаны «+» и «-» или «DC»), два — силовые (подписаны «~» или «AC»).</li>
+        <li>Подключите <strong>управляющие контакты</strong> к Arduino: «+» реле → <strong>пин D13</strong> Arduino, «-» реле → <strong>пин GND</strong> Arduino.</li>
+        <li>Силовые контакты реле мы подключим позже — они будут размыкать/замыкать цепь между вашими ладонями и электродом AS-1.</li>
+    </ol>
+    <div class="scheme-box">
+        <p style="color:#90caf9;text-align:center;margin-bottom:0.5rem;">📍 Распиновка реле SSR-5V</p>
+        <pre>
+    [РЕЛЕ SSR-5V]
+     ┌─────────┐
+     │ +   -   │ ← Управление (к Arduino: D13 и GND)
+     │         │
+     │ ~   ~   │ ← Силовая цепь (разрыв провода от ладони к электроду)
+     └─────────┘
+        </pre>
+    </div>
+
+    <h3><span class="step-number">2</span> Подключение светодиодов (индикаторов)</h3>
+    <p>Мы сделаем простую цветовую индикацию: <strong>зелёный</strong> = Cₛ выше порога, идёт зарядка. <strong>красный</strong> = Cₛ ниже порога, ожидание.</p>
+    <ol>
+        <li>Возьмите <strong>зелёный светодиод</strong>. У него длинная ножка — это «+» (анод), короткая — «-» (катод).</li>
+        <li>Подключите <strong>короткую ножку (катод)</strong> зелёного светодиода к <strong>пину GND</strong> Arduino.</li>
+        <li>Подключите <strong>длинную ножку (анод)</strong> зелёного светодиода через <strong>резистор 220 Ом</strong> к <strong>пину D12</strong> Arduino.</li>
+        <li>Точно так же подключите <strong>красный светодиод</strong>: катод → GND, анод через резистор 220 Ом → <strong>пин D11</strong> Arduino.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Важно:</strong> Никогда не подключайте светодиод к Arduino БЕЗ резистора! Без ограничения тока светодиод сгорит мгновенно, а порт Arduino может выйти из строя. Резистор на 220 Ом обязателен.</p></div>
+
+    <h3><span class="step-number">3</span> Сборка силовой цепи (самое главное)</h3>
+    <p>Теперь нам нужно «врезать» реле в цепь, по которой Qₛ течёт от ваших ладоней к электроду AS-1.</p>
+    <p><strong>Как это работает:</strong> Вы держите ладони на двух металлических пластинах (или просто на оголённых проводах). Обычно эти пластины напрямую соединены с серебряными электродами внутри AS-1. Мы <strong>разрезаем один из этих проводов</strong> и вставляем в разрыв силовые контакты реле.</p>
+    <ol>
+        <li>Найдите провод, идущий от <strong>серебряного электрода (+)</strong> в AS-1 к вашей правой ладони. Разрежьте его посередине. Зачистите концы.</li>
+        <li>Один зачищенный конец прикрутите к <strong>первому силовому контакту реле</strong> (одна из клемм «~»).</li>
+        <li>Второй зачищенный конец прикрутите ко <strong>второму силовому контакту реле</strong> (вторая клемма «~»).</li>
+    </ol>
+    <div class="scheme-box">
+        <p style="color:#90caf9;text-align:center;margin-bottom:0.5rem;">📍 Силовая цепь (схема)</p>
+        <pre>
+    [ЛАДОНЬ ПРАВАЯ] ──── [РЕЛЕ (разрыв)] ──── [ЭЛЕКТРОД (+) AS-1]
+    
+    Реле замкнуто (Cₛ > 0.7) → Qₛ течёт в аккумулятор.
+    Реле разомкнуто (Cₛ < 0.7) → Qₛ не тратится впустую.
+        </pre>
+    </div>
+    <div class="tip-box"><p><strong>💡 Почему мы разрываем только ОДИН провод:</strong> Для протекания Qₛ (как и электрического тока) нужна замкнутая цепь. Если разорвать один провод — цепь размыкается, и зарядка останавливается. Разрывать оба провода не нужно.</p></div>
+
+    <!-- ПРОГРАММА -->
+    <h2>💻 Этап 2: Программирование Arduino</h2>
+
+    <h3><span class="step-number">4</span> Код для Arduino</h3>
+    <p>Arduino будет слушать <strong>последовательный порт (Serial)</strong> и ждать команды от компьютера. Когда компьютер присылает символ <strong>'1'</strong> (Cₛ ≥ 0.7) — Arduino замыкает реле и зажигает зелёный светодиод. Когда присылает <strong>'0'</strong> (Cₛ < 0.7) — размыкает реле и зажигает красный.</p>
+    <div class="scheme-box">
+        <p style="color:#90caf9;text-align:center;margin-bottom:0.5rem;">📍 Код для Arduino (скопируйте и загрузите)</p>
+        <pre>
+// Пины
+const int RELAY_PIN = 13;   // Реле
+const int GREEN_PIN = 12;   // Зелёный светодиод
+const int RED_PIN = 11;     // Красный светодиод
+
+void setup() {
+  pinMode(RELAY_PIN, OUTPUT);
+  pinMode(GREEN_PIN, OUTPUT);
+  pinMode(RED_PIN, OUTPUT);
+  
+  Serial.begin(9600); // Открываем порт для связи с ПК
+  
+  // На старте — реле разомкнуто, горит красный
+  digitalWrite(RELAY_PIN, LOW);
+  digitalWrite(GREEN_PIN, LOW);
+  digitalWrite(RED_PIN, HIGH);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    char command = Serial.read();
+    
+    if (command == '1') {
+      // Cₛ >= 0.7 — ЗАРЯЖАЕМ!
+      digitalWrite(RELAY_PIN, HIGH);   // Замкнуть реле
+      digitalWrite(GREEN_PIN, HIGH);   // Зелёный горит
+      digitalWrite(RED_PIN, LOW);      // Красный гаснет
+    }
+    else if (command == '0') {
+      // Cₛ < 0.7 — ОЖИДАНИЕ
+      digitalWrite(RELAY_PIN, LOW);    // Разомкнуть реле
+      digitalWrite(GREEN_PIN, LOW);    // Зелёный гаснет
+      digitalWrite(RED_PIN, HIGH);     // Красный горит
+    }
+  }
+}
+        </pre>
+    </div>
+    <ol>
+        <li>Подключите Arduino к компьютеру по USB.</li>
+        <li>Откройте <strong>Arduino IDE</strong> (бесплатная программа).</li>
+        <li>Скопируйте код выше и вставьте в редактор.</li>
+        <li>Выберите правильный порт (Инструменты → Порт → COMx) и плату (Инструменты → Плата → Arduino Nano/Uno).</li>
+        <li>Нажмите <strong>«Загрузить»</strong> (стрелка вправо).</li>
+        <li>После загрузки откройте <strong>Монитор порта</strong> (Инструменты → Монитор порта). Отправьте '1' — реле должно щёлкнуть, загореться зелёный. Отправьте '0' — реле выключится, загорится красный.</li>
+    </ol>
+
+    <h3><span class="step-number">5</span> Скрипт для компьютера (Python)</h3>
+    <p>Теперь нужна программа, которая будет <strong>читать Cₛ с ЭЭГ-гарнитуры</strong> и отправлять команды '1' или '0' в Arduino.</p>
+    <div class="scheme-box">
+        <p style="color:#90caf9;text-align:center;margin-bottom:0.5rem;">📍 Python-скрипт (сохраните как as2_controller.py)</p>
+        <pre>
+import serial
+import time
+
+# Настройки порта (замените COM3 на ваш порт Arduino)
+PORT = 'COM3'
+BAUD = 9600
+THRESHOLD = 0.7  # Порог Cₛ для зарядки
+
+# Подключение к Arduino
+try:
+    arduino = serial.Serial(PORT, BAUD, timeout=1)
+    time.sleep(2)  # Пауза на инициализацию
+    print(f"✅ Подключено к Arduino на порту {PORT}")
+except:
+    print(f"❌ Не удалось подключиться к {PORT}")
+    exit()
+
+# Функция получения Cₛ (ЗАГЛУШКА — замените на реальный код!)
+def get_cs():
+    # В реальности здесь должен быть код, читающий данные с Muse/NeuroSky
+    # Пока что — просто случайное число для теста
+    import random
+    return random.uniform(0.3, 0.9)
+
+print("🚀 AS-2 Controller запущен. Начинаем мониторинг Cₛ...")
+print(f"Порог срабатывания: Cₛ >= {THRESHOLD}")
+
+while True:
+    cs = get_cs()
+    timestamp = time.strftime("%H:%M:%S")
+    
+    if cs >= THRESHOLD:
+        arduino.write(b'1')
+        print(f"[{timestamp}] Cₛ = {cs:.2f} 🟢 ЗАРЯДКА (реле замкнуто)")
+    else:
+        arduino.write(b'0')
+        print(f"[{timestamp}] Cₛ = {cs:.2f} 🔴 ОЖИДАНИЕ (реле разомкнуто)")
+    
+    time.sleep(1)  # Проверяем Cₛ раз в секунду
+        </pre>
+    </div>
+    <div class="tip-box"><p><strong>💡 Важно:</strong> В реальном проекте функция <strong>get_cs()</strong> должна читать данные с вашей ЭЭГ-гарнитуры. Для Muse 2 есть библиотека <strong>muse-lsl</strong> для Python. Для NeuroSky есть <strong>pyNeuroSky</strong>. Установите их и замените заглушку на реальный код. Если вы используете пульсометр вместо ЭЭГ — найдите библиотеку для вашего браслета.</p></div>
+
+    <!-- ТЕСТИРОВАНИЕ -->
+    <h2>🧪 Этап 3: Тестирование и калибровка</h2>
+
+    <h3><span class="step-number">6</span> Проверка работы системы</h3>
+    <ol>
+        <li>Подключите Arduino к компьютеру по USB. Запустите Python-скрипт.</li>
+        <li>Убедитесь, что в консоли идут сообщения «Cₛ = ... 🟢 ЗАРЯДКА» или «🔴 ОЖИДАНИЕ».</li>
+        <li>Проверьте, что при сообщении «ЗАРЯДКА» зелёный светодиод загорается, а красный гаснет.</li>
+        <li>Проверьте, что при сообщении «ОЖИДАНИЕ» красный светодиод загорается, а зелёный гаснет.</li>
+        <li>Поднесите руки к контактным пластинам. При зелёном свете вы должны почувствовать <strong>лёгкое тепло или покалывание</strong> — это Qₛ течёт в аккумулятор.</li>
+    </ol>
+
+    <h3><span class="step-number">7</span> Калибровка порога Cₛ</h3>
+    <p>Порог 0.7 подходит не всем. Если вы новичок, и ваш Cₛ редко поднимается выше 0.5 — поставьте порог 0.5. Если вы опытный медитатор — поставьте 0.85.</p>
+    <p>Измените строчку в Python-скрипте:</p>
+    <div class="scheme-box"><pre>THRESHOLD = 0.5  # Для новичков</pre></div>
+    <p>Или:</p>
+    <div class="scheme-box"><pre>THRESHOLD = 0.85  # Для профи</pre></div>
+
+    <!-- ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ -->
+    <h2>📊 Что вы должны увидеть (сравнение AS-1 и AS-2)</h2>
+    <table class="materials-table">
+        <thead><tr><th>Параметр</th><th>AS-1 (без обратной связи)</th><th>AS-2 (с обратной связью)</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Время «активной» зарядки за 15 мин</strong></td><td>~5 мин (случайно)</td><td>~8-12 мин (целенаправленно)</td></tr>
+            <tr><td><strong>Накопленный Qₛ за сеанс</strong></td><td>150 у.е.</td><td>220-280 у.е. (+50-80%)</td></tr>
+            <tr><td><strong>Мотивация оператора</strong></td><td>Низкая («непонятно, работает или нет»)</td><td>Высокая («вижу зелёный — значит, в потоке!»)</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=39" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция AS-2 v1.0</p>
+        <p>✧ «Не трать Смысл на шум. Заряжай осознанно.» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

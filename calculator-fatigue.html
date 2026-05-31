@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор «Насколько я устал?» • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,152,0,0.1); border: 2px solid #ff9800; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ff9800; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-details { color: #d0c8b8; font-size: 0.9rem; margin-top: 1rem; text-align: left; line-height: 1.6; }
+        .result-details span { color: #ff9800; font-weight: bold; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .advice-box { background: rgba(255,152,0,0.15); border-radius: 12px; padding: 1rem 1.5rem; margin-top: 1.5rem; color: #d0c8b8; font-size: 0.9rem; line-height: 1.6; }
+        .advice-box strong { color: #ff9800; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ff9800; text-decoration: none; border: 1px solid #ff9800; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ff9800; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>😴 Насколько я устал?</h1>
+    <div class="subtitle">Оценка семантического истощения (§44, §101, §108)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📋 Субъективные ощущения</div>
+
+        <div class="input-group">
+            <label>🧠 Ясность ума:</label>
+            <select id="claritySelect">
+                <option value="0">Кристальная ясность, мысли текут легко</option>
+                <option value="1" selected>Норма, иногда отвлекаюсь</option>
+                <option value="2">«Туман» в голове, трудно сосредоточиться</option>
+                <option value="3">«Каша», мысли путаются, забываю слова</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>⚡ Уровень энергии:</label>
+            <select id="energySelect">
+                <option value="0">Полон сил, готов горы свернуть</option>
+                <option value="1" selected>Нормально, хватает на дела</option>
+                <option value="2">Вялость, всё делаю через силу</option>
+                <option value="3">Истощение, даже встать тяжело</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>😤 Эмоциональное состояние:</label>
+            <select id="emotionSelect">
+                <option value="0">Спокоен, уравновешен</option>
+                <option value="1" selected>Лёгкая раздражительность</option>
+                <option value="2">Вспыхиваю по мелочам, тревога</option>
+                <option value="3">Апатия или агрессия, ничего не радует</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>😵 Сенсорная перегрузка:</label>
+            <select id="sensorySelect">
+                <option value="0">Тишина и покой вокруг</option>
+                <option value="1" selected>Обычный городской фон</option>
+                <option value="2">Шум, яркий свет, соцсети — раздражает</option>
+                <option value="3">Всё бесит: звуки, свет, прикосновения</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>💤 Качество сна прошлой ночью:</label>
+            <select id="sleepSelect">
+                <option value="0">Отлично выспался, сны приятные</option>
+                <option value="1" selected>Нормально, 6-7 часов</option>
+                <option value="2">Плохо спал, просыпался, кошмары</option>
+                <option value="3">Почти не спал или сон не восстановил</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>📱 Экранное время сегодня:</label>
+            <select id="screenSelect">
+                <option value="0">Меньше 1 часа</option>
+                <option value="1" selected>2-4 часа (норма)</option>
+                <option value="2">5-8 часов (много)</option>
+                <option value="3">Больше 8 часов (залипание)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Индекс семантической усталости</div>
+        <div class="result-details" id="resultDetails"></div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+        <div class="advice-box" id="adviceBox"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const selects = [
+        document.getElementById('claritySelect'),
+        document.getElementById('energySelect'),
+        document.getElementById('emotionSelect'),
+        document.getElementById('sensorySelect'),
+        document.getElementById('sleepSelect'),
+        document.getElementById('screenSelect')
+    ];
+
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultDetails = document.getElementById('resultDetails');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+    const adviceBox = document.getElementById('adviceBox');
+
+    selects.forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const answers = selects.map(s => parseInt(s.value));
+        const sum = answers.reduce((a, b) => a + b, 0);
+        
+        // Максимум: 6 × 3 = 18, минимум: 0
+        // Переводим в проценты и в параметры
+        const fatiguePercent = Math.round((sum / 18) * 100);
+        
+        // Оценка Tₛ: усталость повышает Tₛ (перегрев) или понижает (истощение)
+        let Ts;
+        if (sum <= 4) Ts = 5.0; // Оптимум
+        else if (sum <= 8) Ts = 6.5; // Лёгкий перегрев
+        else if (sum <= 12) Ts = 8.0; // Перегрев
+        else Ts = 9.5; // Сильный перегрев или истощение
+        
+        // Оценка Cₛ: усталость снижает когерентность
+        let Cs;
+        if (sum <= 4) Cs = 0.75;
+        else if (sum <= 8) Cs = 0.55;
+        else if (sum <= 12) Cs = 0.35;
+        else Cs = 0.15;
+        
+        // Оценка Qₛ: усталость снижает заряд
+        let Qs;
+        if (sum <= 4) Qs = 4;
+        else if (sum <= 8) Qs = 2;
+        else if (sum <= 12) Qs = 0;
+        else Qs = -2;
+        
+        // Оценка S_noise
+        let Snoise;
+        if (sum <= 4) Snoise = 0.2;
+        else if (sum <= 8) Snoise = 0.5;
+        else if (sum <= 12) Snoise = 0.75;
+        else Snoise = 0.9;
+
+        resultNumber.textContent = fatiguePercent + '%';
+        resultLabel.textContent = 'Индекс семантической усталости';
+
+        resultDetails.innerHTML = `
+            <span>Оценка Tₛ:</span> ${Ts.toFixed(1)} (оптимум ~5) &nbsp;|&nbsp;
+            <span>Оценка Cₛ:</span> ${Cs.toFixed(2)} &nbsp;|&nbsp;
+            <span>Оценка Qₛ:</span> ${Qs >= 0 ? '+' : ''}${Qs} &nbsp;|&nbsp;
+            <span>S_noise:</span> ${Snoise.toFixed(2)}
+        `;
+
+        let extra = '';
+        if (fatiguePercent <= 20) extra = '🌟 Вы в отличной семантической форме! Поле чистое, когерентность высокая.';
+        else if (fatiguePercent <= 40) extra = '😊 Лёгкая усталость. Ничего критичного, но вечером лучше отдохнуть от экранов.';
+        else if (fatiguePercent <= 60) extra = '😐 Умеренная усталость. Cₛ падает, S_noise растёт. Рекомендуется прогулка и тишина.';
+        else if (fatiguePercent <= 80) extra = '😫 Сильная усталость. Вы на грани семантического истощения. Срочно нужен отдых.';
+        else extra = '🚨 Критическое истощение! Tₛ зашкаливает, Cₛ на нуле. Отложите все дела, восстановитесь.';
+        resultExtra.textContent = extra;
+
+        resultFormula.textContent = `Сумма баллов: ${sum} / 18 → Индекс: ${fatiguePercent}% → Tₛ≈${Ts.toFixed(1)}, Cₛ≈${Cs.toFixed(2)}, Qₛ≈${Qs}, S_noise≈${Snoise.toFixed(2)}`;
+
+        // Советы
+        let advice = '';
+        if (fatiguePercent <= 20) {
+            advice = '<strong>🌿 Совет:</strong> Вы в порядке! Поддерживайте это состояние: регулярная медитация, прогулки, минимум соцсетей.';
+        } else if (fatiguePercent <= 40) {
+            advice = '<strong>💧 Совет:</strong> Умойтесь прохладной водой, сделайте 5-минутную дыхательную практику (4-7-8). Откажитесь от кофе во второй половине дня.';
+        } else if (fatiguePercent <= 60) {
+            advice = '<strong>🧘 Совет:</strong> Вам нужен час тишины. Никаких экранов, никаких разговоров. Просто посидите с закрытыми глазами или посмотрите на огонь/воду. Ложитесь сегодня до 23:00.';
+        } else if (fatiguePercent <= 80) {
+            advice = '<strong>🛡️ Совет:</strong> Семантическая гигиена! Примите ванну с солью, проветрите комнату, зажгите свечу. Откажитесь от новостей и соцсетей до завтра. Спите не менее 8 часов.';
+        } else {
+            advice = '<strong>🚨 Совет:</strong> Полный семантический детокс. Отключите телефон, закройте шторы, лягте спать. Завтра — никаких важных решений. Пейте тёплую воду с мёдом. Если состояние повторяется часто — обратитесь к психологу.';
+        }
+        adviceBox.innerHTML = advice;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

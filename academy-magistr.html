@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экзамен Магистра • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 850px; width: 100%; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 2px solid #ce93d8; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ce93d8; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ce93d8; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .task-box { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; border: 1px solid #5d4a3a; }
+        .task-title { color: #ce93d8; font-size: 1.3rem; margin-bottom: 1rem; }
+        .task-text { color: #d0c8b8; line-height: 1.6; margin-bottom: 1rem; }
+        .task-input { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .task-input::placeholder { color: #706858; font-style: italic; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #ce93d8; color: #ce93d8; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #ce93d8; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ce93d8; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ce93d8; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>🧙 ЭКЗАМЕН МАГИСТРА</h1>
+    <div class="subtitle">10 задач • ручной ввод ответа • звание «Магистр»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="taskArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-magistr-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-magistr-menu.html" class="back-link">← Вернуться к темам Магистра</a>
+</div>
+
+<script>
+const tasks = [
+    {
+        title: "Задача №1. Молитва в храме и дома",
+        text: "Дано: Φ_чел = +3, Φ_иконы = +7, R_дом = 2.5 Ω, R_храм = 0.4 Ω.\nВо сколько раз молитва в храме «сильнее» (по мощности), чем дома?\nОтвет округлите до сотых.",
+        answer: "6.25"
+    },
+    {
+        title: "Задача №2. Семантическая батарейка",
+        text: "Дано: Q_крест = 500 ед., Φ_крест = +6, Φ_вы = -2, R = 0.11 Ω.\nСколько секунд нужно держать крестик, чтобы поднять Φ с -2 до +1, если «стоимость» поднятия Φ на 1 ед. = 50 ед. заряда?\nОтвет округлите до сотых.",
+        answer: "2.06"
+    },
+    {
+        title: "Задача №3. Резонанс в храме",
+        text: "Дано: C_sense = 5 F, L_sense = 1000 H, R_sense = 0.5 Ω.\nВо сколько раз вырастет мощность при резонансе по сравнению с частотой 0.1 Гц?\nОтвет округлите до целых миллионов.",
+        answer: "1.6"
+    },
+    {
+        title: "Задача №4. Семантическая цепь с проклятием",
+        text: "Дано: Φ_прокл = -6, Φ_жерт = +2, R_цепи = 5.5 Ω, защита креста = 4 V.\nНа сколько процентов нательный крест снизил мощность проклятия?\nОтвет округлите до целых.",
+        answer: "75"
+    },
+    {
+        title: "Задача №5. Проектирование семантического уголка",
+        text: "Бетонная стена имеет R = 2 Ω. Вы добавили деревянную драпировку с σ_sense = 6.\nНа сколько процентов снизилось общее сопротивление?\nОтвет округлите до целых.",
+        answer: "25"
+    },
+    {
+        title: "Задача №6. Семантический импульс",
+        text: "Дано: U_sense = 10 V, R_sense = 2 Ω, Δt = 0.5 сек.\nЧему равен семантический импульс J_sense (в Джоулях смысла)?\nОтвет округлите до целых.",
+        answer: "25"
+    },
+    {
+        title: "Задача №7. Закон подлости",
+        text: "Дано: P_natural = 0.5, Q_expectation = 8, Q_critical = 7, α = 0.01.\nЧему равна итоговая вероятность P_actual по формуле инверсии?\nОтвет округлите до сотых.",
+        answer: "0.49"
+    },
+    {
+        title: "Задача №8. Добротность резонатора",
+        text: "Дано: R_sense = 0.5 Ω, L_sense = 1000 H, C_sense = 5 F.\nЧему равна добротность Q_factor?\nОтвет округлите до десятых.",
+        answer: "28.3"
+    },
+    {
+        title: "Задача №9. Время намоленности",
+        text: "Дано: Нужно накопить Q = 10000 ед. Мощность молитвы P = 50 W.\nСколько часов непрерывной молитвы потребуется?\nОтвет округлите до целых.",
+        answer: "200"
+    },
+    {
+        title: "Задача №10. Коллективная мощность",
+        text: "Дано: P₁ = 10 W, N = 5 человек, коэффициент синергии k = 1.8.\nЧему равна коллективная мощность P_total? \nОтвет округлите до целых.",
+        answer: "10"
+    }
+];
+
+let idx = 0, answers = Array(10).fill('');
+const tArea = document.getElementById('taskArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn'), next = document.getElementById('nextBtn');
+
+function render() {
+    const t = tasks[idx];
+    let h = `<div class="task-box"><div class="task-title">${t.title}</div><div class="task-text" style="white-space:pre-line;">${t.text}</div>`;
+    h += `<input type="text" class="task-input" id="answerInput" placeholder="Введите числовой ответ..." value="${answers[idx]}">`;
+    h += '</div>';
+    tArea.innerHTML = h;
+    document.getElementById('answerInput').addEventListener('input', function(){
+        answers[idx] = this.value.trim();
+    });
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = idx===0;
+    next.textContent = idx===9 ? '🎉 Завершить' : 'Далее →';
+    if(idx===9) document.getElementById('answerInput').focus();
+}
+
+function showResult() {
+    let correct=0, rows='';
+    tasks.forEach((t,i)=>{
+        const userAns = answers[i].replace(',','.').trim();
+        const realAns = t.answer;
+        const ok = Math.abs(parseFloat(userAns) - parseFloat(realAns)) < 0.015;
+        if(ok) correct++;
+        rows += `<tr><td>${t.title}</td><td style="color:#f3e7c0;">Ваш: ${userAns||'—'}</td><td style="color:#a09080;">Верно: ${realAns}</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'🧙 Вы — истинный Магистр!':pct>=70?'📚 Отличный результат, Адепт.':pct>=40?'🔬 Неплохо, но есть куда расти.':'🌱 Сложные задачи требуют практики.';
+    tArea.innerHTML = `<div class="result-container"><div class="result-score">${pct}%</div><p style="color:#c0b090;">${comment}</p><table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table><p style="color:#a09080;">Звание: ${pct>=90?'🧙 Магистр':pct>=70?'📚 Адепт':pct>=40?'🔬 Практик':'🌱 Неофит'}</p></div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', ()=>{ if(idx>0){ idx--; render(); } });
+next.addEventListener('click', ()=>{
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

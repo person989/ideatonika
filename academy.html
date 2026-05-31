@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎓 Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 1200px; width: 100%; position: relative; z-index: 1; }
+        
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 { font-size: 3.5rem; font-weight: 400; letter-spacing: 4px; color: #81c784; text-shadow: 0 0 20px rgba(129,199,132,0.3); margin-bottom: 0.5rem; }
+        .hero .subtitle { font-size: 1.2rem; color: #c0b090; font-style: italic; }
+        .hero .epigraph { margin-top: 1rem; color: #a09080; font-size: 1rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .card {
+            background: rgba(30,40,60,0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 24px;
+            padding: 2.5rem 2rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transition: transform 0.2s, border-color 0.3s;
+            display: flex; flex-direction: column; text-align: center;
+        }
+        .card:hover { transform: translateY(-5px); border-color: #81c784; }
+        .card-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .card h2 { color: #f3e7c0; font-size: 2rem; font-weight: 400; margin-bottom: 1rem; }
+        .card .level-badge {
+            display: inline-block; padding: 0.4rem 1.2rem; border-radius: 20px;
+            font-size: 0.85rem; font-weight: bold; margin-bottom: 1.5rem;
+        }
+        .badge-beginner { background: #81c784; color: #1b5e20; }
+        .badge-medium { background: #ffb74d; color: #e65100; }
+        .badge-master { background: #ce93d8; color: #4a148c; }
+        
+        .card p { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+        .card .meta { color: #a09080; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .btn {
+            display: inline-block; background: transparent;
+            border: 1.5px solid #81c784; color: #81c784;
+            padding: 0.8rem 2rem; text-decoration: none;
+            font-size: 1rem; font-weight: bold; border-radius: 40px;
+            transition: 0.2s; margin-top: auto;
+        }
+        .btn:hover { background: #81c784; color: #1a1a2e; box-shadow: 0 0 15px rgba(129,199,132,0.5); }
+        .btn-disabled { border-color: #5d4a3a; color: #706858; cursor: not-allowed; }
+        .btn-disabled:hover { background: transparent; color: #706858; box-shadow: none; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #81c784; text-decoration: none; border: 1px solid #81c784; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #81c784; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>🎓 АКАДЕМИЯ ИДЕАТОНИКИ</h1>
+        <div class="subtitle">Интерактивный задачник — от основ до мастерства</div>
+        <div class="epigraph">✧ «Не верь. Проверь. Реши задачу.» ✧</div>
+    </div>
+
+    <div class="grid">
+        
+        <!-- Карточка 1: Основы -->
+        <div class="card" style="border-color: #81c784;">
+            <div class="card-icon">🌱</div>
+            <span class="level-badge badge-beginner">НАЧИНАЮЩИЙ</span>
+            <h2>Основы</h2>
+            <p>Базовые понятия: Qₛ, Cₛ, Tₛ. Закон Ома для семантической цепи. Простые задачи на напряжение, ток и мощность.</p>
+            <div class="meta">🧠 20+ тестов • баллы Qₛ • звание «Неофит»</div>
+            <a href="academy-basics-menu.html" class="btn">🌱 Начать обучение</a>
+        </div>
+
+        <!-- Карточка 2: Практик -->
+        <div class="card" style="border-color: #ffb74d;">
+            <div class="card-icon">🔬</div>
+            <span class="level-badge badge-medium">СРЕДНИЙ</span>
+            <h2>Практик</h2>
+            <p>Расчёты резонанса, мощности, времени. Проектирование семантических цепей. Задачи на эксперименты.</p>
+            <div class="meta">🧠 10+ тестов • баллы Qₛ • звание «Адепт»</div>
+            <a href="academy-practicum-menu.html" class="btn">🔬 Начать обучение</a>
+        </div>
+
+        <!-- Карточка 3: Магистр -->
+        <div class="card" style="border-color: #ce93d8;">
+            <div class="card-icon">🧙</div>
+            <span class="level-badge badge-master">ПРОДВИНУТЫЙ</span>
+            <h2>Магистр</h2>
+            <p>Квантовая семантика, запутанность, гидродинамика Qₛ. Открытые задачи без ответа — ждут своего исследователя.</p>
+            <div class="meta">🧠 1 тест • баллы Qₛ • звание «Магистр»</div>
+            <a href="academy-magistr-menu.html" class="btn">🧙 Начать обучение</a>
+        </div>
+
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Академия</p>
+        <p>✧ «Знание без применения — как семя без воды» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

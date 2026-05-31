@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧙 Магистр Идеатоники • Академия</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 1200px; width: 100%; position: relative; z-index: 1; }
+        
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 { font-size: 3rem; font-weight: 400; letter-spacing: 3px; color: #ce93d8; text-shadow: 0 0 20px rgba(206,147,216,0.3); margin-bottom: 0.5rem; }
+        .hero .subtitle { font-size: 1.2rem; color: #c0b090; font-style: italic; }
+        .hero .epigraph { margin-top: 1rem; color: #a09080; font-size: 1rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem; max-width: 960px; margin-left: auto; margin-right: auto; }
+        .card {
+            background: rgba(30, 40, 60, 0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(206, 147, 216, 0.3); border-radius: 24px;
+            padding: 2rem 1.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transition: transform 0.2s, border-color 0.3s;
+            display: flex; flex-direction: column; text-align: center;
+        }
+        .card:hover { transform: translateY(-5px); border-color: #ce93d8; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .card-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .card h2 { color: #f3e7c0; font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+        .card p { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+        .card .meta { color: #a09080; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .btn {
+            display: inline-block; background: transparent;
+            border: 1.5px solid #ce93d8; color: #ce93d8;
+            padding: 0.8rem 1.5rem; text-decoration: none;
+            font-size: 1rem; font-weight: bold; border-radius: 40px;
+            transition: 0.2s; margin-top: auto;
+        }
+        .btn:hover { background: #ce93d8; color: #1a1a2e; box-shadow: 0 0 15px rgba(206,147,216,0.5); }
+        .btn-disabled { border-color: #5d4a3a; color: #706858; cursor: not-allowed; }
+        .btn-disabled:hover { background: transparent; color: #706858; box-shadow: none; }
+
+        .back-link { display: block; text-align: center; margin-top: 2rem; color: #ce93d8; text-decoration: none; border: 1px solid #ce93d8; padding: 0.6rem 1.5rem; border-radius: 30px; width: fit-content; margin-left: auto; margin-right: auto; transition: 0.2s; }
+        .back-link:hover { background: #ce93d8; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>🧙 МАГИСТР ИДЕАТОНИКИ</h1>
+        <div class="subtitle">Выберите тему для решения задач</div>
+        <div class="epigraph">✧ «Настоящее знание — в умении решать неизвестное» ✧</div>
+    </div>
+
+    <div class="grid">
+        
+        <!-- Тема 1: Открытые задачи (АКТИВНА — ведёт на готовый экзамен) -->
+        <div class="card">
+            <div class="card-icon">🧮</div>
+            <h2>Открытые задачи</h2>
+            <p>Расчёты семантических цепей, резонанса, мощности, времени намоленности, коллективной синергии. Ручной ввод ответа — никаких подсказок.</p>
+            <div class="meta">🧠 10 задач • ручной ввод • звание «Магистр»</div>
+            <a href="academy-magistr.html" class="btn">🧮 Начать решение</a>
+        </div>
+
+        <!-- Тема 2: Гидродинамика Qₛ -->
+        <div class="card">
+            <div class="card-icon">🌊</div>
+            <h2>Гидродинамика Qₛ</h2>
+            <p>Число Рейнольдса Re_sense, число Маха M_sense, турбулентность, кавитация. Задачи на движение семантических потоков.</p>
+            <div class="meta">🧠 10 задач • ручной ввод • звание «Магистр»</div>
+            <a href="academy-hydro.html" class="btn">🌊 Начать решение</a>
+        </div>
+
+        <!-- Тема 3: Квантовая семантика (АКТИВНА) -->
+<div class="card">
+    <div class="card-icon">🔗</div>
+    <h2>Квантовая семантика</h2>
+    <p>Семантическая запутанность, коллапс, суперпозиция, интерференция. Задачи на расчёт нелокальных связей и вероятностных полей.</p>
+    <div class="meta">🧠 10 задач • ручной ввод • звание «Магистр»</div>
+    <a href="academy-quantum.html" class="btn">🔗 Начать решение</a>
+</div>
+
+<!-- Тема 4: Семантическая термодинамика (АКТИВНА) -->
+<div class="card">
+    <div class="card-icon">🌡️</div>
+    <h2>Семантическая термодинамика</h2>
+    <p>Tₛ, S_sense, теплоёмкость, теплопроводность, энтальпия, свободная энергия. Законы сохранения смысла в тепловых процессах.</p>
+    <div class="meta">🧠 10 задач • ручной ввод • звание «Магистр»</div>
+    <a href="academy-thermo.html" class="btn">🌡️ Начать решение</a>
+</div>
+
+<!-- Тема 5: Семантическая электротехника (АКТИВНА) -->
+<div class="card">
+    <div class="card-icon">⚡</div>
+    <h2>Семантическая электротехника</h2>
+    <p>Импеданс Z_sense, добротность Q_factor, резонанс, фильтры, последовательные и параллельные R-L-C цепи. Продвинутые расчёты.</p>
+    <div class="meta">🧠 10 задач • ручной ввод • звание «Магистр»</div>
+    <a href="academy-electro.html" class="btn">⚡ Начать решение</a>
+</div>
+
+<!-- Тема 6: Семантическая оптика и геометрия поля (АКТИВНА) -->
+<div class="card">
+    <div class="card-icon">🔭</div>
+    <h2>Оптика и геометрия поля</h2>
+    <p>Градиент ∇Φ, дивергенция ∇·Φ, ротор ∇×Φ, поток J_Q через поверхность. Векторный анализ семантических полей.</p>
+    <div class="meta">🧠 10 задач • ручной ввод • звание «Магистр»</div>
+    <a href="academy-optics.html" class="btn">🔭 Начать решение</a>
+</div>
+
+<!-- Тема 7: Семантическая нейродинамика (АКТИВНА) -->
+<div class="card">
+    <div class="card-icon">🧠</div>
+    <h2>Семантическая нейродинамика</h2>
+    <p>Cₛ, χ, S_noise, θₜ, восприятие времени τ. Как шум и когерентность влияют на чувствительность, внимание и поток.</p>
+    <div class="meta">🧠 10 задач • ручной ввод • звание «Магистр»</div>
+    <a href="academy-neuro.html" class="btn">🧠 Начать решение</a>
+</div>
+
+<!-- Тема 8: Семантическая архитектура и материалы (АКТИВНА) -->
+<div class="card">
+    <div class="card-icon">🏛️</div>
+    <h2>Архитектура и материалы</h2>
+    <p>Ранги материалов, проектирование пространства, FIELD-MAP. Расчёты итогового Qₛ комнат, сравнение Храмов и Бункеров.</p>
+    <div class="meta">🧠 10 задач • ручной ввод • звание «Магистр»</div>
+    <a href="academy-arch.html" class="btn">🏛️ Начать решение</a>
+</div>
+
+    </div>
+
+    <a href="academy.html" class="back-link">← Вернуться в Академию</a>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Академия • Магистр</p>
+    </div>
+
+</div>
+</body>
+</html>

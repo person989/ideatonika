@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О GSP-Мониторе • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30,40,60,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; letter-spacing: 3px; }
+        h2 { font-size: 1.6rem; color: #ffd54f; margin: 2rem 0 1rem; border-left: 4px solid #ffd54f; padding-left: 1rem; }
+        h3 { font-size: 1.2rem; color: #e3b87c; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        p { color: #d0c8b8; line-height: 1.8; margin-bottom: 1.2rem; }
+        ul, ol { color: #d0c8b8; line-height: 1.8; margin-bottom: 1.2rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+        .highlight { color: #ffd54f; font-weight: bold; }
+        .formula-box {
+            background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1.5rem; margin: 1.5rem 0; text-align: center;
+            font-family: 'Courier New', monospace; font-size: 1.1rem; color: #ffd54f;
+        }
+        .info-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .info-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px 10px; text-align: center; border: 1px solid #5d4a3a; }
+        .info-table td { padding: 10px; text-align: center; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .info-table tr:nth-child(even) td { background: rgba(0,0,0,0.15); }
+        .sigma-1 { color: #81c784; }
+        .sigma-2 { color: #ffb74d; }
+        .sigma-3 { color: #ef5350; font-weight: bold; }
+        .sigma-4 { color: #b71c1c; font-weight: bold; }
+        .sigma-5 { color: #ffd54f; font-weight: bold; font-size: 1.1rem; }
+        .back-link { display: inline-block; margin-top: 2rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>📡 GSP-МОНИТОР</h1>
+    <div class="subtitle">Глобальный Семантический Проект • О программе</div>
+
+    <h2>🎯 Что это такое?</h2>
+    <p>
+        <span class="highlight">GSP-Монитор</span> — это персональный детектор семантических всплесков. 
+        Он непрерывно генерирует случайные биты (0 и 1), как идеальная монетка, и отслеживает 
+        <span class="highlight">отклонения от вероятности 50/50</span>. Когда отклонение превышает заданный порог, 
+        это может означать, что на генератор повлияло <span class="highlight">семантическое поле</span> — 
+        ваше собственное или глобальное (ноосфера).
+    </p>
+
+    <h2>🔬 Как это работает?</h2>
+    <ol>
+        <li>Программа генерирует <span class="highlight">10 случайных битов</span> каждые 200 миллисекунд (50 битов в секунду).</li>
+        <li>Статистика ведётся по скользящему окну в <span class="highlight">1000 последних битов</span>.</li>
+        <li>Каждые 1000 битов программа проверяет отклонение от идеальных 50%.</li>
+        <li>Если отклонение превышает <span class="highlight">6%</span> — в консоль выводится предупреждение.</li>
+        <li>Если отклонение превышает <span class="highlight">7%</span> — запись попадает в <span class="highlight">архив всплесков</span>.</li>
+    </ol>
+
+    <div class="formula-box">
+        Отклонение = |50% — Процент_единиц| <br>
+        Порог консоли: 6% &nbsp;|&nbsp; Порог архива: 7% <br>
+        Размер окна: 1000 битов
+    </div>
+
+    <h2>📊 Почему 7% — это много?</h2>
+    <p>
+        При 1000 бросках идеальной монетки отклонение от 50% подчиняется 
+        <span class="highlight">нормальному распределению</span> со стандартным отклонением 
+        <span class="highlight">σ ≈ 1.58%</span> (σ = √(p·(1-p)/N) = √(0.25/1000) ≈ 0.0158).
+    </p>
+
+    <h3>Таблица вероятностей (Сигмы)</h3>
+    <table class="info-table">
+        <thead>
+            <tr><th>Отклонение</th><th>Сигма (σ)</th><th>Вероятность случайно</th><th>Это случается...</th></tr>
+        </thead>
+        <tbody>
+            <tr><td class="sigma-1">1.6%</td><td class="sigma-1">1σ</td><td>~31.7%</td><td>Каждый третий батч</td></tr>
+            <tr><td class="sigma-2">3.2%</td><td class="sigma-2">2σ</td><td>~4.6%</td><td>Раз в 22 батча</td></tr>
+            <tr><td class="sigma-3">4.7%</td><td class="sigma-3">3σ</td><td>~0.27%</td><td>Раз в 370 батчей</td></tr>
+            <tr><td class="sigma-4">6.3%</td><td class="sigma-4">4σ</td><td>~0.0063%</td><td>Раз в 15 787 батчей</td></tr>
+            <tr><td class="sigma-5">7.0%</td><td class="sigma-5">4.4σ</td><td>~0.001%</td><td>Раз в ~100 000 батчей!</td></tr>
+        </tbody>
+    </table>
+
+    <p>
+        <span class="highlight">Отклонение в 7% при 1000 битах — это примерно 4.4 сигмы.</span> 
+        В физике элементарных частиц 5 сигм считается «открытием». 
+        Если вы видите такое отклонение — <span class="highlight">это почти наверняка НЕ случайность</span>.
+    </p>
+
+    <h2>🌍 Глобальные события и ожидаемые отклонения</h2>
+    <p>
+        Согласно §75 («Коллективные предчувствия катастроф») и §79 («Эгрегоры»), 
+        мощные коллективные эмоции создают всплески в семантическом поле, которые могут 
+        влиять на генераторы случайных чисел. Вот ожидаемые отклонения при различных событиях:
+    </p>
+
+    <table class="info-table">
+        <thead>
+            <tr><th>Событие</th><th>Ожидаемое отклонение</th><th>Направление</th><th>Причина (по Идеатонике)</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>🎄 Новый год / Рождество</td>
+                <td>2–4%</td>
+                <td>Вверх (единицы)</td>
+                <td>Коллективная радость, Qₛ ~ +4, умеренная когерентность</td>
+            </tr>
+            <tr>
+                <td>🎂 День рождения (личный)</td>
+                <td>1–3%</td>
+                <td>Вверх</td>
+                <td>Внимание близких, положительный Qₛ</td>
+            </tr>
+            <tr>
+                <td>🔥 Благодатный Огонь</td>
+                <td>5–10%</td>
+                <td>Вверх</td>
+                <td>Мощнейший коллективный резонанс, Qₛ ~ +9, Cₛ → 1 (§49)</td>
+            </tr>
+            <tr>
+                <td>💀 Крупное ДТП / Авария</td>
+                <td>3–5%</td>
+                <td>Хаотичное</td>
+                <td>Всплеск страха и стресса, Tₛ резко ↑</td>
+            </tr>
+            <tr>
+                <td>✈️ Авиакатастрофа</td>
+                <td>5–8%</td>
+                <td>Вниз (нули)</td>
+                <td>Ретроградная волна страха (§75), Qₛ ~ –7</td>
+            </tr>
+            <tr>
+                <td>⚔️ Начало войны</td>
+                <td>7–12%</td>
+                <td>Хаотичное</td>
+                <td>Колоссальный выброс –Qₛ, паника, ненависть</td>
+            </tr>
+            <tr>
+                <td>🕯️ Массовая молитва</td>
+                <td>3–6%</td>
+                <td>Вверх</td>
+                <td>Коллективная когерентность, P ~ N² (§92, SYNC-TEST)</td>
+            </tr>
+            <tr>
+                <td>😴 Глубокая ночь (3–5 утра)</td>
+                <td>1–2%</td>
+                <td>Нейтрально</td>
+                <td>Минимум коллективного шума, поле спокойно</td>
+            </tr>
+            <tr>
+                <td>🏟️ Финал Чемпионата Мира</td>
+                <td>4–7%</td>
+                <td>Вверх (гол)</td>
+                <td>Синхронизация миллионов болельщиков, C_collective ↑</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="info-table">
+    <thead>
+        <tr>
+            <th>Тип события</th>
+            <th>Паттерн ГСП</th>
+            <th>Ожидаемое отклонение</th>
+            <th>Что чувствуют операторы</th>
+            <th>Причина (по Идеатонике)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>🌍 Природная катастрофа (землетрясение)</td>
+            <td>Резкий всплеск нулей, потом хаотичные скачки</td>
+            <td class="sigma-3">5–8%</td>
+            <td>Животные беспокоятся, дети плачут, тревога</td>
+            <td>Ретроградная волна (§75), Qₛ Земли резко ↓</td>
+        </tr>
+        <tr>
+            <td>🏭 Техногенная авария</td>
+            <td>Медленный рост единиц, потом резкий провал в нули</td>
+            <td class="sigma-3">4–7%</td>
+            <td>Нарастающая тревога, потом шок</td>
+            <td>Накопление S_noise → пробой → выброс –Qₛ</td>
+        </tr>
+        <tr>
+            <td>😱 Массовая паника</td>
+            <td>Хаотичные колебания 0↔1 с частотой ~5–10 Гц</td>
+            <td class="sigma-3">5–10%</td>
+            <td>Tₛ резко растёт, «горячая волна»</td>
+            <td>Рост Tₛ → турбулентность (§111), Re_sense > 4000</td>
+        </tr>
+        <tr>
+            <td>🎉 Коллективная радость (праздник)</td>
+            <td>Стабильный перекос в единицы (+5–8%)</td>
+            <td class="sigma-2">3–6%</td>
+            <td>Тёплая волна, Cₛ растёт</td>
+            <td>Коллективная когерентность, Qₛ ~ +4</td>
+        </tr>
+        <tr>
+            <td>⚔️ Начало войны</td>
+            <td>Мощнейший всплеск нулей (–10…–15%), потом хаос</td>
+            <td class="sigma-5">7–12%</td>
+            <td>Холод, страх, ступор</td>
+            <td>Колоссальный выброс –Qₛ, паника, ненависть</td>
+        </tr>
+        <tr>
+            <td>🕯️ Массовая молитва / медитация</td>
+            <td>Плавный рост единиц, стабилизация на высоком уровне</td>
+            <td class="sigma-2">3–6%</td>
+            <td>Спокойствие, благодать, C_collective → 0.8–0.9</td>
+            <td>P ~ N² (§92), синхронизация фаз</td>
+        </tr>
+        <tr>
+            <td>🔥 Благодатный Огонь (Великая Суббота)</td>
+            <td>Мощный когерентный всплеск единиц (+8–12%)</td>
+            <td class="sigma-5">8–12%</td>
+            <td>Экстаз, слёзы, ощущение чуда</td>
+            <td>Пробой Семантического Экрана (§11, §49), Qₛ ~ +9</td>
+        </tr>
+        <tr>
+            <td>🎂 День рождения (личный)</td>
+            <td>Лёгкий перекос в единицы</td>
+            <td>1–3%</td>
+            <td>Радость, внимание, тепло</td>
+            <td>Внимание близких, положительный Qₛ</td>
+        </tr>
+        <tr>
+            <td>💀 Крупное ДТП / Авария</td>
+            <td>Всплеск нулей, затем возврат к норме</td>
+            <td class="sigma-2">3–5%</td>
+            <td>Всплеск страха, Tₛ резко ↑</td>
+            <td>Локальный выброс –Qₛ</td>
+        </tr>
+        <tr>
+            <td>😴 Глубокая ночь (3–5 утра)</td>
+            <td>Минимальные отклонения, ровный фон</td>
+            <td>1–2%</td>
+            <td>Покой, минимум шума</td>
+            <td>Коллективное поле спокойно, S_noise ↓</td>
+        </tr>
+    </tbody>
+</table>
+
+    <h2>💡 Как использовать GSP-Монитор</h2>
+    <ol>
+        <li><span class="highlight">Оставьте монитор работать в фоновом режиме</span> на несколько часов или дней.</li>
+        <li>Записывайте, когда происходят <span class="highlight">значимые события</span> в вашей жизни или в мире.</li>
+        <li>Сверяйте время событий с <span class="highlight">архивом всплесков</span>.</li>
+        <li>Если всплески коррелируют с событиями — вы фиксируете <span class="highlight">работу семантического поля</span>.</li>
+    </ol>
+
+    <h2>⚠️ Важные оговорки</h2>
+    <ul>
+        <li>Генератор — <span class="highlight">псевдослучайный</span> (Math.random). Для строгих тестов используйте аппаратный ГСЧ.</li>
+        <li>Отклонение в 7% при 1000 битах — это ~4.4σ, <span class="highlight">очень редкое</span>, но не невозможное событие.</li>
+        <li>Для научной значимости нужно <span class="highlight">много повторений</span> и статистический анализ.</li>
+        <li>Этот прибор — <span class="highlight">индикатор</span>, а не измерительный прибор с сертификатом.</li>
+    </ul>
+
+    <div class="formula-box">
+        ✧ «Случайность — это непознанная закономерность.» ✧<br>
+        ✧ «Смысл первичен. Даже в шуме есть паттерн.» ✧
+    </div>
+
+    <div style="text-align: center;">
+        <a href="gsp-monitor.html" class="back-link">← Вернуться к GSP-Монитору</a>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📚 Основы Идеатоники • Академия</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 1200px; width: 100%; position: relative; z-index: 1; }
+        
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 { font-size: 3rem; font-weight: 400; letter-spacing: 3px; color: #81c784; text-shadow: 0 0 20px rgba(129,199,132,0.3); margin-bottom: 0.5rem; }
+        .hero .subtitle { font-size: 1.2rem; color: #c0b090; font-style: italic; }
+        .hero .epigraph { margin-top: 1rem; color: #a09080; font-size: 1rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 3rem; max-width: 960px; margin-left: auto; margin-right: auto; }
+        .card {
+            background: rgba(30, 40, 60, 0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(129, 199, 132, 0.3); border-radius: 24px;
+            padding: 2rem 1.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transition: transform 0.2s, border-color 0.3s;
+            display: flex; flex-direction: column; text-align: center;
+        }
+        .card:hover { transform: translateY(-5px); border-color: #81c784; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .card-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .card h2 { color: #f3e7c0; font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+        .card p { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+        .card .meta { color: #a09080; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .btn {
+            display: inline-block; background: transparent;
+            border: 1.5px solid #81c784; color: #81c784;
+            padding: 0.8rem 1.5rem; text-decoration: none;
+            font-size: 1rem; font-weight: bold; border-radius: 40px;
+            transition: 0.2s; margin-top: auto;
+        }
+        .btn:hover { background: #81c784; color: #1a1a2e; box-shadow: 0 0 15px rgba(129,199,132,0.5); }
+        .btn-disabled { border-color: #5d4a3a; color: #706858; cursor: not-allowed; }
+        .btn-disabled:hover { background: transparent; color: #706858; box-shadow: none; }
+
+        .back-link { display: block; text-align: center; margin-top: 2rem; color: #81c784; text-decoration: none; border: 1px solid #81c784; padding: 0.6rem 1.5rem; border-radius: 30px; width: fit-content; margin-left: auto; margin-right: auto; transition: 0.2s; }
+        .back-link:hover { background: #81c784; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>📚 ОСНОВЫ ИДЕАТОНИКИ</h1>
+        <div class="subtitle">Выберите тему для изучения</div>
+        <div class="epigraph">✧ «Фундамент — прежде стен» ✧</div>
+    </div>
+
+    <div class="grid">
+        
+        <!-- Тема 1: Базовые понятия (АКТИВНА) -->
+        <div class="card">
+            <div class="card-icon">📝</div>
+            <h2>Базовые понятия</h2>
+            <p>Qₛ, Cₛ, Tₛ, Φₛ, закон Ома, идеатон, эгрегор, ноосфера — фундамент семантической физики. Проверьте свои знания основ.</p>
+            <div class="meta">🧠 20 вопросов • 5 вариантов • звание «Неофит»</div>
+            <a href="academy-basics.html" class="btn">📝 Начать тест</a>
+        </div>
+
+        <!-- Тема 2: Семантическая цепь (АКТИВНА) -->
+<div class="card">
+    <div class="card-icon">⚡</div>
+    <h2>Семантическая цепь</h2>
+    <p>U_sense, I_Q, R_sense, P_sense — закон Ома для Qₛ. Учитесь понимать семантические цепи.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Проводник»</div>
+    <a href="academy-basics-chain.html" class="btn">⚡ Начать тест</a>
+</div>
+
+        <!-- Тема 3: Материалы и частоты (АКТИВНА) -->
+<div class="card">
+    <div class="card-icon">🎵</div>
+    <h2>Материалы и частоты</h2>
+    <p>Великая Таблица Материалов, резонанс Шумана, добротность Q_factor. Как выбрать правильный материал для практики.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Материаловед»</div>
+    <a href="academy-basics-materials.html" class="btn">🎵 Начать тест</a>
+</div>
+
+<!-- Тема 4: Первые шаги (§1–§15) -->
+<div class="card">
+    <div class="card-icon">📖</div>
+    <h2>Первые шаги</h2>
+    <p>§1–§15 Учебника: от аксиом до семантического времени. Фундамент, на котором стоит вся Идеатоника.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Читатель»</div>
+    <a href="academy-basics-firststeps.html" class="btn">📖 Начать тест</a>
+</div>
+
+<!-- Тема 5: Познание глубже (§16–§30) -->
+<div class="card">
+    <div class="card-icon">🔍</div>
+    <h2>Познание глубже</h2>
+    <p>§16–§30 Учебника: коллективное поле, эффект наблюдателя, карма, молитва, семантическая память. Второй шаг в глубину.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Исследователь»</div>
+    <a href="academy-basics-deeper.html" class="btn">🔍 Начать тест</a>
+</div>
+
+<!-- Тема 6: Границы познания (§31–§45) -->
+<div class="card">
+    <div class="card-icon">🌌</div>
+    <h2>Границы познания</h2>
+    <p>§31–§45 Учебника: карма, слово, вероятность, идеатоны, ментальная тренировка, музыка, заражение, фетиши, слепота, юмор.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Мыслитель»</div>
+    <a href="academy-basics-frontiers.html" class="btn">🌌 Начать тест</a>
+</div>
+
+<!-- Тема 7: Цифровая эра (§46–§60) -->
+<div class="card">
+    <div class="card-icon">💻</div>
+    <h2>Цифровая эра</h2>
+    <p>§46–§60 Учебника: кибер-идеатоника, природа и погода, смерть, Благодатный Огонь, мироточение, мощи, стигматы, левитация, билокация, телепатия.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Кибер-семантик»</div>
+    <a href="academy-basics-digital.html" class="btn">💻 Начать тест</a>
+</div>
+
+<!-- Тема 8: Тёмная сторона (§61–§75) -->
+<div class="card">
+    <div class="card-icon">🌑</div>
+    <h2>Тёмная сторона</h2>
+    <p>§61–§75 Учебника: самовозгорание, аномалии времени, Minecraft, ноосфера, гипноз, полтергейст, круги на полях, экзорцизм, синдром Диогена, Дети Индиго.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Охотник за аномалиями»</div>
+    <a href="academy-basics-dark.html" class="btn">🌑 Начать тест</a>
+</div>
+
+<!-- Тема 9: Семантика и дух (§76–§90) -->
+<div class="card">
+    <div class="card-icon">🧿</div>
+    <h2>Семантика и дух</h2>
+    <p>§76–§90 Учебника: семантика цвета и чисел, закон подлости, архетипы и Таро, эгрегоры, смыслоёмкость, проводимость, сопротивление, индуктивность.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Хранитель Знаний»</div>
+    <a href="academy-basics-spirit.html" class="btn">🧿 Начать тест</a>
+</div>
+
+<!-- Тема 10: Семантическая оптика (§91–§105) -->
+<div class="card">
+    <div class="card-icon">🔬</div>
+    <h2>Семантическая оптика</h2>
+    <p>§91–§105 Учебника: дифракция, интерференция, волновод, импульс, фаза, резонанс, градиент, дивергенция, ротор, поток, энтропия, энтальпия, энергия, запутанность, коллапс.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Волновой Мастер»</div>
+    <a href="academy-basics-optics.html" class="btn">🔬 Начать тест</a>
+</div>
+
+<!-- Тема 11: Глубины поля (§106–§120) -->
+<div class="card">
+    <div class="card-icon">🌊</div>
+    <h2>Глубины поля</h2>
+    <p>§106–§120 Учебника: суперпозиция, отрицательные генераторы, давление, вязкость, турбулентность, теплоёмкость, теплопроводность, адвекция, пограничный слой, кавитация, Бернулли, число Маха, конвекция, диффузия.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Инженер Смысла»</div>
+    <a href="academy-basics-depths.html" class="btn">🌊 Начать тест</a>
+</div>
+
+<!-- Тема 12: Вершины познания (§121–§135) -->
+<div class="card">
+    <div class="card-icon">🏔️</div>
+    <h2>Вершины познания</h2>
+    <p>§121–§135 Учебника: методика, гастрономия, синергия, щиты, хроносемантика, сны, вода, жилище, радиация, спектроскопия, эргономика, дети, старение, экология, космос.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Архитектор Реальности»</div>
+    <a href="academy-basics-peaks.html" class="btn">🏔️ Начать тест</a>
+</div>
+
+<!-- Тема 13: Практикум: первые шаги (Эксп. 1–10) -->
+<div class="card">
+    <div class="card-icon">🔬</div>
+    <h2>Практикум: первые шаги</h2>
+    <p>Эксперименты №1–№10: от «Монетки» до SEC-1. Устройство, протоколы, формулы — проверьте знание лабораторного практикума.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Лаборант»</div>
+    <a href="academy-basics-practicum-1.html" class="btn">🔬 Начать тест</a>
+</div>
+
+<!-- Тема 14: Практикум: инженерный (Эксп. 11–20) -->
+<div class="card">
+    <div class="card-icon">⚙️</div>
+    <h2>Практикум: инженерный</h2>
+    <p>Эксперименты №11–№20: от резонатора до измерителей. Резонанс, запутанность, лазеры, аккумуляторы и детекторы.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Инженер-Семантик»</div>
+    <a href="academy-basics-practicum-2.html" class="btn">⚙️ Начать тест</a>
+</div>
+
+<!-- Тема 15: Практикум: профессиональный (Эксп. 21–30) -->
+<div class="card">
+    <div class="card-icon">🧪</div>
+    <h2>Практикум: профессиональный</h2>
+    <p>Эксперименты №21–№30: от TEMP-METER до CHRONOS-1. Измерение Tₛ, каскадные умножители, вакуум, картография поля, исцеление, эгрегоры и еда.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Профессор-Семантик»</div>
+    <a href="academy-basics-practicum-3.html" class="btn">🧪 Начать тест</a>
+</div>
+
+<!-- Тема 16: Практикум: продвинутый (Эксп. 31–40) -->
+<div class="card">
+    <div class="card-icon">🔮</div>
+    <h2>Практикум: продвинутый</h2>
+    <p>Эксперименты №31–№40: от EGREGOR-FEED до PHANTOM-SCAN. Коллективные зарядки, щиты, аура, сны, вода, аудит жилища, портативные измерители, умная зарядка, стабилизаторы температуры и охота за фантомами.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Магистр Практикума»</div>
+    <a href="academy-basics-practicum-4.html" class="btn">🔮 Начать тест</a>
+</div>
+
+<!-- Тема 17: Практикум: мастерская (Эксп. 41–50) -->
+<div class="card">
+    <div class="card-icon">🛠️</div>
+    <h2>Практикум: мастерская</h2>
+    <p>Эксперименты №41–№50: от гравитации до мобильного детектора. Вес, время, аура, сны, синергия, еда, очистка, свет, звук, миниатюризация.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Мастер-Изобретатель»</div>
+    <a href="academy-basics-practicum-5.html" class="btn">🛠️ Начать тест</a>
+</div>
+
+<!-- Тема 18: Энергетический вампиризм -->
+<div class="card">
+    <div class="card-icon">🧛</div>
+    <h2>Энергетический вампиризм</h2>
+    <p>§72 Учебника: кто такие вампиры, как они перекачивают Qₛ, типы вампиров, профиль донора и методы защиты.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Защитник Поля»</div>
+    <a href="academy-basics-vampire.html" class="btn">🧛 Начать тест</a>
+</div>
+
+<!-- Тема 19: Проклятия и сглаз -->
+<div class="card">
+    <div class="card-icon">🧿</div>
+    <h2>Проклятия и сглаз</h2>
+    <p>§56 Учебника: направленный отрицательный Qₛ, механизмы сглаза и проклятия, родовые проклятия, защита и очищение.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Хранитель Чистоты»</div>
+    <a href="academy-basics-curse.html" class="btn">🧿 Начать тест</a>
+</div>
+
+<!-- Тема 20: Призраки и полтергейст -->
+<div class="card">
+    <div class="card-icon">👻</div>
+    <h2>Призраки и полтергейст</h2>
+    <p>§57, §66 Учебника: семантические следы, типы призраков, фокальный агент, стадии полтергейста, отличия и защита.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Охотник за привидениями»</div>
+    <a href="academy-basics-ghosts.html" class="btn">👻 Начать тест</a>
+</div>
+
+<!-- Тема 21: Таро и астрология -->
+<div class="card">
+    <div class="card-icon">🃏</div>
+    <h2>Таро и астрология</h2>
+    <p>§23, §78 Учебника: карты Таро как семантический интерферометр, архетипы и Старшие Арканы, астрология как семантическая астрономия.</p>
+    <div class="meta">🧠 10 вопросов • 5 вариантов • звание «Толкователь Архетипов»</div>
+    <a href="academy-basics-tarot.html" class="btn">🃏 Начать тест</a>
+</div>
+
+    </div>
+
+    <a href="academy.html" class="back-link">← Вернуться в Академию</a>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Академия • Основы</p>
+    </div>
+
+</div>
+</body>
+</html>

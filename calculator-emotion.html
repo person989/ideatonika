@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Энергия эмоции • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-comparison { color: #a09080; font-size: 0.9rem; margin-top: 0.8rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>⚡ Энергия эмоции</h1>
+    <div class="subtitle">Калькулятор семантической энергии чувств (§7, §86, §94)</div>
+
+    <div class="calc-section">
+        <div class="section-title">😊 Параметры эмоции</div>
+
+        <!-- Тип эмоции -->
+        <div class="input-group">
+            <label>🎭 Тип эмоции:</label>
+            <select id="emotionSelect">
+                <option value="8">😊 Радость / Восторг (Qₛ = +8)</option>
+                <option value="6">❤️ Любовь / Нежность (Qₛ = +6)</option>
+                <option value="4">🙏 Благодарность / Надежда (Qₛ = +4)</option>
+                <option value="2">😐 Спокойный интерес (Qₛ = +2)</option>
+                <option value="-3">😠 Раздражение / Гнев (Qₛ = –3)</option>
+                <option value="-6">😨 Страх / Тревога (Qₛ = –6)</option>
+                <option value="-9">😱 Ужас / Паника (Qₛ = –9)</option>
+            </select>
+        </div>
+
+        <!-- Интенсивность -->
+        <div class="input-group">
+            <label>📊 Интенсивность эмоции: <span id="intensityValue">5</span> из 10</label>
+            <input type="range" id="intensitySlider" min="1" max="10" value="5" step="0.5">
+            <div class="range-labels"><span>1 (лёгкий оттенок)</span><span>10 (захлёстывает)</span></div>
+        </div>
+
+        <!-- Когерентность -->
+        <div class="input-group">
+            <label>🎯 Когерентность в момент эмоции (Cₛ): <span id="csValue">0.6</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <!-- Длительность -->
+        <div class="input-group">
+            <label>⏱️ Длительность эмоции: <span id="durationValue">10</span> секунд</label>
+            <input type="range" id="durationSlider" min="1" max="300" value="10" step="1">
+            <div class="range-labels"><span>1 сек (вспышка)</span><span>60 сек</span><span>300 сек (5 мин)</span></div>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Энергия эмоции</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-comparison" id="resultComparison"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const emotionSelect = document.getElementById('emotionSelect');
+    const intensitySlider = document.getElementById('intensitySlider');
+    const csSlider = document.getElementById('csSlider');
+    const durationSlider = document.getElementById('durationSlider');
+    const intensityValue = document.getElementById('intensityValue');
+    const csValue = document.getElementById('csValue');
+    const durationValue = document.getElementById('durationValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultComparison = document.getElementById('resultComparison');
+    const resultFormula = document.getElementById('resultFormula');
+
+    emotionSelect.addEventListener('change', calculate);
+    intensitySlider.addEventListener('input', () => { intensityValue.textContent = parseFloat(intensitySlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    durationSlider.addEventListener('input', () => { durationValue.textContent = parseInt(durationSlider.value); calculate(); });
+
+    function calculate() {
+        const Qbase = parseInt(emotionSelect.value);
+        const I = parseFloat(intensitySlider.value);
+        const C = parseFloat(csSlider.value);
+        const t = parseFloat(durationSlider.value);
+
+        // Эффективный Qₛ с учётом интенсивности: Q_eff = Qbase * (I / 10)
+        const Qeff = Qbase * (I / 10);
+
+        // Мощность: P = |Qeff| * C (Ватт смысла)
+        const P = Math.abs(Qeff) * C;
+
+        // Энергия: E = P * t (Джоуль смысла)
+        const E = P * t;
+
+        const emotionName = emotionSelect.options[emotionSelect.selectedIndex].text.split(' (')[0];
+
+        resultNumber.textContent = E.toFixed(1) + ' Дж';
+        resultLabel.textContent = 'Семантическая энергия';
+
+        let extra = '';
+        const absE = Math.abs(E);
+        if (absE < 10) extra = '💨 Лёгкий ветерок смысла. Почти неощутимо.';
+        else if (absE < 100) extra = '🌬️ Ощутимый порыв. Может слегка повлиять на настроение окружающих.';
+        else if (absE < 500) extra = '⚡ Мощный импульс! Способен «пробить» Семантический Экран и повлиять на вероятности.';
+        else if (absE < 2000) extra = '💥 Огромный выброс! Эффект плацебо, синхронистичность, влияние на здоровье.';
+        else extra = '🌋 Колоссальная энергия! Молитва святого, проклятие, экстатическое состояние.';
+        resultExtra.textContent = extra;
+
+        // Сравнение: на сколько хватит этой энергии для SEC-1
+        const secPulseEnergy = 0.2; // мДж = 0.0002 Дж
+        const pulses = absE / secPulseEnergy;
+        resultComparison.textContent = `Для сравнения: этой энергии хватило бы на ${pulses.toFixed(0)} импульсов SEC-1 (один импульс ≈ 0.2 мДж).`;
+
+        const sign = Qeff >= 0 ? '+' : '';
+        resultFormula.textContent = `Q_eff = ${sign}${Qeff.toFixed(1)} | P = ${Math.abs(Qeff).toFixed(1)} · ${C.toFixed(2)} = ${P.toFixed(1)} Вт | E = ${P.toFixed(1)} · ${t.toFixed(0)} = ${E.toFixed(1)} Дж`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

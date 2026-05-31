@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Семантического Детокса • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(129,199,132,0.1); border: 2px solid #81c784; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #81c784; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .detox-plan { text-align: left; margin-top: 1.5rem; color: #d0c8b8; font-size: 0.9rem; line-height: 1.8; }
+        .detox-plan table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+        .detox-plan th { background: #2a2a4a; color: #81c784; padding: 8px; border: 1px solid #5d4a3a; font-size: 0.85rem; }
+        .detox-plan td { padding: 8px; border: 1px solid #5d4a3a; font-size: 0.85rem; color: #d0c8b8; }
+        .detox-plan tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🍃 Семантический Детокс</h1>
+    <div class="subtitle">Калькулятор очищения поля через питание (§44, §122, Гастрономическая Таблица)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваши текущие параметры</div>
+
+        <!-- Текущий Qₛ -->
+        <div class="input-group">
+            <label>🌙 Текущий Qₛ: <span id="qsValue">+2</span></label>
+            <input type="range" id="qsSlider" min="-5" max="10" value="2" step="0.5">
+            <div class="range-labels"><span>-5 (истощён)</span><span>0</span><span>+10 (святой)</span></div>
+        </div>
+
+        <!-- Желаемый Qₛ -->
+        <div class="input-group">
+            <label>🎯 Желаемый Qₛ: <span id="targetValue">+5</span></label>
+            <input type="range" id="targetSlider" min="-5" max="10" value="5" step="0.5">
+            <div class="range-labels"><span>-5</span><span>0</span><span>+10 (святой)</span></div>
+        </div>
+
+        <!-- Cₛ во время еды -->
+        <div class="input-group">
+            <label>🍽️ Осознанность приёма пищи (Cₛ): <span id="csValue">0.5</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.5" step="0.01">
+            <div class="range-labels"><span>0.1 (перед экраном)</span><span>1.0 (медитация с едой)</span></div>
+        </div>
+
+        <!-- Уровень детокса -->
+        <div class="input-group">
+            <label>🥗 Уровень строгости детокса:</label>
+            <select id="levelSelect">
+                <option value="6.5">🌟 Максимальный: только Светлая еда (+6...+8) — просфора, мёд, святая вода</option>
+                <option value="5" selected>🌿 Живой детокс: Живая еда (+3...+5) — салаты, каши, супы</option>
+                <option value="3">🟰 Мягкий детокс: Нейтральная и выше (0...+5) — исключаем фастфуд</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Дней детокса</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="detox-plan" id="detoxPlan"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const qsSlider = document.getElementById('qsSlider');
+    const targetSlider = document.getElementById('targetSlider');
+    const csSlider = document.getElementById('csSlider');
+    const levelSelect = document.getElementById('levelSelect');
+    const qsValue = document.getElementById('qsValue');
+    const targetValue = document.getElementById('targetValue');
+    const csValue = document.getElementById('csValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const detoxPlan = document.getElementById('detoxPlan');
+    const resultFormula = document.getElementById('resultFormula');
+
+    qsSlider.addEventListener('input', () => { qsValue.textContent = (parseFloat(qsSlider.value) >= 0 ? '+' : '') + parseFloat(qsSlider.value).toFixed(1); calculate(); });
+    targetSlider.addEventListener('input', () => { targetValue.textContent = (parseFloat(targetSlider.value) >= 0 ? '+' : '') + parseFloat(targetSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    levelSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const Qcurrent = parseFloat(qsSlider.value);
+        const Qtarget = parseFloat(targetSlider.value);
+        const C = parseFloat(csSlider.value);
+        const avgRank = parseFloat(levelSelect.value);
+
+        // Если цель уже достигнута или ниже текущего
+        if (Qtarget <= Qcurrent) {
+            resultNumber.textContent = '0';
+            resultLabel.textContent = 'Детокс не требуется';
+            resultExtra.textContent = '✅ Ваш текущий Qₛ уже на целевом уровне или выше.';
+            detoxPlan.innerHTML = '';
+            resultFormula.textContent = 'Q_цель ≤ Q_текущий — детокс не нужен.';
+            return;
+        }
+
+        // Прирост Qₛ в день: зависит от ранга еды, Cₛ и базовой усвояемости
+        const deltaPerDay = (avgRank / 10) * C * 2.5;
+        const daysNeeded = Math.ceil((Qtarget - Qcurrent) / deltaPerDay);
+
+        resultNumber.textContent = daysNeeded;
+        resultLabel.textContent = (daysNeeded === 1 ? 'день' : (daysNeeded < 5 ? 'дня' : 'дней')) + ' детокса';
+
+        let extra = '';
+        if (daysNeeded <= 3) extra = '🌱 Быстрый детокс! Всего несколько дней осознанного питания — и вы на целевом уровне.';
+        else if (daysNeeded <= 7) extra = '📅 Неделя осознанного питания. Хороший план для мягкой перезагрузки поля.';
+        else if (daysNeeded <= 14) extra = '🕰️ Две недели. Серьёзный детокс. Рекомендуется вести дневник питания.';
+        else if (daysNeeded <= 30) extra = '🌙 Месяц. Глубинная очистка. Ваше поле основательно «загрязнено», но это поправимо.';
+        else extra = '⏳ Длительный путь. Возможно, стоит начать с повышения Cₛ во время еды — это ускорит процесс.';
+        resultExtra.textContent = extra;
+
+        // Примерный план
+        const levelName = levelSelect.options[levelSelect.selectedIndex].text.split(' —')[0];
+        const finalQ = Math.min(10, Qcurrent + deltaPerDay * daysNeeded);
+
+        detoxPlan.innerHTML = `
+            <p><strong>📋 Параметры детокса:</strong></p>
+            <table>
+                <tr><th>Параметр</th><th>Значение</th></tr>
+                <tr><td>Уровень строгости</td><td>${levelName}</td></tr>
+                <tr><td>Средний ранг блюд</td><td>${avgRank.toFixed(1)}</td></tr>
+                <tr><td>Прирост Qₛ в день</td><td>+${deltaPerDay.toFixed(2)}</td></tr>
+                <tr><td>Qₛ после детокса</td><td>${(finalQ >= 0 ? '+' : '') + finalQ.toFixed(1)}</td></tr>
+                <tr><td>Рекомендуемые продукты</td><td>${avgRank >= 6 ? 'Просфора, мёд, святая вода, травяные чаи, печёные яблоки' : (avgRank >= 4 ? 'Свежие салаты, каши, супы, орехи, фрукты, зелень' : 'Варёные овощи, рис, курица, яйца, хлеб на закваске')}</td></tr>
+                <tr><td>Исключить</td><td>Фастфуд, чипсы, газировка, колбасы, дешёвые сладости, алкоголь</td></tr>
+            </table>
+        `;
+
+        resultFormula.textContent = `ΔQ/день = (${avgRank.toFixed(1)} / 10) · ${C.toFixed(2)} · 2.5 = +${deltaPerDay.toFixed(2)} | ${(Qtarget - Qcurrent).toFixed(1)} / ${deltaPerDay.toFixed(2)} = ${daysNeeded} дн.`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

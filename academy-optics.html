@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантическая оптика и геометрия поля • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 850px; width: 100%; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 2px solid #ce93d8; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ce93d8; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ce93d8; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .task-box { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; border: 1px solid #5d4a3a; }
+        .task-title { color: #ce93d8; font-size: 1.3rem; margin-bottom: 1rem; }
+        .task-text { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; white-space: pre-line; }
+        .task-input { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .task-input::placeholder { color: #706858; font-style: italic; }
+        .hint { color: #a09080; font-size: 0.85rem; margin-top: 0.5rem; font-style: italic; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #ce93d8; color: #ce93d8; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #ce93d8; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ce93d8; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ce93d8; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>🔭 СЕМАНТИЧЕСКАЯ ОПТИКА И ГЕОМЕТРИЯ ПОЛЯ</h1>
+    <div class="subtitle">10 задач • числовой ответ • звание «Магистр»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="taskArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-magistr-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-magistr-menu.html" class="back-link">← Вернуться к темам Магистра</a>
+</div>
+
+<script>
+const tasks = [
+    {
+        title: "Задача №1. Семантический градиент",
+        text: "Дано: потенциал Φ меняется вдоль оси x по закону Φ(x) = 3x² + 2x + 5.\nЧему равен градиент dΦ/dx в точке x = 2?\nОтвет округлите до целых.",
+        answer: "14"
+    },
+    {
+        title: "Задача №2. Поток через поверхность",
+        text: "Дано: алтарь излучает Qₛ = 800 ед. равномерно во все стороны. Радиус сферы вокруг алтаря r = 2 м.\nЧему равна плотность потока J_Q на расстоянии r (т.е. мощность, проходящая через 1 м²)?\nПримите π ≈ 3.14.\nОтвет округлите до целых.",
+        answer: "16"
+    },
+    {
+        title: "Задача №3. Дивергенция — источник или сток?",
+        text: "Дано: поле Φ = (2x, -3y, 0).\nЧему равна дивергенция ∇·Φ в точке (1, 2, 0)? Является ли эта точка источником (∇·Φ > 0) или стоком (∇·Φ < 0)?\nОтвет: число (округлите до целых) и слово «источник» или «сток» через пробел.",
+        answer: "-1 сток"
+    },
+    {
+        title: "Задача №4. Ротор поля",
+        text: "Дано: поле Φ = (-y, x, 0).\nЧему равна z-компонента ротора (∇×Φ)_z в любой точке? Является ли поле вихревым?\nОтвет: число и «да» или «нет» через пробел.",
+        answer: "2 да"
+    },
+    {
+        title: "Задача №5. Градиент в храме",
+        text: "Дано: потенциал Φ в храме меняется вдоль оси y по закону Φ(y) = 10 — 0.5y², где y — расстояние от алтаря в метрах.\nЧему равен градиент dΦ/dy на расстоянии y = 3 м от алтаря?\nОтвет округлите до целых.",
+        answer: "-3"
+    },
+    {
+        title: "Задача №6. Поток через прямоугольную поверхность",
+        text: "Дано: однородное поле Qₛ с плотностью потока j = 5 ед/м². Прямоугольная поверхность имеет размеры 2 м × 3 м и ориентирована перпендикулярно потоку.\nЧему равен полный поток J_Q через эту поверхность?\nОтвет округлите до целых.",
+        answer: "30"
+    },
+    {
+        title: "Задача №7. Дивергенция в трёхмерном поле",
+        text: "Дано: поле Φ = (x², y², z²).\nЧему равна дивергенция ∇·Φ в точке (1, 2, 3)?\nОтвет округлите до целых.",
+        answer: "12"
+    },
+    {
+        title: "Задача №8. Поток через замкнутую поверхность",
+        text: "Дано: внутри сферы радиуса r = 1 м находится источник с постоянной дивергенцией ∇·Φ = 6.\nПримите π ≈ 3.14.\nЧему равен суммарный поток J_Q через поверхность сферы?\nОтвет округлите до целых.",
+        answer: "25"
+    },
+    {
+        title: "Задача №9. Угол падения потока",
+        text: "Дано: плотность потока j = 10 ед/м², поверхность площадью S = 4 м², угол между направлением потока и нормалью к поверхности α = 60°.\nЧему равен поток J_Q через поверхность?\nОтвет округлите до целых.",
+        answer: "20"
+    },
+    {
+        title: "Задача №10. Ротор и циркуляция",
+        text: "Дано: в поле с постоянным ротором (∇×Φ)_z = 3 по замкнутому контуру, ограничивающему площадь S = 5 м².\nЧему равна циркуляция Γ по этому контуру?\nОтвет округлите до целых.",
+        answer: "15"
+    }
+];
+
+let idx = 0, answers = Array(10).fill('');
+const tArea = document.getElementById('taskArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn'), next = document.getElementById('nextBtn');
+
+function render() {
+    const t = tasks[idx];
+    let h = `<div class="task-box"><div class="task-title">${t.title}</div><div class="task-text">${t.text}</div>`;
+    h += `<input type="text" class="task-input" id="answerInput" placeholder="Введите числовой ответ..." value="${answers[idx]}">`;
+    h += `<div class="hint">💡 Введите только число (или число и слово через пробел для задач №3 и №4).</div>`;
+    h += '</div>';
+    tArea.innerHTML = h;
+    document.getElementById('answerInput').addEventListener('input', function(){
+        answers[idx] = this.value.trim();
+    });
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = idx===0;
+    next.textContent = idx===9 ? '🎉 Завершить' : 'Далее →';
+    if(idx===9) document.getElementById('answerInput').focus();
+}
+
+function toNumber(str) {
+    return parseFloat(str.replace(',', '.').trim());
+}
+
+function showResult() {
+    let correct=0, rows='';
+    tasks.forEach((t,i)=>{
+        const userAns = answers[i].replace(',','.').trim().toLowerCase();
+        const realAns = t.answer.toLowerCase();
+        if (i === 2 || i === 3) {
+            const userParts = userAns.split(/\s+/);
+            const realParts = realAns.split(/\s+/);
+            let ok = false;
+            if (userParts.length >= 2) {
+                const userNum = toNumber(userParts[0]);
+                const realNum = toNumber(realParts[0]);
+                ok = !isNaN(userNum) && Math.abs(userNum - realNum) < 0.015 && userParts[1] === realParts[1];
+            }
+            if (ok) correct++;
+            rows += `<tr><td>${t.title}</td><td style="color:#f3e7c0;">${answers[i]||'—'}</td><td style="color:#a09080;">${t.answer}</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+        } else {
+            const userNum = toNumber(answers[i]);
+            const realNum = toNumber(t.answer);
+            const ok = !isNaN(userNum) && Math.abs(userNum - realNum) < 0.015;
+            if(ok) correct++;
+            rows += `<tr><td>${t.title}</td><td style="color:#f3e7c0;">${answers[i]||'—'}</td><td style="color:#a09080;">${t.answer}</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+        }
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'🔭 Вы — Магистр Оптики и Геометрии!':pct>=70?'📚 Отличный результат, Адепт.':pct>=40?'🔬 Неплохо, но есть куда расти.':'🌱 Геометрия поля требует практики.';
+    tArea.innerHTML = `<div class="result-container"><div class="result-score">${pct}%</div><p style="color:#c0b090;">${comment}</p><table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table><p style="color:#a09080;">Звание: ${pct>=90?'🔭 Магистр':pct>=70?'📚 Адепт':pct>=40?'🔬 Практик':'🌱 Неофит'}</p></div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', ()=>{ if(idx>0){ idx--; render(); } });
+next.addEventListener('click', ()=>{
+    if(answers[idx]===''){ alert('Введите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

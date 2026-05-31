@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица Святых • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 1300px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.75); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3); border-radius: 24px;
+            padding: 2rem 1.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 { font-size: 2.2rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; letter-spacing: 2px; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 1.5rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .button-group { display: flex; justify-content: center; gap: 20px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .btn { padding: 10px 25px; background: #3b2a1f; color: white; border: none; border-radius: 30px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s; font-family: inherit; }
+        .btn:hover { background: #5d4037; transform: scale(1.02); }
+        .btn-secondary { background: #5d4037; }
+        .btn-secondary:hover { background: #3b2a1f; }
+        .sort-indicator { text-align: center; font-size: 0.9rem; color: #5d4037; margin-bottom: 1rem; font-style: italic; }
+        .table-wrapper { overflow-x: auto; background: #fdf8f0; border-radius: 12px; border: 1px solid #d4c4a8; margin-bottom: 1.5rem; }
+        .saints-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: #fdf8f0; min-width: 1200px; }
+        .saints-table th { background: #3b2a1f; color: white; padding: 12px 6px; font-weight: bold; text-align: center; border: 1px solid #5d4037; font-size: 0.8rem; white-space: nowrap; }
+        .saints-table td { border: 1px solid #8b7355; padding: 10px 6px; vertical-align: middle; color: #2c1e0e; }
+        .saints-table tr:nth-child(even) td { background: #f5ede0; }
+        .saints-table tr:nth-child(odd) td { background: #fdf8f0; }
+
+        /* Цвета строк по Qₛ */
+        .rank-p10 { background: linear-gradient(135deg, #fff9c4, #fff8e1) !important; }
+        .rank-p9 { background: linear-gradient(135deg, #fff8e1, #ffecb3) !important; }
+        .rank-p8 { background: linear-gradient(135deg, #ffecb3, #ffe082) !important; }
+        .rank-p7 { background: linear-gradient(135deg, #fff9c4, #fff59d) !important; }
+
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.65rem; font-weight: bold; white-space: nowrap; }
+        .badge-christianity { background: #bbdefb; color: #0d47a1; }
+        .badge-buddhism { background: #ffe082; color: #e65100; }
+        .badge-hinduism { background: #f8bbd0; color: #880e4f; }
+        .badge-islam { background: #c8e6c9; color: #1b5e20; }
+        .badge-judaism { background: #d1c4e9; color: #4527a0; }
+        .badge-taoism { background: #e0e0e0; color: #424242; }
+
+        .phenom-link { color: #5d4037; text-decoration: underline; cursor: pointer; font-size: 0.75rem; }
+        .phenom-link:hover { color: #3b2a1f; }
+
+        .legend { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; font-size: 0.8rem; margin-bottom: 1.5rem; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .footer-note { text-align: center; font-size: 0.85rem; color: #5d4037; font-style: italic; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #8b7355; }
+        .back-link { display: inline-block; margin-top: 1rem; color: #e3b87c; text-decoration: none; border: 1px solid #e3b87c; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #e3b87c; color: #1a1a2e; }
+        @media (max-width: 700px) { body { padding: 1rem; } h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>🕊️ ТАБЛИЦА СВЯТЫХ И ПРОСВЕТЛЁННЫХ</h1>
+    <div class="subtitle">Семантические параметры величайших духовных мастеров человечества</div>
+
+    <div class="button-group">
+        <button id="sortByQsBtn" class="btn">📊 По Qₛ (от +10 к +7)</button>
+        <button id="sortByNameBtn" class="btn btn-secondary">🔤 По ИМЕНИ (А → Я)</button>
+    </div>
+    <p id="currentSortIndicator" class="sort-indicator">Текущая сортировка: по Qₛ (от +10 к +7)</p>
+
+    <div class="legend">
+        <div class="legend-item"><span class="badge badge-christianity">Христианство</span></div>
+        <div class="legend-item"><span class="badge badge-buddhism">Буддизм</span></div>
+        <div class="legend-item"><span class="badge badge-hinduism">Индуизм</span></div>
+        <div class="legend-item"><span class="badge badge-islam">Ислам</span></div>
+        <div class="legend-item"><span class="badge badge-judaism">Иудаизм</span></div>
+        <div class="legend-item"><span class="badge badge-taoism">Даосизм</span></div>
+    </div>
+
+    <div id="tableWrapper" class="table-wrapper">
+        <table class="saints-table" id="saintsTable">
+            <thead>
+                <tr>
+                    <th>Святой / Просветлённый</th>
+                    <th>Традиция</th>
+                    <th>Qₛ</th>
+                    <th>Cₛ</th>
+                    <th>Tₛ</th>
+                    <th>χ</th>
+                    <th>Особые дары</th>
+                    <th>Семантический феномен</th>
+                    <th>Параграфы</th>
+                </tr>
+            </thead>
+            <tbody id="saintsBody">
+                <!-- Заполняется JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer-note">
+        ✧ «Святые — это живые доказательства того, что семантическое поле можно развить до уровня Абсолютного Света.» ✧
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+</div>
+
+<script>
+(function() {
+    const saintsData = [
+        { name: "Иисус Христос", tradition: "Христианство", qs: 10, cs: 1.0, ts: 5.0, chi: 10, gifts: "Исцеление, воскрешение, умножение пищи, хождение по воде, Преображение", phenomenon: "Абсолютный Свет (§60)", paragraphs: "§49, §52, §53, §54", badge: "badge-christianity", rankClass: "rank-p10" },
+        { name: "Богородица (Дева Мария)", tradition: "Христианство", qs: 9, cs: 0.98, ts: 4.5, chi: 9, gifts: "Мироточение, явления, защита, исцеления по молитвам", phenomenon: "Сияющий Свет (§89)", paragraphs: "§50, §89", badge: "badge-christianity", rankClass: "rank-p9" },
+        { name: "Франциск Ассизский", tradition: "Христианство", qs: 8, cs: 0.95, ts: 4.0, chi: 8, gifts: "Стигматы, левитация, проповедь птицам, билокация", phenomenon: "Семантическая импринтация (§52)", paragraphs: "§52, §53, §54", badge: "badge-christianity", rankClass: "rank-p8" },
+        { name: "Серафим Саровский", tradition: "Православие", qs: 8, cs: 0.96, ts: 3.8, chi: 9, gifts: "Прозорливость, исцеления, явление Богородицы, «стяжание Духа»", phenomenon: "Семантический резонанс с Ноосферой (§64)", paragraphs: "§51, §55, §64", badge: "badge-christianity", rankClass: "rank-p8" },
+        { name: "Иоанн Кронштадтский", tradition: "Православие", qs: 8, cs: 0.94, ts: 4.2, chi: 8, gifts: "Массовые исцеления, прозорливость, сила молитвы", phenomenon: "Коллективный семантический резонанс (§92)", paragraphs: "§30, §92", badge: "badge-christianity", rankClass: "rank-p8" },
+        { name: "Падре Пио", tradition: "Христианство", qs: 8, cs: 0.93, ts: 3.9, chi: 9, gifts: "Стигматы, билокация, прозорливость, телепатия", phenomenon: "Билокация как семантическая проекция (§54)", paragraphs: "§52, §54, §55", badge: "badge-christianity", rankClass: "rank-p8" },
+        { name: "Тереза Авильская", tradition: "Христианство", qs: 8, cs: 0.94, ts: 4.1, chi: 9, gifts: "Левитация, мистические видения, билокация", phenomenon: "Семантическая антигравитация (§53)", paragraphs: "§53, §54", badge: "badge-christianity", rankClass: "rank-p8" },
+        { name: "Будда (Сиддхартха Гаутама)", tradition: "Буддизм", qs: 9, cs: 0.99, ts: 5.0, chi: 10, gifts: "Просветление (нирвана), выход из колеса сансары, левитация", phenomenon: "Остановка семантического времени τ (§13)", paragraphs: "§13, §62, §108", badge: "badge-buddhism", rankClass: "rank-p9" },
+        { name: "Миларепа", tradition: "Буддизм", qs: 8, cs: 0.96, ts: 3.5, chi: 8, gifts: "Левитация, хождение сквозь стены, полёт, согревание тела в снегу", phenomenon: "Туммо — генерация Qₛ тепла (§61)", paragraphs: "§53, §54, §61", badge: "badge-buddhism", rankClass: "rank-p8" },
+        { name: "Далай-лама XIV", tradition: "Буддизм", qs: 7, cs: 0.92, ts: 4.8, chi: 8, gifts: "Сострадание, мудрость, глобальное влияние, учение", phenomenon: "Когерентность коллективного поля (§123)", paragraphs: "§79, §123", badge: "badge-buddhism", rankClass: "rank-p7" },
+        { name: "Рамакришна", tradition: "Индуизм", qs: 8, cs: 0.93, ts: 4.5, chi: 9, gifts: "Самадхи, видения Богини Кали, единение со всеми религиями", phenomenon: "Семантический коллапс в Абсолют (§105)", paragraphs: "§105, §106", badge: "badge-hinduism", rankClass: "rank-p8" },
+        { name: "Парамаханса Йогананда", tradition: "Индуизм", qs: 8, cs: 0.90, ts: 4.6, chi: 8, gifts: "Крийя-йога, левитация, сознательный выход из тела", phenomenon: "Управление Cₛ и Tₛ через пранаяму (§108)", paragraphs: "§59, §108", badge: "badge-hinduism", rankClass: "rank-p8" },
+        { name: "Рамана Махарши", tradition: "Индуизм", qs: 8, cs: 0.96, ts: 5.0, chi: 9, gifts: "Самореализация, безмолвие ума, исцеление присутствием", phenomenon: "Постоянная Cₛ > 0.95 (§108)", paragraphs: "§108", badge: "badge-hinduism", rankClass: "rank-p8" },
+        { name: "Пророк Мухаммад", tradition: "Ислам", qs: 9, cs: 0.98, ts: 5.0, chi: 10, gifts: "Откровение Корана, мирадж (вознесение), пророчества", phenomenon: "Семантический канал связи с Абсолютом (§64)", paragraphs: "§30, §64, §75", badge: "badge-islam", rankClass: "rank-p9" },
+        { name: "Руми (Джалаладдин)", tradition: "Ислам (суфизм)", qs: 8, cs: 0.92, ts: 4.4, chi: 9, gifts: "Поэзия, танец дервишей, мистическая любовь, прозрения", phenomenon: "Семантический экстаз (§40)", paragraphs: "§40, §73", badge: "badge-islam", rankClass: "rank-p8" },
+        { name: "Пророк Моисей", tradition: "Иудаизм", qs: 9, cs: 0.97, ts: 4.8, chi: 9, gifts: "Десять казней, рассечение моря, манна небесная, получение Торы", phenomenon: "Коллективный семантический коллапс (§105)", paragraphs: "§105", badge: "badge-judaism", rankClass: "rank-p9" },
+        { name: "Баал Шем Тов", tradition: "Иудаизм (хасидизм)", qs: 8, cs: 0.91, ts: 4.5, chi: 8, gifts: "Исцеления, прозорливость, молитвенный экстаз", phenomenon: "Семантический резонанс общины (§123)", paragraphs: "§30, §123", badge: "badge-judaism", rankClass: "rank-p8" },
+        { name: "Лао-Цзы", tradition: "Даосизм", qs: 8, cs: 0.95, ts: 5.0, chi: 9, gifts: "Дао Дэ Цзин, учение о Пути, гармония с природой", phenomenon: "Семантическая синергия с природой (§134)", paragraphs: "§134", badge: "badge-taoism", rankClass: "rank-p8" },
+        { name: "Иосиф Купертинский", tradition: "Христианство", qs: 7, cs: 0.88, ts: 4.0, chi: 7, gifts: "Левитация (летающий святой), экстаз на мессе", phenomenon: "Гравитационная семантическая аномалия (§53)", paragraphs: "§53", badge: "badge-christianity", rankClass: "rank-p7" },
+        { name: "Святая Ксения Петербургская", tradition: "Православие", qs: 7, cs: 0.85, ts: 4.2, chi: 8, gifts: "Прозорливость, помощь в бедах, юродство", phenomenon: "Семантический след после смерти (§57)", paragraphs: "§48, §57", badge: "badge-christianity", rankClass: "rank-p7" },
+        { name: "Мать Тереза Калькуттская", tradition: "Христианство", qs: 7, cs: 0.87, ts: 4.5, chi: 7, gifts: "Служение бедным, милосердие, глобальное влияние", phenomenon: "Эгрегор милосердия (§79)", paragraphs: "§79", badge: "badge-christianity", rankClass: "rank-p7" }
+    ];
+
+    let currentSort = 'qs';
+    const tbody = document.getElementById('saintsBody');
+    const indicator = document.getElementById('currentSortIndicator');
+
+    function getBadgeClass(tradition) {
+        if (tradition.includes('Христианство') || tradition.includes('Православие')) return 'badge-christianity';
+        if (tradition.includes('Буддизм')) return 'badge-buddhism';
+        if (tradition.includes('Индуизм')) return 'badge-hinduism';
+        if (tradition.includes('Ислам')) return 'badge-islam';
+        if (tradition.includes('Иудаизм')) return 'badge-judaism';
+        return 'badge-taoism';
+    }
+
+    function renderTable() {
+        const sorted = [...saintsData].sort((a,b) => {
+            if (currentSort === 'qs') return b.qs - a.qs;
+            return a.name.localeCompare(b.name, 'ru');
+        });
+
+        let html = '';
+        sorted.forEach(s => {
+            html += `<tr class="${s.rankClass}">`;
+            html += `<td><strong>${s.name}</strong></td>`;
+            html += `<td style="text-align:center;"><span class="badge ${s.badge}">${s.tradition}</span></td>`;
+            html += `<td style="text-align:center; font-weight:bold;">+${s.qs}</td>`;
+            html += `<td style="text-align:center;">${s.cs.toFixed(2)}</td>`;
+            html += `<td style="text-align:center;">${s.ts.toFixed(1)}</td>`;
+            html += `<td style="text-align:center;">${s.chi}</td>`;
+            html += `<td>${s.gifts}</td>`;
+            html += `<td>${s.phenomenon}</td>`;
+            html += `<td style="font-size:0.75rem;">${s.paragraphs}</td>`;
+            html += `</tr>`;
+        });
+        tbody.innerHTML = html;
+        indicator.textContent = currentSort === 'qs' ? 'Текущая сортировка: по Qₛ (от +10 к +7)' : 'Текущая сортировка: по ИМЕНИ (А → Я)';
+    }
+
+    document.getElementById('sortByQsBtn').onclick = () => { currentSort = 'qs'; renderTable(); };
+    document.getElementById('sortByNameBtn').onclick = () => { currentSort = 'name'; renderTable(); };
+    renderTable();
+})();
+</script>
+</body>
+</html>

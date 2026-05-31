@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантическая Лестница • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .main-container {
+            max-width: 1300px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #c0b090;
+            font-style: italic;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #5d4a3a;
+            padding-bottom: 1rem;
+        }
+        
+        /* Навигация */
+        .level-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 2rem;
+        }
+        .level-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+        .level-btn-light { background: #ffd54f; color: #1a1a2e; }
+        .level-btn-light:hover { background: #ffca28; transform: scale(1.05); }
+        .level-btn-mid { background: #9e9e9e; color: white; }
+        .level-btn-mid:hover { background: #757575; }
+        .level-btn-dark { background: #616161; color: #ddd; }
+        .level-btn-dark:hover { background: #424242; transform: scale(1.05); color: white; }
+        .level-btn-black { background: #212121; color: #ccc; }
+        .level-btn-black:hover { background: #000; color: white; }
+        
+        .jump-hint {
+            text-align: center;
+            color: #a09080;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Таблица */
+        .table-wrapper {
+            overflow-x: auto;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            padding: 1px;
+            margin-bottom: 2rem;
+        }
+        .ladder-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            background: transparent;
+            min-width: 1100px;
+        }
+        .ladder-table th {
+            background: #2a2a4a;
+            color: #f3e7c0;
+            padding: 12px 6px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #5d4a3a;
+            font-size: 0.8rem;
+        }
+        .ladder-table td {
+            border: 1px solid #5d4a3a;
+            padding: 8px 5px;
+            vertical-align: top;
+            color: #d0c8b8;
+        }
+        
+        /* Цвета строк по рангу */
+        .rank-p10 { background: linear-gradient(135deg, rgba(255,249,196,0.2), rgba(255,255,255,0.05)); }
+        .rank-p9 { background: linear-gradient(135deg, rgba(255,249,196,0.18), rgba(255,248,225,0.08)); }
+        .rank-p8 { background: linear-gradient(135deg, rgba(255,248,225,0.18), rgba(255,236,179,0.08)); }
+        .rank-p7 { background: linear-gradient(135deg, rgba(255,236,179,0.15), rgba(255,224,130,0.08)); }
+        .rank-p6 { background: linear-gradient(135deg, rgba(255,249,196,0.12), rgba(255,245,157,0.06)); }
+        .rank-p5 { background: linear-gradient(135deg, rgba(232,245,233,0.15), rgba(200,230,201,0.08)); }
+        .rank-p4 { background: linear-gradient(135deg, rgba(227,242,253,0.15), rgba(187,222,251,0.08)); }
+        .rank-p3 { background: linear-gradient(135deg, rgba(232,234,246,0.12), rgba(197,202,233,0.06)); }
+        .rank-p2 { background: linear-gradient(135deg, rgba(224,224,224,0.1), rgba(238,238,238,0.05)); }
+        .rank-p1 { background: linear-gradient(135deg, rgba(245,245,245,0.08), rgba(224,224,224,0.04)); }
+        .rank-0 { background: linear-gradient(135deg, rgba(239,235,233,0.1), rgba(215,204,200,0.05)); }
+        .rank-m1 { background: linear-gradient(135deg, rgba(215,204,200,0.12), rgba(188,170,164,0.06)); }
+        .rank-m2 { background: linear-gradient(135deg, rgba(255,204,188,0.12), rgba(255,171,145,0.06)); }
+        .rank-m3 { background: linear-gradient(135deg, rgba(176,190,197,0.12), rgba(144,164,174,0.06)); }
+        .rank-m4 { background: linear-gradient(135deg, rgba(161,136,127,0.12), rgba(141,110,99,0.06)); }
+        .rank-m5 { background: linear-gradient(135deg, rgba(239,154,154,0.15), rgba(229,115,115,0.08)); }
+        .rank-m6 { background: linear-gradient(135deg, rgba(206,147,216,0.15), rgba(171,71,188,0.08)); }
+        .rank-m7 { background: linear-gradient(135deg, rgba(121,134,203,0.15), rgba(92,107,192,0.08)); }
+        .rank-m8 { background: linear-gradient(135deg, rgba(97,97,97,0.2), rgba(66,66,66,0.12)); }
+        .rank-m9 { background: linear-gradient(135deg, rgba(66,66,66,0.25), rgba(33,33,33,0.15)); color: #ddd; }
+        .rank-m10 { background: rgba(0,0,0,0.5); color: #ccc; }
+        
+        .rec-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .rec-seek { background: #c8e6c9; color: #1b5e20; }
+        .rec-use { background: #bbdefb; color: #0d47a1; }
+        .rec-neutral { background: #9e9e9e; color: white; }
+        .rec-caution { background: #ffecb3; color: #e65100; }
+        .rec-avoid { background: #ffcdd2; color: #b71c1c; }
+        .rec-cleanse { background: #ef9a9a; color: #b71c1c; }
+        .rec-flee { background: #b71c1c; color: white; }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #e3b87c;
+            text-decoration: none;
+            border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+        }
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+        }
+        .self-audit {
+            background: rgba(227,184,124,0.1);
+            border: 1px solid #e3b87c;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .self-audit h3 {
+            color: #e3b87c;
+            margin-bottom: 1rem;
+        }
+        .self-audit p {
+            color: #d0c8b8;
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>📊 ВЕЛИКАЯ СЕМАНТИЧЕСКАЯ ЛЕСТНИЦА</h1>
+    <div class="subtitle">Полный справочник предметов, действий, мест и явлений — от Абсолютного Света (+10) до Абсолютной Тьмы (-10)</div>
+    
+    <!-- Навигация -->
+    <p class="jump-hint">⚡ Быстрый переход к уровню:</p>
+    <div class="level-nav">
+        <a href="#rank10" class="level-btn level-btn-light">+10</a>
+        <a href="#rank9" class="level-btn level-btn-light">+9</a>
+        <a href="#rank8" class="level-btn level-btn-light">+8</a>
+        <a href="#rank7" class="level-btn level-btn-light">+7</a>
+        <a href="#rank6" class="level-btn level-btn-light">+6</a>
+        <a href="#rank5" class="level-btn level-btn-light">+5</a>
+        <a href="#rank4" class="level-btn level-btn-light">+4</a>
+        <a href="#rank3" class="level-btn level-btn-light">+3</a>
+        <a href="#rank2" class="level-btn level-btn-light">+2</a>
+        <a href="#rank1" class="level-btn level-btn-light">+1</a>
+        <a href="#rank0" class="level-btn level-btn-mid">0</a>
+        <a href="#rank-1" class="level-btn level-btn-dark">-1</a>
+        <a href="#rank-2" class="level-btn level-btn-dark">-2</a>
+        <a href="#rank-3" class="level-btn level-btn-dark">-3</a>
+        <a href="#rank-4" class="level-btn level-btn-dark">-4</a>
+        <a href="#rank-5" class="level-btn level-btn-dark">-5</a>
+        <a href="#rank-6" class="level-btn level-btn-dark">-6</a>
+        <a href="#rank-7" class="level-btn level-btn-dark">-7</a>
+        <a href="#rank-8" class="level-btn level-btn-black">-8</a>
+        <a href="#rank-9" class="level-btn level-btn-black">-9</a>
+        <a href="#rank-10" class="level-btn level-btn-black">-10</a>
+    </div>
+    
+    <div class="table-wrapper">
+        <table class="ladder-table" id="ladderTable">
+            <thead>
+                <tr>
+                    <th>Qₛ</th>
+                    <th>Уровень</th>
+                    <th>Предметы и вещества</th>
+                    <th>Места и пространства</th>
+                    <th>Действия и практики</th>
+                    <th>Символы и знаки</th>
+                    <th>Рекомендация</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Данные вставлены через JavaScript -->
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Аудит -->
+    <div class="self-audit">
+        <h3>📋 Как работать с Лестницей: семантический аудит жизни</h3>
+        <p style="margin-bottom: 1rem;">Пройдитесь по всем категориям. Выпишите, что вас окружает, что вы делаете, где бываете. Посмотрите, на каких уровнях находится большинство пунктов. Это ваш текущий «семантический адрес». Следуйте рекомендациям, чтобы подняться выше.</p>
+        <p style="font-family: 'Courier New', monospace; font-size: 1.1rem; color: #e3b87c;">Qₛ_личный = (Σ Qₛ_предметов + Σ Qₛ_действий + Σ Qₛ_мест) / N</p>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Семантическая Лестница (Великая Таблица Предметов и Явлений)</p>
+        <p>✧ «То, что ты держишь в руках, держит тебя. Выбирай своё окружение — выбираешь свою судьбу.» ✧</p>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const ladderData = [
+            // +10
+            { rank: "+10", level: "Абсолютный Свет", items: "Мощи святых, Благодатный Огонь, Святые Дары, Крест Животворящий, Миро", places: "Алтарь Храма Гроба Господня, Кувуклия, Гора Фавор", actions: "Глубокая созерцательная молитва, состояние обожения, Причастие", symbols: "Крест (восьмиконечный), Нимб, Свет Фаворский, ΑΩ", rec: "🌟 СТРЕМИСЬ", recClass: "rec-seek", rankClass: "rank-p10" },
+            // +9
+            { rank: "+9", level: "Сияющий Свет", items: "Намоленные иконы, Святая вода (Крещенская), Миро, Антидор, Ладан", places: "Храмы, Монастыри, Святые источники, Пещеры Киево-Печерской Лавры, Афон", actions: "Молитва (Иисусова), поклоны, Исповедь, чтение Писания", symbols: "Икона, Крест нательный, Лампада, Чётки, Колокол", rec: "🌟 СТРЕМИСЬ", recClass: "rec-seek", rankClass: "rank-p9" },
+            // +8
+            { rank: "+8", level: "Яркий Свет", items: "Иконы, Святая вода, свечи, Молитвослов, Библия", places: "Церкви, мечети, синагоги, кельи, освящённые кладбища", actions: "Молитва, медитация на Свет, благотворительность, пост", symbols: "Полумесяц со звездой, Звезда Давида, Колесо Дхармы, Ом", rec: "🙏 ИСПОЛЬЗУЙ", recClass: "rec-use", rankClass: "rank-p8" },
+            // +7
+            { rank: "+7", level: "Золотой Свет", items: "Свечи, благовония, кристаллы, вода из источников, хлеб", places: "Горы, рощи, места силы, дольмены, старинные парки", actions: "Медитация на природе, паломничество, мантры, созерцание", symbols: "Мандала, Лабиринт, Спираль, Древо Жизни, Лотос", rec: "🙏 ИСПОЛЬЗУЙ", recClass: "rec-use", rankClass: "rank-p7" },
+            // +6
+            { rank: "+6", level: "Тёплый Свет", items: "Живые цветы, эфирные масла, мёд, травяные чаи, музыкальные инструменты", places: "Сады, ботанические сады, набережные, уютные кафе, библиотеки", actions: "Слушание классики, поэзия, рисование, общение с детьми, уход за растениями", symbols: "Скрипичный ключ, Лира, Павлинье перо, Радуга, Бабочка", rec: "🙏 ИСПОЛЬЗУЙ", recClass: "rec-use", rankClass: "rank-p6" },
+            // +5
+            { rank: "+5", level: "Живое и Природное", items: "Растения, животные, дерево, шерсть, хлопок, лён, родниковая вода, камни", places: "Лес, парк, поле, берег моря, ферма, деревня", actions: "Прогулки, общение с животными, садоводство, купание", symbols: "Дерево, Солнце, Горы, Река, Животные", rec: "🙏 ИСПОЛЬЗУЙ", recClass: "rec-use", rankClass: "rank-p5" },
+            // +4
+            { rank: "+4", level: "Творческое", items: "Книги, краски, кисти, холсты, фотоаппарат, дневник", places: "Мастерская, студия, музей, галерея, книжный магазин", actions: "Творчество, дневник, фотография, изучение нового", symbols: "Палитра, Мольберт, Перо, Фотоаппарат, Книга", rec: "🙏 ИСПОЛЬЗУЙ", recClass: "rec-use", rankClass: "rank-p4" },
+            // +3
+            { rank: "+3", level: "Успокаивающее", items: "Чай, свечи, подушки, пледы, ванна с солью, спокойная музыка", places: "Спальня, ванная, беседка, уголок для чтения, СПА", actions: "Ванна, чтение перед сном, медитация, чайная церемония", symbols: "Чашка, Свеча, Подушка, Луна, Звезда", rec: "🙏 ИСПОЛЬЗУЙ", recClass: "rec-use", rankClass: "rank-p3" },
+            // +2
+            { rank: "+2", level: "Нейтрально-бытовое", items: "Одежда, мебель, посуда, бытовая техника, инструменты", places: "Дом, кухня, офис, магазин, остановка", actions: "Уборка, готовка, работа, поездки, сон", symbols: "Дом, Ключ, Стол, Стул, Часы", rec: "🟰 НЕЙТРАЛЬНО", recClass: "rec-neutral", rankClass: "rank-p2" },
+            // +1
+            { rank: "+1", level: "Фоновое", items: "Деньги, ключи, документы, канцелярия, бытовая химия", places: "Улица, подъезд, лифт, банк, поликлиника", actions: "Рутина, ожидание, оплата счетов, документы", symbols: "Деньги, Документ, Ключ, Телефон, Календарь", rec: "🟰 НЕЙТРАЛЬНО", recClass: "rec-neutral", rankClass: "rank-p1" },
+            // 0
+            { rank: "0", level: "Нейтральное", items: "Камни, песок, вода (водопроводная), воздух, стекло, бумага", places: "Пустырь, пустая комната, подвал, чердак, поле", actions: "Сон без снов, молчание, ожидание, созерцание пустоты", symbols: "Круг, Ноль, Белый лист, Тишина, Зеркало", rec: "⚪ ТОЧКА ВЫБОРА", recClass: "rec-neutral", rankClass: "rank-0" },
+            // -1
+            { rank: "-1", level: "Лёгкий негатив", items: "Мусор, пыль, грязная посуда, сломанные вещи, старые газеты", places: "Захламлённая комната, грязный подъезд, свалка, туалет", actions: "Прокрастинация, лень, нытьё, сплетни, переедание", symbols: "Мусорный бак, Паутина, Пыль", rec: "⚠️ ОЧИСТИ", recClass: "rec-caution", rankClass: "rank-m1" },
+            // -2
+            { rank: "-2", level: "Зависть / Обида", items: "Фото врагов, оскорбительные письма, «трофеи», подарки от неприятных людей", places: "Места унижения, квартиры завистников, соцсети врагов", actions: "Зависть, злопамятство, злые сплетни, пассивная агрессия", symbols: "Зелёный глаз, Змея, Паук в банке", rec: "🧹 ОЧИСТИСЬ", recClass: "rec-cleanse", rankClass: "rank-m2" },
+            // -3
+            { rank: "-3", level: "Агрессия / Гнев", items: "Оружие, изображения насилия, острые углы, избыток красного", places: "Места драк, тир, зоны боёв, тюрьмы, агрессивные бары", actions: "Крик, ругань, драки, угрозы, агрессивное вождение", symbols: "Меч (обратный), Кулак, Оскал, Молния", rec: "❌ ИЗБЕГАЙ", recClass: "rec-avoid", rankClass: "rank-m3" },
+            // -4
+            { rank: "-4", level: "Страх / Тревога", items: "Медицинские инструменты, лекарства, мрачные картины, тревожные новости", places: "Больницы, морги, кладбища, подвалы, тёмные переулки", actions: "Думскроллинг, ужасы, избегание, панические атаки", symbols: "Череп, Тёмный лес, Ворон, Паук", rec: "❌ ИЗБЕГАЙ", recClass: "rec-avoid", rankClass: "rank-m4" },
+            // -5
+            { rank: "-5", level: "Ненависть", items: "Предметы предательства, фото трагедий, символика ненависти", places: "Места казней, концлагеря, места терактов", actions: "Планирование мести, разжигание ненависти, проклятия, буллинг", symbols: "Свастика (искажённая), Виселица, Кинжал в спину", rec: "🧹 ОЧИСТИСЬ", recClass: "rec-cleanse", rankClass: "rank-m5" },
+            // -6
+            { rank: "-6", level: "Ярость / Месть", items: "Предметы чёрной магии, проклятые вещи, «подклады», вуду-куклы", places: "Места чёрных ритуалов, капища, дома с плохой славой", actions: "Чёрная магия, наведение порчи, ритуалы мести, садизм", symbols: "Перевёрнутая пентаграмма, Козёл, 666, Чёрная свеча", rec: "🧹 ОЧИСТИСЬ СРОЧНО", recClass: "rec-cleanse", rankClass: "rank-m6" },
+            // -7
+            { rank: "-7", level: "Отчаяние", items: "Петли, яды, большие дозы наркотиков, предсмертные записки", places: "Места самоубийств, притоны, психбольницы", actions: "Суицидальные мысли, самоповреждение, запои, апатия", symbols: "Петля, Чёрная дыра, Разбитое зеркало", rec: "🚨 БЕГИ / ЗОВИ НА ПОМОЩЬ", recClass: "rec-flee", rankClass: "rank-m7" },
+            // -8
+            { rank: "-8", level: "Садизм / Зло", items: "Орудия пыток, предметы с мест убийств, сатанинская атрибутика", places: "Камеры пыток, сатанинские храмы, места маньяков", actions: "Пытки, ритуальные убийства, садизм, растление", symbols: "Перевёрнутый крест, Число Зверя, Чёрное солнце", rec: "🚨 НЕМЕДЛЕННО БЕГИ", recClass: "rec-flee", rankClass: "rank-m8" },
+            // -9
+            { rank: "-9", level: "Преддверие Тьмы", items: "Анти-святыни, пепел сожжённых святынь", places: "Места вечной гибели, Геенна, эпицентры ядерных взрывов", actions: "Богохульство, проклятие Бога, продажа души", symbols: "Перевёрнутая икона, Сожжённый Крест", rec: "🚨 НЕВОЗМОЖНО ПОМОЧЬ", recClass: "rec-flee", rankClass: "rank-m9" },
+            // -10
+            { rank: "-10", level: "Абсолютная Тьма", items: "Ничто. Отсутствие даже тьмы.", places: "Пустота (абсолютная), Ад как отвержение", actions: "Окончательное отречение от Смысла", symbols: "Отсутствие символа, Чёрный квадрат", rec: "⚫ НЕПОСТИЖИМО", recClass: "rec-flee", rankClass: "rank-m10" }
+        ];
+        
+        const tbody = document.querySelector('#ladderTable tbody');
+        let html = '';
+        
+        ladderData.forEach(item => {
+            html += `<tr class="${item.rankClass}" id="rank${item.rank}">`;
+            html += `<td style="text-align:center; font-weight:bold; font-size:1.1rem;">${item.rank}</td>`;
+            html += `<td><strong>${item.level}</strong></td>`;
+            html += `<td>${item.items}</td>`;
+            html += `<td>${item.places}</td>`;
+            html += `<td>${item.actions}</td>`;
+            html += `<td>${item.symbols}</td>`;
+            html += `<td><span class="rec-badge ${item.recClass}">${item.rec}</span></td>`;
+            html += `</tr>`;
+        });
+        
+        tbody.innerHTML = html;
+    })();
+</script>
+</body>
+</html>

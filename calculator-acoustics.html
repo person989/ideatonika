@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Акустики Помещения • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1.5rem; text-align: left; line-height: 1.8; }
+        .result-extra span { color: #ffd54f; font-weight: bold; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1.5rem; font-family: 'Courier New', monospace; text-align: center; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔊 Акустика помещения</h1>
+    <div class="subtitle">Калькулятор резонансной частоты комнаты (§87, §88, §96)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Размеры и материалы комнаты</div>
+
+        <!-- Длина -->
+        <div class="input-group">
+            <label>📏 Длина комнаты: <span id="lengthValue">5</span> м</label>
+            <input type="range" id="lengthSlider" min="2" max="20" value="5" step="0.1">
+            <div class="range-labels"><span>2 м</span><span>20 м</span></div>
+        </div>
+
+        <!-- Ширина -->
+        <div class="input-group">
+            <label>📐 Ширина комнаты: <span id="widthValue">4</span> м</label>
+            <input type="range" id="widthSlider" min="2" max="15" value="4" step="0.1">
+            <div class="range-labels"><span>2 м</span><span>15 м</span></div>
+        </div>
+
+        <!-- Высота -->
+        <div class="input-group">
+            <label>⬆️ Высота потолка: <span id="heightValue">2.7</span> м</label>
+            <input type="range" id="heightSlider" min="2" max="6" value="2.7" step="0.1">
+            <div class="range-labels"><span>2 м</span><span>6 м</span></div>
+        </div>
+
+        <!-- Материал стен -->
+        <div class="input-group">
+            <label>🧱 Материал стен (влияет на отражение звука):</label>
+            <select id="wallsSelect">
+                <option value="0.03">Дерево (мягкое отражение)</option>
+                <option value="0.02">Кирпич, штукатурка</option>
+                <option value="0.01" selected>Бетон, камень (жёсткое отражение)</option>
+                <option value="0.05">Ткань, ковры (поглощение)</option>
+                <option value="0.005">Стекло, плитка (сильное отражение)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Основная резонансная частота</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const lengthSlider = document.getElementById('lengthSlider');
+    const widthSlider = document.getElementById('widthSlider');
+    const heightSlider = document.getElementById('heightSlider');
+    const wallsSelect = document.getElementById('wallsSelect');
+    const lengthValue = document.getElementById('lengthValue');
+    const widthValue = document.getElementById('widthValue');
+    const heightValue = document.getElementById('heightValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    lengthSlider.addEventListener('input', () => { lengthValue.textContent = parseFloat(lengthSlider.value).toFixed(1); calculate(); });
+    widthSlider.addEventListener('input', () => { widthValue.textContent = parseFloat(widthSlider.value).toFixed(1); calculate(); });
+    heightSlider.addEventListener('input', () => { heightValue.textContent = parseFloat(heightSlider.value).toFixed(1); calculate(); });
+    wallsSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const Lx = parseFloat(lengthSlider.value);
+        const Ly = parseFloat(widthSlider.value);
+        const Lz = parseFloat(heightSlider.value);
+        const absorption = parseFloat(wallsSelect.value);
+
+        // Скорость звука в воздухе (м/с)
+        const c = 343;
+
+        // Собственные частоты комнаты (формула для стоячих волн):
+        // f_{nx,ny,nz} = c/2 · √((nx/Lx)² + (ny/Ly)² + (nz/Lz)²)
+        // Основная частота: nx=1, ny=0, nz=0 (вдоль длины)
+        const fLength = c / (2 * Lx);
+        const fWidth = c / (2 * Ly);
+        const fHeight = c / (2 * Lz);
+
+        // Первая тангенциальная мода: nx=1, ny=1, nz=0
+        const fTangential = (c / 2) * Math.sqrt(1/(Lx*Lx) + 1/(Ly*Ly));
+
+        // Первая косая мода: nx=1, ny=1, nz=1
+        const fOblique = (c / 2) * Math.sqrt(1/(Lx*Lx) + 1/(Ly*Ly) + 1/(Lz*Lz));
+
+        // Основная резонансная частота (наименьшая)
+        const fMain = Math.min(fLength, fWidth, fHeight);
+
+        // Время реверберации (формула Сэбина): T = 0.161 · V / (α · S)
+        const V = Lx * Ly * Lz;
+        const S = 2 * (Lx*Ly + Lx*Lz + Ly*Lz);
+        const T60 = S > 0 ? (0.161 * V) / (absorption * S) : 0;
+        const T60rounded = Math.round(T60 * 10) / 10;
+
+        // Рекомендация музыки по основной частоте
+        let musicRec = '';
+        let musicFreq = 0;
+        if (fMain < 20) {
+            musicRec = 'Очень низкий резонанс. Рекомендуется: инфразвуковые冥想-треки (7.83 Гц, резонанс Шумана). Слушайте через сабвуфер или колонки с глубоким басом.';
+            musicFreq = 7.83;
+        } else if (fMain < 50) {
+            musicRec = 'Низкий резонанс. Рекомендуется: тибетские чаши, горловое пение, музыка в строе 432 Гц, частоты сольфеджио 174-396 Гц.';
+            musicFreq = 432;
+        } else if (fMain < 100) {
+            musicRec = 'Средний резонанс. Рекомендуется: фортепианная музыка, струнные, эмбиент. Хорошо звучат частоты 432 Гц и 528 Гц.';
+            musicFreq = 432;
+        } else {
+            musicRec = 'Высокий резонанс. Рекомендуется: акустическая музыка, джаз, классика. Избегайте громких басов — они будут "гулять" по комнате.';
+            musicFreq = 440;
+        }
+
+        // Дополнительная рекомендация по размещению мебели
+        let furnitureTip = '';
+        if (T60rounded > 2.0) {
+            furnitureTip = 'Время реверберации высокое. Добавьте мягкую мебель, ковры, шторы для поглощения эха.';
+        } else if (T60rounded < 0.3) {
+            furnitureTip = 'Звук слишком сухой. Добавьте отражающие поверхности (картины в рамках, деревянные панели).';
+        } else {
+            furnitureTip = 'Акустика близка к оптимальной для речи и музыки.';
+        }
+
+        resultNumber.textContent = fMain.toFixed(1) + ' Гц';
+        resultLabel.textContent = 'Основная резонансная частота';
+
+        resultExtra.innerHTML = `
+            <strong>📐 Собственные моды:</strong><br>
+            • Вдоль длины (1,0,0): <span>${fLength.toFixed(1)} Гц</span><br>
+            • Вдоль ширины (0,1,0): <span>${fWidth.toFixed(1)} Гц</span><br>
+            • Вдоль высоты (0,0,1): <span>${fHeight.toFixed(1)} Гц</span><br>
+            • Тангенциальная (1,1,0): <span>${fTangential.toFixed(1)} Гц</span><br>
+            • Косая (1,1,1): <span>${fOblique.toFixed(1)} Гц</span><br><br>
+            <strong>⏱️ Время реверберации (T60):</strong> <span>${T60rounded.toFixed(1)} сек</span><br>
+            <span style="color:#a09080;">${furnitureTip}</span><br><br>
+            <strong>🎵 Рекомендуемая музыка:</strong><br>
+            <span>${musicRec}</span><br>
+            <span style="color:#a09080;">Рекомендуемая частота для настройки: ${musicFreq} Гц</span>
+        `;
+
+        resultFormula.textContent = `f_осн = c / (2·L) = 343 / (2·${Lx.toFixed(1)}) = ${fMain.toFixed(1)} Гц | T60 = 0.161·V / (α·S) = ${T60rounded.toFixed(1)} сек`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

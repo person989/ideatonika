@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Ранга Окружения • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🏠 Ранг Окружения</h1>
+    <div class="subtitle">Калькулятор семантического качества жилища (§128, Таблица Материалов)</div>
+
+    <div class="calc-section">
+        <div class="section-title">🧱 Материалы и атмосфера (15 параметров)</div>
+
+        <div class="input-group">
+            <label>🧱 Стены:</label>
+            <select id="wallsSelect">
+                <option value="8">Натуральный камень / гранит (+8)</option>
+                <option value="5">Массив дерева / сруб (+5)</option>
+                <option value="2">Кирпич (+2)</option>
+                <option value="0">Гипсокартон (0)</option>
+                <option value="-3">Бетон (–3)</option>
+                <option value="-5">Железобетон, плесень (–5)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🪵 Пол:</label>
+            <select id="floorSelect">
+                <option value="6">Массив дерева (+6)</option>
+                <option value="2">Паркет (+2)</option>
+                <option value="1">Керамическая плитка (+1)</option>
+                <option value="0">Ламинат (0)</option>
+                <option value="-4">Линолеум (–4)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🔝 Потолок:</label>
+            <select id="ceilingSelect">
+                <option value="6">Деревянные своды / купол (+6)</option>
+                <option value="1">Побелка / штукатурка (+1)</option>
+                <option value="0">Натяжной потолок (0)</option>
+                <option value="-3">Пластиковые панели (–3)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🪑 Мебель:</label>
+            <select id="furnitureSelect">
+                <option value="7">Антиквариат, намоленное дерево (+7)</option>
+                <option value="2">Дерево + ткань (+2)</option>
+                <option value="0">ДСП / МДФ (0)</option>
+                <option value="-3">Пластик, сломана (–3)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🪴 Растения:</label>
+            <select id="plantsSelect">
+                <option value="5">Оранжерея, зимний сад (+5)</option>
+                <option value="1">Одно-два растения (+1)</option>
+                <option value="0">Нет растений (0)</option>
+                <option value="-3">Искусственные цветы (–3)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>💡 Освещение:</label>
+            <select id="lightSelect">
+                <option value="4">Живой огонь (свечи, камин) (+4)</option>
+                <option value="1">Тёплый LED (2700K) (+1)</option>
+                <option value="0">Обычный белый LED (4000K) (0)</option>
+                <option value="-3">Холодный LED (6500K), мерцание (–3)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🪟 Окна и вид:</label>
+            <select id="windowsSelect">
+                <option value="5">Панорамные, на лес/горы (+5)</option>
+                <option value="1">Обычные, на улицу (+1)</option>
+                <option value="-2">Маленькие, на стену (–2)</option>
+                <option value="-5">Нет окон / подвал / забиты (–5)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🧹 Чистота и порядок:</label>
+            <select id="cleanSelect">
+                <option value="4">Идеальная чистота, свежесть (+4)</option>
+                <option value="0">Обычное, убрано (0)</option>
+                <option value="-5">Лёгкий беспорядок, пыль (–5)</option>
+                <option value="-9">Завалы хлама, грязь, плесень (–9)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>📡 Техногенный фон:</label>
+            <select id="emfSelect">
+                
+                <option value="1">Минимум техники (+1)</option>
+                <option value="0">Обычный набор (0)</option>
+                <option value="-4">Много техники, вышек 5G рядом (–4)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🕯️ Алтарь / Место силы:</label>
+            <select id="altarSelect">
+                <option value="9">Намоленный красный угол, мощи (+9)</option>
+                <option value="3">Небольшой алтарь / икона (+3)</option>
+                <option value="0">Нет (0)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>👥 История места:</label>
+            <select id="historySelect">
+                <option value="5">Намоленное, счастливое (+5)</option>
+                <option value="0">Нейтральное (0)</option>
+                <option value="-4">Ссоры, болезни (–4)</option>
+                <option value="-8">Место трагедии / проклятое (–8)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🎨 Цвет стен:</label>
+            <select id="colorSelect">
+                <option value="3">Тёплые природные тона (+3)</option>
+                <option value="0">Нейтральные (0)</option>
+                <option value="-3">Серый бетон, грязные цвета (–3)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🔇 Звуковой фон:</label>
+            <select id="soundSelect">
+                <option value="3">Тишина, пение птиц (+3)</option>
+                <option value="0">Обычный городской шум (0)</option>
+                <option value="-4">Постоянный гул, сирены, соседи (–4)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>💧 Качество воздуха:</label>
+            <select id="airSelect">
+                <option value="3">Свежий, с гор/моря, ионизированный (+3)</option>
+                <option value="0">Обычный (0)</option>
+                <option value="-4">Затхлый, пыльный, гарь (–4)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🧘 Энергетика после медитации:</label>
+            <select id="meditationSelect">
+                <option value="4">Регулярные практики, намолено (+4)</option>
+                <option value="0">Нейтрально (0)</option>
+                <option value="-5">Давно не чистили, застой (–5)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Итоговый ранг комнаты</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const selects = [
+        document.getElementById('wallsSelect'),
+        document.getElementById('floorSelect'),
+        document.getElementById('ceilingSelect'),
+        document.getElementById('furnitureSelect'),
+        document.getElementById('plantsSelect'),
+        document.getElementById('lightSelect'),
+        document.getElementById('windowsSelect'),
+        document.getElementById('cleanSelect'),
+        document.getElementById('emfSelect'),
+        document.getElementById('altarSelect'),
+        document.getElementById('historySelect'),
+        document.getElementById('colorSelect'),
+        document.getElementById('soundSelect'),
+        document.getElementById('airSelect'),
+        document.getElementById('meditationSelect')
+    ];
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    selects.forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+    const values = selects.map(s => parseInt(s.value));
+    const sum = values.reduce((acc, val) => acc + val, 0);
+    const avg = sum / selects.length;
+
+    // === СИНЕРГИЯ: считаем, сколько параметров в «светлой» и «тёмной» зоне ===
+    let lightCount = 0;  // Параметры со значением >= 3
+    let darkCount = 0;   // Параметры со значением <= -3
+
+    values.forEach(val => {
+        if (val >= 3) lightCount++;
+        if (val <= -3) darkCount++;
+    });
+
+    // === БОНУС СИНЕРГИИ ===
+    // Если большинство параметров «светлые» — комната становится больше, чем сумма частей
+    // Если большинство «тёмные» — комната проваливается глубже
+    let synergyBonus = 0;
+
+    if (lightCount >= 10) synergyBonus = 3.0;       // Почти всё идеально — Храм
+    else if (lightCount >= 7) synergyBonus = 2.0;   // Очень хорошо
+    else if (lightCount >= 5) synergyBonus = 1.0;   // Заметно хорошо
+    else if (lightCount >= 3) synergyBonus = 0.3;   // Чуть выше среднего
+
+    if (darkCount >= 10) synergyBonus = -3.0;       // Почти всё ужасно — Склеп
+    else if (darkCount >= 7) synergyBonus = -2.0;   // Очень плохо
+    else if (darkCount >= 5) synergyBonus = -1.0;   // Заметно плохо
+    else if (darkCount >= 3) synergyBonus = -0.3;   // Чуть ниже среднего
+
+    // Итоговый ранг
+    const rounded = Math.round((avg + synergyBonus) * 10) / 10;
+
+    resultNumber.textContent = (rounded >= 0 ? '+' : '') + rounded.toFixed(1);
+    resultLabel.textContent = 'Итоговый ранг комнаты';
+
+    let interpretation = '';
+    if (rounded >= 6) interpretation = '🏛️ ХРАМ. Это пространство излучает Свет. Оно исцеляет вас каждый день.';
+    else if (rounded >= 3) interpretation = '🌿 САД. Очень хорошее, живое окружение. Вы восстанавливаете силы дома.';
+    else if (rounded >= 0) interpretation = '🏠 ДОМ. Нейтрально-положительное окружение. Можно улучшить.';
+    else if (rounded >= -2) interpretation = '🏢 ОФИС. Лёгкий негатив. Синтетика и бетон истощают вас.';
+    else if (rounded >= -4) interpretation = '🏭 БУНКЕР. Серьёзный перекос в «мёртвые» материалы. Срочно менять обстановку!';
+    else interpretation = '💀 СКЛЕП. Экстремально низкий Qₛ. Находиться здесь опасно для психики.';
+    resultExtra.textContent = interpretation;
+
+    resultFormula.textContent = `Q = (${values.join(' + ')}) / ${selects.length} = ${avg.toFixed(2)} | Бонус синергии: ${synergyBonus >= 0 ? '+' : ''}${synergyBonus.toFixed(1)} | Итог: ${rounded.toFixed(2)}`;
+}
+
+    calculate();
+</script>
+
+</body>
+</html>

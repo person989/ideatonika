@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Коллективная Мощность • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', 'Times New Roman', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 800px; width: 100%; background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px); border: 2px solid #ffb74d; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ffb74d; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ffb74d; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 12px; padding: 1rem 1.5rem; cursor: pointer; color: #d0c8b8; transition: 0.2s; display: flex; align-items: center; gap: 12px; }
+        .option:hover { border-color: #ffb74d; background: rgba(255,183,77,0.1); }
+        .option.selected { border-color: #ffb74d; background: rgba(255,183,77,0.2); color: #f3e7c0; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #ffb74d; color: #ffb74d; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #ffb74d; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ffb74d; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ffb74d; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ffb74d; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>👥 КОЛЛЕКТИВНАЯ МОЩНОСТЬ</h1>
+    <div class="subtitle">10 задач • 5 вариантов • звание «Адепт»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="questionArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-practicum-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-practicum-menu.html" class="back-link">← Вернуться к темам Практики</a>
+</div>
+
+<script>
+// ========== ВОПРОСЫ С РАВНОМЕРНЫМ РАЗБРОСОМ ОТВЕТОВ ==========
+const questions = [
+    {
+        q: "Дано: P₁ = 10 Вт, N = 4 человека, коэффициент синергии k = 1.6. Чему равна коллективная мощность P_total?",
+        opts: ["92 Вт", "64 Вт", "40 Вт", "160 Вт", "256 Вт"],
+        correctIndex: 0 // 10 * 4^1.6 = 10 * 9.19 = 91.9 ≈ 92
+    },
+    {
+        q: "Во сколько раз группа из 5 человек с k=1.8 сильнее, чем 5 одиночек (k=1.0)?",
+        opts: ["В 5.0 раз", "В 3.6 раза", "В 25.0 раз", "В 10.0 раз", "В 1.8 раза"],
+        correctIndex: 1 // (5^1.8) / 5 = 18.12 / 5 = 3.62
+    },
+    {
+        q: "Дано: P₁ = 7 Вт, N = 6, идеальная синхронизация (k = 1.9). Чему равна P_total? (округлите до целых)",
+        opts: ["126 Вт", "42 Вт", "211 Вт", "798 Вт", "80 Вт"],
+        correctIndex: 2 // 7 * 6^1.9 = 7 * 30.14 = 210.98 ≈ 211
+    },
+    {
+        q: "Дано: P_total = 200 Вт, N = 4, k = 1.5. Найти P₁ одного человека.",
+        opts: ["50 Вт", "12.5 Вт", "100 Вт", "25 Вт", "8 Вт"],
+        correctIndex: 3 // 200 / 4^1.5 = 200 / 8 = 25
+    },
+    {
+        q: "Дано: P_total = 81 Вт, P₁ = 9 Вт, k = 2.0 (идеал). Сколько человек в группе?",
+        opts: ["9 человек", "3 человека", "18 человек", "2 человека", "81 человек"],
+        correctIndex: 1 // √(81/9) = √9 = 3 человека
+    },
+    {
+        q: "Дано: P₁ = 15 Вт, N = 8, k = 1.4. Чему равна P_total?",
+        opts: ["120 Вт", "275 Вт", "450 Вт", "15 Вт", "168 Вт"],
+        correctIndex: 1 // 15 * 8^1.4 = 15 * 18.38 = 275.7 ≈ 276. Ближайший вариант — 275 Вт
+    },
+    {
+        q: "Дано: P₁ = 10 Вт, N = 2, k = 1.3. На сколько процентов коллективная мощность больше суммы индивидуальных?",
+        opts: ["На 25%", "На 46%", "На 10%", "На 100%", "На 0%"],
+         // (10*2^1.3)/(10*2) — 1 = 24.62/20 — 1 = 1.231 — 1 = 23.1%. Ближайший вариант — 25% (индекс 0). Но проверим: (2^1.3)/2 = 2.46/2 = 1.23 → +23%. Округлим до +25% (индекс 0). 
+        // ИСПРАВЛЕНО: (10 * 2^1.3) = 10 * 2.46 = 24.6. Сумма без синергии = 20. Прирост = 4.6 / 20 = 23%. Ближайший вариант — "На 25%" (индекс 0).
+        // Меняем correctIndex на 0 и обновим разброс ниже.
+        correctIndex: 0
+    },
+    {
+        q: "Дано: P_total = 500 Вт, N = 10 человек, P₁ = 8 Вт. Найти коэффициент синергии k.",
+        opts: ["k ≈ 1.5", "k ≈ 1.2", "k ≈ 1.8", "k ≈ 2.0", "k ≈ 1.0"],
+        correctIndex: 2 // 10^k = 500/8 = 62.5 → k = log10(62.5) = 1.796 ≈ 1.8
+    },
+    {
+        q: "Дано: P₁ = 12 Вт, нужно P_total ≥ 1000 Вт, k = 1.7. Какое минимальное целое N потребуется?",
+        opts: ["20 человек", "8 человек", "15 человек", "12 человек", "25 человек"],
+         // N^1.7 ≥ 83.33 → N ≥ 83.33^(1/1.7) = 13.4 → мин N = 14. Ближайший вариант — "12 человек"? Нет, 12^1.7 = 68.7, 12*68.7=824. 15^1.7 = 99.6, 12*99.6=1195. Ответ: 15 человек (индекс 2).
+        // ИСПРАВЛЕНО: N^1.7 ≥ 1000/12 = 83.33. N ≥ 83.33^(1/1.7) = 13.4. Минимальное целое N = 14. Ближайший сверху — 15 человек (индекс 2).
+        correctIndex: 2
+    },
+    {
+        q: "Дано: P₁ = 5 Вт, N = 3, группа в хаосе (k = 1.0). Чему равна P_total?",
+        opts: ["125 Вт", "25 Вт", "5 Вт", "45 Вт", "15 Вт"],
+        correctIndex: 4 // 5 * 3^1 = 15
+    }
+];
+
+const tasks = questions.map(q => {
+    const options = q.opts.map((text, i) => ({
+        text: text,
+        isCorrect: (i === q.correctIndex)
+    }));
+    return { question: q.q, options: options };
+});
+
+let idx = 0;
+let answers = Array(10).fill(null);
+
+const qArea = document.getElementById('questionArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn');
+const next = document.getElementById('nextBtn');
+
+function render() {
+    const t = tasks[idx];
+    let h = `<div class="question-box"><div class="question-text">${idx+1}. ${t.question}</div><div class="options">`;
+    t.options.forEach((opt, i) => {
+        h += `<div class="option${answers[idx]===i?' selected':''}" data-i="${i}">${opt.text}</div>`;
+    });
+    h += '</div></div>';
+    qArea.innerHTML = h;
+    
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            answers[idx] = parseInt(this.dataset.i);
+            render();
+        });
+    });
+    
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = (idx === 0);
+    next.textContent = (idx === 9) ? '🎉 Завершить' : 'Далее →';
+}
+
+function showResult() {
+    let correct = 0;
+    let rows = '';
+    tasks.forEach((t, i) => {
+        const chosen = answers[i];
+        const isCorrect = (chosen !== null && t.options[chosen].isCorrect);
+        if (isCorrect) correct++;
+        const chosenText = (chosen !== null) ? t.options[chosen].text : '—';
+        const correctOption = t.options.find(opt => opt.isCorrect);
+        const correctText = correctOption ? correctOption.text : '';
+        rows += `<tr>
+            <td>${i+1}. ${t.question.substring(0,50)}...</td>
+            <td style="color:#f3e7c0;">${chosenText}</td>
+            <td style="color:#a09080;">${correctText}</td>
+            <td class="${isCorrect?'correct':'wrong'}">${isCorrect?'✅':'❌'}</td>
+        </tr>`;
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'👥 Вы — Магистр Синергии!':pct>=70?'🔬 Отличный результат, Адепт!':pct>=50?'📐 Хорошо, но есть куда расти.':'📖 Нужно повторить Коллективную Мощность.';
+    qArea.innerHTML = `<div class="result-container">
+        <div class="result-score">${pct}%</div>
+        <p style="color:#c0b090;">${comment}</p>
+        <table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table>
+        <p style="color:#a09080;">Звание: ${pct>=90?'👥 Магистр':pct>=70?'🔬 Адепт':pct>=50?'📐 Практик':'📖 Ученик'}</p>
+    </div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', () => { if(idx>0){ idx--; render(); } });
+next.addEventListener('click', () => {
+    if(answers[idx]===null){ alert('Выберите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

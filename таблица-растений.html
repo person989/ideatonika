@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 Таблица Растений • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 1400px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30,40,60,0.75); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 24px;
+            padding: 2.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; letter-spacing: 3px; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 1.5rem; }
+        .button-group { display: flex; justify-content: center; gap: 20px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .btn {
+            padding: 10px 25px; background: #3b2a1f; color: white; border: none; border-radius: 30px;
+            font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;
+        }
+        .btn:hover { background: #5d4037; transform: scale(1.02); }
+        .btn-secondary { background: #5d4037; }
+        .btn-secondary:hover { background: #3b2a1f; }
+        .sort-indicator { text-align: center; font-size: 0.9rem; color: #c0b090; margin-bottom: 1rem; font-style: italic; }
+        .table-wrapper { overflow-x: auto; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1px; margin-bottom: 1.5rem; }
+        
+        .plant-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; background: transparent; min-width: 1100px; }
+        .plant-table th {
+            background: #2a2a4a; color: #f3e7c0; padding: 12px 6px; font-weight: bold;
+            text-align: center; border: 1px solid #5d4a3a; font-size: 0.8rem; white-space: nowrap;
+        }
+        .plant-table td { border: 1px solid #5d4a3a; padding: 8px 5px; vertical-align: middle; color: #d0c8b8; }
+        .plant-table tr:nth-child(even) { background: rgba(0,0,0,0.1); }
+        
+        /* Цвета строк по рангу */
+        .rank-p9 { background: linear-gradient(135deg, rgba(255,249,196,0.2), rgba(255,248,225,0.1)); }
+        .rank-p8 { background: linear-gradient(135deg, rgba(255,248,225,0.18), rgba(255,236,179,0.1)); }
+        .rank-p7 { background: linear-gradient(135deg, rgba(255,236,179,0.18), rgba(255,224,130,0.1)); }
+        .rank-p6 { background: linear-gradient(135deg, rgba(232,245,233,0.15), rgba(200,230,201,0.1)); }
+        .rank-p5 { background: linear-gradient(135deg, rgba(227,242,253,0.15), rgba(187,222,251,0.1)); }
+        .rank-p4 { background: linear-gradient(135deg, rgba(232,234,246,0.15), rgba(197,202,233,0.1)); }
+        .rank-p3 { background: linear-gradient(135deg, rgba(224,224,224,0.12), rgba(238,238,238,0.08)); }
+        .rank-p2 { background: linear-gradient(135deg, rgba(245,245,245,0.1), rgba(224,224,224,0.08)); }
+        .rank-p1 { background: linear-gradient(135deg, rgba(250,250,250,0.08), rgba(245,245,245,0.05)); }
+        .rank-0 { background: linear-gradient(135deg, rgba(239,235,233,0.1), rgba(215,204,200,0.05)); }
+        .rank-m1 { background: linear-gradient(135deg, rgba(215,204,200,0.12), rgba(188,170,164,0.08)); }
+        .rank-m2 { background: linear-gradient(135deg, rgba(255,204,188,0.12), rgba(255,171,145,0.08)); }
+        
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.65rem; font-weight: bold; white-space: nowrap; }
+        .badge-tree { background: #81c784; color: #1b5e20; }
+        .badge-herb { background: #a5d6a7; color: #1b5e20; }
+        .badge-flower { background: #f48fb1; color: #880e4f; }
+        .badge-shrub { background: #90caf9; color: #0d47a1; }
+        .badge-other { background: #b0bec5; color: #37474f; }
+        
+        .legend { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; font-size: 0.8rem; margin-bottom: 1.5rem; }
+        .legend-item { display: flex; align-items: center; gap: 5px; color: #d0c8b8; }
+        .footer-note { text-align: center; font-size: 0.85rem; color: #5d4037; font-style: italic; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #8b7355; }
+        .back-link { display: inline-block; margin-top: 1rem; color: #e3b87c; text-decoration: none; border: 1px solid #e3b87c; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #e3b87c; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>🌿 ВЕЛИКАЯ ТАБЛИЦА РАСТЕНИЙ И ДЕРЕВЬЕВ</h1>
+    <p class="subtitle">Полный семантический паспорт флоры: от священных рощ до комнатных цветов</p>
+    
+    <div class="button-group">
+        <button id="sortByRankBtn" class="btn">📊 По РАНГУ (от +9 к -2)</button>
+        <button id="sortByNameBtn" class="btn btn-secondary">🔤 По НАЗВАНИЮ (А → Я)</button>
+    </div>
+    <p id="currentSortIndicator" class="sort-indicator">Текущая сортировка: по РАНГУ (от +9 к -2)</p>
+    
+    <div class="legend">
+        <div class="legend-item"><span class="badge badge-tree">🌳 Дерево</span></div>
+        <div class="legend-item"><span class="badge badge-herb">🌿 Трава</span></div>
+        <div class="legend-item"><span class="badge badge-flower">🌸 Цветок</span></div>
+        <div class="legend-item"><span class="badge badge-shrub">🪴 Кустарник</span></div>
+        <div class="legend-item"><span class="badge badge-other">🍄 Прочее</span></div>
+    </div>
+    
+    <div id="tableWrapper" class="table-wrapper">
+        <table class="plant-table">
+            <thead>
+                <tr>
+                    <th>Растение</th><th>Тип</th><th>C_sense</th><th>σ_sense</th><th>Генерация</th>
+                    <th>ωₛ (частота)</th><th>Стихия</th><th>Архетип</th><th>Ранг</th><th>Комментарий</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    <div class="footer-note">✧ «Растения — это антенны Земли. Они слушают Небо и передают Свет в почву.» ✧</div>
+</div>
+
+<script>
+(function() {
+    const plantsData = [
+        // ===== СВЯЩЕННЫЕ ДЕРЕВЬЯ (+7...+9) =====
+        { name:"Дуб (Quercus robur)", type:"Дерево", C:8, S:6, Gen:4, freq:"Дельта (0.5-2 Гц)", element:"Земля/Огонь", archetype:"Царь, Сила, Долголетие", rank:9, comment:"Царь деревьев. Символ мощи и вечности. Резонирует с архетипом Правителя. Отводит молнии." },
+        { name:"Кедр (Cedrus)", type:"Дерево", C:8, S:7, Gen:4, freq:"Тета (4-7 Гц)", element:"Воздух/Земля", archetype:"Мудрость, Защита, Святость", rank:9, comment:"Священное дерево. Очищает поле, отгоняет негатив. Используется в храмах." },
+        { name:"Секвойя (Sequoia)", type:"Дерево", C:8, S:5, Gen:3, freq:"Дельта (0.3-1 Гц)", element:"Земля", archetype:"Вечность, Терпение, Масштаб", rank:9, comment:"Живой небоскрёб. Колоссальная инерция L_sense. Память тысячелетий." },
+        { name:"Олива (Olea europaea)", type:"Дерево", C:7, S:6, Gen:3, freq:"Альфа (8-12 Гц)", element:"Воздух/Вода", archetype:"Мир, Мудрость, Изобилие", rank:8, comment:"Символ мира и процветания. Масло проводник благодати. Ветвь примирения." },
+        { name:"Сандал (Santalum album)", type:"Дерево", C:7, S:8, Gen:3, freq:"Тета (5-8 Гц)", element:"Воздух/Эфир", archetype:"Медитация, Духовность, Чистота", rank:8, comment:"Аромат открывает врата в высшие слои. Используется в храмах и медитации." },
+        { name:"Баньян (Ficus benghalensis)", type:"Дерево", C:8, S:7, Gen:3, freq:"Дельта (1-3 Гц)", element:"Земля/Воздух", archetype:"Бессмертие, Единство, Прибежище", rank:8, comment:"Дерево просветления. Воздушные корни — символ связи Неба и Земли." },
+        { name:"Ясень (Fraxinus)", type:"Дерево", C:7, S:6, Gen:2, freq:"Альфа (8-14 Гц)", element:"Воздух/Огонь", archetype:"Мировое Древо, Связь миров", rank:7, comment:"Иггдрасиль скандинавов. Проводит связь между мирами. Крепкая древесина." },
+        { name:"Тис (Taxus baccata)", type:"Дерево", C:8, S:4, Gen:2, freq:"Дельта (0.5-1 Гц)", element:"Земля/Тьма", archetype:"Смерть, Вечность, Трансформация", rank:7, comment:"Дерево кладбищ. Хранит память ушедших. Очень медленный рост — огромная инерция." },
+        { name:"Сосна (Pinus)", type:"Дерево", C:7, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Воздух/Огонь", archetype:"Стойкость, Свет, Очищение", rank:7, comment:"Светлое дерево. Очищает воздух и поле. Фитонциды убивают не только микробов, но и S_noise." },
+        { name:"Можжевельник (Juniperus)", type:"Дерево/Кустарник", C:6, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Воздух/Огонь", archetype:"Защита, Очищение, Границы", rank:7, comment:"Природный антисептик. Дым очищает пространство. Ветки над дверью — мощный оберег." },
+        { name:"Кипарис (Cupressus)", type:"Дерево", C:7, S:5, Gen:2, freq:"Тета (6-8 Гц)", element:"Земля/Воздух", archetype:"Скорбь, Память, Устремление в Небо", rank:7, comment:"Дерево кладбищ и храмов. Устремлён вверх. Связь с ушедшими." },
+        
+        // ===== ПЛОДОВЫЕ ДЕРЕВЬЯ (+4...+6) =====
+        { name:"Яблоня (Malus domestica)", type:"Дерево", C:6, S:6, Gen:3, freq:"Альфа (8-12 Гц)", element:"Вода/Земля", archetype:"Любовь, Плодородие, Искушение", rank:6, comment:"Символ любви и познания. Цветение — пик генерации Qₛ. Плоды — живые батарейки." },
+        { name:"Груша (Pyrus)", type:"Дерево", C:6, S:5, Gen:2, freq:"Альфа (8-12 Гц)", element:"Вода/Земля", archetype:"Нежность, Долголетие, Уют", rank:5, comment:"Мягкое, «женское» дерево. Дарит комфорт и умиротворение." },
+        { name:"Вишня (Prunus cerasus)", type:"Дерево", C:6, S:6, Gen:3, freq:"Альфа (10-14 Гц)", element:"Вода/Огонь", archetype:"Красота, Мимолётность, Весна", rank:6, comment:"Сакура — символ красоты момента. Плоды — кровь земли. Цветение — взрыв Qₛ." },
+        { name:"Слива (Prunus domestica)", type:"Дерево", C:5, S:5, Gen:2, freq:"Альфа (8-12 Гц)", element:"Вода/Земля", archetype:"Терпение, Мудрость, Долголетие", rank:5, comment:"Спокойное, «мудрое» дерево. Плоды полезны для пищеварения и поля." },
+        { name:"Персик (Prunus persica)", type:"Дерево", C:6, S:6, Gen:2, freq:"Альфа (8-12 Гц)", element:"Вода/Огонь", archetype:"Бессмертие, Юность, Любовь", rank:5, comment:"Символ бессмертия в Китае. Плоды — эликсир молодости." },
+        { name:"Абрикос (Prunus armeniaca)", type:"Дерево", C:5, S:5, Gen:2, freq:"Альфа (8-12 Гц)", element:"Огонь/Вода", archetype:"Солнце, Радость, Жизненная сила", rank:5, comment:"Солнечный плод. Повышает Tₛ мягко и приятно." },
+        { name:"Инжир (Ficus carica)", type:"Дерево", C:6, S:6, Gen:2, freq:"Тета (5-8 Гц)", element:"Земля/Вода", archetype:"Плодородие, Изобилие, Тайна", rank:5, comment:"Священное дерево Востока. Листья — символ стыда и знания. Плоды питательны." },
+        { name:"Гранат (Punica granatum)", type:"Дерево/Кустарник", C:6, S:5, Gen:2, freq:"Альфа (10-14 Гц)", element:"Огонь/Вода", archetype:"Изобилие, Брак, Подземный мир", rank:5, comment:"Символ брака и плодородия. Сок — «кровь земли»." },
+        { name:"Лимон (Citrus limon)", type:"Дерево", C:5, S:7, Gen:2, freq:"Бета (15-20 Гц)", element:"Воздух/Вода", archetype:"Очищение, Бодрость, Кислота", rank:5, comment:"Очищает пространство. Запах цедры повышает Cₛ. Сок — детокс для тела и поля." },
+        { name:"Апельсин (Citrus sinensis)", type:"Дерево", C:5, S:7, Gen:2, freq:"Бета (14-18 Гц)", element:"Огонь/Вода", archetype:"Солнце, Радость, Здоровье", rank:5, comment:"Живое солнце. Заряжает позитивом. Цедра — генератор радости." },
+        { name:"Мандарин (Citrus reticulata)", type:"Дерево", C:5, S:7, Gen:2, freq:"Бета (14-18 Гц)", element:"Огонь/Вода", archetype:"Праздник, Новый год, Семья", rank:5, comment:"Аромат праздника. Объединяет семью. Кожура — очиститель воздуха." },
+        { name:"Грейпфрут (Citrus paradisi)", type:"Дерево", C:5, S:6, Gen:2, freq:"Бета (16-20 Гц)", element:"Огонь/Вода", archetype:"Очищение, Горькая правда, Детокс", rank:4, comment:"Мощный очиститель. Горечь «сжигает» S_noise. Не всем приятен." },
+        { name:"Авокадо (Persea americana)", type:"Дерево", C:5, S:6, Gen:2, freq:"Тета (5-8 Гц)", element:"Вода/Земля", archetype:"Питание, Красота, Плодородие", rank:5, comment:"Маслянистый плод. Питает физическое и семантическое тело." },
+        { name:"Манго (Mangifera indica)", type:"Дерево", C:6, S:6, Gen:2, freq:"Альфа (8-14 Гц)", element:"Огонь/Вода", archetype:"Сладость, Изобилие, Тропики", rank:5, comment:"Король фруктов. Сладкий нектар жизни. Листья — оберег." },
+        { name:"Хурма (Diospyros kaki)", type:"Дерево", C:5, S:5, Gen:2, freq:"Тета (5-8 Гц)", element:"Огонь/Земля", archetype:"Мудрость, Сладость, Терпение", rank:5, comment:"Плод богов. Сладкая, вяжущая. Собирает Qₛ в точку." },
+        { name:"Шелковица (Morus)", type:"Дерево", C:6, S:5, Gen:3, freq:"Альфа (8-12 Гц)", element:"Земля/Вода", archetype:"Щедрость, Пища, Связь поколений", rank:5, comment:"Дерево-кормилец. Плоды — сладкая благодать. Листья — пища для шелкопряда." },
+        { name:"Орех грецкий (Juglans regia)", type:"Дерево", C:7, S:5, Gen:2, freq:"Дельта (2-4 Гц)", element:"Земля/Воздух", archetype:"Мудрость, Плодородие, Защита", rank:6, comment:"Мощный накопитель. Густая крона создаёт «зону покоя». Плоды — концентрат Qₛ." },
+        { name:"Миндаль (Prunus dulcis)", type:"Дерево", C:6, S:5, Gen:2, freq:"Альфа (8-12 Гц)", element:"Воздух/Вода", archetype:"Нежность, Пробуждение, Весна", rank:5, comment:"Раннее цветение — первый взрыв Qₛ после зимы. Орехи — пища для мозга и ауры." },
+        { name:"Каштан (Castanea)", type:"Дерево", C:6, S:5, Gen:2, freq:"Дельта (2-4 Гц)", element:"Земля/Огонь", archetype:"Защита, Плодородие, Долголетие", rank:5, comment:"Мощный ствол — генератор покоя. Плоды в колючках — символ защиты." },
+        { name:"Фисташка (Pistacia vera)", type:"Дерево", C:5, S:5, Gen:2, freq:"Альфа (8-14 Гц)", element:"Воздух/Огонь", archetype:"Изобилие, Счастье, Здоровье", rank:5, comment:"Зелёное золото. Орехи — концентрат жизненной силы." },
+        { name:"Кедровый орех (сосна сибирская)", type:"Дерево", C:6, S:5, Gen:2, freq:"Альфа (8-14 Гц)", element:"Земля/Воздух", archetype:"Сила, Здоровье, Сибирь", rank:5, comment:"Семена кедра — кладезь Qₛ. Масло — проводник Света." },
+        { name:"Фундук (Corylus avellana)", type:"Кустарник", C:5, S:5, Gen:2, freq:"Альфа (8-12 Гц)", element:"Земля/Вода", archetype:"Мудрость, Защита, Изобилие", rank:5, comment:"Орешник — дерево мудрости. Прутья — для лозоходства. Орехи — пища для ума." },
+        { name:"Кокос (Cocos nucifera)", type:"Дерево", C:6, S:7, Gen:2, freq:"Тета (5-8 Гц)", element:"Вода/Земля", archetype:"Жизнь, Питание, Тропики", rank:5, comment:"Дерево жизни. Вода кокоса — почти святая. Мякоть — сытная и живая." },
+        { name:"Финик (Phoenix dactylifera)", type:"Дерево", C:6, S:6, Gen:2, freq:"Альфа (8-14 Гц)", element:"Огонь/Земля", archetype:"Жизнь, Пустыня, Выносливость", rank:5, comment:"Древо жизни пустыни. Плоды — концентрат энергии и Qₛ." },
+        
+        // ===== ПРОДОЛЖЕНИЕ: ДЕРЕВЬЯ (ЛИСТВЕННЫЕ, ХВОЙНЫЕ) =====
+        { name:"Берёза (Betula pendula)", type:"Дерево", C:6, S:7, Gen:3, freq:"Альфа (10-14 Гц)", element:"Воздух/Вода", archetype:"Чистота, Свет, Начало", rank:7, comment:"Символ России. Сок — эликсир жизни. Кора — для писем предкам. Очищает и утешает." },
+        { name:"Липа (Tilia cordata)", type:"Дерево", C:6, S:7, Gen:3, freq:"Альфа (8-12 Гц)", element:"Воздух/Вода", archetype:"Уют, Защита, Материнство", rank:7, comment:"Мягкое «женское» дерево. Цветки — лекарство от тревоги. Аромат — генератор покоя." },
+        { name:"Осина (Populus tremula)", type:"Дерево", C:6, S:6, Gen:2, freq:"Тета (5-8 Гц)", element:"Вода/Земля", archetype:"Громоотвод, Снятие порчи, Дрожь", rank:6, comment:"Дерево-вампир в хорошем смысле. Забирает негатив. Дрожит, «перерабатывая» чужую Тьму." },
+        { name:"Тополь (Populus nigra)", type:"Дерево", C:6, S:5, Gen:2, freq:"Бета (14-20 Гц)", element:"Воздух/Земля", archetype:"Защита, Очищение, Быстрый рост", rank:5, comment:"Быстрорастущий защитник. Пух — переносчик Qₛ. Мощные корни заземляют." },
+        { name:"Ива (Salix alba)", type:"Дерево", C:6, S:7, Gen:2, freq:"Тета (4-7 Гц)", element:"Вода", archetype:"Печаль, Гибкость, Интуиция", rank:6, comment:"Дерево воды и Луны. Проводит интуицию. Ветки — для лозоходства. Утешает в горе." },
+        { name:"Верба (Salix caprea)", type:"Дерево/Кустарник", C:5, S:7, Gen:3, freq:"Тета (5-8 Гц)", element:"Вода/Воздух", archetype:"Весна, Воскресение, Праздник", rank:6, comment:"Символ Вербного воскресенья. Пушистые почки — генераторы весеннего Qₛ." },
+        { name:"Ольха (Alnus glutinosa)", type:"Дерево", C:6, S:6, Gen:2, freq:"Тета (5-8 Гц)", element:"Вода/Земля", archetype:"Переход, Связь с водой, Тайна", rank:5, comment:"Дерево перехода. Растёт у воды. Кора — для дубления и защиты." },
+        { name:"Вяз (Ulmus)", type:"Дерево", C:7, S:5, Gen:2, freq:"Дельта (1-3 Гц)", element:"Земля/Вода", archetype:"Стойкость, Надёжность, Опора", rank:6, comment:"Крепкое, «мужское» дерево. Вязкая древесина — символ несокрушимости." },
+        { name:"Клён (Acer platanoides)", type:"Дерево", C:6, S:5, Gen:2, freq:"Альфа (8-14 Гц)", element:"Воздух/Земля", archetype:"Равновесие, Щедрость, Гармония", rank:6, comment:"Дерево равновесия. Лист — символ Канады и гармонии. Сок — сладкий нектар." },
+        { name:"Явор (Acer pseudoplatanus)", type:"Дерево", C:6, S:5, Gen:2, freq:"Альфа (8-14 Гц)", element:"Воздух/Земля", archetype:"Музыка, Чистота, Возвышенность", rank:5, comment:"Древесина для музыкальных инструментов. Проводит звук и Qₛ." },
+        { name:"Рябина (Sorbus aucuparia)", type:"Дерево", C:7, S:6, Gen:3, freq:"Альфа (10-14 Гц)", element:"Огонь/Вода", archetype:"Защита, Магия, Женская сила", rank:7, comment:"Мощный оберег. Гроздья — капли огня. Отгоняет злых духов. Женское дерево." },
+        { name:"Калина (Viburnum opulus)", type:"Кустарник", C:6, S:6, Gen:3, freq:"Альфа (10-14 Гц)", element:"Огонь/Вода", archetype:"Любовь, Кровь, Род", rank:6, comment:"Символ любви и рода. Ягоды — «кровь земли». Кора — лекарство." },
+        { name:"Черёмуха (Prunus padus)", type:"Дерево", C:6, S:6, Gen:3, freq:"Альфа (10-14 Гц)", element:"Вода/Воздух", archetype:"Весна, Любовь, Аромат", rank:6, comment:"Пьянящий аромат — генератор романтики. Ягоды — вяжущие, собирающие." },
+        { name:"Боярышник (Crataegus)", type:"Кустарник", C:6, S:5, Gen:2, freq:"Альфа (10-14 Гц)", element:"Огонь/Земля", archetype:"Сердце, Защита, Границы", rank:6, comment:"Колючая защита. Цветки — лекарство для сердца. Куст — живая изгородь от негатива." },
+        { name:"Шиповник (Rosa canina)", type:"Кустарник", C:6, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Огонь/Вода", archetype:"Красота, Защита, Витамины", rank:6, comment:"Дикая роза. Колючки защищают. Плоды — концентрат витамина C и Qₛ." },
+        { name:"Сирень (Syringa vulgaris)", type:"Кустарник", C:5, S:7, Gen:3, freq:"Альфа (10-14 Гц)", element:"Воздух/Вода", archetype:"Весна, Любовь, Ностальгия", rank:6, comment:"Аромат детства. Цветение — взрыв Qₛ. Запах открывает воспоминания." },
+        { name:"Жасмин (Jasminum)", type:"Кустарник", C:5, S:8, Gen:2, freq:"Альфа (10-14 Гц)", element:"Воздух/Вода", archetype:"Любовь, Чувственность, Ночь", rank:6, comment:"Ночной аромат. Усиливает романтику. Масло — афродизиак и антидепрессант." },
+        { name:"Бамбук (Bambusoideae)", type:"Трава/Дерево", C:6, S:8, Gen:3, freq:"Бета (14-20 Гц)", element:"Воздух/Вода", archetype:"Гибкость, Рост, Стойкость", rank:7, comment:"Рекордсмен роста. Проводит энергию вверх. Символ стойкости и гибкости." },
+        { name:"Эвкалипт (Eucalyptus)", type:"Дерево", C:6, S:7, Gen:2, freq:"Бета (14-20 Гц)", element:"Воздух/Огонь", archetype:"Очищение, Дыхание, Защита", rank:6, comment:"Мощный очиститель воздуха и поля. Аромат — детокс для лёгких и ауры." },
+        { name:"Лавр (Laurus nobilis)", type:"Дерево/Кустарник", C:5, S:6, Gen:2, freq:"Альфа (8-14 Гц)", element:"Огонь/Воздух", archetype:"Победа, Слава, Защита", rank:5, comment:"Венок победителя. Лист — оберег. Дым лавра очищает и защищает." },
+        { name:"Маслина (Olea europaea)", type:"Дерево", C:7, S:6, Gen:3, freq:"Альфа (8-12 Гц)", element:"Воздух/Вода", archetype:"Мир, Мудрость, Изобилие", rank:8, comment:"Священное дерево Средиземноморья. Масло — проводник Света. Ветвь — символ мира." },
+        { name:"Мирт (Myrtus communis)", type:"Кустарник", C:5, S:6, Gen:2, freq:"Альфа (8-12 Гц)", element:"Вода/Воздух", archetype:"Любовь, Мир, Чистота", rank:5, comment:"Символ любви и мира. Венок невесты. Аромат успокаивает." },
+        { name:"Розмарин (Salvia rosmarinus)", type:"Кустарник", C:5, S:7, Gen:2, freq:"Бета (14-18 Гц)", element:"Огонь/Воздух", archetype:"Память, Ясность, Защита", rank:6, comment:"Трава памяти. Аромат повышает Cₛ. Дым очищает. Ветка — оберег." },
+        { name:"Лаванда (Lavandula)", type:"Кустарник", C:6, S:8, Gen:3, freq:"Альфа (10-14 Гц)", element:"Воздух/Вода", archetype:"Спокойствие, Очищение, Любовь", rank:7, comment:"Королева успокоения. Аромат снижает Tₛ. Мешочки с лавандой — для сна и защиты." },
+        { name:"Шалфей (Salvia officinalis)", type:"Кустарник", C:5, S:7, Gen:2, freq:"Бета (14-18 Гц)", element:"Огонь/Воздух", archetype:"Мудрость, Очищение, Здоровье", rank:6, comment:"Священная трава. Дым — мощный очиститель пространства. Чай — для ума." },
+        { name:"Чабрец (Thymus serpyllum)", type:"Кустарник", C:5, S:7, Gen:2, freq:"Альфа (10-14 Гц)", element:"Огонь/Воздух", archetype:"Мужество, Очищение, Сила", rank:6, comment:"Тимьян. Аромат даёт мужество. Подушка с чабрецом — защита от кошмаров." },
+        { name:"Мята (Mentha piperita)", type:"Трава", C:5, S:8, Gen:2, freq:"Бета (14-18 Гц)", element:"Вода/Воздух", archetype:"Охлаждение, Ясность, Бодрость", rank:6, comment:"Освежает ум. Чай — перезагрузка Cₛ. Запах — «холодный душ» для мозга." },
+        { name:"Мелисса (Melissa officinalis)", type:"Трава", C:5, S:7, Gen:2, freq:"Альфа (8-12 Гц)", element:"Вода/Воздух", archetype:"Утешение, Покой, Сердце", rank:6, comment:"Лимонная мята. Успокаивает сердце. Чай — от тревоги. Растение — генератор уюта." },
+        { name:"Зверобой (Hypericum perforatum)", type:"Трава", C:5, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Огонь", archetype:"Солнце, Защита, Исцеление", rank:6, comment:"Солнечная кровь. Масло — красное, целебное. Отгоняет тьму. Антидепрессант." },
+        { name:"Тысячелистник (Achillea millefolium)", type:"Трава", C:5, S:6, Gen:2, freq:"Бета (14-18 Гц)", element:"Огонь/Воздух", archetype:"Защита, Мужество, Границы", rank:5, comment:"Трава воинов. Останавливает кровь. Укрепляет границы поля." },
+        { name:"Полынь (Artemisia absinthium)", type:"Трава", C:5, S:5, Gen:1, freq:"Бета (14-20 Гц)", element:"Земля/Огонь", archetype:"Горечь, Защита, Изгнание", rank:5, comment:"Горькая защитница. Дым изгоняет сущностей. Веник — для чистки пространства." },
+        { name:"Крапива (Urtica dioica)", type:"Трава", C:5, S:5, Gen:2, freq:"Бета (14-20 Гц)", element:"Огонь/Земля", archetype:"Защита, Очищение, Сила", rank:4, comment:"Жгучая защитница. «Кусает» негатив. Волокно — для одежды силы." },
+        { name:"Подорожник (Plantago major)", type:"Трава", C:4, S:5, Gen:1, freq:"Альфа (8-12 Гц)", element:"Земля/Вода", archetype:"Исцеление, Путь, Дорога", rank:4, comment:"Спутник путника. Лист — пластырь. Растёт там, где ходят люди." },
+        { name:"Одуванчик (Taraxacum officinale)", type:"Трава", C:5, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Воздух/Огонь", archetype:"Солнце, Дети, Исполнение желаний", rank:5, comment:"Маленькое солнце. Пух разносит Qₛ. Корень — детокс. Радость детям." },
+        { name:"Ромашка (Matricaria chamomilla)", type:"Трава", C:5, S:7, Gen:2, freq:"Альфа (8-12 Гц)", element:"Вода/Воздух", archetype:"Утешение, Чистота, Детство", rank:6, comment:"Солнечная сердцевина. Чай — от всех бед. Аромат — возвращение в детство." },
+        { name:"Календула (Calendula officinalis)", type:"Цветок", C:5, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Огонь", archetype:"Солнце, Исцеление, Защита", rank:5, comment:"Ноготки. Масло лечит раны. Цветы — маленькие солнца." },
+        { name:"Эхинацея (Echinacea purpurea)", type:"Цветок", C:5, S:6, Gen:2, freq:"Бета (14-18 Гц)", element:"Огонь/Земля", archetype:"Иммунитет, Защита, Сила", rank:5, comment:"Природный иммуностимулятор. Укрепляет поле. Цветок-ёж." },
+        { name:"Алоэ (Aloe vera)", type:"Суккулент", C:6, S:7, Gen:3, freq:"Тета (5-8 Гц)", element:"Вода/Земля", archetype:"Исцеление, Бессмертие, Защита", rank:7, comment:"Домашний доктор. Гель — живая вода. Растение-оберег. Висит над дверью." },
+        { name:"Кактус (Cactaceae)", type:"Суккулент", C:5, S:4, Gen:1, freq:"Бета (14-20 Гц)", element:"Земля/Огонь", archetype:"Защита, Выносливость, Границы", rank:4, comment:"Колючая защита. Выживает в аду. Цветёт редко, но мощно." },
+        { name:"Папоротник (Dryopteris filix-mas)", type:"Трава", C:5, S:5, Gen:2, freq:"Тета (5-8 Гц)", element:"Земля/Вода", archetype:"Тайна, Магия, Древность", rank:5, comment:"Древнейшее растение. Цветок папоротника — символ удачи. Споры — ключи к тайнам." },
+        { name:"Мох (Bryophyta)", type:"Мох", C:5, S:6, Gen:2, freq:"Тета (4-7 Гц)", element:"Вода/Земля", archetype:"Время, Покой, Уют", rank:5, comment:"Живой ковёр. Удерживает влагу и Qₛ. Символ терпения. Растёт миллиметрами." },
+        { name:"Пшеница (Triticum)", type:"Злак", C:5, S:6, Gen:3, freq:"Альфа (8-14 Гц)", element:"Земля/Солнце", archetype:"Жизнь, Хлеб, Воскресение", rank:7, comment:"Основа цивилизации. Колос — символ жизни. Зерно — концентрат Qₛ. Поле — генератор." },
+        { name:"Рожь (Secale cereale)", type:"Злак", C:5, S:5, Gen:2, freq:"Альфа (8-14 Гц)", element:"Земля", archetype:"Выносливость, Север, Простота", rank:5, comment:"Северный злак. Чёрный хлеб — сила. Солома — для оберегов." },
+        { name:"Овёс (Avena sativa)", type:"Злак", C:5, S:6, Gen:2, freq:"Альфа (8-14 Гц)", element:"Земля/Вода", archetype:"Спокойствие, Питание, Сила", rank:5, comment:"Каша — заряд на весь день. Солома — наполнитель для матрасов (спокойный сон)." },
+        { name:"Рис (Oryza sativa)", type:"Злак", C:5, S:7, Gen:2, freq:"Альфа (8-14 Гц)", element:"Вода/Земля", archetype:"Жизнь, Питание, Азия", rank:5, comment:"Основа восточной цивилизации. Вода риса — очиститель. Зёрна — символ изобилия." },
+        { name:"Кукуруза (Zea mays)", type:"Злак", C:5, S:6, Gen:3, freq:"Альфа (10-14 Гц)", element:"Солнце/Земля", archetype:"Солнце, Изобилие, Америка", rank:5, comment:"Солнечный злак. Початок — концентрат Qₛ. Волосы — для чая." },
+        { name:"Ячмень (Hordeum vulgare)", type:"Злак", C:5, S:5, Gen:2, freq:"Альфа (8-14 Гц)", element:"Земля/Вода", archetype:"Пиво, Хлеб, Древность", rank:4, comment:"Древнейший злак. Солод — для пива и кваса. Солома — для ритуалов." },
+        { name:"Гречиха (Fagopyrum esculentum)", type:"Злак", C:5, S:5, Gen:2, freq:"Альфа (8-14 Гц)", element:"Земля", archetype:"Сила, Здоровье, Русь", rank:5, comment:"Русская сила. Крупа — железо и Qₛ. Мёд гречишный — тёмный, мощный." },
+        { name:"Просо (Panicum miliaceum)", type:"Злак", C:4, S:5, Gen:2, freq:"Альфа (8-14 Гц)", element:"Земля/Солнце", archetype:"Скромность, Питание, Древность", rank:4, comment:"Скромный злак. Пшено — каша для заземления. Веник — для чистки." },
+        { name:"Лён (Linum usitatissimum)", type:"Трава", C:6, S:7, Gen:3, freq:"Альфа (10-14 Гц)", element:"Воздух/Земля", archetype:"Чистота, Свет, Традиция", rank:7, comment:"Священная ткань. Льняная одежда — проводник Qₛ. Семя — детокс. Масло — защита." },
+        { name:"Конопля (Cannabis sativa)", type:"Трава", C:6, S:6, Gen:2, freq:"Тета (5-8 Гц)", element:"Земля/Вода", archetype:"Прочность, Свобода, Спор", rank:5, comment:"Техническая конопля. Волокно — сверхпрочное. Семя — суперфуд. Масло — целебное." },
+        { name:"Хлопок (Gossypium)", type:"Кустарник", C:5, S:6, Gen:2, freq:"Альфа (8-14 Гц)", element:"Воздух/Земля", archetype:"Мягкость, Чистота, Комфорт", rank:5, comment:"Белое облако. Ткань — дышащая, живая. Вата — для очистки." },
+        { name:"Табак (Nicotiana tabacum)", type:"Трава", C:4, S:6, Gen:2, freq:"Бета (14-20 Гц)", element:"Огонь/Воздух", archetype:"Дух, Ритуал, Обмен", rank:4, comment:"Ритуальное растение. Дым — подношение духам. Жертва Свету. Не для лёгких." },
+        { name:"Чай (Camellia sinensis)", type:"Кустарник", C:6, S:7, Gen:2, freq:"Бета (14-18 Гц)", element:"Вода/Огонь", archetype:"Ясность, Ритуал, Медитация", rank:6, comment:"Напиток монахов. Чайная церемония — семантический ритуал. Лист — концентрат Qₛ." },
+        { name:"Кофе (Coffea arabica)", type:"Кустарник", C:5, S:8, Gen:2, freq:"Бета (20-30 Гц)", element:"Огонь/Вода", archetype:"Бодрость, Утро, Действие", rank:5, comment:"Ускоритель мыслей. Зерно — концентрат энергии. Аромат — пробуждение." },
+        { name:"Какао (Theobroma cacao)", type:"Дерево", C:6, S:7, Gen:3, freq:"Тета (5-8 Гц)", element:"Огонь/Вода", archetype:"Любовь, Блаженство, Сердце", rank:6, comment:"Пища богов. Шоколад — генератор радости. Масло какао — нежный проводник." },
+        { name:"Ваниль (Vanilla planifolia)", type:"Лиана", C:5, S:8, Gen:2, freq:"Альфа (10-14 Гц)", element:"Вода/Воздух", archetype:"Нежность, Уют, Сладость", rank:6, comment:"Аромат уюта. Стручок — концентрат нежности. Успокаивает и согревает." },
+        { name:"Корица (Cinnamomum verum)", type:"Дерево", C:6, S:8, Gen:2, freq:"Бета (14-18 Гц)", element:"Огонь/Воздух", archetype:"Тепло, Защита, Привлекательность", rank:6, comment:"Согревающая кора. Аромат — генератор уюта. Палочка — оберег." },
+        { name:"Гвоздика (Syzygium aromaticum)", type:"Дерево", C:6, S:7, Gen:2, freq:"Бета (16-20 Гц)", element:"Огонь/Воздух", archetype:"Защита, Очищение, Острота", rank:5, comment:"Мощный антисептик. Аромат отгоняет насекомых и негатив. Масло — для зубов и поля." },
+        { name:"Имбирь (Zingiber officinale)", type:"Корень", C:5, S:8, Gen:2, freq:"Бета (18-25 Гц)", element:"Огонь", archetype:"Огонь, Энергия, Очищение", rank:6, comment:"Корень огня. Согревает тело и дух. Чай — разгоняет S_noise. Мощный генератор Tₛ." },
+        { name:"Куркума (Curcuma longa)", type:"Корень", C:6, S:7, Gen:2, freq:"Альфа (10-14 Гц)", element:"Земля/Огонь", archetype:"Очищение, Святость, Золото", rank:6, comment:"Золотой корень. Окрашивает всё в цвет солнца. Мощный антиоксидант для ауры." },
+        { name:"Чеснок (Allium sativum)", type:"Луковица", C:5, S:7, Gen:2, freq:"Бета (18-25 Гц)", element:"Огонь/Земля", archetype:"Защита, Граница, Изгнание", rank:6, comment:"Лучший друг против вампиров. Зубчик — генератор защиты. Запах — барьер." },
+        { name:"Лук (Allium cepa)", type:"Луковица", C:5, S:6, Gen:2, freq:"Бета (14-20 Гц)", element:"Огонь/Земля", archetype:"Слои, Слёзы, Защита", rank:5, comment:"Слёзы очищения. Шелуха — для окраски яиц. Слои — структура поля." },
+        { name:"Хрен (Armoracia rusticana)", type:"Корень", C:5, S:7, Gen:2, freq:"Бета (18-25 Гц)", element:"Огонь", archetype:"Ядрёность, Защита, Очищение", rank:5, comment:"Пробивает заложенность. Корень — мощный очиститель. Слеза — выход негатива." },
+        { name:"Горчица (Sinapis)", type:"Трава", C:5, S:7, Gen:2, freq:"Бета (16-20 Гц)", element:"Огонь", archetype:"Острота, Вера, Зерно", rank:5, comment:"Зерно горчичное. Семя — символ веры. Масло — согревающее." },
+        { name:"Укроп (Anethum graveolens)", type:"Трава", C:5, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Воздух/Вода", archetype:"Защита, Спокойствие, Сон", rank:5, comment:"Зонтик защиты. Семена — от колик. Ветка — оберег." },
+        { name:"Петрушка (Petroselinum crispum)", type:"Трава", C:5, S:6, Gen:2, freq:"Бета (14-18 Гц)", element:"Земля/Вода", archetype:"Очищение, Свежесть, Здоровье", rank:5, comment:"Детокс для тела и поля. Корень — мощный очиститель. Зелень — свежесть." },
+        { name:"Базилик (Ocimum basilicum)", type:"Трава", C:6, S:7, Gen:3, freq:"Альфа (10-14 Гц)", element:"Огонь/Воздух", archetype:"Любовь, Защита, Святость", rank:7, comment:"Священный базилик (туласи). Проводит божественную любовь. Горшок с базиликом — алтарь." },
+        { name:"Кинза (Coriandrum sativum)", type:"Трава", C:5, S:6, Gen:2, freq:"Бета (14-18 Гц)", element:"Воздух/Огонь", archetype:"Любовь, Бессмертие, Пряность", rank:5, comment:"Семена — от бессмертия. Зелень — на любителя. Очищает воздух." },
+        { name:"Эстрагон (Artemisia dracunculus)", type:"Трава", C:5, S:6, Gen:2, freq:"Бета (14-18 Гц)", element:"Огонь/Воздух", archetype:"Острота, Бодрость, Аппетит", rank:5, comment:"Тархун. Освежает. Напиток — изумрудный генератор радости." },
+        { name:"Роза (Rosa)", type:"Цветок", C:7, S:8, Gen:3, freq:"Альфа (10-14 Гц)", element:"Вода/Огонь", archetype:"Любовь, Красота, Совершенство", rank:8, comment:"Царица цветов. Аромат — генератор любви. Лепестки — для ванн очищения." },
+        { name:"Лотос (Nelumbo nucifera)", type:"Цветок", C:8, S:7, Gen:3, freq:"Тета (5-8 Гц)", element:"Вода/Эфир", archetype:"Просветление, Чистота, Возрождение", rank:9, comment:"Священный цветок Востока. Растёт из грязи — символ трансформации. Семена — вечность." },
+        { name:"Лилия (Lilium)", type:"Цветок", C:6, S:7, Gen:2, freq:"Альфа (8-12 Гц)", element:"Воздух/Вода", archetype:"Чистота, Невинность, Благородство", rank:6, comment:"Символ чистоты. Аромат — возвышающий. Белая лилия — проводник Света." },
+        { name:"Хризантема (Chrysanthemum)", type:"Цветок", C:6, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Воздух/Земля", archetype:"Долголетие, Память, Осень", rank:6, comment:"Цветок императоров. Символ долголетия. Чай — для ясности ума." },
+        { name:"Пион (Paeonia)", type:"Цветок", C:6, S:7, Gen:3, freq:"Альфа (10-14 Гц)", element:"Вода/Земля", archetype:"Богатство, Честь, Весна", rank:6, comment:"Царский цветок. Пышность — генератор изобилия. Корень — лекарство." },
+        { name:"Тюльпан (Tulipa)", type:"Цветок", C:5, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Земля/Огонь", archetype:"Весна, Любовь, Простота", rank:5, comment:"Вестник весны. Луковица — концентрат Qₛ после зимы. Красный — любовь." },
+        { name:"Нарцисс (Narcissus)", type:"Цветок", C:5, S:5, Gen:2, freq:"Альфа (8-12 Гц)", element:"Вода/Земля", archetype:"Весна, Самопознание, Тень", rank:4, comment:"Цветок самопознания. Аромат — одурманивающий. Напоминает о гордыне." },
+        { name:"Подсолнух (Helianthus annuus)", type:"Цветок", C:6, S:7, Gen:3, freq:"Альфа (10-14 Гц)", element:"Солнце", archetype:"Солнце, Верность, Изобилие", rank:7, comment:"Живое солнце. Поворачивается к Свету. Семена — концентрат Qₛ. Масло — золото." },
+        { name:"Ирис (Iris)", type:"Цветок", C:5, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Вода/Воздух", archetype:"Радуга, Связь миров, Весть", rank:5, comment:"Радужный цветок. Корень — «фиалковый корень». Связь с богами." },
+        { name:"Орхидея (Orchidaceae)", type:"Цветок", C:6, S:7, Gen:2, freq:"Тета (5-8 Гц)", element:"Воздух/Вода", archetype:"Красота, Редкость, Изысканность", rank:6, comment:"Экзотическая красота. Требует заботы. Цветение — награда за терпение." },
+        { name:"Герань (Pelargonium)", type:"Цветок", C:5, S:6, Gen:2, freq:"Альфа (10-14 Гц)", element:"Земля/Огонь", archetype:"Уют, Защита, Бабушка", rank:5, comment:"Бабушкин цветок. Аромат листьев — защита. На подоконнике — оберег." },
+        { name:"Фиалка (Viola)", type:"Цветок", C:5, S:6, Gen:2, freq:"Альфа (8-12 Гц)", element:"Вода/Земля", archetype:"Скромность, Верность, Лес", rank:5, comment:"Лесная скромница. Аромат — тонкий. Цветок — символ верности." },
+        { name:"Магнолия (Magnolia)", type:"Дерево", C:7, S:7, Gen:3, freq:"Альфа (10-14 Гц)", element:"Вода/Воздух", archetype:"Благородство, Юг, Весна", rank:7, comment:"Древнейшее цветковое. Огромные цветы — генераторы Qₛ. Аромат — южный, пьянящий." },
+        { name:"Сакура (Prunus serrulata)", type:"Дерево", C:7, S:7, Gen:4, freq:"Альфа (10-14 Гц)", element:"Воздух/Вода", archetype:"Мимолётность, Красота, Япония", rank:8, comment:"Цветение — взрыв Qₛ. Пик генерации. Ханами — коллективная медитация." },
+        { name:"Глициния (Wisteria)", type:"Лиана", C:6, S:7, Gen:3, freq:"Тета (5-8 Гц)", element:"Вода/Воздух", archetype:"Мечта, Романтика, Тайна", rank:6, comment:"Фиолетовые водопады. Аромат — опьяняющий. Символ романтики и тайны." },
+        { name:"Плющ (Hedera helix)", type:"Лиана", C:5, S:5, Gen:2, freq:"Тета (4-7 Гц)", element:"Земля/Вода", archetype:"Верность, Цепкость, Вечность", rank:5, comment:"Вечнозелёный друг. Обвивает стены — защищает. Символ верности." },
+        { name:"Виноград (Vitis vinifera)", type:"Лиана", C:6, S:7, Gen:3, freq:"Альфа (10-14 Гц)", element:"Огонь/Вода", archetype:"Вакх, Вино, Изобилие", rank:6, comment:"Лоза жизни. Вино — кровь земли. Ягоды — концентрат Qₛ. Лист — символ." },
+        { name:"Хмель (Humulus lupulus)", type:"Лиана", C:5, S:6, Gen:2, freq:"Бета (14-20 Гц)", element:"Воздух/Огонь", archetype:"Пиво, Сон, Успокоение", rank:5, comment:"Шишки — для пива и сна. Подушка с хмелем — от бессонницы." },
+        { name:"Пассифлора (Passiflora)", type:"Лиана", C:6, S:7, Gen:2, freq:"Тета (5-8 Гц)", element:"Вода/Воздух", archetype:"Страсть, Сон, Мистика", rank:6, comment:"Цветок Страстей Христовых. Плод — маракуйя. Успокаивает и вдохновляет." },
+        { name:"Гинкго (Ginkgo biloba)", type:"Дерево", C:7, S:6, Gen:3, freq:"Дельта (1-3 Гц)", element:"Земля/Воздух", archetype:"Память, Древность, Стойкость", rank:7, comment:"Живое ископаемое. Лист — символ памяти. Пережил атомную бомбу." },
+        { name:"Платан (Platanus)", type:"Дерево", C:7, S:5, Gen:2, freq:"Дельта (1-3 Гц)", element:"Земля/Воздух", archetype:"Защита, Тень, Долголетие", rank:6, comment:"Дерево-шатёр. Огромная крона — зона покоя. Кора — камуфляж." },
+        { name:"Бук (Fagus)", type:"Дерево", C:7, S:5, Gen:2, freq:"Дельта (1-3 Гц)", element:"Земля/Воздух", archetype:"Знание, Письменность, Терпение", rank:6, comment:"Дерево книг. Кора — для письма. Густая крона — «библиотека» покоя." },
+        { name:"Граб (Carpinus betulus)", type:"Дерево", C:6, S:4, Gen:2, freq:"Дельта (1-3 Гц)", element:"Земля", archetype:"Терпение, Крепость, Медлительность", rank:5, comment:"Железное дерево. Очень твёрдая древесина. Медленный рост — высокая инерция." },
+        
+        // ===== ЯДОВИТЫЕ РАСТЕНИЯ (-1...-2) =====
+        { name:"Белладонна (Atropa belladonna)", type:"Трава", C:4, S:5, Gen:-2, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Яд, Тьма, Опасная красота", rank:-2, comment:"Красивый, но смертельный. Ягоды — отрава. Использовался в алхимии." },
+        { name:"Болиголов (Conium maculatum)", type:"Трава", C:3, S:4, Gen:-3, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Смерть, Предательство, Казнь", rank:-2, comment:"Яд Сократа. Пятнистый стебель — метка Тьмы. Не приближаться." },
+        { name:"Аконит (Aconitum napellus)", type:"Трава", C:4, S:5, Gen:-3, freq:"Бета (16-20 Гц)", element:"Земля/Тьма", archetype:"Оборотень, Яд, Защита Тьмы", rank:-2, comment:"Волчий корень. Сильнейший яд. Цветы-шлемы — символ тёмной защиты." },
+        { name:"Мандрагора (Mandragora officinarum)", type:"Трава", C:5, S:6, Gen:-1, freq:"Тета (4-7 Гц)", element:"Земля/Тьма", archetype:"Крик, Смерть, Магия", rank:-1, comment:"Корень-человечек. Крик убивает. Сильное магическое растение." },
+        { name:"Дурман (Datura stramonium)", type:"Трава", C:4, S:5, Gen:-2, freq:"Бета (16-20 Гц)", element:"Земля/Тьма", archetype:"Безумие, Видения, Опасность", rank:-2, comment:"Цветок дьявола. Галлюциноген. Семена — яд. Не для дома." },
+        
+        // ===== ЯДОВИТЫЕ И ОПАСНЫЕ РАСТЕНИЯ (-3...0) =====
+{ name:"Клещевина (Ricinus communis)", type:"Кустарник", C:4, S:5, Gen:-3, freq:"Бета (16-20 Гц)", element:"Земля/Тьма", archetype:"Яд, Скрытая угроза, Защита", rank:-2, comment:"Семена содержат рицин — сильнейший яд. Красивое, но смертельно опасное. Не для дома." },
+{ name:"Олеандр (Nerium oleander)", type:"Кустарник", C:4, S:6, Gen:-2, freq:"Альфа (10-14 Гц)", element:"Воздух/Тьма", archetype:"Красота, Обман, Смерть", rank:-2, comment:"Прекрасные цветы и абсолютная токсичность. Даже мёд с него ядовит. Опасен." },
+{ name:"Наперстянка (Digitalis purpurea)", type:"Трава", C:4, S:5, Gen:-2, freq:"Бета (14-18 Гц)", element:"Воздух/Тьма", archetype:"Лекарство/Яд, Сердце, Риск", rank:-1, comment:"Источник дигиталиса. Лечит сердце в микро-дозах, убивает в малых. Амбивалентна." },
+{ name:"Волчеягодник (Daphne mezereum)", type:"Кустарник", C:4, S:5, Gen:-3, freq:"Тета (5-8 Гц)", element:"Земля/Тьма", archetype:"Смерть, Искушение, Лес", rank:-2, comment:"Волчье лыко. Яркие ягоды привлекают, но смертельны. Кора раздражает кожу." },
+{ name:"Безвременник (Colchicum autumnale)", type:"Цветок", C:4, S:5, Gen:-2, freq:"Тета (5-8 Гц)", element:"Земля/Тьма", archetype:"Осень, Яд, Неожиданность", rank:-1, comment:"Цветёт осенью. Содержит колхицин. Красив, но опасен." },
+{ name:"Ландыш (Convallaria majalis)", type:"Цветок", C:5, S:6, Gen:-1, freq:"Альфа (8-12 Гц)", element:"Воздух/Вода", archetype:"Невинность, Яд, Весна", rank:0, comment:"Символ весны с тёмной стороной. Ягоды ядовиты. Аромат приятный." },
+{ name:"Вороний глаз (Paris quadrifolia)", type:"Трава", C:4, S:5, Gen:-2, freq:"Тета (5-8 Гц)", element:"Земля/Тьма", archetype:"Тьма, Лес, Одиночество", rank:-1, comment:"Одинокая чёрная ягода. Ядовит. Растёт в тёмных лесах." },
+{ name:"Чемерица (Veratrum)", type:"Трава", C:4, S:5, Gen:-2, freq:"Бета (14-18 Гц)", element:"Земля/Вода", archetype:"Яд, Рвота, Очищение", rank:-1, comment:"Сильное рвотное. Использовалась в древности для «очищения», но опасно." },
+{ name:"Болиголов пятнистый (Conium maculatum)", type:"Трава", C:3, S:4, Gen:-3, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Смерть, Предательство, Казнь", rank:-2, comment:"Яд Сократа. Пятнистый стебель — метка Тьмы. Не приближаться." },
+{ name:"Цикута (Cicuta virosa)", type:"Трава", C:3, S:4, Gen:-4, freq:"Бета (14-18 Гц)", element:"Вода/Тьма", archetype:"Смерть, Вода, Обман", rank:-3, comment:"Самый ядовитый дикорос. Похожа на съедобные зонтичные. Растёт у воды." },
+{ name:"Белена (Hyoscyamus niger)", type:"Трава", C:3, S:4, Gen:-3, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Безумие, Яд, Судороги", rank:-2, comment:"Вызывает галлюцинации и смерть. Растёт на пустырях. Опасна." },
+{ name:"Дурман индейский (Datura innoxia)", type:"Трава", C:3, S:4, Gen:-2, freq:"Бета (16-20 Гц)", element:"Земля/Тьма", archetype:"Видения, Опасность, Ритуал", rank:-2, comment:"Галлюциноген. Использовался в ритуалах. Смертельно опасен при передозировке." },
+{ name:"Куколь обыкновенный (Agrostemma githago)", type:"Трава", C:3, S:4, Gen:-2, freq:"Бета (14-18 Гц)", element:"Земля", archetype:"Сорняк, Яд, Хлеб", rank:-1, comment:"Семена отравляют муку. Красивый сорняк с тёмной сущностью." },
+{ name:"Паслён сладко-горький (Solanum dulcamara)", type:"Лиана", C:4, S:5, Gen:-2, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Сладость/Горечь, Яд, Искушение", rank:-1, comment:"Красные ягоды привлекательны, но ядовиты. Стебель горький." },
+{ name:"Паслён чёрный (Solanum nigrum)", type:"Трава", C:3, S:4, Gen:-2, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Тьма, Яд, Сорняк", rank:-1, comment:"Чёрные ягоды. Некоторые виды съедобны, дикие — ядовиты. Опасное соседство." },
+{ name:"Табак (Nicotiana tabacum)", type:"Трава", C:4, S:6, Gen:-2, freq:"Бета (14-20 Гц)", element:"Огонь/Воздух", archetype:"Дух, Ритуал, Зависимость", rank:0, comment:"Ритуальное растение. Дым — подношение духам. Но никотин — яд. Зависимость." },
+{ name:"Мак снотворный (Papaver somniferum)", type:"Цветок", C:5, S:6, Gen:-2, freq:"Тета (4-7 Гц)", element:"Вода/Тьма", archetype:"Сон, Грёзы, Забвение", rank:-1, comment:"Опиум. Дарит покой и смерть. Семена безвредны. Млечный сок — источник зла." },
+{ name:"Конопля посевная (Cannabis sativa)", type:"Трава", C:5, S:6, Gen:-1, freq:"Тета (5-8 Гц)", element:"Земля/Вода", archetype:"Свобода, Запрет, Двойственность", rank:0, comment:"Техническая — добро. Психоактивная — изменяет Cₛ, вызывает S_noise. Амбивалентна." },
+{ name:"Абсент (Полынь горькая)", type:"Трава", C:5, S:5, Gen:-1, freq:"Бета (14-20 Гц)", element:"Земля/Огонь", archetype:"Горечь, Вдохновение, Безумие", rank:0, comment:"Туйон в полыни — яд для мозга. Но дым полыни — очиститель. Двойственна." },
+{ name:"Эфедра (Ephedra sinica)", type:"Кустарник", C:4, S:6, Gen:-1, freq:"Бета (20-30 Гц)", element:"Огонь/Воздух", archetype:"Стимулятор, Опасность, Энергия", rank:0, comment:"Источник эфедрина. Мощный стимулятор, но истощает Qₛ. Опасна для сердца." },
+{ name:"Чилибуха (Strychnos nux-vomica)", type:"Дерево", C:4, S:5, Gen:-4, freq:"Бета (18-25 Гц)", element:"Земля/Тьма", archetype:"Смерть, Конвульсии, Стрихнин", rank:-3, comment:"Источник стрихнина. Семена — смертельный яд. Рвотный орех." },
+{ name:"Аконит (Aconitum napellus)", type:"Цветок", C:4, S:5, Gen:-3, freq:"Бета (16-20 Гц)", element:"Земля/Тьма", archetype:"Оборотень, Яд, Защита Тьмы", rank:-2, comment:"Волчий корень. Сильнейший яд. Цветы-шлемы — символ тёмной защиты." },
+{ name:"Белладонна (Atropa belladonna)", type:"Трава", C:4, S:5, Gen:-2, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Яд, Тьма, Опасная красота", rank:-2, comment:"Красивый, но смертельный. Ягоды — отрава. Использовался в алхимии." },
+{ name:"Мандрагора (Mandragora officinarum)", type:"Трава", C:5, S:6, Gen:-1, freq:"Тета (4-7 Гц)", element:"Земля/Тьма", archetype:"Крик, Смерть, Магия", rank:-1, comment:"Корень-человечек. Крик убивает. Сильное магическое растение." },
+{ name:"Красавка (Atropa belladonna)", type:"Трава", C:4, S:5, Gen:-2, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Красота, Смерть, Алхимия", rank:-2, comment:"См. Белладонна." },
+{ name:"Лютик (Ranunculus acris)", type:"Трава", C:3, S:4, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Земля/Воздух", archetype:"Ожог, Раздражение, Осторожность", rank:-1, comment:"Красивый, но едкий. Сок вызывает ожоги. «Куриная слепота»." },
+{ name:"Калужница (Caltha palustris)", type:"Трава", C:3, S:4, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Вода/Земля", archetype:"Весна, Осторожность, Болото", rank:-1, comment:"Яркий болотный цветок. Слегка ядовита. Жжётся." },
+{ name:"Ветреница (Anemone nemorosa)", type:"Цветок", C:3, S:4, Gen:-1, freq:"Альфа (8-12 Гц)", element:"Воздух/Земля", archetype:"Нежность, Яд, Лес", rank:-1, comment:"Прекрасный весенний цветок. Сок ядовит. «Дочь ветра»." },
+{ name:"Чистотел (Chelidonium majus)", type:"Трава", C:4, S:5, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Земля/Огонь", archetype:"Очищение, Ожог, Бородавки", rank:0, comment:"Оранжевый сок — лекарство и яд. Сводит бородавки, но жжёт кожу." },
+{ name:"Молочай (Euphorbia)", type:"Трава", C:3, S:4, Gen:-2, freq:"Бета (14-20 Гц)", element:"Земля/Огонь", archetype:"Ожог, Раздражение, Сорняк", rank:-1, comment:"Едкий млечный сок. Опасен для глаз и кожи. Агрессивный сорняк." },
+{ name:"Борщевик Сосновского (Heracleum sosnowskyi)", type:"Трава", C:3, S:4, Gen:-3, freq:"Бета (16-22 Гц)", element:"Солнце/Земля", archetype:"Ожог, Нашествие, Опасность", rank:-3, comment:"Гигантский сорняк-убийца. Сок + солнце = страшные ожоги. Избегать!" },
+{ name:"Ясенец (Dictamnus albus)", type:"Трава", C:4, S:5, Gen:-2, freq:"Бета (16-20 Гц)", element:"Огонь/Воздух", archetype:"Пламя, Ожог, Неопалимая", rank:-1, comment:"«Неопалимая купина». Вспыхивает эфирными маслами. Ожоги без огня." },
+{ name:"Сумах ядовитый (Toxicodendron radicans)", type:"Лиана/Кустарник", C:3, S:4, Gen:-3, freq:"Бета (14-20 Гц)", element:"Земля/Тьма", archetype:"Зуд, Ожог, Ярость", rank:-2, comment:"Ядовитый плющ. Урушиол вызывает дикую аллергию. Не прикасаться!" },
+{ name:"Посконник (Eupatorium rugosum)", type:"Трава", C:3, S:4, Gen:-3, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Молоко, Смерть, Линкольн", rank:-2, comment:"Молоко коров, поевших посконник, ядовито. «Молочная болезнь»." },
+{ name:"Абрус (Abrus precatorius)", type:"Лиана", C:4, S:5, Gen:-4, freq:"Бета (18-25 Гц)", element:"Земля/Тьма", archetype:"Чётки, Смерть, Яд", rank:-3, comment:"Красивейшие чётки из семян. Но семя содержит абрин — сильнейший яд." },
+{ name:"Цербера (Cerbera odollam)", type:"Дерево", C:4, S:5, Gen:-4, freq:"Дельта (2-4 Гц)", element:"Вода/Тьма", archetype:"Самоубийство, Море, Яд", rank:-3, comment:"«Дерево самоубийц». Плод похож на манго, но содержит церберин. Опасно." },
+{ name:"Стрихнос (Strychnos nux-vomica)", type:"Дерево", C:4, S:5, Gen:-4, freq:"Бета (18-25 Гц)", element:"Земля/Тьма", archetype:"Стрихнин, Смерть, Конвульсии", rank:-3, comment:"Один из самых горьких и смертельных ядов. Семена — орудие убийства." },
+{ name:"Игнация (Strychnos ignatii)", type:"Дерево", C:4, S:5, Gen:-3, freq:"Бета (18-25 Гц)", element:"Земля/Тьма", archetype:"Яд, Горечь, Гомеопатия", rank:-2, comment:"Бобы Святого Игнатия. Содержат стрихнин. Гомеопатия — безопасно." },
+{ name:"Анчар (Antiaris toxicaria)", type:"Дерево", C:4, S:5, Gen:-4, freq:"Дельта (1-3 Гц)", element:"Земля/Тьма", archetype:"Смерть, Стрелы, Яд", rank:-3, comment:"«Дерево смерти». Сок использовали для отравленных стрел. Даже тень опасна." },
+{ name:"Омела (Viscum album)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Тета (5-8 Гц)", element:"Воздух/Тьма", archetype:"Паразит, Поцелуй, Яд", rank:0, comment:"Паразит на деревьях. Ягоды ядовиты. Символ Рождества — амбивалентна." },
+{ name:"Плющ (Hedera helix) — ягоды", type:"Лиана", C:4, S:5, Gen:-1, freq:"Тета (5-8 Гц)", element:"Земля/Тьма", archetype:"Цепкость, Яд, Защита", rank:0, comment:"Листья и ягоды ядовиты при приёме внутрь. Но как растение-защитник — полезен." },
+{ name:"Бересклет (Euonymus europaeus)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Земля/Тьма", archetype:"Яд, Красота, Осень", rank:-1, comment:"Красивые плоды-серёжки ядовиты. Кора слабит." },
+{ name:"Бирючина (Ligustrum vulgare)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Земля/Воздух", archetype:"Живая изгородь, Яд, Птицы", rank:0, comment:"Ягоды ядовиты для людей, но птицы их едят. Хороша для границ." },
+{ name:"Снежноягодник (Symphoricarpos albus)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Земля/Воздух", archetype:"Невинность, Яд, Детство", rank:0, comment:"Белые ягоды красивы, но ядовиты. Дети могут соблазниться." },
+{ name:"Крушина (Frangula alnus)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Тета (5-8 Гц)", element:"Земля/Вода", archetype:"Слабительное, Яд, Лес", rank:0, comment:"Кора — слабительное. Ягоды ядовиты. Лекарство и яд в одном." },
+{ name:"Жимолость лесная (Lonicera xylosteum)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Земля/Воздух", archetype:"Лес, Яд, Птицы", rank:-1, comment:"«Волчьи ягоды». Красивые парные плоды ядовиты. Птицы едят." },
+{ name:"Копытень (Asarum europaeum)", type:"Трава", C:4, S:5, Gen:-1, freq:"Тета (4-7 Гц)", element:"Земля/Тьма", archetype:"Рвота, Тайна, Лес", rank:-1, comment:"Лесной ковёр. Корень — сильное рвотное. Пахнет перцем." },
+{ name:"Багульник (Ledum palustre)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Тета (4-7 Гц)", element:"Земля/Воздух", archetype:"Головокружение, Болото, Тайна", rank:-1, comment:"Одурманивающий запах. Вызывает головную боль. Болотный страж." },
+{ name:"Азалия (Rhododendron)", type:"Кустарник", C:5, S:6, Gen:-2, freq:"Альфа (10-14 Гц)", element:"Земля/Тьма", archetype:"Красота, Яд, Опасность", rank:-1, comment:"Великолепные цветы. Но нектар и листья содержат андромедотоксин. «Безумный мёд»." },
+{ name:"Рододендрон (Rhododendron ponticum)", type:"Кустарник", C:5, S:6, Gen:-2, freq:"Альфа (10-14 Гц)", element:"Земля/Тьма", archetype:"Яд, Мёд, Война", rank:-1, comment:"«Безумный мёд» с Понта. Ядовитый нектар. Опасен для пчёл." },
+{ name:"Кальмия (Kalmia latifolia)", type:"Кустарник", C:5, S:6, Gen:-2, freq:"Альфа (10-14 Гц)", element:"Земля/Тьма", archetype:"Горный лавр, Яд, Овцы", rank:-1, comment:"«Овечий лавр». Ядовита для скота. Красивые цветы-чашечки." },
+{ name:"Пиерис (Pieris japonica)", type:"Кустарник", C:5, S:6, Gen:-2, freq:"Альфа (10-14 Гц)", element:"Земля/Тьма", archetype:"Япония, Яд, Красота", rank:-1, comment:"Декоративный кустарник. Содержит андромедотоксин. Опасен." },
+{ name:"Скиммия (Skimmia japonica)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Земля/Воздух", archetype:"Япония, Тень, Красные ягоды", rank:0, comment:"Красные ягоды красивы, но ядовиты. Теневынослива." },
+{ name:"Аукуба (Aucuba japonica)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Земля/Воздух", archetype:"Пятна, Яд, Тень", rank:0, comment:"«Золотое дерево». Ягоды и листья ядовиты. Очень теневынослива." },
+{ name:"Лантана (Lantana camara)", type:"Кустарник", C:4, S:5, Gen:-1, freq:"Альфа (10-14 Гц)", element:"Огонь/Земля", archetype:"Тропики, Яд, Сорняк", rank:-1, comment:"Красивые соцветия. Ягоды ядовиты. Агрессивный сорняк." },
+{ name:"Дурман древовидный (Brugmansia)", type:"Кустарник/Дерево", C:5, S:6, Gen:-2, freq:"Бета (16-20 Гц)", element:"Земля/Тьма", archetype:"Ангельские трубы, Видения, Смерть", rank:-2, comment:"Галлюциноген. Используется в ритуалах. Смертельно опасен." },
+{ name:"Кокаиновый куст (Erythroxylum coca)", type:"Кустарник", C:4, S:7, Gen:-3, freq:"Бета (20-30 Гц)", element:"Воздух/Огонь", archetype:"Стимулятор, Зависимость, Зло", rank:-3, comment:"Источник кокаина. Разрушает Cₛ и жизнь. Вне закона." },
+{ name:"Опийный мак (Papaver somniferum)", type:"Цветок", C:5, S:6, Gen:-3, freq:"Тета (4-7 Гц)", element:"Вода/Тьма", archetype:"Забвение, Зависимость, Смерть", rank:-3, comment:"Источник опиатов. Дарит рай и ад. Запрещён к выращиванию." },
+{ name:"Кат (Catha edulis)", type:"Кустарник", C:4, S:7, Gen:-2, freq:"Бета (20-30 Гц)", element:"Воздух/Огонь", archetype:"Стимулятор, Жевание, Зависимость", rank:-2, comment:"Листья жуют ради эйфории. Разрушает поле. Популярен в Африке." },
+{ name:"Бетель (Piper betle)", type:"Лиана", C:4, S:6, Gen:-1, freq:"Бета (14-20 Гц)", element:"Воздух/Вода", archetype:"Жевание, Ритуал, Зависимость", rank:-1, comment:"Лист бетеля жуют с орехом арека. Стимулятор. Вызывает рак." },
+{ name:"Арека (Areca catechu)", type:"Пальма", C:4, S:6, Gen:-1, freq:"Бета (14-20 Гц)", element:"Огонь/Земля", archetype:"Орех, Стимулятор, Азия", rank:-1, comment:"Орех арека — основа бетеля. Стимулятор. Вызывает зависимость." },
+{ name:"Ипомея (Ipomoea violacea)", type:"Лиана", C:4, S:5, Gen:-1, freq:"Бета (14-18 Гц)", element:"Вода/Воздух", archetype:"Семена, Видения, Риск", rank:-1, comment:"Семена содержат ЛСД-подобные вещества. Галлюциноген. Опасна." },
+{ name:"Пейотль (Lophophora williamsii)", type:"Кактус", C:5, S:5, Gen:-1, freq:"Тета (5-8 Гц)", element:"Земля/Эфир", archetype:"Видения, Духи, Запрет", rank:-1, comment:"Кактус мескалита. Галлюциноген. Используется в ритуалах коренных народов." },
+{ name:"Мухомор красный (Amanita muscaria)", type:"Гриб", C:5, S:6, Gen:-2, freq:"Тета (4-7 Гц)", element:"Земля/Эфир", archetype:"Шаман, Транс, Яд", rank:-2, comment:"Гриб шаманов. Галлюциноген. Ядовит. Символ волшебства." },
+{ name:"Бледная поганка (Amanita phalloides)", type:"Гриб", C:4, S:5, Gen:-5, freq:"Дельта (1-3 Гц)", element:"Земля/Тьма", archetype:"Смерть, Яд, Без антидота", rank:-4, comment:"Самый смертельный гриб. Разрушает печень. Нет противоядия." },
+{ name:"Сатанинский гриб (Boletus satanas)", type:"Гриб", C:4, S:5, Gen:-3, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Яд, Рвота, Ад", rank:-3, comment:"Ядовит. Вызывает жестокую рвоту. Название говорит само за себя." },
+{ name:"Ложный опёнок (Hypholoma fasciculare)", type:"Гриб", C:3, S:4, Gen:-3, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Обман, Яд, Горечь", rank:-2, comment:"Горький и ядовитый двойник съедобного опёнка. Символ обмана." },
+{ name:"Спорынья (Claviceps purpurea)", type:"Гриб-паразит", C:4, S:6, Gen:-4, freq:"Бета (14-20 Гц)", element:"Земля/Тьма", archetype:"Огонь, Безумие, ЛСД", rank:-3, comment:"Источник ЛСД и эрготизма. «Огонь Святого Антония». Опасна в зерне." },
+{ name:"Плесень (Aspergillus flavus)", type:"Гриб-плесень", C:2, S:4, Gen:-4, freq:"Бета (14-20 Гц)", element:"Воздух/Тьма", archetype:"Гниль, Яд, Рак", rank:-3, comment:"Афлатоксин — сильнейший канцероген. Поражает зерно и орехи." },
+{ name:"Чёрная плесень (Stachybotrys chartarum)", type:"Гриб-плесень", C:1, S:3, Gen:-5, freq:"Бета (16-24 Гц)", element:"Воздух/Тьма", archetype:"Болезнь, Сырость, Разрушение", rank:-4, comment:"«Синдром больного здания». Разрушает лёгкие и поле. Опасна в домах." },
+{ name:"Фитофтора (Phytophthora infestans)", type:"Гриб-паразит", C:2, S:3, Gen:-3, freq:"Бета (14-18 Гц)", element:"Вода/Тьма", archetype:"Голод, Неурожай, Гниль", rank:-3, comment:"Убийца картофеля. Вызвала Великий Голод в Ирландии. Разрушитель." },
+{ name:"Ржавчина (Puccinia graminis)", type:"Гриб-паразит", C:2, S:3, Gen:-3, freq:"Бета (14-18 Гц)", element:"Воздух/Тьма", archetype:"Коррозия, Неурожай, Рыжий", rank:-2, comment:"Паразит злаков. Рыжие пятна — метка Тьмы. Уничтожает урожай." },
+{ name:"Головня (Ustilago maydis)", type:"Гриб-паразит", C:3, S:4, Gen:-2, freq:"Бета (14-18 Гц)", element:"Земля/Тьма", archetype:"Мутация, Пища, Двойственность", rank:-1, comment:"Паразит кукурузы. В Мексике — деликатес. Амбивалентен." },
+{ name:"Трутовик (Fomes fomentarius)", type:"Гриб", C:4, S:4, Gen:-1, freq:"Дельта (1-3 Гц)", element:"Земля/Воздух", archetype:"Разрушение, Трут, Огонь", rank:0, comment:"Разрушает деревья. Но даёт трут для огня. Созидание через разрушение." },
+{ name:"Чага (Inonotus obliquus)", type:"Гриб", C:5, S:5, Gen:2, freq:"Дельта (1-3 Гц)", element:"Земля/Огонь", archetype:"Исцеление, Паразит, Иммунитет", rank:4, comment:"Паразит берёзы. Мощный иммуномодулятор. Парадокс: полезный паразит." },
+    ];
+
+    let currentSortMode = 'rank';
+    const tbody = document.getElementById('tableBody');
+    const indicator = document.getElementById('currentSortIndicator');
+
+    function getRankClass(rank) {
+        if (rank >= 9) return 'rank-p9';
+        if (rank >= 8) return 'rank-p8';
+        if (rank >= 7) return 'rank-p7';
+        if (rank >= 6) return 'rank-p6';
+        if (rank >= 5) return 'rank-p5';
+        if (rank >= 4) return 'rank-p4';
+        if (rank >= 3) return 'rank-p3';
+        if (rank >= 2) return 'rank-p2';
+        if (rank >= 1) return 'rank-p1';
+        if (rank >= 0) return 'rank-0';
+        if (rank >= -1) return 'rank-m1';
+        return 'rank-m2';
+    }
+
+    function getTypeBadge(type) {
+        if (type.includes('Дерево')) return 'badge-tree';
+        if (type.includes('Трава')) return 'badge-herb';
+        if (type.includes('Цветок')) return 'badge-flower';
+        if (type.includes('Кустарник')) return 'badge-shrub';
+        return 'badge-other';
+    }
+
+    function renderTable() {
+        const sorted = [...plantsData].sort((a, b) => {
+            if (currentSortMode === 'rank') return b.rank - a.rank;
+            return a.name.localeCompare(b.name, 'ru');
+        });
+
+        let html = '';
+        sorted.forEach(p => {
+            const rankClass = getRankClass(p.rank);
+            const badge = getTypeBadge(p.type);
+            html += `<tr class="${rankClass}">`;
+            html += `<td><strong>${p.name}</strong></td>`;
+            html += `<td style="text-align:center;"><span class="badge ${badge}">${p.type.split('/')[0]}</span></td>`;
+            html += `<td style="text-align:center;">${p.C}</td>`;
+            html += `<td style="text-align:center;">${p.S}</td>`;
+            html += `<td style="text-align:center;">${p.Gen >= 0 ? '+' : ''}${p.Gen}</td>`;
+            html += `<td style="font-size:0.75rem;">${p.freq}</td>`;
+            html += `<td style="font-size:0.75rem;">${p.element}</td>`;
+            html += `<td style="font-size:0.75rem;">${p.archetype}</td>`;
+            html += `<td style="text-align:center; font-weight:bold;">${p.rank >= 0 ? '+' : ''}${p.rank}</td>`;
+            html += `<td style="font-size:0.75rem;">${p.comment}</td>`;
+            html += '</tr>';
+        });
+        tbody.innerHTML = html;
+        indicator.textContent = `Текущая сортировка: по ${currentSortMode === 'rank' ? 'РАНГУ (от +9 к -2)' : 'НАЗВАНИЮ (А → Я)'}`;
+    }
+
+    document.getElementById('sortByRankBtn').addEventListener('click', () => { currentSortMode = 'rank'; renderTable(); });
+    document.getElementById('sortByNameBtn').addEventListener('click', () => { currentSortMode = 'name'; renderTable(); });
+    renderTable();
+})();
+</script>
+
+</body>
+</html>

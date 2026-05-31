@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор затухания кармы • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-timeline { color: #a09080; font-size: 0.85rem; margin-top: 1rem; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .sign-indicator { font-size: 2rem; margin-bottom: 0.5rem; }
+        .sign-positive { color: #81c784; }
+        .sign-negative { color: #ef5350; }
+        .sign-neutral { color: #ffd54f; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔄 Затухание кармы</h1>
+    <div class="subtitle">Калькулятор семантической инерции поступков (§3, §31)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры поступка</div>
+
+        <!-- Знак кармы -->
+        <div class="input-group">
+            <label>⚖️ Характер поступка:</label>
+            <select id="signSelect">
+                <option value="1">☀️ Позитивный (помощь, доброта, подарок)</option>
+                <option value="-1" selected>🌑 Негативный (обида, гнев, проклятие)</option>
+            </select>
+        </div>
+
+        <!-- Сила поступка (Qₛ начальное) -->
+        <div class="input-group">
+            <label>💪 Сила поступка / эмоции (Qₛ): <span id="qsValue">5</span> из 10</label>
+            <input type="range" id="qsSlider" min="1" max="10" value="5" step="1">
+            <div class="range-labels"><span>1 (мелочь)</span><span>5 (серьёзно)</span><span>10 (судьбоносно)</span></div>
+        </div>
+
+        <!-- Тип поступка (влияет на τ) -->
+        <div class="input-group">
+            <label>📂 Категория поступка:</label>
+            <select id="categorySelect">
+                <option value="7">Мысль (мысленно пожелал) — τ = 7 дней</option>
+                <option value="30">Слово (сказал вслух) — τ = 30 дней</option>
+                <option value="90" selected>Действие (совершил физически) — τ = 90 дней</option>
+                <option value="365">Ритуал (осознанный обряд) — τ = 365 дней</option>
+                <option value="3650">Кровная клятва / родовое — τ = 3650 дней (~10 лет)</option>
+            </select>
+        </div>
+
+        <!-- Время с момента поступка -->
+        <div class="input-group">
+            <label>⏳ Прошло времени: <span id="timeValue">30</span> дней</label>
+            <input type="range" id="timeSlider" min="0" max="3650" value="30" step="1">
+            <div class="range-labels"><span>0 (сейчас)</span><span>365 (год)</span><span>3650 (10 лет)</span></div>
+        </div>
+
+        <!-- Раскаяние / Осознание -->
+        <div class="input-group">
+            <label>🙏 Раскаяние / осознание (только для негатива):</label>
+            <select id="repentSelect">
+                <option value="1.0">Нет</option>
+                <option value="0.5" selected>Частичное (понимаю, но не отпустил)</option>
+                <option value="0.2">Искреннее раскаяние / прощение</option>
+                <option value="0.05">Полное отпускание (как будто и не было)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="sign-indicator" id="signIndicator"></div>
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Остаточный заряд</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-timeline" id="resultTimeline"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const signSelect = document.getElementById('signSelect');
+    const qsSlider = document.getElementById('qsSlider');
+    const categorySelect = document.getElementById('categorySelect');
+    const timeSlider = document.getElementById('timeSlider');
+    const repentSelect = document.getElementById('repentSelect');
+    const qsValue = document.getElementById('qsValue');
+    const timeValue = document.getElementById('timeValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultTimeline = document.getElementById('resultTimeline');
+    const resultFormula = document.getElementById('resultFormula');
+    const signIndicator = document.getElementById('signIndicator');
+
+    qsSlider.addEventListener('input', () => { qsValue.textContent = qsSlider.value; calculate(); });
+    timeSlider.addEventListener('input', () => { timeValue.textContent = timeSlider.value; calculate(); });
+    [signSelect, categorySelect, repentSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const sign = parseInt(signSelect.value);
+        const Q0 = parseFloat(qsSlider.value);
+        const tau = parseFloat(categorySelect.value);
+        const t = parseFloat(timeSlider.value);
+        const repentFactor = parseFloat(repentSelect.value);
+
+        // Формула: Q(t) = Q₀ · e^(-t/τ)
+        let Qt = Q0 * Math.exp(-t / tau);
+
+        // Если негатив — применяем раскаяние
+        if (sign < 0) {
+            Qt *= repentFactor;
+        }
+
+        // Округление
+        const displayQ = Math.round(Qt * 100) / 100;
+        const percentLeft = Math.round((Qt / Q0) * 100);
+
+        // Знак и иконка
+        if (sign > 0) {
+            signIndicator.innerHTML = '<span class="sign-positive">☀️</span>';
+            signIndicator.title = 'Позитивная карма';
+        } else {
+            signIndicator.innerHTML = '<span class="sign-negative">🌑</span>';
+            signIndicator.title = 'Негативная карма';
+        }
+
+        resultNumber.textContent = displayQ.toFixed(1) + ' / ' + Q0;
+        resultLabel.textContent = 'Остаточный заряд (из ' + Q0 + ')';
+
+        // Интерпретация
+        let extra = '';
+        if (percentLeft <= 1) extra = '✨ Кармический след практически исчез. Вы свободны.';
+        else if (percentLeft <= 10) extra = '🌫️ След почти рассеялся. Влияние минимально.';
+        else if (percentLeft <= 30) extra = '🌤️ Значительная часть кармы уже отработана.';
+        else if (percentLeft <= 60) extra = '⏳ Карма ещё активна, но затухает.';
+        else if (percentLeft <= 90) extra = '⚡ Кармический след ещё силён. Нужно время.';
+        else extra = '🔥 След свежий. Влияние максимально.';
+
+        if (sign < 0 && repentFactor < 1.0) {
+            extra += ' (С учётом раскаяния)';
+        }
+        resultExtra.textContent = extra;
+
+        // Таймлайн
+        const halfLife = Math.round(tau * Math.log(2));
+        const fullGone = Math.round(tau * 5); // 99.3% исчезло
+        const halfTime = Math.round(halfLife - t);
+        const fullTime = Math.round(fullGone - t);
+        
+        let timeline = '📅 Прогноз: ';
+        if (halfTime > 0 && percentLeft > 1) {
+            timeline += '50% затухания через ~' + halfTime + ' дн. ';
+        }
+        if (fullTime > 0 && percentLeft > 1) {
+            timeline += 'Полное затухание через ~' + fullTime + ' дн. ';
+        }
+        if (percentLeft <= 1) {
+            timeline += 'След уже затух. ';
+        }
+        timeline += '(τ = ' + tau + ' дн.)';
+        resultTimeline.textContent = timeline;
+
+        const repentText = sign < 0 ? ' · ' + repentFactor.toFixed(2) + ' (раскаяние)' : '';
+        resultFormula.textContent = 'Q(' + t + ') = ' + Q0 + ' · e^(-' + t + '/' + tau + ')' + repentText + ' = ' + displayQ.toFixed(2);
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

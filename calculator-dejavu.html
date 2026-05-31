@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Вероятности Дежавю • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(147,112,219,0.1); border: 2px solid #9370db; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #9370db; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .fun-fact { background: rgba(147,112,219,0.15); border-radius: 12px; padding: 1rem 1.5rem; margin-top: 1.5rem; color: #d0c8b8; font-size: 0.9rem; line-height: 1.5; }
+        .fun-fact strong { color: #9370db; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #9370db; text-decoration: none; border: 1px solid #9370db; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #9370db; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>👁️ Вероятность Дежавю</h1>
+    <div class="subtitle">Калькулятор семантической метки времени (§74)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваши параметры на сегодня</div>
+
+        <!-- χ — семантическая чувствительность -->
+        <div class="input-group">
+            <label>🔮 Семантическая чувствительность (χ): <span id="chiValue">4.0</span> из 10</label>
+            <input type="range" id="chiSlider" min="0" max="10" value="4" step="0.1">
+            <div class="range-labels"><span>0 (глухарь)</span><span>5</span><span>10 (экстрасенс)</span></div>
+        </div>
+
+        <!-- Cₛ — когерентность -->
+        <div class="input-group">
+            <label>🎯 Текущая когерентность (Cₛ): <span id="csValue">0.50</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.5" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>0.5</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <!-- Усталость -->
+        <div class="input-group">
+            <label>😴 Уровень усталости:</label>
+            <select id="fatigueSelect">
+                <option value="0.3">Отдохнувший, полон сил (множитель 0.3)</option>
+                <option value="1.0" selected>Норма (множитель 1.0)</option>
+                <option value="2.0">Уставший, недосып (множитель 2.0)</option>
+                <option value="3.5">Истощён, на грани (множитель 3.5)</option>
+            </select>
+        </div>
+
+        <!-- Новизна обстановки -->
+        <div class="input-group">
+            <label>🏙️ Новизна окружения:</label>
+            <select id="noveltySelect">
+                <option value="0.3">Всё знакомо, рутина (множитель 0.3)</option>
+                <option value="1.0" selected>Обычный день (множитель 1.0)</option>
+                <option value="2.5">Новое место, путешествие (множитель 2.5)</option>
+                <option value="4.0">Впервые в этом городе/стране (множитель 4.0)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Вероятность испытать дежавю сегодня</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+        <div class="fun-fact" id="funFact"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const chiSlider = document.getElementById('chiSlider');
+    const csSlider = document.getElementById('csSlider');
+    const fatigueSelect = document.getElementById('fatigueSelect');
+    const noveltySelect = document.getElementById('noveltySelect');
+    const chiValue = document.getElementById('chiValue');
+    const csValue = document.getElementById('csValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+    const funFact = document.getElementById('funFact');
+
+    chiSlider.addEventListener('input', () => { chiValue.textContent = parseFloat(chiSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    fatigueSelect.addEventListener('change', calculate);
+    noveltySelect.addEventListener('change', calculate);
+
+    const funFacts = [
+        "🔬 Учёные выяснили: дежавю чаще всего испытывают люди в возрасте 15–25 лет. Пик приходится на периоды высокой нейропластичности.",
+        "🧠 Дежавю связано с височной долей мозга. У людей с эпилепсией оно может быть частью ауры перед приступом.",
+        "🌍 Около 60–70% людей испытывали дежавю хотя бы раз в жизни. Но только 1–2% — регулярно.",
+        "⏳ Согласно §74, дежавю — это сбой семантической маркировки времени. Текущий поток Φ_present записывается с меткой прошлого.",
+        "👁️ Люди с высокой χ (сенситивы) испытывают дежавю в 3–5 раз чаще, чем «семантические глухари».",
+        "🌙 Усталость и недосып повышают вероятность дежавю. Именно поэтому оно часто случается в конце тяжёлой недели.",
+        "✈️ Путешествия — катализатор дежавю. Новые места создают «помехи» в системе маркировки времени.",
+        "🧘 Медитация снижает частоту дежавю. Высокая Cₛ стабилизирует временные метки."
+    ];
+
+    function calculate() {
+        const chi = parseFloat(chiSlider.value);
+        const C = parseFloat(csSlider.value);
+        const fatigue = parseFloat(fatigueSelect.value);
+        const novelty = parseFloat(noveltySelect.value);
+
+        // Базовая вероятность (в обычный день для среднего человека ~2%)
+        const baseProb = 2.0;
+        
+        // Формула: P = baseProb × (χ/5) × (1 + (1-C)) × fatigue × novelty
+        const chiFactor = chi / 5.0;
+        const csFactor = 1.0 + (1.0 - C);
+        const fatigueFactor = fatigue;
+        const noveltyFactor = novelty;
+        
+        let probability = baseProb * chiFactor * csFactor * fatigueFactor * noveltyFactor;
+        if (probability > 95) probability = 95;
+        if (probability < 0.1) probability = 0.1;
+
+        resultNumber.textContent = probability.toFixed(1) + '%';
+        resultLabel.textContent = 'Вероятность испытать дежавю сегодня';
+
+        let extra = '';
+        if (probability < 1) extra = '🔒 Очень низкая. Сегодня вы вряд ли испытаете дежавю. Ваше время течёт ровно.';
+        else if (probability < 5) extra = '🕰️ Низкая. Дежавю возможно, но маловероятно.';
+        else if (probability < 15) extra = '👁️ Средняя. Есть шанс поймать «уже виденное». Обратите внимание на странные совпадения.';
+        else if (probability < 35) extra = '🌀 Повышенная. Вероятность дежавю значительна. Не удивляйтесь, если день покажется «знакомым».';
+        else if (probability < 60) extra = '🌌 Высокая. Вы в зоне риска дежавю. Возможны множественные эпизоды за день.';
+        else extra = '⚡ Очень высокая! Сегодня вы почти наверняка испытаете дежавю. Записывайте каждое — это ценные данные!';
+        resultExtra.textContent = extra;
+
+        resultFormula.textContent = `P = 2.0% × (${chi.toFixed(1)}/5) × (1 + (1 - ${C.toFixed(2)})) × ${fatigue.toFixed(1)} × ${novelty.toFixed(1)} = ${probability.toFixed(1)}%`;
+
+        const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+        funFact.innerHTML = '<strong>🧠 Случайный факт о дежавю:</strong><br>' + randomFact;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

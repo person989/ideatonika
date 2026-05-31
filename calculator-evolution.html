@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Эволюции Cₛ • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-milestones { color: #c0b090; font-size: 0.9rem; margin-top: 1.2rem; line-height: 1.8; text-align: left; }
+        .result-milestones span { color: #ffd54f; font-weight: bold; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>📈 Эволюция Cₛ человечества</h1>
+    <div class="subtitle">Калькулятор семантического прогресса цивилизации (§70, §79, Ноосфера)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры эпохи</div>
+
+        <!-- Текущий средний Cₛ -->
+        <div class="input-group">
+            <label>🎯 Средний Cₛ человечества сейчас: <span id="csValue">0.4</span></label>
+            <input type="range" id="csSlider" min="0.1" max="0.6" value="0.4" step="0.01">
+            <div class="range-labels"><span>0.1 (хаос, войны)</span><span>0.4 (XXI век)</span><span>0.6 (начало пробуждения)</span></div>
+        </div>
+
+        <!-- Скорость роста -->
+        <div class="input-group">
+            <label>📈 Скорость роста Cₛ (за 100 лет): <span id="growthValue">+0.05</span></label>
+            <input type="range" id="growthSlider" min="0.01" max="0.3" value="0.05" step="0.01">
+            <div class="range-labels"><span>0.01 (стагнация)</span><span>0.05</span><span>0.3 (духовный рывок)</span></div>
+        </div>
+
+        <!-- S_noise планеты -->
+        <div class="input-group">
+            <label>🔇 Уровень планетарного шума (S_noise):</label>
+            <select id="noiseSelect">
+                <option value="0.9">Очень высокий — войны, кризисы, хаос (×0.1)</option>
+                <option value="0.7" selected="selected">Высокий — соцсети, реклама, стресс (×0.3)</option>
+                <option value="0.4">Средний — баланс шума и тишины (×0.6)</option>
+                <option value="0.1">Низкий — эпоха тишины и созерцания (×0.9)</option>
+            </select>
+        </div>
+
+        <!-- Вклад эгрегоров -->
+        <div class="input-group">
+            <label>🏛️ Вклад духовных эгрегоров (религии, практики):</label>
+            <select id="egregorSelect">
+                <option value="1">Слабый — религии умирают, практики забыты (×1)</option>
+                <option value="3" selected="selected">Умеренный — часть человечества практикует (×3)</option>
+                <option value="7">Сильный — массовое духовное возрождение (×7)</option>
+                <option value="10">Колоссальный — планетарная ноосферная сеть (×10)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">До эпохи Просветлённых (Cₛ = 0.8)</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-milestones" id="resultMilestones"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const csSlider = document.getElementById('csSlider');
+    const growthSlider = document.getElementById('growthSlider');
+    const noiseSelect = document.getElementById('noiseSelect');
+    const egregorSelect = document.getElementById('egregorSelect');
+    const csValue = document.getElementById('csValue');
+    const growthValue = document.getElementById('growthValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultMilestones = document.getElementById('resultMilestones');
+    const resultFormula = document.getElementById('resultFormula');
+
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    growthSlider.addEventListener('input', () => { growthValue.textContent = '+' + parseFloat(growthSlider.value).toFixed(2); calculate(); });
+    [noiseSelect, egregorSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const Ccurrent = parseFloat(csSlider.value);
+        const rawGrowth = parseFloat(growthSlider.value);
+        const noiseFactor = parseFloat(noiseSelect.value);
+        const egregorFactor = parseInt(egregorSelect.value);
+
+        // Эффективная скорость роста с учётом шума и эгрегоров
+        const effectiveGrowth = rawGrowth * (1 - noiseFactor) * (egregorFactor / 3);
+
+        // Целевые пороги
+        const targetC = 0.8;
+        const targetC2 = 0.95;
+
+        // Время до цели (в 100-летних периодах)
+        const deltaC = targetC - Ccurrent;
+        const periodsToTarget = effectiveGrowth > 0 ? deltaC / effectiveGrowth : 9999;
+        const yearsToTarget = Math.round(periodsToTarget * 100);
+
+        const deltaC2 = targetC2 - Ccurrent;
+        const periodsToTarget2 = effectiveGrowth > 0 ? deltaC2 / effectiveGrowth : 9999;
+        const yearsToTarget2 = Math.round(periodsToTarget2 * 100);
+
+        const currentYear = 2026;
+        const yearC08 = currentYear + yearsToTarget;
+        const yearC095 = currentYear + yearsToTarget2;
+
+        // Также посчитаем промежуточные вехи
+        const milestones = [
+            { c: 0.50, label: 'Критическая масса (Cₛ = 0.50) — идеи начинают распространяться лавинообразно' },
+            { c: 0.60, label: 'Первое признание (Cₛ = 0.60) — Идеатоника входит в научный мейнстрим' },
+            { c: 0.70, label: 'Эпоха Потока (Cₛ = 0.70) — большинство людей практикуют осознанность' },
+            { c: 0.80, label: 'Эпоха Просветлённых (Cₛ = 0.80) — семантические технологии как электричество' },
+            { c: 0.90, label: 'Ноосферный скачок (Cₛ = 0.90) — единое планетарное сознание' }
+        ];
+
+        let timeText = '';
+        if (yearsToTarget < 0) {
+            timeText = 'Уже достигнуто!';
+        } else if (yearsToTarget < 100) {
+            timeText = yearsToTarget + ' лет';
+        } else if (yearsToTarget < 1000) {
+            timeText = Math.round(yearsToTarget / 100) + ' веков';
+        } else if (yearsToTarget < 1000000) {
+            timeText = Math.round(yearsToTarget / 1000) + ' тысячелетий';
+        } else {
+            timeText = 'Вечность';
+        }
+
+        resultNumber.textContent = timeText;
+        resultLabel.textContent = yearsToTarget < 0 ? 'Эпоха Просветлённых уже наступила!' : 'До эпохи Просветлённых (Cₛ = 0.8)';
+
+        let extra = '';
+        if (yearsToTarget < 0) {
+            extra = '🌟 Человечество уже достигло этого уровня! Мы живём в эпоху Света.';
+        } else if (yearsToTarget < 50) {
+            extra = '🚀 При вашей жизни! Вы можете стать свидетелем величайшего скачка в истории.';
+        } else if (yearsToTarget < 200) {
+            extra = '📅 Через несколько поколений. Ваши внуки увидят этот мир.';
+        } else if (yearsToTarget < 500) {
+            extra = '⏳ В отдалённом будущем. Но каждый ваш шаг приближает этот момент.';
+        } else if (yearsToTarget < 2000) {
+            extra = '📜 Через тысячелетия. Ваш вклад — капля, но капля точит камень.';
+        } else {
+            extra = '🌌 Почти невозможно при текущих условиях. Нужен духовный рывок или снижение S_noise.';
+        }
+        resultExtra.textContent = extra;
+
+        // Вехи
+        let milestonesHTML = '<strong>📅 Ключевые даты:</strong><br>';
+        milestones.forEach(m => {
+            const deltaM = m.c - Ccurrent;
+            const periodsM = effectiveGrowth > 0 ? deltaM / effectiveGrowth : 9999;
+            const yearsM = Math.round(periodsM * 100);
+            const yearM = currentYear + yearsM;
+            if (yearsM > 0 && yearsM < 10000) {
+                milestonesHTML += '<span>' + yearM + ' г.</span> — ' + m.label + '<br>';
+            }
+        });
+        if (yearsToTarget2 > 0 && yearsToTarget2 < 10000) {
+            milestonesHTML += '<span>' + yearC095 + ' г.</span> — Ноосферный скачок (Cₛ = 0.95)<br>';
+        }
+        resultMilestones.innerHTML = milestonesHTML;
+
+        resultFormula.textContent = `Cₛ(t) = ${Ccurrent.toFixed(2)} + ${effectiveGrowth.toFixed(4)} · (t / 100) | Цель 0.8 → ${yearsToTarget} лет (≈ ${yearC08} г.)`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

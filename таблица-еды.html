@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍽️ Гастрономическая Идеатоника • Таблица Светлой Еды</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container {
+            max-width: 1400px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #c0b090;
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #5d4a3a;
+            padding-bottom: 1rem;
+        }
+        
+        /* Кнопки */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 25px;
+            background: #3b2a1f;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: 0.2s;
+        }
+        .btn:hover {
+            background: #5d4037;
+            transform: scale(1.02);
+        }
+        .btn-secondary {
+            background: #5d4037;
+        }
+        .btn-secondary:hover {
+            background: #3b2a1f;
+        }
+        .sort-indicator {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #c0b090;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        /* Таблица */
+        .table-wrapper {
+            overflow-x: auto;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            padding: 1px;
+            margin-bottom: 1.5rem;
+        }
+        .food-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            background: transparent;
+            min-width: 1300px;
+        }
+        .food-table th {
+            background: #2a2a4a;
+            color: #f3e7c0;
+            padding: 12px 6px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #5d4a3a;
+            font-size: 0.8rem;
+        }
+        .food-table td {
+            border: 1px solid #5d4a3a;
+            padding: 10px 6px;
+            vertical-align: middle;
+            color: #d0c8b8;
+        }
+        .food-table tr:nth-child(even) {
+            background: rgba(0,0,0,0.1);
+        }
+        
+        /* Цвета строк по рангу */
+        .rank-p8 { background: linear-gradient(135deg, rgba(255,248,225,0.2), rgba(255,236,179,0.1)); }
+        .rank-p7 { background: linear-gradient(135deg, rgba(255,236,179,0.18), rgba(255,224,130,0.1)); }
+        .rank-p6 { background: linear-gradient(135deg, rgba(255,249,196,0.15), rgba(255,245,157,0.08)); }
+        .rank-p5 { background: linear-gradient(135deg, rgba(232,245,233,0.15), rgba(200,230,201,0.08)); }
+        .rank-p4 { background: linear-gradient(135deg, rgba(227,242,253,0.15), rgba(187,222,251,0.08)); }
+        .rank-p3 { background: linear-gradient(135deg, rgba(232,234,246,0.12), rgba(197,202,233,0.06)); }
+        .rank-p2 { background: linear-gradient(135deg, rgba(224,224,224,0.1), rgba(238,238,238,0.05)); }
+        .rank-p1 { background: linear-gradient(135deg, rgba(245,245,245,0.08), rgba(224,224,224,0.04)); }
+        .rank-0 { background: linear-gradient(135deg, rgba(239,235,233,0.1), rgba(215,204,200,0.05)); }
+        .rank-m1 { background: linear-gradient(135deg, rgba(215,204,200,0.12), rgba(188,170,164,0.06)); }
+        .rank-m2 { background: linear-gradient(135deg, rgba(255,204,188,0.12), rgba(255,171,145,0.06)); }
+        .rank-m3 { background: linear-gradient(135deg, rgba(176,190,197,0.12), rgba(144,164,174,0.06)); }
+        
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .badge-light { background: #ffd54f; color: #1a1a2e; }
+        .badge-live { background: #81c784; color: #1b5e20; }
+        .badge-neutral { background: #9e9e9e; color: white; }
+        .badge-dark { background: #616161; color: #ddd; }
+        .badge-toxic { background: #e57373; color: #b71c1c; }
+        
+        .ingredient-tag {
+            display: inline-block;
+            background: rgba(227,184,124,0.2);
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            margin: 2px;
+            border: 1px solid #5d4a3a;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin: 1.5rem 0;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #e3b87c;
+            text-decoration: none;
+            border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover { background: #e3b87c; color: #1a1a2e; }
+        
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+        }
+        
+        details {
+            margin-top: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px dashed #5d4a3a;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: #e3b87c;
+        }
+        pre {
+            background: #1a1a2e;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 0.7rem;
+            color: #c0b090;
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>🍽️ ГАСТРОНОМИЧЕСКАЯ ИДЕАТОНИКА</h1>
+    <div class="subtitle">Великая Таблица Светлой Еды • Семантическая Кулинария</div>
+    
+    <!-- Кнопки -->
+    <div class="button-group">
+        <button id="sortByRankBtn" class="btn">📊 По РАНГУ (от +8 к -4)</button>
+        <button id="sortByNameBtn" class="btn btn-secondary">🔤 По НАЗВАНИЮ (А → Я)</button>
+    </div>
+    <p id="currentSortIndicator" class="sort-indicator">Текущая сортировка: по РАНГУ</p>
+    
+    <!-- Легенда -->
+    <div class="legend">
+        <div class="legend-item"><span class="badge badge-light">🌟 Светлая</span> +6...+8 — благословенная, живая</div>
+        <div class="legend-item"><span class="badge badge-live">🌿 Живая</span> +3...+5 — свежая, природная</div>
+        <div class="legend-item"><span class="badge badge-neutral">🟰 Нейтральная</span> 0...+2 — обычная еда</div>
+        <div class="legend-item"><span class="badge badge-dark">🌑 Тёмная</span> -1...-2 — обработанная, «мёртвая»</div>
+        <div class="legend-item"><span class="badge badge-toxic">☠️ Токсичная</span> -3...-4 — фастфуд, синтетика</div>
+    </div>
+    
+    <!-- Таблица -->
+    <div id="tableWrapper" class="table-wrapper">
+        <table class="food-table" id="foodTable">
+            <thead>
+                <tr>
+                    <th>Блюдо</th>
+                    <th>Категория</th>
+                    <th>Qₛ (ингредиенты)</th>
+                    <th>Cₛ (приготовление)</th>
+                    <th>Ритуал</th>
+                    <th>Ингредиенты (ранг)</th>
+                    <th>Ранг</th>
+                    <th>Комментарий</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Данные вставятся через JS -->
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Инструкция -->
+<!--    <details>
+        <summary>📝 Как добавить новое блюдо (для продвинутых)</summary>
+        <p>Откройте этот HTML-файл в редакторе. Найдите массив <code>foodData</code>. Добавьте новую строку по шаблону:</p>
+        <pre>{ 
+    name: "НАЗВАНИЕ", 
+    category: "Светлая", 
+    Q_ing: 7, 
+    C_cook: 0.8, 
+    ritual: "С молитвой", 
+    ingredients: "Ингредиент1 (ранг), Ингредиент2 (ранг)", 
+    rank: 7, 
+    comment: "КОММЕНТАРИЙ" 
+}</pre>
+        <p><strong>Категории:</strong> "Светлая", "Живая", "Нейтральная", "Тёмная", "Токсичная". <strong>Ритуал:</strong> "С молитвой", "Осознанно", "В тишине", "Обычное", "В спешке".</p>
+    </details>
+    -->
+    
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Гастрономическая Таблица • «Ты есть то, что ты ешь»</p>
+        <p>✧ «Пища, приготовленная с любовью, — это семантическая батарейка» ✧</p>
+    </div>
+</div>
+
+<script>
+(function() {
+    // ========== БАЗА ДАННЫХ БЛЮД ==========
+    const foodData = [
+        // СВЕТЛАЯ ЕДА (+6...+8)
+        { name: "Просфора (освящённая)", category: "Светлая", Q_ing: 8, C_cook: 0.9, ritual: "Литургия", ingredients: "Мука (+2), Вода (+3), Закваска (+2), Соль (+3)", rank: 8, comment: "Высшая форма благословенной пищи. Несёт эгрегор Церкви." },
+        { name: "Кулич (освящённый)", category: "Светлая", Q_ing: 7, C_cook: 0.8, ritual: "С молитвой", ingredients: "Мука (+2), Яйца (+3), Масло (+3), Сахар (0), Изюм (+2)", rank: 7, comment: "Пасхальная радость. Заряжен коллективным резонансом." },
+        { name: "Мёд (сырой, с пасеки)", category: "Светлая", Q_ing: 7, C_cook: 0.9, ritual: "Природный", ingredients: "Нектар цветов (+5), Ферменты пчёл (+4)", rank: 7, comment: "Живой генератор Qₛ. Усиливает любое блюдо." },
+        { name: "Хлеб на закваске (домашний)", category: "Светлая", Q_ing: 6, C_cook: 0.8, ritual: "С любовью", ingredients: "Мука цельнозерновая (+3), Вода (+3), Закваска (+2), Соль (+3)", rank: 6, comment: "Живой хлеб. Символ дома и уюта." },
+        { name: "Травяной чай (свежие травы)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Осознанно", ingredients: "Мята (+4), Мелисса (+4), Чабрец (+4), Вода (+3)", rank: 6, comment: "Успокаивает Tₛ, повышает Cₛ. Медитация в чашке." },
+        { name: "Яблоки печёные с корицей", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "С любовью", ingredients: "Яблоки (+4), Корица (+4), Мёд (+7)", rank: 6, comment: "Тёплое, уютное блюдо. Согревает семантически." },
+        // ========== СВЕТЛАЯ ЕДА: 20 БЛЮД ==========
+
+{ name: "Артос (освящённый хлеб)", category: "Светлая", Q_ing: 8, C_cook: 0.9, ritual: "Литургия", ingredients: "Мука (+2), Вода (+3), Закваска (+2), Соль (+3)", rank: 8, comment: "Хлеб, освящённый на Пасхальной седмице. Мощный защитный Qₛ." },
+
+{ name: "Пасха творожная (освящённая)", category: "Светлая", Q_ing: 7, C_cook: 0.8, ritual: "С молитвой", ingredients: "Творог (+4), Сметана (+3), Яйца (+3), Мёд (+7), Изюм (+2)", rank: 7, comment: "Символ Гроба Господня. Несёт чистоту и обновление." },
+{ name: "Яблоки освящённые (Яблочный Спас)", category: "Светлая", Q_ing: 7, C_cook: 0.9, ritual: "Освящение", ingredients: "Яблоки (+4), Мёд (+7)", rank: 7, comment: "Плоды, благословлённые в храме. Несут энергию Преображения." },
+{ name: "Мёд освящённый (Медовый Спас)", category: "Светлая", Q_ing: 7, C_cook: 0.9, ritual: "Освящение", ingredients: "Мёд (+7), Вода (+3)", rank: 7, comment: "Освящённый мёд. Усиливает любые целебные свойства." },
+{ name: "Коливо (кутья)", category: "Светлая", Q_ing: 7, C_cook: 0.8, ritual: "Поминальная молитва", ingredients: "Пшеница (+3), Мёд (+7), Орехи (+4), Изюм (+2)", rank: 7, comment: "Пища памяти. Связывает с ушедшими предками." },
+{ name: "Блины на Масленицу (с молитвой)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Семейный ритуал", ingredients: "Мука (+2), Яйца (+3), Молоко (+3), Масло (+3)", rank: 6, comment: "Символ Солнца. Объединяет семью, несёт радость." },
+{ name: "Сочиво (рождественское)", category: "Светлая", Q_ing: 6, C_cook: 0.8, ritual: "В Сочельник", ingredients: "Пшеница (+3), Мак (+3), Орехи (+4), Мёд (+7)", rank: 6, comment: "Постное, но насыщенное смыслом блюдо. Очищает перед праздником." },
+{ name: "Хлеб на закваске (домашний, с молитвой)", category: "Светлая", Q_ing: 6, C_cook: 0.8, ritual: "С любовью и молитвой", ingredients: "Мука цельнозерновая (+3), Вода (+3), Закваска (+2), Соль (+3)", rank: 6, comment: "Живой хлеб, заряженный намерением. Основа трапезы." },
+{ name: "Травяной чай (свежие травы, с благодарностью)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Осознанно, с благодарностью", ingredients: "Мята (+4), Мелисса (+4), Чабрец (+4), Вода (+3)", rank: 6, comment: "Успокаивает Tₛ, повышает Cₛ. Медитация в чашке." },
+{ name: "Яблоки печёные с корицей и мёдом", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "С любовью", ingredients: "Яблоки (+4), Корица (+4), Мёд (+7)", rank: 6, comment: "Тёплое, уютное блюдо. Согревает семантически." },
+{ name: "Взвар (компот из сухофруктов)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Традиционный", ingredients: "Сухофрукты (+3), Вода (+3), Мёд (+7)", rank: 6, comment: "Традиционный напиток. Несёт Qₛ предков и праздника." },
+{ name: "Пряники медовые (домашние)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "С любовью", ingredients: "Мука (+2), Мёд (+7), Пряности (+4), Масло (+3)", rank: 6, comment: "Сладость, сделанная с душой. Согревает и радует." },
+{ name: "Каша из полбы с тыквой", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Спокойно", ingredients: "Полба (+4), Тыква (+4), Молоко (+3), Мёд (+7)", rank: 6, comment: "Исконно русская еда. Заземляет, даёт силу." },
+{ name: "Кисель овсяный (традиционный)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Традиционный", ingredients: "Овёс (+3), Вода (+3), Мёд (+7)", rank: 6, comment: "Древнее блюдо. Обволакивает и защищает слизистые и поле." },
+{ name: "Молоко с мёдом (тёплое)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Перед сном", ingredients: "Молоко (+3), Мёд (+7)", rank: 6, comment: "Успокаивает, настраивает на глубокий сон (дельта-ритм)." },
+{ name: "Имбирный чай с лимоном и мёдом", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Забота о здоровье", ingredients: "Имбирь (+4), Лимон (+4), Мёд (+7), Вода (+3)", rank: 6, comment: "Согревает, повышает иммунитет и Qₛ." },
+{ name: "Сбитень (горячий напиток)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Традиционный", ingredients: "Мёд (+7), Пряности (+4), Травы (+4), Вода (+3)", rank: 6, comment: "Древнерусский напиток. Согревает тело и душу." },
+{ name: "Постный борщ с фасолью", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "С любовью", ingredients: "Свёкла (+4), Капуста (+4), Фасоль (+3), Томаты (+4)", rank: 6, comment: "Очищающий суп. Несёт энергию земли и корней." },
+        
+        // ЖИВАЯ ЕДА (+3...+5)
+        { name: "Салат из свежих овощей", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Обычное", ingredients: "Помидоры (+4), Огурцы (+4), Зелень (+5), Масло оливковое (+3)", rank: 5, comment: "Максимум живого Qₛ. Есть сразу после приготовления." },
+        { name: "Каша овсяная с ягодами", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Спокойно", ingredients: "Овсянка цельная (+3), Вода (+3), Ягоды (+5), Мёд (+7)", rank: 5, comment: "Заряжает энергией на весь день. Заземляет." },
+        { name: "Суп овощной (домашний)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Овощи (+4), Вода (+3), Зелень (+5), Соль (+3)", rank: 5, comment: "Жидкий Qₛ. Легко усваивается и очищает." },
+        { name: "Орехи и сухофрукты", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Обычное", ingredients: "Грецкий орех (+4), Миндаль (+4), Курага (+3), Изюм (+2)", rank: 4, comment: "Концентрированный Qₛ. Хороший перекус." },
+        { name: "Яйцо варёное (домашнее)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Обычное", ingredients: "Яйцо (+4), Вода (+3), Соль (+3)", rank: 4, comment: "Символ жизни. Содержит потенциал." },
+        { name: "Квашеная капуста", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Ферментация", ingredients: "Капуста (+4), Соль (+3), Морковь (+3)", rank: 4, comment: "Qₛ трансформации. Полезна для микрофлоры и поля." },
+        // ========== ЖИВАЯ ЕДА: 80 БЛЮД ==========
+{ name: "Салат из свежих овощей", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Обычное", ingredients: "Помидоры (+4), Огурцы (+4), Зелень (+5), Масло оливковое (+3)", rank: 5, comment: "Максимум живого Qₛ. Есть сразу после приготовления." },
+{ name: "Греческий салат", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Обычное", ingredients: "Помидоры (+4), Огурцы (+4), Перец (+4), Сыр фета (+2), Маслины (+3)", rank: 5, comment: "Средиземноморская свежесть. Гармонизирует." },
+{ name: "Салат из рукколы с креветками", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Обычное", ingredients: "Руккола (+5), Креветки (+2), Помидоры черри (+4), Лимон (+4)", rank: 5, comment: "Лёгкий, изысканный. Повышает вибрации." },
+{ name: "Салат из печёной свёклы с козьим сыром", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Свёкла (+4), Козий сыр (+3), Орехи (+4), Руккола (+5)", rank: 5, comment: "Заземляющий, но утончённый. Баланс земли и воздуха." },
+{ name: "Салат из моркови с яблоком", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Обычное", ingredients: "Морковь (+4), Яблоко (+4), Лимонный сок (+4)", rank: 5, comment: "Простой, витаминный. Очищает и бодрит." },
+{ name: "Салат из капусты с клюквой", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Обычное", ingredients: "Капуста (+4), Клюква (+5), Морковь (+3)", rank: 5, comment: "Витаминный заряд. Укрепляет иммунитет и поле." },
+{ name: "Овощная нарезка (ассорти)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Обычное", ingredients: "Огурцы (+4), Помидоры (+4), Перец (+4), Редис (+4)", rank: 5, comment: "Максимально простая и живая еда." },
+{ name: "Фруктовый салат", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Обычное", ingredients: "Яблоко (+4), Банан (+3), Апельсин (+4), Киви (+4), Мёд (+7)", rank: 5, comment: "Радость и витамины. Поднимает настроение." },
+{ name: "Смузи зелёный", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Осознанно", ingredients: "Шпинат (+5), Банан (+3), Яблоко (+4), Вода (+3)", rank: 5, comment: "Жидкий хлорофилл. Очищает и наполняет энергией." },
+{ name: "Смузи ягодный", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Осознанно", ingredients: "Ягоды (+5), Банан (+3), Мёд (+7), Вода (+3)", rank: 5, comment: "Антиоксиданты и радость. Укрепляет поле." },
+{ name: "Фреш апельсиновый", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Свежевыжатый", ingredients: "Апельсины (+4)", rank: 5, comment: "Солнце в стакане. Мгновенный заряд бодрости." },
+{ name: "Фреш морковный", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Свежевыжатый", ingredients: "Морковь (+4), Яблоко (+4)", rank: 5, comment: "Заземляет и питает. Полезен для глаз и ауры." },
+{ name: "Каша овсяная с ягодами", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Спокойно", ingredients: "Овсянка цельная (+3), Вода (+3), Ягоды (+5), Мёд (+7)", rank: 5, comment: "Заряжает энергией на весь день. Заземляет." },
+{ name: "Каша гречневая с грибами", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "С любовью", ingredients: "Гречка (+4), Грибы лесные (+5), Лук (+3), Масло (+3)", rank: 5, comment: "Русская классика. Сила земли и леса." },
+{ name: "Каша пшённая с тыквой", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Спокойно", ingredients: "Пшено (+4), Тыква (+4), Молоко (+3), Масло (+3)", rank: 5, comment: "Согревает и питает. Энергия солнца." },
+{ name: "Каша рисовая с изюмом", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Спокойно", ingredients: "Рис (+2), Молоко (+3), Изюм (+2), Масло (+3)", rank: 4, comment: "Мягкая, обволакивающая. Успокаивает." },
+{ name: "Каша перловая с овощами", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Перловка (+3), Овощи (+4), Зелень (+5)", rank: 4, comment: "Сытная и полезная. Энергия земли." },
+{ name: "Каша кукурузная с сыром", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Кукурузная крупа (+3), Сыр (+2), Масло (+3)", rank: 4, comment: "Солнечная каша. Поднимает настроение." },
+{ name: "Мюсли домашние с йогуртом", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Обычное", ingredients: "Овсяные хлопья (+3), Орехи (+4), Сухофрукты (+3), Йогурт (+2)", rank: 4, comment: "Быстрый и полезный завтрак." },
+{ name: "Яйцо пашот", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Аккуратно", ingredients: "Яйцо (+4), Вода (+3), Уксус (0)", rank: 4, comment: "Нежное яйцо. Сохраняет максимум Qₛ." },
+{ name: "Омлет с зеленью", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "С любовью", ingredients: "Яйца (+4), Молоко (+3), Зелень (+5)", rank: 4, comment: "Быстрый и питательный. Зелень повышает Qₛ." },
+{ name: "Яичница с помидорами", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Обычное", ingredients: "Яйца (+4), Помидоры (+4), Лук (+3)", rank: 4, comment: "Классика. Сытная и живая." },
+{ name: "Суп овощной (домашний)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Овощи (+4), Вода (+3), Зелень (+5), Соль (+3)", rank: 5, comment: "Жидкий Qₛ. Легко усваивается и очищает." },
+{ name: "Суп-пюре из тыквы", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "С любовью", ingredients: "Тыква (+4), Морковь (+4), Лук (+3), Сливки (+2)", rank: 5, comment: "Согревающий, солнечный. Успокаивает." },
+{ name: "Суп грибной (из лесных грибов)", category: "Живая", Q_ing: 5, C_cook: 0.8, ritual: "С любовью", ingredients: "Грибы (+5), Картофель (+3), Лук (+3), Зелень (+5)", rank: 5, comment: "Аромат леса. Заземляет и питает." },
+{ name: "Суп гороховый", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Горох (+3), Морковь (+4), Лук (+3), Копчёности (-1)", rank: 4, comment: "Сытный, густой. Энергия бобовых." },
+{ name: "Суп чечевичный", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Чечевица (+4), Овощи (+4), Зелень (+5)", rank: 5, comment: "Богат белком и Qₛ. Очищает." },
+{ name: "Борщ украинский", category: "Живая", Q_ing: 5, C_cook: 0.8, ritual: "С любовью", ingredients: "Свёкла (+4), Капуста (+4), Мясо (0), Сметана (+3)", rank: 5, comment: "Классика. Сила рода и традиции." },
+{ name: "Щи из свежей капусты", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "С любовью", ingredients: "Капуста (+4), Картофель (+3), Морковь (+4), Зелень (+5)", rank: 5, comment: "Русская душа. Очищает и согревает." },
+{ name: "Солянка сборная", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Мясо (0), Колбаса (-1), Огурцы солёные (+2), Маслины (+3)", rank: 3, comment: "Насыщенный вкус. Согревает, но Qₛ смешанный." },
+{ name: "Уха из речной рыбы", category: "Живая", Q_ing: 5, C_cook: 0.8, ritual: "На природе", ingredients: "Рыба (+2), Вода (+3), Картофель (+3), Зелень (+5)", rank: 4, comment: "Энергия воды. Лучше всего на костре." },
+{ name: "Овощное рагу", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "С любовью", ingredients: "Кабачки (+4), Баклажаны (+4), Перец (+4), Помидоры (+4)", rank: 5, comment: "Летнее блюдо. Максимум живого Qₛ." },
+{ name: "Картофель запечённый с розмарином", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Картофель (+3), Розмарин (+4), Масло оливковое (+3)", rank: 4, comment: "Просто и вкусно. Заземляет." },
+{ name: "Картофельное пюре (домашнее)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Картофель (+3), Молоко (+3), Масло (+3)", rank: 4, comment: "Уютная классика. Согревает." },
+{ name: "Овощи-гриль", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "На огне", ingredients: "Перец (+4), Кабачки (+4), Баклажаны (+4), Лук (+3)", rank: 5, comment: "Энергия огня и овощей. Очень полезно." },
+{ name: "Голубцы (домашние)", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "С любовью", ingredients: "Капуста (+4), Рис (+2), Мясо (0), Морковь (+4)", rank: 4, comment: "Традиционное блюдо. Требует времени и любви." },
+{ name: "Фаршированный перец", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Перец (+4), Рис (+2), Мясо (0), Овощи (+4)", rank: 4, comment: "Яркое, летнее блюдо." },
+{ name: "Лазанья (домашняя)", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "С любовью", ingredients: "Мука (+2), Яйца (+3), Томаты (+4), Сыр (+2)", rank: 4, comment: "Слоёное удовольствие. Готовить с душой." },
+{ name: "Паста с томатным соусом и базиликом", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Паста (+2), Томаты (+4), Базилик (+5), Масло оливковое (+3)", rank: 4, comment: "Простота и вкус. Базилик повышает Qₛ." },
+{ name: "Ризотто с грибами", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Медитативно", ingredients: "Рис (+2), Грибы (+5), Лук (+3), Бульон (+2)", rank: 4, comment: "Требует внимания. Впитывает Cₛ повара." },
+{ name: "Плов с бараниной", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "С любовью", ingredients: "Рис (+2), Баранина (0), Морковь (+4), Лук (+3), Специи (+3)", rank: 4, comment: "Праздничное блюдо. Объединяет." },
+{ name: "Курица, запечённая с лимоном и травами", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Курица (0), Лимон (+4), Розмарин (+4), Чеснок (+3)", rank: 4, comment: "Ароматное и сочное. Травы повышают Qₛ." },
+{ name: "Рыба, запечённая в фольге", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Рыба (+2), Лимон (+4), Травы (+4), Масло (+3)", rank: 4, comment: "Сохраняет влагу и Qₛ. Полезно." },
+{ name: "Котлеты домашние (из фарша)", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "С любовью", ingredients: "Мясо (0), Лук (+3), Яйцо (+4), Хлеб (+1)", rank: 3, comment: "Классика. Качество зависит от мяса." },
+{ name: "Тефтели в томатном соусе", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "С любовью", ingredients: "Фарш (0), Рис (+2), Томаты (+4), Лук (+3)", rank: 3, comment: "Сочные и нежные. Хороши с пастой." },
+{ name: "Бефстроганов", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "С любовью", ingredients: "Говядина (0), Лук (+3), Сметана (+3), Томаты (+4)", rank: 3, comment: "Классика русской кухни. Согревает." },
+{ name: "Гуляш", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "С любовью", ingredients: "Мясо (0), Лук (+3), Паприка (+4), Томаты (+4)", rank: 3, comment: "Сытное мясное блюдо. Энергия огня." },
+{ name: "Шашлык (на костре)", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "На природе", ingredients: "Мясо (0), Лук (+3), Уксус (0), Специи (+3)", rank: 4, comment: "Энергия огня и компании. Cₛ зависит от настроения." },
+{ name: "Люля-кебаб", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "На огне", ingredients: "Баранина (0), Лук (+3), Зелень (+5), Специи (+3)", rank: 4, comment: "Сочные колбаски. Зелень повышает Qₛ." },
+{ name: "Овощные котлеты", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "С любовью", ingredients: "Морковь (+4), Капуста (+4), Картофель (+3), Лук (+3)", rank: 5, comment: "Полезная альтернатива. Чистый Qₛ овощей." },
+{ name: "Нутовые котлеты (фалафель)", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "С любовью", ingredients: "Нут (+4), Зелень (+5), Чеснок (+3), Специи (+3)", rank: 5, comment: "Ближневосточная классика. Сытные и живые." },
+{ name: "Драники картофельные", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Картофель (+3), Лук (+3), Яйцо (+4)", rank: 4, comment: "Золотистые, хрустящие. Согревают." },
+{ name: "Сырники (домашние)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Творог (+4), Яйцо (+4), Мука (+2), Мёд (+7)", rank: 4, comment: "Нежные, творожные. Хороши со сметаной." },
+{ name: "Запеканка творожная", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Творог (+4), Яйца (+4), Манка (+1), Изюм (+2)", rank: 4, comment: "Полезный десерт. Нежный и воздушный." },
+{ name: "Шарлотка с яблоками", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Яблоки (+4), Мука (+2), Яйца (+4), Сахар (0)", rank: 4, comment: "Простой пирог. Аромат яблок повышает Qₛ." },
+{ name: "Пирог с ягодами", category: "Живая", Q_ing: 5, C_cook: 0.8, ritual: "С любовью", ingredients: "Ягоды (+5), Мука (+2), Масло (+3), Сахар (0)", rank: 5, comment: "Летний пирог. Максимум живого Qₛ." },
+{ name: "Печенье овсяное (домашнее)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Овсянка (+3), Масло (+3), Мёд (+7), Орехи (+4)", rank: 4, comment: "Полезное лакомство. Энергия злаков." },
+{ name: "Пряники (домашние)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Мука (+2), Мёд (+7), Пряности (+4)", rank: 4, comment: "Ароматные, согревающие." },
+{ name: "Кекс творожный", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Творог (+4), Яйца (+4), Мука (+2)", rank: 4, comment: "Влажный, нежный. Хорош к чаю." },
+{ name: "Манник", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Запекание", ingredients: "Манка (+1), Кефир (+2), Яйца (+4)", rank: 3, comment: "Простой пирог. Уютный." },
+{ name: "Блинчики тонкие", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "С любовью", ingredients: "Мука (+2), Молоко (+3), Яйца (+4)", rank: 3, comment: "Универсальное блюдо. С чем подадите." },
+{ name: "Оладьи на кефире", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "С любовью", ingredients: "Кефир (+2), Мука (+2), Яйцо (+4)", rank: 3, comment: "Пышные, быстрые. Завтрак выходного дня." },
+{ name: "Панкейки", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "С любовью", ingredients: "Мука (+2), Молоко (+3), Яйцо (+4)", rank: 3, comment: "Американские блинчики. Хороши с ягодами." },
+{ name: "Вареники с вишней", category: "Живая", Q_ing: 5, C_cook: 0.8, ritual: "С любовью", ingredients: "Мука (+2), Вишня (+5), Сахар (0)", rank: 5, comment: "Летнее удовольствие. Qₛ вишни." },
+{ name: "Вареники с картошкой", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "С любовью", ingredients: "Мука (+2), Картофель (+3), Лук (+3)", rank: 4, comment: "Сытное блюдо. Заземляет." },
+{ name: "Вареники с творогом", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "С любовью", ingredients: "Мука (+2), Творог (+4), Яйцо (+4)", rank: 4, comment: "Нежные, творожные. Любимое блюдо." },
+{ name: "Пельмени домашние", category: "Живая", Q_ing: 3, C_cook: 0.8, ritual: "С любовью", ingredients: "Мука (+2), Мясо (0), Лук (+3)", rank: 3, comment: "Семейное блюдо. Лепить вместе." },
+{ name: "Манты", category: "Живая", Q_ing: 3, C_cook: 0.8, ritual: "На пару", ingredients: "Мука (+2), Мясо (0), Лук (+3), Тыква (+4)", rank: 3, comment: "Сочные, крупные. Энергия пара." },
+{ name: "Хинкали", category: "Живая", Q_ing: 3, C_cook: 0.8, ritual: "С любовью", ingredients: "Мука (+2), Мясо (0), Зелень (+5)", rank: 3, comment: "Грузинская классика. Бульон внутри." },
+{ name: "Чебуреки домашние", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "С любовью", ingredients: "Мука (+2), Мясо (0), Лук (+3)", rank: 3, comment: "Жареные пирожки. Вкусно, но тяжеловато." },
+{ name: "Пицца домашняя", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Мука (+2), Томаты (+4), Сыр (+2), Базилик (+5)", rank: 4, comment: "Любимое блюдо. Готовить с душой." },
+{ name: "Хачапури по-аджарски", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "С любовью", ingredients: "Мука (+2), Сыр (+2), Яйцо (+4)", rank: 4, comment: "Лодочка с сыром и яйцом. Сытное." },
+{ name: "Киш с овощами", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+2), Овощи (+4), Яйца (+4), Сливки (+2)", rank: 4, comment: "Французский пирог. Нежный и лёгкий." },
+{ name: "Фриттата с овощами", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "С любовью", ingredients: "Яйца (+4), Овощи (+4), Сыр (+2)", rank: 4, comment: "Итальянский омлет. Быстро и живо." },
+{ name: "Тыквенный крем-суп", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "С любовью", ingredients: "Тыква (+4), Морковь (+4), Имбирь (+4)", rank: 5, comment: "Бархатный, согревающий." },
+// ========== ЖИВАЯ ЕДА: ДОПОЛНЕНИЕ (30 БЛЮД) ==========
+{ name: "Пахлава (домашняя, с мёдом)", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Праздничный", ingredients: "Тесто фило (+2), Орехи (+4), Мёд (+7), Масло сливочное (+3)", rank: 5, comment: "Настоящая, с мёдом и любовью. Мощный Qₛ." },
+{ name: "Салат из авокадо с томатами", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Обычное", ingredients: "Авокадо (+4), Томаты черри (+4), Лимонный сок (+4), Масло оливковое (+3)", rank: 5, comment: "Кремовый, полезный. Авокадо — источник хороших жиров." },
+{ name: "Салат из шпината с клубникой", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Обычное", ingredients: "Шпинат (+5), Клубника (+5), Орехи (+4), Бальзамик (0)", rank: 5, comment: "Неожиданное сочетание. Очень свежее." },
+{ name: "Салат из пекинской капусты", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Обычное", ingredients: "Пекинская капуста (+4), Огурец (+4), Кукуруза (+2), Сметана (+3)", rank: 4, comment: "Лёгкий, хрустящий. Быстро и полезно." },
+{ name: "Салат из редиса с яйцом", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Обычное", ingredients: "Редис (+4), Яйцо (+4), Зелень (+5), Сметана (+3)", rank: 4, comment: "Весенний салат. Бодрит и очищает." },
+{ name: "Салат из фасоли с овощами", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Обычное", ingredients: "Фасоль (+3), Помидоры (+4), Лук (+3), Зелень (+5)", rank: 4, comment: "Сытный, богат белком. Заземляет." },
+{ name: "Винегрет", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Традиционный", ingredients: "Свёкла (+4), Морковь (+4), Картофель (+3), Огурцы солёные (+2), Горошек (+3)", rank: 4, comment: "Русская классика. Очищает и насыщает." },
+{ name: "Сельдь под шубой", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Праздничный", ingredients: "Сельдь (0), Свёкла (+4), Морковь (+4), Картофель (+3), Майонез (-1)", rank: 3, comment: "Праздничное блюдо. Qₛ смешанный из-за майонеза." },
+{ name: "Оливье (домашний)", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Праздничный", ingredients: "Картофель (+3), Морковь (+4), Яйца (+4), Огурцы солёные (+2), Майонез (-1)", rank: 3, comment: "Символ Нового года. Вкусно, но Qₛ средний." },
+{ name: "Крабовый салат", category: "Живая", Q_ing: 3, C_cook: 0.5, ritual: "Обычное", ingredients: "Крабовые палочки (-1), Кукуруза (+2), Яйца (+4), Майонез (-1)", rank: 2, comment: "Быстрый салат. Qₛ низкий из-за имитации краба." },
+{ name: "Салат «Цезарь» (домашний)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Обычное", ingredients: "Курица (0), Салат (+4), Помидоры (+4), Сухарики (0), Соус (0)", rank: 3, comment: "Популярный салат. Качество зависит от соуса." },
+{ name: "Салат с тунцом", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Обычное", ingredients: "Тунец (0), Салат (+4), Помидоры (+4), Яйцо (+4)", rank: 3, comment: "Белковый салат. Хорош для спортсменов." },
+{ name: "Тыква запечённая с чесноком", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Тыква (+4), Чеснок (+3), Масло оливковое (+3), Травы (+4)", rank: 5, comment: "Солнечное блюдо. Очень полезно." },
+{ name: "Кабачки фаршированные", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Кабачки (+4), Фарш (0), Рис (+2), Овощи (+4)", rank: 4, comment: "Лёгкое летнее блюдо." },
+{ name: "Баклажаны, запечённые с сыром", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Баклажаны (+4), Помидоры (+4), Сыр (+2), Чеснок (+3)", rank: 4, comment: "Ароматное, сытное. Средиземноморский стиль." },
+{ name: "Цветная капуста в кляре", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Жарка", ingredients: "Цветная капуста (+4), Яйцо (+4), Мука (+2)", rank: 4, comment: "Хрустящая, нежная. Хороша как гарнир." },
+{ name: "Брокколи на пару", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "На пару", ingredients: "Брокколи (+5), Лимонный сок (+4)", rank: 5, comment: "Максимум пользы. Сохраняет Qₛ." },
+{ name: "Спаржа на гриле", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "На огне", ingredients: "Спаржа (+5), Масло оливковое (+3), Лимон (+4)", rank: 5, comment: "Деликатес. Очень высокий Qₛ." },
+{ name: "Шпинат, тушёный с чесноком", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Тушение", ingredients: "Шпинат (+5), Чеснок (+3), Масло оливковое (+3)", rank: 5, comment: "Быстро, полезно, вкусно." },
+{ name: "Грибы, жаренные с луком", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Жарка", ingredients: "Грибы (+5), Лук (+3), Масло (+3)", rank: 5, comment: "Аромат леса. Заземляет." },
+{ name: "Картофель, жаренный с грибами", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Жарка", ingredients: "Картофель (+3), Грибы (+5), Лук (+3)", rank: 4, comment: "Сытное, уютное блюдо." },
+{ name: "Рис с овощами", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Тушение", ingredients: "Рис (+2), Овощи (+4), Зелень (+5)", rank: 4, comment: "Хороший гарнир или самостоятельное блюдо." },
+{ name: "Гречка с грибами и луком", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "С любовью", ingredients: "Гречка (+4), Грибы (+5), Лук (+3)", rank: 5, comment: "Русская классика. Очень сытно и полезно." },
+{ name: "Булгур с овощами", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Тушение", ingredients: "Булгур (+3), Овощи (+4), Зелень (+5)", rank: 4, comment: "Популярный гарнир. Лёгкий и рассыпчатый." },
+{ name: "Кускус с травами", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Запаривание", ingredients: "Кускус (+2), Зелень (+5), Лимон (+4)", rank: 4, comment: "Быстрый гарнир. Зелень повышает Qₛ." },
+{ name: "Чечевица тушёная", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Тушение", ingredients: "Чечевица (+4), Морковь (+4), Лук (+3), Томаты (+4)", rank: 4, comment: "Богата белком. Очищает." },
+{ name: "Нут с овощами", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Тушение", ingredients: "Нут (+4), Помидоры (+4), Перец (+4), Зелень (+5)", rank: 4, comment: "Сытное вегетарианское блюдо." },
+{ name: "Фасоль тушёная в томате", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Тушение", ingredients: "Фасоль (+3), Томаты (+4), Лук (+3), Морковь (+4)", rank: 4, comment: "Простое, сытное блюдо." },
+{ name: "Маринованные огурцы (домашние)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Заготовка", ingredients: "Огурцы (+4), Вода (+3), Соль (+3), Укроп (+5)", rank: 3, comment: "Хрустящие, ароматные. Хорошая закуска." },
+{ name: "Квашеная капуста (домашняя)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Ферментация", ingredients: "Капуста (+4), Морковь (+4), Соль (+3)", rank: 4, comment: "Пробиотики. Очень полезна для поля." },
+{ name: "Мочёные яблоки", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заготовка", ingredients: "Яблоки (+4), Вода (+3), Мёд (+7)", rank: 4, comment: "Традиционная заготовка. Сохраняет Qₛ." },
+        
+        // НЕЙТРАЛЬНАЯ ЕДА (0...+2)
+        { name: "Рис отварной", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Обычное", ingredients: "Рис (+1), Вода (+3)", rank: 2, comment: "Нейтральный наполнитель. Впитывает Qₛ того, с чем его едят." },
+        { name: "Макароны (из твёрдых сортов)", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Обычное", ingredients: "Мука (+2), Вода (+3)", rank: 2, comment: "Быстрая энергия. Мало Qₛ." },
+        { name: "Хлеб белый (магазинный)", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Дрожжи (0), Сахар (0)", rank: 1, comment: "«Пустые» калории. Почти без Qₛ." },
+        { name: "Чай чёрный (пакетированный)", category: "Нейтральная", Q_ing: 1, C_cook: 0.2, ritual: "В спешке", ingredients: "Чай (0), Вода (+3)", rank: 1, comment: "Стимулирует, но не насыщает семантически." },
+        // ========== НЕЙТРАЛЬНАЯ ЕДА: 70 БЛЮД ==========
+{ name: "Рис отварной", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Обычное", ingredients: "Рис (+1), Вода (+3)", rank: 2, comment: "Нейтральный наполнитель. Впитывает Qₛ того, с чем его едят." },
+{ name: "Рис жареный с яйцом", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Жарка", ingredients: "Рис (+1), Яйцо (+4), Соевый соус (-1)", rank: 2, comment: "Быстрый перекус. Qₛ смешанный." },
+{ name: "Макароны (из твёрдых сортов)", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Обычное", ingredients: "Мука (+2), Вода (+3)", rank: 2, comment: "Быстрая энергия. Мало Qₛ." },
+{ name: "Макароны с сыром", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Обычное", ingredients: "Макароны (+2), Сыр (+2)", rank: 2, comment: "Простое блюдо. Углеводы и жиры." },
+{ name: "Спагетти с томатным соусом", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Обычное", ingredients: "Спагетти (+2), Томаты (+4), Чеснок (+3)", rank: 3, comment: "Классика. Томаты немного повышают Qₛ." },
+{ name: "Спагетти с маслом и чесноком", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Обычное", ingredients: "Спагетти (+2), Масло (+3), Чеснок (+3)", rank: 2, comment: "Простое, но ароматное." },
+{ name: "Хлеб белый (магазинный)", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Дрожжи (0), Сахар (0)", rank: 1, comment: "«Пустые» калории. Почти без Qₛ." },
+{ name: "Хлеб ржаной (магазинный)", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Ржаная мука (+2), Дрожжи (0)", rank: 2, comment: "Чуть лучше белого. Больше клетчатки." },
+{ name: "Тосты с маслом", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Обычное", ingredients: "Хлеб (+1), Масло (+3)", rank: 2, comment: "Простой завтрак. Масло немного повышает Qₛ." },
+{ name: "Бутерброд с колбасой", category: "Нейтральная", Q_ing: 0, C_cook: 0.3, ritual: "В спешке", ingredients: "Хлеб (+1), Колбаса (-1), Масло (+3)", rank: 0, comment: "Qₛ около нуля. Не полезно." },
+{ name: "Бутерброд с сыром", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Обычное", ingredients: "Хлеб (+1), Сыр (+2)", rank: 1, comment: "Чуть лучше, чем с колбасой." },
+{ name: "Гренки чесночные", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Жарка", ingredients: "Хлеб (+1), Чеснок (+3), Масло (+3)", rank: 2, comment: "Хрустящие, ароматные. К супу." },
+{ name: "Картофельное пюре (на воде)", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Обычное", ingredients: "Картофель (+3), Вода (+3)", rank: 2, comment: "Диетический вариант. Мало Qₛ." },
+{ name: "Картофель отварной", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Обычное", ingredients: "Картофель (+3), Вода (+3)", rank: 3, comment: "Простой гарнир." },
+{ name: "Картофель жареный", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Жарка", ingredients: "Картофель (+3), Масло (+3)", rank: 2, comment: "Вкусно, но тяжеловато." },
+{ name: "Картофель фри", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Фритюр", ingredients: "Картофель (+3), Масло (0)", rank: 1, comment: "Много масла. Qₛ низкий." },
+{ name: "Пюре гороховое", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Обычное", ingredients: "Горох (+3), Вода (+3)", rank: 3, comment: "Сытное, богато белком." },
+{ name: "Кукуруза варёная", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Обычное", ingredients: "Кукуруза (+3), Вода (+3), Соль (+3)", rank: 3, comment: "Летнее лакомство. Солнечная энергия." },
+{ name: "Кукуруза консервированная", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Кукуруза (+2), Вода (+1), Сахар (0)", rank: 2, comment: "Меньше Qₛ, чем свежая." },
+{ name: "Горошек консервированный", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Горошек (+2), Вода (+1)", rank: 2, comment: "Удобно для салатов." },
+{ name: "Фасоль консервированная", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Фасоль (+2), Вода (+1)", rank: 2, comment: "Быстрый источник белка." },
+{ name: "Овощная икра (кабачковая)", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Промышленное", ingredients: "Кабачки (+3), Морковь (+4), Томаты (+4)", rank: 3, comment: "Неплохой вариант. Лучше домашняя." },
+{ name: "Томатная паста", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Промышленное", ingredients: "Томаты (+3), Соль (+3)", rank: 2, comment: "Концентрат. Используется для соусов." },
+{ name: "Кетчуп", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Томаты (+2), Сахар (0), Уксус (0)", rank: 1, comment: "Много добавок. Qₛ низкий." },
+{ name: "Майонез", category: "Нейтральная", Q_ing: -1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Масло (0), Яйца (+2), Уксус (0)", rank: -1, comment: "Тяжёлый соус. Лучше сметана." },
+{ name: "Сметана", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Обычное", ingredients: "Сливки (+3), Закваска (+2)", rank: 3, comment: "Полезный молочный продукт." },
+{ name: "Йогурт натуральный", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Ферментация", ingredients: "Молоко (+3), Закваска (+2)", rank: 3, comment: "Пробиотики. Полезен для пищеварения." },
+{ name: "Йогурт с наполнителем", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Йогурт (+2), Сахар (0), Фрукты (+2)", rank: 2, comment: "Много сахара. Qₛ ниже." },
+{ name: "Кефир", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Ферментация", ingredients: "Молоко (+3), Кефирный грибок (+3)", rank: 3, comment: "Очищает организм и поле." },
+{ name: "Ряженка", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Топление", ingredients: "Топлёное молоко (+3), Закваска (+2)", rank: 3, comment: "Мягкий вкус. Согревает." },
+{ name: "Творог (магазинный)", category: "Нейтральная", Q_ing: 3, C_cook: 0.4, ritual: "Промышленное", ingredients: "Молоко (+3), Закваска (+2)", rank: 3, comment: "Хороший источник белка. Лучше домашний." },
+{ name: "Творожная масса с изюмом", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Промышленное", ingredients: "Творог (+3), Сахар (0), Изюм (+2)", rank: 2, comment: "Сладкая. Qₛ ниже из-за сахара." },
+{ name: "Сыр плавленый", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Сыр (+1), Добавки (-1)", rank: 1, comment: "Много химии. Qₛ низкий." },
+{ name: "Сыр твёрдый (обычный)", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Промышленное", ingredients: "Молоко (+3), Закваска (+2), Соль (+3)", rank: 2, comment: "Хорош для бутербродов." },
+{ name: "Брынза", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Традиционный", ingredients: "Овечье молоко (+4), Соль (+3)", rank: 3, comment: "Рассольный сыр. Хорош в салатах." },
+{ name: "Молоко пастеризованное", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Молоко (+2)", rank: 2, comment: "Обработанное. Меньше Qₛ, чем парное." },
+{ name: "Молоко сгущённое", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Молоко (+2), Сахар (-1)", rank: 1, comment: "Очень сладкое. Пустые калории." },
+{ name: "Мороженое (пломбир)", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Молоко (+2), Сахар (0), Сливки (+3)", rank: 1, comment: "Вкусно, но Qₛ низкий. Есть осознанно." },
+{ name: "Чай чёрный (пакетированный)", category: "Нейтральная", Q_ing: 1, C_cook: 0.2, ritual: "В спешке", ingredients: "Чай (0), Вода (+3)", rank: 1, comment: "Стимулирует, но не насыщает семантически." },
+{ name: "Чай зелёный (пакетированный)", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Обычное", ingredients: "Зелёный чай (+1), Вода (+3)", rank: 2, comment: "Антиоксиданты. Лучше листовой." },
+{ name: "Чай травяной (из пакетика)", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Обычное", ingredients: "Травы (+2), Вода (+3)", rank: 2, comment: "Лучше свежих трав, но приемлемо." },
+{ name: "Кофе чёрный (растворимый)", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "В спешке", ingredients: "Кофе (0), Вода (+3)", rank: 0, comment: "Бодрит, но истощает Qₛ." },
+{ name: "Кофе чёрный (сваренный)", category: "Нейтральная", Q_ing: 1, C_cook: 0.4, ritual: "Осознанно", ingredients: "Кофе в зёрнах (+1), Вода (+3)", rank: 1, comment: "Чуть лучше растворимого. Пить медленно." },
+{ name: "Кофе с молоком", category: "Нейтральная", Q_ing: 1, C_cook: 0.4, ritual: "Обычное", ingredients: "Кофе (0), Молоко (+3)", rank: 1, comment: "Смягчает действие кофеина." },
+{ name: "Какао (порошок)", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "С любовью", ingredients: "Какао (+2), Молоко (+3), Сахар (0)", rank: 2, comment: "Согревает, поднимает настроение." },
+{ name: "Компот из сухофруктов", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Обычное", ingredients: "Сухофрукты (+3), Вода (+3), Сахар (0)", rank: 3, comment: "Домашний напиток. Полезнее газировки." },
+{ name: "Кисель (из брикета)", category: "Нейтральная", Q_ing: 1, C_cook: 0.4, ritual: "Обычное", ingredients: "Крахмал (0), Сахар (0), Ароматизатор (-1)", rank: 1, comment: "Сладкий напиток. Мало пользы." },
+{ name: "Сок яблочный (пакетированный)", category: "Нейтральная", Q_ing: 2, C_cook: 0.2, ritual: "Промышленное", ingredients: "Концентрат сока (+1), Сахар (0)", rank: 2, comment: "Лучше свежевыжатый." },
+{ name: "Лимонад", category: "Нейтральная", Q_ing: 0, C_cook: 0.1, ritual: "Промышленное", ingredients: "Вода (+1), Сахар (-1), Лимонная кислота (0)", rank: 0, comment: "Пустые калории. Утоляет жажду." },
+{ name: "Квас (домашний)", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Ферментация", ingredients: "Ржаной хлеб (+2), Вода (+3), Сахар (0), Дрожжи (0)", rank: 3, comment: "Традиционный напиток. Освежает." },
+{ name: "Квас (магазинный)", category: "Нейтральная", Q_ing: 1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Концентрат (0), Сахар (0), Углекислота (0)", rank: 1, comment: "Имитация кваса. Qₛ низкий." },
+{ name: "Пиво светлое", category: "Нейтральная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Вода (+1), Солод (+2), Хмель (+2), Алкоголь (-2)", rank: 0, comment: "Алкоголь снижает Cₛ. В малых дозах." },
+{ name: "Вино красное сухое", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Ферментация", ingredients: "Виноград (+4), Алкоголь (-2)", rank: 2, comment: "Антиоксиданты. Один бокал в неделю." },
+{ name: "Водка", category: "Нейтральная", Q_ing: -2, C_cook: 0.2, ritual: "Промышленное", ingredients: "Спирт (-3), Вода (+1)", rank: -2, comment: "Сильно снижает Cₛ. Разрушает поле." },
+{ name: "Шашлык из свинины (магазинный)", category: "Нейтральная", Q_ing: 1, C_cook: 0.4, ritual: "Промышленное", ingredients: "Свинина (0), Уксус (0), Специи (+2)", rank: 1, comment: "Лучше готовить самим." },
+{ name: "Котлеты (полуфабрикат)", category: "Нейтральная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Фарш (-1), Хлеб (0), Добавки (-1)", rank: 0, comment: "Неизвестный состав. Qₛ низкий." },
+{ name: "Пельмени (магазинные)", category: "Нейтральная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Фарш (-1)", rank: 0, comment: "Быстро, но Qₛ около нуля." },
+{ name: "Вареники (магазинные)", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Творог (+2), Картофель (+3)", rank: 1, comment: "Лучше домашних, но приемлемо." },
+{ name: "Блинчики (замороженные)", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Молоко (+2), Яйца (+2)", rank: 1, comment: "Разогреть и съесть. Qₛ низкий." },
+{ name: "Пицца (замороженная)", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мука (+1), Сыр (+1), Колбаса (-1)", rank: 0, comment: "Фастфуд дома. Qₛ низкий." },
+{ name: "Сухарики (снеки)", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Хлеб (0), Масло (-1), Усилители (-3)", rank: -1, comment: "Семантический мусор." },
+{ name: "Орешки солёные (снеки)", category: "Нейтральная", Q_ing: 1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Орехи (+3), Соль (+3), Масло (0)", rank: 2, comment: "Орехи полезны, но добавки снижают Qₛ." },
+{ name: "Шоколад молочный", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Какао (+2), Молоко (+2), Сахар (-1)", rank: 1, comment: "Вкусно, но мало пользы." },
+{ name: "Шоколад горький (>70%)", category: "Нейтральная", Q_ing: 3, C_cook: 0.4, ritual: "Обычное", ingredients: "Какао (+4), Какао-масло (+3), Сахар (0)", rank: 3, comment: "Антиоксиданты. Повышает настроение." },
+{ name: "Конфеты шоколадные", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сахар (-1), Какао (+1), Добавки (-1)", rank: 0, comment: "Пустые калории. Qₛ низкий." },
+{ name: "Мармелад", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сахар (-1), Желатин (0), Красители (-1)", rank: 0, comment: "Сладкий, но бесполезный." },
+{ name: "Зефир", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Яблочное пюре (+2), Сахар (-1), Белок (+4)", rank: 1, comment: "Лучше мармелада." },
+{ name: "Халва подсолнечная", category: "Нейтральная", Q_ing: 3, C_cook: 0.4, ritual: "Традиционный", ingredients: "Семечки (+4), Сахар (0), Патока (0)", rank: 3, comment: "Питательная. Семечки дают Qₛ." },
+// ========== НЕЙТРАЛЬНАЯ ЕДА: ДОПОЛНЕНИЕ (50 БЛЮД) ==========
+{ name: "Гречка отварная", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Обычное", ingredients: "Гречка (+4), Вода (+3)", rank: 3, comment: "Полезный гарнир. Богата железом." },
+{ name: "Перловка отварная", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Обычное", ingredients: "Перловка (+3), Вода (+3)", rank: 2, comment: "Сытная каша. Требует долгой варки." },
+{ name: "Пшено отварное", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Обычное", ingredients: "Пшено (+4), Вода (+3)", rank: 3, comment: "Солнечная крупа. Полезна для сердца." },
+{ name: "Ячневая каша", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Обычное", ingredients: "Ячневая крупа (+3), Вода (+3)", rank: 2, comment: "Простая, сытная каша." },
+{ name: "Манная каша", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Обычное", ingredients: "Манка (+1), Молоко (+3), Сахар (0)", rank: 1, comment: "Лёгкая, но мало пользы." },
+{ name: "Кукурузная каша", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Обычное", ingredients: "Кукурузная крупа (+3), Вода (+3)", rank: 2, comment: "Яркая, солнечная. Хороша на завтрак." },
+{ name: "Рисовая каша на молоке", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Спокойно", ingredients: "Рис (+2), Молоко (+3), Сахар (0)", rank: 2, comment: "Нежная, обволакивающая." },
+{ name: "Овсяная каша на воде", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Обычное", ingredients: "Овсянка (+3), Вода (+3)", rank: 3, comment: "Диетический вариант. Очищает." },
+{ name: "Хлопья кукурузные", category: "Нейтральная", Q_ing: 1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Кукуруза (+2), Сахар (0)", rank: 1, comment: "Быстрый завтрак. Много сахара." },
+{ name: "Мюсли с молоком", category: "Нейтральная", Q_ing: 3, C_cook: 0.4, ritual: "Обычное", ingredients: "Овсянка (+3), Орехи (+4), Сухофрукты (+3), Молоко (+3)", rank: 3, comment: "Сытный и полезный завтрак." },
+{ name: "Гранола", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Запекание", ingredients: "Овсянка (+3), Мёд (+7), Орехи (+4)", rank: 3, comment: "Энергетический перекус." },
+{ name: "Батон нарезной", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Дрожжи (0), Сахар (0)", rank: 1, comment: "Мягкий, но пустой." },
+{ name: "Багет", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Выпечка", ingredients: "Мука (+2), Вода (+3), Дрожжи (0)", rank: 2, comment: "Хрустящая корочка. Лучше белого хлеба." },
+{ name: "Лаваш тонкий", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Выпечка", ingredients: "Мука (+2), Вода (+3)", rank: 2, comment: "Универсальная лепёшка. Мало калорий." },
+{ name: "Пита", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Выпечка", ingredients: "Мука (+2), Вода (+3), Дрожжи (0)", rank: 2, comment: "С кармашком для начинки." },
+{ name: "Бублик", category: "Нейтральная", Q_ing: 1, C_cook: 0.4, ritual: "Выпечка", ingredients: "Мука (+1), Сахар (0), Дрожжи (0)", rank: 1, comment: "Традиционная выпечка. С маком." },
+{ name: "Сушка", category: "Нейтральная", Q_ing: 1, C_cook: 0.4, ritual: "Сушка", ingredients: "Мука (+1), Сахар (0)", rank: 1, comment: "Твёрдая, долго хранится." },
+{ name: "Крекер", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Масло (0), Соль (+3)", rank: 1, comment: "Хрустящий перекус." },
+{ name: "Галеты", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Вода (+3)", rank: 1, comment: "Пресные, диетические." },
+{ name: "Хлебцы", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Зерно (+3), Соль (+3)", rank: 2, comment: "Полезная альтернатива хлебу." },
+{ name: "Сухари панировочные", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Хлеб (0)", rank: 1, comment: "Для панировки." },
+{ name: "Мука пшеничная", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Пшеница (+2)", rank: 1, comment: "Основа выпечки. Лучше цельнозерновая." },
+{ name: "Мука ржаная", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Рожь (+3)", rank: 2, comment: "Тёмная, ароматная. Для хлеба." },
+{ name: "Крахмал картофельный", category: "Нейтральная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Картофель (+2)", rank: 0, comment: "Загуститель. Qₛ низкий." },
+{ name: "Дрожжи сухие", category: "Нейтральная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Культура дрожжей (0)", rank: 0, comment: "Для подъёма теста." },
+{ name: "Разрыхлитель", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сода (0), Кислота (0)", rank: 0, comment: "Химия для выпечки." },
+{ name: "Ванилин", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Ароматизатор (-1)", rank: 0, comment: "Искусственный аромат." },
+{ name: "Сахар-песок", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Свёкла/тростник (0)", rank: 0, comment: "Пустые калории. Снижает Cₛ." },
+{ name: "Сахарная пудра", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сахар (0), Крахмал (0)", rank: 0, comment: "Для украшения." },
+{ name: "Соль поваренная", category: "Нейтральная", Q_ing: 3, C_cook: 0.3, ritual: "Промышленное", ingredients: "Хлорид натрия (+3)", rank: 3, comment: "Необходима, но в меру. Очищает." },
+{ name: "Сода пищевая", category: "Нейтральная", Q_ing: 1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Бикарбонат натрия (+1)", rank: 1, comment: "Для выпечки и очистки." },
+{ name: "Уксус столовый", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Спирт (0), Уксусная кислота (0)", rank: 0, comment: "Консервант. Лучше яблочный." },
+{ name: "Масло подсолнечное", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Семечки (+3)", rank: 2, comment: "Для жарки. Лучше нерафинированное." },
+{ name: "Масло сливочное (магазинное)", category: "Нейтральная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Сливки (+3)", rank: 2, comment: "Хороший жир. В меру." },
+{ name: "Маргарин", category: "Нейтральная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Масла растительные (-1), Трансжиры (-2)", rank: -1, comment: "Вреден. Лучше масло." },
+{ name: "Спред", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Смесь жиров (0)", rank: 0, comment: "Замена маслу." },
+{ name: "Майонез домашний", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Взбивание", ingredients: "Масло (0), Яйца (+4), Горчица (+2)", rank: 1, comment: "Лучше покупного, но жирно." },
+{ name: "Кетчуп домашний", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Варка", ingredients: "Томаты (+4), Лук (+3), Специи (+3)", rank: 3, comment: "Без добавок. Полезно." },
+{ name: "Горчица", category: "Нейтральная", Q_ing: 2, C_cook: 0.4, ritual: "Обычное", ingredients: "Горчичный порошок (+2), Вода (+3)", rank: 2, comment: "Острая приправа." },
+{ name: "Хрен столовый", category: "Нейтральная", Q_ing: 3, C_cook: 0.4, ritual: "Обычное", ingredients: "Хрен (+4), Уксус (0)", rank: 3, comment: "Ядрёный. Полезен." },
+{ name: "Соус соевый", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Ферментация", ingredients: "Соя (+2), Пшеница (+2), Соль (+3)", rank: 1, comment: "Много соли. В меру." },
+{ name: "Соус ткемали", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Варка", ingredients: "Слива (+4), Чеснок (+3), Зелень (+5)", rank: 3, comment: "Кисло-сладкий. К мясу." },
+{ name: "Аджика", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Сырая", ingredients: "Перец острый (+4), Чеснок (+3), Зелень (+5)", rank: 3, comment: "Острая, живая." },
+{ name: "Песто", category: "Нейтральная", Q_ing: 4, C_cook: 0.5, ritual: "Сырой", ingredients: "Базилик (+5), Орехи (+4), Сыр (+2), Масло оливковое (+3)", rank: 4, comment: "Ароматный, полезный." },
+{ name: "Соус барбекю", category: "Нейтральная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Томаты (+2), Сахар (-1), Уксус (0)", rank: 1, comment: "Сладкий, копчёный." },
+{ name: "Бульон куриный (из кубика)", category: "Нейтральная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Соль (-1), Усилители (-3), Жир (0)", rank: -1, comment: "Химия. Лучше натуральный." },
+{ name: "Бульон говяжий (из кубика)", category: "Нейтральная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Соль (-1), Усилители (-3)", rank: -1, comment: "Аналогично." },
+{ name: "Суп вермишелевый (из пакета)", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Вермишель (+1), Соль (-1), Усилители (-3)", rank: 0, comment: "Быстро, но вредно." },
+{ name: "Пюре картофельное (порошок)", category: "Нейтральная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Картофель (+1), Добавки (-1)", rank: 0, comment: "Удобно, но не полезно." },
+{ name: "Чурчхела", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Традиционный", ingredients: "Виноградный сок (+4), Орехи грецкие (+4), Мука кукурузная (+2)", rank: 4, comment: "Натуральная сладость. Энергия солнца и орехов. Полезна и сытна." },
+        
+        // ТЁМНАЯ ЕДА (-1...-2)
+        { name: "Колбаса (промышленная)", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мясо (-2), Жир (-1), Добавки (-2)", rank: -1, comment: "Содержит Qₛ страха и смерти. Тяжёлая пища." },
+        { name: "Консервы (мясные)", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мясо (-2), Консерванты (-2)", rank: -1, comment: "«Мёртвая» еда. Qₛ почти отсутствует." },
+        { name: "Сладкая газировка", category: "Тёмная", Q_ing: -2, C_cook: 0.1, ritual: "Промышленное", ingredients: "Вода (+1), Сахар (0), Химия (-3)", rank: -2, comment: "Вносит S_noise. Разрушает Cₛ." },
+        { name: "Чипсы", category: "Тёмная", Q_ing: -2, C_cook: 0.1, ritual: "Промышленное", ingredients: "Картофель (-1), Масло (-1), Усилители (-3)", rank: -2, comment: "Семантический мусор. Не насыщает." },
+        // ========== ТЁМНАЯ ЕДА: 100 БЛЮД ==========
+{ name: "Колбаса варёная", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мясо (-1), Жир (-1), Добавки (-2)", rank: -1, comment: "Много химии. Qₛ низкий." },
+{ name: "Колбаса копчёная", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мясо (-1), Жир (-1), Дым (0)", rank: -1, comment: "Копчение добавляет аромат, но не Qₛ." },
+{ name: "Сосиски", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мясо (-1), Жир (-1), Добавки (-2)", rank: -1, comment: "Детский фастфуд. Мало мяса." },
+{ name: "Сардельки", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мясо (-1), Жир (-1)", rank: -1, comment: "Аналогично сосискам." },
+{ name: "Ветчина", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Свинина (-1), Вода (+1), Добавки (-2)", rank: -1, comment: "Обработанное мясо." },
+{ name: "Бекон", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Копчение", ingredients: "Свинина (-1), Соль (+3), Дым (0)", rank: -1, comment: "Жирный, солёный. Вкусно, но вредно." },
+{ name: "Грудинка копчёная", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Копчение", ingredients: "Свинина (-1), Соль (+3)", rank: -1, comment: "Жирное мясо." },
+{ name: "Карбонат", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Запекание", ingredients: "Свинина (0), Соль (+3)", rank: -1, comment: "Мясной деликатес." },
+{ name: "Буженина", category: "Тёмная", Q_ing: 0, C_cook: 0.4, ritual: "Запекание", ingredients: "Свинина (0), Чеснок (+3), Специи (+3)", rank: 0, comment: "Домашняя лучше." },
+{ name: "Тушёнка", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Консервация", ingredients: "Мясо (-1), Жир (-1)", rank: -1, comment: "Долго хранится. Qₛ низкий." },
+{ name: "Паштет печёночный", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Печень (0), Жир (-1), Добавки (-2)", rank: -1, comment: "Много жира и добавок." },
+{ name: "Заливное", category: "Тёмная", Q_ing: 0, C_cook: 0.5, ritual: "Варка", ingredients: "Мясо (0), Бульон (0), Желатин (0)", rank: 0, comment: "Холодная закуска." },
+{ name: "Холодец", category: "Тёмная", Q_ing: 0, C_cook: 0.6, ritual: "Долгая варка", ingredients: "Свиные ножки (0), Мясо (0), Чеснок (+3)", rank: 0, comment: "Традиционное блюдо. Коллаген полезен." },
+{ name: "Рыба копчёная", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Копчение", ingredients: "Рыба (0), Соль (+3), Дым (0)", rank: 0, comment: "Вкусно, но много соли." },
+{ name: "Рыба солёная", category: "Тёмная", Q_ing: 0, C_cook: 0.2, ritual: "Засолка", ingredients: "Рыба (0), Соль (+3)", rank: 0, comment: "Селёдка, скумбрия. Полезна, но солёная." },
+{ name: "Рыба вяленая", category: "Тёмная", Q_ing: 0, C_cook: 0.2, ritual: "Вяление", ingredients: "Рыба (0), Соль (+3)", rank: 0, comment: "Закуска к пиву." },
+{ name: "Рыбные консервы", category: "Тёмная", Q_ing: 0, C_cook: 0.2, ritual: "Консервация", ingredients: "Рыба (0), Масло (0)", rank: 0, comment: "Тунец, сардины. Удобно." },
+{ name: "Шпроты", category: "Тёмная", Q_ing: 0, C_cook: 0.2, ritual: "Копчение + масло", ingredients: "Килька (0), Масло (0), Дым (0)", rank: 0, comment: "Маленькие копчёные рыбки." },
+{ name: "Икра кабачковая (магазинная)", category: "Тёмная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Кабачки (+3), Морковь (+4), Томаты (+4)", rank: 2, comment: "Неплохо, но много масла." },
+{ name: "Икра баклажанная", category: "Тёмная", Q_ing: 1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Баклажаны (+4), Масло (0)", rank: 1, comment: "Овощная закуска." },
+{ name: "Овощные консервы", category: "Тёмная", Q_ing: 1, C_cook: 0.2, ritual: "Консервация", ingredients: "Овощи (+2), Вода (+1), Соль (+3)", rank: 1, comment: "Горошек, кукуруза, фасоль." },
+{ name: "Маринованные грибы", category: "Тёмная", Q_ing: 1, C_cook: 0.3, ritual: "Маринование", ingredients: "Грибы (+3), Уксус (0), Соль (+3)", rank: 1, comment: "Закуска. Лучше свежих." },
+{ name: "Маринованные помидоры", category: "Тёмная", Q_ing: 2, C_cook: 0.3, ritual: "Заготовка", ingredients: "Помидоры (+3), Уксус (0), Соль (+3)", rank: 2, comment: "Зимняя закуска." },
+{ name: "Солёные огурцы", category: "Тёмная", Q_ing: 2, C_cook: 0.3, ritual: "Засолка", ingredients: "Огурцы (+3), Соль (+3), Укроп (+5)", rank: 2, comment: "Классика. Полезны." },
+{ name: "Квашеная капуста (магазинная)", category: "Тёмная", Q_ing: 2, C_cook: 0.3, ritual: "Промышленное", ingredients: "Капуста (+3), Соль (+3)", rank: 2, comment: "Лучше домашней." },
+{ name: "Кимчи", category: "Тёмная", Q_ing: 3, C_cook: 0.5, ritual: "Ферментация", ingredients: "Пекинская капуста (+4), Перец (+4), Чеснок (+3)", rank: 3, comment: "Острое, полезное." },
+{ name: "Оливки консервированные", category: "Тёмная", Q_ing: 1, C_cook: 0.2, ritual: "Консервация", ingredients: "Оливки (+2), Рассол (+1)", rank: 1, comment: "Солёные. В меру." },
+{ name: "Маслины", category: "Тёмная", Q_ing: 1, C_cook: 0.2, ritual: "Консервация", ingredients: "Маслины (+2)", rank: 1, comment: "Чёрные оливки." },
+{ name: "Варенье", category: "Тёмная", Q_ing: 1, C_cook: 0.5, ritual: "Варка", ingredients: "Ягоды (+4), Сахар (-1)", rank: 1, comment: "Сладкое. Много сахара." },
+{ name: "Джем", category: "Тёмная", Q_ing: 1, C_cook: 0.4, ritual: "Варка", ingredients: "Фрукты (+3), Сахар (-1)", rank: 1, comment: "Однородное варенье." },
+{ name: "Повидло", category: "Тёмная", Q_ing: 1, C_cook: 0.4, ritual: "Уваривание", ingredients: "Яблоки (+4), Сахар (-1)", rank: 1, comment: "Густое, сладкое." },
+{ name: "Конфитюр", category: "Тёмная", Q_ing: 1, C_cook: 0.4, ritual: "Варка", ingredients: "Ягоды (+4), Сахар (-1), Желирующее (0)", rank: 1, comment: "С кусочками ягод." },
+{ name: "Сироп", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Варка", ingredients: "Сахар (-1), Вода (+1)", rank: 0, comment: "Жидкий сахар." },
+{ name: "Сгущёнка варёная", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Варка", ingredients: "Молоко (+2), Сахар (-1)", rank: 0, comment: "Сладкая масса." },
+{ name: "Ириски", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сахар (-1), Молоко (+2)", rank: -1, comment: "Тягучие конфеты." },
+{ name: "Карамель", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сахар (-1), Патока (0)", rank: -1, comment: "Твёрдые конфеты." },
+{ name: "Леденцы", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сахар (-1), Ароматизатор (-1)", rank: -1, comment: "Сладкие. Пустые." },
+{ name: "Шоколадные батончики", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сахар (-1), Какао (+1), Нуга (-1)", rank: -1, comment: "Много сахара и жира." },
+{ name: "Вафли", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-1), Жир (-1)", rank: -1, comment: "Хрустящие, сладкие." },
+{ name: "Печенье сахарное", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-1), Маргарин (-1)", rank: -1, comment: "Сладкое, рассыпчатое." },
+{ name: "Печенье овсяное (магазинное)", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Овсянка (+3), Сахар (-1)", rank: 0, comment: "Лучше домашнего." },
+{ name: "Крекеры солёные", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Соль (+3), Масло (0)", rank: 0, comment: "Хрустящий перекус." },
+{ name: "Пряники (магазинные)", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-1), Пряности (+3)", rank: 0, comment: "Мягкие, сладкие." },
+{ name: "Кекс (магазинный)", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-1), Яйца (+2)", rank: 0, comment: "Сладкая выпечка." },
+{ name: "Рулет с маком", category: "Тёмная", Q_ing: 0, C_cook: 0.4, ritual: "Выпечка", ingredients: "Мука (+1), Мак (+3), Сахар (-1)", rank: 0, comment: "Традиционная выпечка." },
+{ name: "Пирожное заварное", category: "Тёмная", Q_ing: -1, C_cook: 0.4, ritual: "Выпечка", ingredients: "Мука (+1), Масло (0), Крем (-1)", rank: -1, comment: "Сладкое, жирное." },
+{ name: "Пирожное картошка", category: "Тёмная", Q_ing: -1, C_cook: 0.4, ritual: "Смешивание", ingredients: "Печенье (-1), Масло (0), Какао (+2)", rank: -1, comment: "Сладкая масса." },
+{ name: "Торт вафельный", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Вафли (-1), Крем (-1)", rank: -1, comment: "Очень сладкий." },
+{ name: "Торт бисквитный", category: "Тёмная", Q_ing: -1, C_cook: 0.4, ritual: "Выпечка", ingredients: "Мука (+1), Сахар (-1), Яйца (+2), Крем (-1)", rank: -1, comment: "Праздничный десерт." },
+{ name: "Чизкейк", category: "Тёмная", Q_ing: 0, C_cook: 0.5, ritual: "Выпечка", ingredients: "Сыр (+2), Сахар (-1), Яйца (+2)", rank: 0, comment: "Нежный, сливочный." },
+{ name: "Мороженое фруктовый лёд", category: "Тёмная", Q_ing: 0, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сок (+2), Сахар (-1)", rank: 0, comment: "Замороженный сок." },
+{ name: "Мороженое эскимо", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Молоко (+2), Сахар (-1), Шоколад (0)", rank: -1, comment: "Сладкое, холодное." },
+{ name: "Молочный коктейль", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Смешивание", ingredients: "Молоко (+2), Мороженое (-1), Сироп (-1)", rank: 0, comment: "Сладкий напиток." },
+{ name: "Газировка сладкая", category: "Тёмная", Q_ing: -2, C_cook: 0.1, ritual: "Промышленное", ingredients: "Вода (+1), Сахар (-1), Углекислота (0)", rank: -2, comment: "Вносит S_noise. Разрушает Cₛ." },
+{ name: "Кола", category: "Тёмная", Q_ing: -2, C_cook: 0.1, ritual: "Промышленное", ingredients: "Вода (+1), Сахар (-1), Кофеин (+1), Кислота (-1)", rank: -2, comment: "Сильно снижает Cₛ." },
+
+{ name: "Квас (магазинный)", category: "Тёмная", Q_ing: 1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Концентрат (0), Сахар (0), Углекислота (0)", rank: 1, comment: "Имитация кваса. Qₛ низкий." },
+{ name: "Пиво тёмное", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Ферментация", ingredients: "Вода (+1), Солод (+2), Хмель (+2), Алкоголь (-2)", rank: 0, comment: "Алкоголь снижает Cₛ." },
+{ name: "Вино белое", category: "Тёмная", Q_ing: 1, C_cook: 0.4, ritual: "Ферментация", ingredients: "Виноград (+4), Алкоголь (-2)", rank: 1, comment: "Легче красного." },
+{ name: "Шампанское", category: "Тёмная", Q_ing: 1, C_cook: 0.4, ritual: "Ферментация", ingredients: "Виноград (+4), Алкоголь (-2), Углекислота (0)", rank: 1, comment: "Праздничный напиток." },
+{ name: "Коньяк", category: "Тёмная", Q_ing: 0, C_cook: 0.4, ritual: "Выдержка", ingredients: "Виноград (+4), Алкоголь (-2), Дуб (+4)", rank: 0, comment: "Крепкий алкоголь." },
+{ name: "Виски", category: "Тёмная", Q_ing: 0, C_cook: 0.4, ritual: "Выдержка", ingredients: "Зерно (+3), Алкоголь (-2), Дуб (+4)", rank: 0, comment: "Крепкий напиток." },
+{ name: "Ром", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Дистилляция", ingredients: "Сахарный тростник (0), Алкоголь (-2)", rank: -1, comment: "Сладкий крепкий алкоголь." },
+{ name: "Джин", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Дистилляция", ingredients: "Зерно (+2), Можжевельник (+4), Алкоголь (-2)", rank: 0, comment: "Ароматный." },
+{ name: "Текила", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Дистилляция", ingredients: "Агава (+3), Алкоголь (-2)", rank: 0, comment: "Мексиканский напиток." },
+{ name: "Ликёр", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Смешивание", ingredients: "Алкоголь (-2), Сахар (-1), Ароматизаторы (-1)", rank: -1, comment: "Сладкий, крепкий." },
+{ name: "Коктейль алкогольный", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Смешивание", ingredients: "Алкоголь (-2), Соки (+2), Сиропы (-1)", rank: -1, comment: "Смесь. Qₛ низкий." },
+{ name: "Чипсы картофельные", category: "Тёмная", Q_ing: -2, C_cook: 0.1, ritual: "Промышленное", ingredients: "Картофель (-1), Масло (-1), Усилители (-3)", rank: -2, comment: "Семантический мусор." },
+{ name: "Чипсы кукурузные (начос)", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Кукуруза (+2), Масло (-1), Соль (+3)", rank: -1, comment: "Лучше картофельных." },
+{ name: "Сухарики (снеки)", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Хлеб (0), Масло (-1), Усилители (-3)", rank: -1, comment: "Солёные, хрустящие." },
+{ name: "Попкорн солёный", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Нагревание", ingredients: "Кукуруза (+2), Масло (0), Соль (+3)", rank: 0, comment: "Цельное зерно. Лучше без добавок." },
+{ name: "Попкорн сладкий", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Промышленное", ingredients: "Кукуруза (+2), Сахар (-1), Масло (0)", rank: -1, comment: "Сладкий, карамельный." },
+{ name: "Орешки в глазури", category: "Тёмная", Q_ing: 0, C_cook: 0.3, ritual: "Промышленное", ingredients: "Орехи (+4), Сахар (-1)", rank: 0, comment: "Сладкая закуска." },
+{ name: "Семечки жареные", category: "Тёмная", Q_ing: 2, C_cook: 0.3, ritual: "Жарка", ingredients: "Семечки (+4), Соль (+3)", rank: 2, comment: "Полезны, но калорийны." },
+{ name: "Арахис солёный", category: "Тёмная", Q_ing: 2, C_cook: 0.3, ritual: "Жарка", ingredients: "Арахис (+3), Соль (+3)", rank: 2, comment: "Бобовые. Сытные." },
+{ name: "Козинаки", category: "Тёмная", Q_ing: 2, C_cook: 0.4, ritual: "Смешивание", ingredients: "Семечки (+4), Мёд (+7)", rank: 2, comment: "Полезная сладость." },
+
+{ name: "Рахат-лукум", category: "Тёмная", Q_ing: 0, C_cook: 0.4, ritual: "Варка", ingredients: "Крахмал (0), Сахар (-1), Орехи (+4)", rank: 0, comment: "Восточная сладость." },
+{ name: "Нуга", category: "Тёмная", Q_ing: 0, C_cook: 0.4, ritual: "Варка", ingredients: "Мёд (+7), Орехи (+4), Белок (+4)", rank: 1, comment: "Сладкая, ореховая." },
+{ name: "Марципан", category: "Тёмная", Q_ing: 2, C_cook: 0.5, ritual: "Смешивание", ingredients: "Миндаль (+4), Сахар (-1)", rank: 2, comment: "Миндальная масса." },
+{ name: "Шербет", category: "Тёмная", Q_ing: 1, C_cook: 0.4, ritual: "Варка", ingredients: "Сахар (-1), Орехи (+4), Фрукты (+3)", rank: 1, comment: "Сладкий, с орехами." },
+{ name: "Пахлава (магазинная, на сиропе)", category: "Нейтральная", Q_ing: 1, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-1), Маргарин (-1), Орехи (+2)", rank: 1, comment: "Имитация. Много сахара. Qₛ низкий." },
+{ name: "Пончики жареные", category: "Тёмная", Q_ing: -1, C_cook: 0.4, ritual: "Фритюр", ingredients: "Мука (+1), Сахар (-1), Масло (-1)", rank: -1, comment: "Жирные, сладкие." },
+{ name: "Чебуреки жареные", category: "Тёмная", Q_ing: 0, C_cook: 0.4, ritual: "Фритюр", ingredients: "Мука (+1), Мясо (0), Масло (-1)", rank: 0, comment: "Сочные, но жирные." },
+{ name: "Беляши", category: "Тёмная", Q_ing: 0, C_cook: 0.4, ritual: "Фритюр", ingredients: "Мука (+1), Мясо (0), Масло (-1)", rank: 0, comment: "Жареные пирожки." },
+{ name: "Хот-дог", category: "Тёмная", Q_ing: -1, C_cook: 0.2, ritual: "Фастфуд", ingredients: "Булка (+1), Сосиска (-1), Кетчуп (1)", rank: -1, comment: "Уличная еда." },
+{ name: "Гамбургер", category: "Тёмная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Булка (0), Котлета (-3), Соус (-2), Сыр (-1)", rank: -3, comment: "Концентрат негативного Qₛ." },
+{ name: "Чизбургер", category: "Тёмная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Булка (0), Котлета (-3), Сыр (-1), Соус (-2)", rank: -3, comment: "Аналогично гамбургеру." },
+{ name: "Картофель фри", category: "Тёмная", Q_ing: -2, C_cook: 0.2, ritual: "Фритюр", ingredients: "Картофель (+3), Масло (-2)", rank: -2, comment: "Много масла. Qₛ низкий." },
+{ name: "Наггетсы", category: "Тёмная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Курица (-2), Панировка (0), Масло (-2)", rank: -3, comment: "Переработанное мясо." },
+{ name: "Пицца (фастфуд)", category: "Тёмная", Q_ing: -2, C_cook: 0.2, ritual: "Конвейер", ingredients: "Тесто (0), Сыр (0), Колбаса (-1), Соус (-1)", rank: -2, comment: "Быстрая пицца. Qₛ низкий." },
+{ name: "Шаурма", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Уличная еда", ingredients: "Лаваш (+2), Мясо (0), Овощи (+4), Соус (-1)", rank: -1, comment: "Зависит от качества мяса." },
+{ name: "Блинчики с мясом (фастфуд)", category: "Тёмная", Q_ing: -1, C_cook: 0.3, ritual: "Разогрев", ingredients: "Блины (+1), Фарш (-1)", rank: -1, comment: "Полуфабрикат." },
+{ name: "Лапша быстрого приготовления", category: "Тёмная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Мука (0), Масло (-1), Усилители (-4)", rank: -3, comment: "«Пустая» еда." },
+{ name: "Пюре быстрого приготовления", category: "Тёмная", Q_ing: -2, C_cook: 0.1, ritual: "Конвейер", ingredients: "Картофель (-1), Добавки (-2)", rank: -2, comment: "Химия." },
+        
+        // ТОКСИЧНАЯ ЕДА (-3)
+        // ========== ТОКСИЧНАЯ ЕДА: 50 БЛЮД ==========
+{ name: "Гамбургер (фастфуд)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Булка (0), Котлета (-3), Соус (-2), Сыр (-1)", rank: -3, comment: "Концентрат негативного Qₛ. Вызывает «туман» и упадок сил." },
+{ name: "Чизбургер (фастфуд)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Булка (0), Котлета (-3), Сыр (-1), Соус (-2)", rank: -3, comment: "Аналогично гамбургеру. Много жира и химии." },
+{ name: "Картофель фри (фастфуд)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Фритюр", ingredients: "Картофель (+2), Масло (-3), Соль (+3)", rank: -3, comment: "Пережаренное масло — источник -Qₛ." },
+{ name: "Наггетсы куриные", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Фарш (-2), Панировка (0), Масло (-3)", rank: -3, comment: "Переработанное мясо с добавками." },
+{ name: "Крылышки острые (фастфуд)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Фритюр", ingredients: "Курица (-1), Панировка (0), Масло (-3), Соус (-2)", rank: -3, comment: "Жирные, острые, с химией." },
+{ name: "Пицца (фастфуд, дешёвая)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Тесто (0), Сыр (-1), Колбаса (-2), Кетчуп (-1)", rank: -3, comment: "Много калорий, мало пользы." },
+{ name: "Хот-дог (уличный)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Разогрев", ingredients: "Булка (0), Сосиска (-2), Кетчуп (-1), Майонез (-2)", rank: -3, comment: "Сомнительное качество ингредиентов." },
+{ name: "Шаурма (сомнительная)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Уличная еда", ingredients: "Лаваш (+2), Мясо (-2), Соус (-2), Овощи (+3)", rank: -2, comment: "Ранг зависит от мяса. Часто -3." },
+{ name: "Беляши (уличные)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Фритюр", ingredients: "Тесто (0), Фарш (-2), Масло (-3)", rank: -3, comment: "Много пережаренного масла." },
+{ name: "Чебуреки (уличные)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Фритюр", ingredients: "Тесто (0), Фарш (-2), Масло (-3)", rank: -3, comment: "Аналогично беляшам." },
+{ name: "Пончики жареные (уличные)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Фритюр", ingredients: "Тесто (+1), Сахар (-1), Масло (-3)", rank: -3, comment: "Сладкие, жирные, пустые." },
+{ name: "Лапша быстрого приготовления", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Мука (0), Масло (-1), Усилители (-4)", rank: -3, comment: "«Пустая» еда. Не содержит ничего живого." },
+{ name: "Пюре картофельное (порошок)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Картофель (-1), Добавки (-3)", rank: -3, comment: "Химия вместо картошки." },
+{ name: "Суп из пакета", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Соль (-1), Усилители (-4), Сушёные овощи (0)", rank: -3, comment: "Соль и химия." },
+{ name: "Бульонные кубики", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Соль (-1), Усилители (-4), Жир (0)", rank: -3, comment: "Основа для «пустых» супов." },
+{ name: "Крабовые палочки", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Рыбный фарш (-2), Крахмал (0), Красители (-2)", rank: -3, comment: "Имитация краба. Химия." },
+{ name: "Сосиски дешёвые", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Мясо (-2), Жир (-1), Добавки (-3)", rank: -3, comment: "Мало мяса, много химии." },
+{ name: "Колбаса варёная (дешёвая)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Мясо (-2), Жир (-1), Добавки (-3)", rank: -3, comment: "Аналогично сосискам." },
+{ name: "Паштет (дешёвый)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Конвейер", ingredients: "Субпродукты (-1), Жир (-1), Добавки (-3)", rank: -3, comment: "Много жира и химии." },
+{ name: "Рыбные консервы в масле (дешёвые)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Консервация", ingredients: "Рыба (-1), Масло (-2)", rank: -3, comment: "Низкое качество рыбы и масла." },
+{ name: "Шпроты (дешёвые)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Копчение + масло", ingredients: "Килька (-1), Масло (-2), Дым (0)", rank: -3, comment: "Много масла сомнительного качества." },
+{ name: "Чипсы картофельные", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Картофель (-1), Масло (-2), Усилители (-4)", rank: -3, comment: "Семантический мусор. Не насыщает." },
+{ name: "Чипсы кукурузные (с усилителями)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Кукуруза (+2), Масло (-2), Усилители (-4)", rank: -3, comment: "Лучше картофельных, но всё равно вредно." },
+{ name: "Сухарики (снеки)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Хлеб (0), Масло (-2), Усилители (-4)", rank: -3, comment: "Солёные, хрустящие, пустые." },
+{ name: "Попкорн для микроволновки", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Кукуруза (+2), Масло (-2), Усилители (-3)", rank: -3, comment: "Химия вместо натурального попкорна." },
+{ name: "Кириешки", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Хлеб (0), Масло (-2), Усилители (-4)", rank: -3, comment: "Классика «мусорной» еды." },
+{ name: "Орешки в глазури (дешёвые)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Промышленное", ingredients: "Орехи (+3), Сахар (-2), Глазурь (-3)", rank: -3, comment: "Глазурь — сплошная химия." },
+{ name: "Конфеты жевательные", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Сахар (-2), Желатин (0), Красители (-2)", rank: -3, comment: "Сахар и химия." },
+{ name: "Мармелад (дешёвый)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Сахар (-2), Желатин (0), Красители (-2)", rank: -3, comment: "Пустые калории." },
+{ name: "Зефир (дешёвый)", category: "Токсичная", Q_ing: -2, C_cook: 0.2, ritual: "Промышленное", ingredients: "Сахар (-2), Белок (+3), Пектин (0)", rank: -2, comment: "Лучше мармелада, но всё равно много сахара." },
+{ name: "Шоколадные батончики (дешёвые)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Сахар (-2), Жир (-2), Какао (+1)", rank: -3, comment: "Много сахара и жира." },
+{ name: "Вафли (дешёвые)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-2), Жир (-2)", rank: -3, comment: "Сладкие, жирные, пустые." },
+{ name: "Печенье сахарное (дешёвое)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-2), Маргарин (-2)", rank: -3, comment: "Трансжиры и сахар." },
+{ name: "Кекс (дешёвый, упакованный)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-2), Маргарин (-2)", rank: -3, comment: "Долго хранится — много консервантов." },
+{ name: "Рулет бисквитный (дешёвый)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мука (+1), Сахар (-2), Джем (-1)", rank: -3, comment: "Сладкий, с химическим джемом." },
+{ name: "Торт вафельный (дешёвый)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Промышленное", ingredients: "Вафли (-2), Крем (-2)", rank: -3, comment: "Сахар и трансжиры." },
+{ name: "Пирожное заварное (дешёвое)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Промышленное", ingredients: "Мука (+1), Масло (-2), Крем (-2)", rank: -3, comment: "Жирный крем на маргарине." },
+{ name: "Мороженое (дешёвое, растительное)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Молоко (+1), Растительные жиры (-3), Сахар (-2)", rank: -3, comment: "Пальмовое масло вместо сливок." },
+{ name: "Молочный коктейль (фастфуд)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Смешивание", ingredients: "Молоко (+1), Сироп (-3), Мороженое (-2)", rank: -3, comment: "Сахарная бомба." },
+{ name: "Газировка сладкая", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Вода (+1), Сахар (-2), Кислота (-1)", rank: -3, comment: "Вносит S_noise. Разрушает Cₛ." },
+{ name: "Кола", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Вода (+1), Сахар (-2), Кофеин (+1), Кислота (-2)", rank: -3, comment: "Сильно снижает Cₛ." },
+{ name: "Энергетик", category: "Токсичная", Q_ing: -4, C_cook: 0.1, ritual: "Промышленное", ingredients: "Вода (+1), Кофеин (+1), Сахар (-2), Химия (-4)", rank: -4, comment: "Всплеск, потом глубокий провал. Истощает." },
+{ name: "Алкоголь (водка, дешёвая)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Дистилляция", ingredients: "Спирт (-4), Вода (+1)", rank: -3, comment: "Разрушает поле и печень." },
+{ name: "Алкоголь (пиво дешёвое)", category: "Токсичная", Q_ing: -3, C_cook: 0.2, ritual: "Промышленное", ingredients: "Вода (+1), Солод (+1), Алкоголь (-2), Химия (-3)", rank: -3, comment: "Порошковое пиво. Химия." },
+{ name: "Коктейль алкогольный (дешёвый)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Смешивание", ingredients: "Алкоголь (-3), Сироп (-3)", rank: -3, comment: "Смесь ядов." },
+{ name: "Маргарин", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Растительные масла (-3), Трансжиры (-4)", rank: -3, comment: "Чистый вред." },
+{ name: "Спред", category: "Токсичная", Q_ing: -2, C_cook: 0.1, ritual: "Промышленное", ingredients: "Смесь жиров (-2)", rank: -2, comment: "Лучше маргарина, но хуже масла." },
+{ name: "Майонез (дешёвый)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Масло (-2), Яйца (+1), Уксус (0), Добавки (-3)", rank: -3, comment: "Тяжёлый соус. Лучше сметана." },
+{ name: "Кетчуп (дешёвый)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Томаты (+1), Сахар (-2), Уксус (0), Крахмал (0)", rank: -3, comment: "Много сахара и крахмала." },
+{ name: "Соус сырный (фастфуд)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Промышленное", ingredients: "Сыр (-1), Масло (-2), Добавки (-3)", rank: -3, comment: "Химический сырный вкус." },
+        { name: "Фастфуд (бургер)", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Булка (0), Котлета (-3), Соус (-2), Сыр (-1)", rank: -3, comment: "Концентрат негативного Qₛ. Вызывает «туман» и упадок сил." },
+              
+        { name: "Лапша быстрого приготовления", category: "Токсичная", Q_ing: -3, C_cook: 0.1, ritual: "Конвейер", ingredients: "Мука (0), Масло (-1), Усилители (-4)", rank: -3, comment: "«Пустая» еда. Не содержит ничего живого." },
+        
+// ========== ФРУКТЫ (20 штук) ==========
+{ name: "Яблоко свежее (фермерское)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Яблоко цельное (+4)", rank: 4, comment: "Классика. Содержит много клетчатки и живого Qₛ." },
+{ name: "Яблоко печёное с корицей", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Яблоко (+4), Корица (+4), Мёд (+7)", rank: 5, comment: "Тёплое, уютное. Согревает семантически." },
+{ name: "Яблоко мочёное", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Ферментация", ingredients: "Яблоко (+4), Вода (+3), Мёд (+7)", rank: 4, comment: "Традиционная заготовка. Сохраняет Qₛ." },
+{ name: "Груша свежая (спелая)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Груша цельная (+4)", rank: 4, comment: "Сочная, сладкая. Мягкая энергия." },
+{ name: "Груша запечённая с мёдом", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Груша (+4), Мёд (+7), Корица (+4)", rank: 5, comment: "Изысканный десерт. Нежный Qₛ." },
+{ name: "Банан", category: "Живая", Q_ing: 3, C_cook: 0.5, ritual: "Сырое", ingredients: "Банан цельный (+3)", rank: 3, comment: "Быстрая энергия. Хорош для перекуса." },
+{ name: "Банан запечённый с шоколадом", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Банан (+3), Шоколад горький (+3)", rank: 3, comment: "Десерт для поднятия настроения." },
+{ name: "Апельсин свежий", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Апельсин цельный (+4)", rank: 4, comment: "Солнечная энергия. Витамин C и радость." },
+{ name: "Мандарин", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Мандарин цельный (+4)", rank: 4, comment: "Праздничная энергия. Поднимает настроение." },
+{ name: "Лимон", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Лимон цельный (+4)", rank: 4, comment: "Очищает. Бодрит. Антисептик для поля." },
+{ name: "Лимонный сок с водой и мёдом", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Смешивание", ingredients: "Лимон (+4), Вода (+3), Мёд (+7)", rank: 6, comment: "Утренний детокс. Пробуждает Cₛ." },
+{ name: "Грейпфрут", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Грейпфрут цельный (+4)", rank: 4, comment: "Горьковатый. Сжигает негатив." },
+{ name: "Киви", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Киви цельное (+4)", rank: 4, comment: "Зелёная энергия. Много витаминов." },
+{ name: "Ананас свежий", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Ананас цельный (+4)", rank: 4, comment: "Тропическая радость. Ферменты бодрят." },
+{ name: "Гранат", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Гранат цельный (+5)", rank: 5, comment: "Символ плодородия. Мощный Qₛ." },
+{ name: "Гранатовый сок (свежевыжатый)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Гранат (+5)", rank: 5, comment: "Концентрат жизненной силы." },
+{ name: "Хурма", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Хурма цельная (+4)", rank: 4, comment: "Сладкая, вяжущая. Осенняя энергия." },
+{ name: "Инжир свежий", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Инжир цельный (+5)", rank: 5, comment: "Древний символ мудрости. Сладкий Qₛ." },
+{ name: "Инжир сушёный", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сушка", ingredients: "Инжир (+4)", rank: 4, comment: "Концентрированная сладость. Энергия." },
+{ name: "Финики", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сушка", ingredients: "Финики (+5)", rank: 5, comment: "Пища пустыни. Очень сытные и полезные." },
+{ name: "Финики с миндалём", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Финики (+5), Миндаль (+4)", rank: 5, comment: "Идеальный перекус. Белок + углеводы." },
+
+// ========== ЯГОДЫ (20 штук) ==========
+{ name: "Малина свежая", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Малина цельная (+5)", rank: 5, comment: "Нежная, ароматная. Радость лета." },
+{ name: "Малина с молоком", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Малина (+5), Молоко (+3)", rank: 4, comment: "Деревенское детство. Уют." },
+{ name: "Малиновое варенье (домашнее)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Малина (+5), Сахар (0)", rank: 3, comment: "Зимний привет от лета. Но сахар снижает Qₛ." },
+{ name: "Клубника свежая", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Клубника цельная (+5)", rank: 5, comment: "Королева ягод. Любовь и радость." },
+{ name: "Клубника со сливками", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Клубника (+5), Сливки (+3)", rank: 4, comment: "Классика. Нежный десерт." },
+{ name: "Черника", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Черника цельная (+5)", rank: 5, comment: "Для глаз и для ауры. Сильная ягода." },
+{ name: "Черничное варенье (домашнее)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Черника (+5), Сахар (0)", rank: 3, comment: "Зимой напоминает о лесе." },
+{ name: "Голубика", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Голубика цельная (+5)", rank: 5, comment: "Северная ягода. Спокойная сила." },
+{ name: "Смородина красная", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Смородина красная (+5)", rank: 5, comment: "Кислая, бодрящая. Очищает." },
+{ name: "Смородина чёрная", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Смородина чёрная (+5)", rank: 5, comment: "Кладезь витаминов. Мощный Qₛ." },
+{ name: "Клюква", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Клюква цельная (+5)", rank: 5, comment: "Болотная целительница. Антиоксиданты." },
+{ name: "Клюквенный морс (домашний)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Варка", ingredients: "Клюква (+5), Вода (+3), Мёд (+7)", rank: 6, comment: "Очищает и тонизирует. Витаминный заряд." },
+{ name: "Брусника", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Брусника цельная (+5)", rank: 5, comment: "Горьковатая. Защита от болезней." },
+{ name: "Брусника мочёная", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Мочение", ingredients: "Брусника (+5), Вода (+3)", rank: 4, comment: "Традиционная заготовка. Сохраняет Qₛ." },
+{ name: "Вишня свежая", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Вишня цельная (+5)", rank: 5, comment: "Сочная, летняя. Энергия солнца." },
+{ name: "Вишнёвое варенье (домашнее)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Вишня (+5), Сахар (0)", rank: 3, comment: "Напоминание о лете." },
+{ name: "Черешня", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Черешня цельная (+5)", rank: 5, comment: "Сладкая, крупная. Радость." },
+{ name: "Слива", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Слива цельная (+4)", rank: 4, comment: "Сочная. Полезна для пищеварения." },
+{ name: "Чернослив", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сушка", ingredients: "Слива сушёная (+4)", rank: 4, comment: "Концентрат. Для костей и ауры." },
+{ name: "Крыжовник", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Крыжовник цельный (+5)", rank: 5, comment: "Колючий, но полезный. Защищает." },
+
+// ========== ОВОЩИ (20 штук) ==========
+{ name: "Огурец свежий", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Огурец цельный (+4)", rank: 4, comment: "Вода и свежесть. Охлаждает Tₛ." },
+{ name: "Помидор свежий", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Помидор цельный (+4)", rank: 4, comment: "Солнечная энергия. Ликопин." },
+{ name: "Помидоры вяленые", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Вяление", ingredients: "Помидоры (+4), Масло оливковое (+3)", rank: 4, comment: "Концентрат вкуса и Qₛ." },
+{ name: "Морковь свежая", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Морковь цельная (+4)", rank: 4, comment: "Заземляет. Полезна для глаз." },
+{ name: "Морковь тёртая с яблоком", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Морковь (+4), Яблоко (+4), Лимон (+4)", rank: 4, comment: "Витаминный салат. Яркий Qₛ." },
+{ name: "Морковный сок (свежевыжатый)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Морковь (+4), Яблоко (+4)", rank: 5, comment: "Солнце в стакане. Заземляет." },
+{ name: "Свёкла отварная", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Варка", ingredients: "Свёкла (+4)", rank: 4, comment: "Кроветворная. Мощный Qₛ земли." },
+{ name: "Свёкла запечённая", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Свёкла (+4), Масло оливковое (+3)", rank: 4, comment: "Слаще варёной. Глубинная энергия." },
+{ name: "Свекольный сок (свежевыжатый)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Свёкла (+4), Яблоко (+4), Лимон (+4)", rank: 5, comment: "Очищает кровь и поле." },
+{ name: "Капуста белокочанная (свежая)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Капуста цельная (+4)", rank: 4, comment: "Основа Qu. Хруст и чистота." },
+{ name: "Капуста тушёная", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Тушение", ingredients: "Капуста (+4), Морковь (+4), Лук (+3)", rank: 4, comment: "Уютное, сытное блюдо." },
+{ name: "Капуста цветная (на пару)", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "На пару", ingredients: "Цветная капуста (+4)", rank: 4, comment: "Нежная. Сохраняет максимум Qₛ." },
+{ name: "Брокколи (на пару)", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "На пару", ingredients: "Брокколи (+5)", rank: 5, comment: "Суперфуд. Очень высокий Qₛ." },
+{ name: "Брокколи, запечённая с чесноком", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Брокколи (+5), Чеснок (+3), Масло оливковое (+3)", rank: 5, comment: "Ароматное. Полезное." },
+{ name: "Перец болгарский (свежий)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Перец болгарский (+4)", rank: 4, comment: "Яркий. Много витамина C." },
+{ name: "Перец фаршированный (овощами)", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Перец (+4), Рис (+2), Овощи (+4)", rank: 4, comment: "Сытное, летнее блюдо." },
+{ name: "Тыква запечённая", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Тыква (+4), Мёд (+7), Корица (+4)", rank: 6, comment: "Солнечная энергия осени. Очень полезно." },
+{ name: "Тыквенный суп-пюре", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Варка", ingredients: "Тыква (+4), Морковь (+4), Имбирь (+4)", rank: 5, comment: "Согревает. Бархатный Qₛ." },
+{ name: "Тыквенные семечки (сушёные)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сушка", ingredients: "Семечки тыквенные (+4)", rank: 4, comment: "Цинк и магний. Для иммунитета." },
+{ name: "Кабачок (на гриле)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "На огне", ingredients: "Кабачок (+4), Масло оливковое (+3)", rank: 4, comment: "Лёгкое летнее блюдо." },
+
+// ========== КОРНЕПЛОДЫ (10 штук) ==========
+{ name: "Картофель запечённый (в мундире)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Картофель (+3), Масло (+3)", rank: 4, comment: "Просто и сытно. Заземляет." },
+{ name: "Картофельное пюре (на молоке)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Картофель (+3), Молоко (+3), Масло (+3)", rank: 4, comment: "Уютная классика. Согревает." },
+{ name: "Батат запечённый", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Батат (+5)", rank: 5, comment: "Сладкий картофель. Высокий Qₛ." },
+{ name: "Редис свежий", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Редис цельный (+4)", rank: 4, comment: "Весенняя свежесть. Бодрит." },
+{ name: "Редька чёрная с мёдом", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Смешивание", ingredients: "Редька чёрная (+5), Мёд (+7)", rank: 6, comment: "Народное лекарство. От кашля и для Qₛ." },
+{ name: "Дайкон (свежий)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Дайкон (+4)", rank: 4, comment: "Японская редька. Лёгкий Qₛ." },
+{ name: "Сельдерей (стебель, свежий)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Сельдерей (+5)", rank: 5, comment: "Хруст и очищение. Детокс." },
+{ name: "Сельдереевый сок (свежевыжатый)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Сельдерей (+5), Лимон (+4)", rank: 5, comment: "Мощный очиститель. Заземляет." },
+{ name: "Имбирь (корень, свежий)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Имбирь (+4)", rank: 4, comment: "Согревает. Противовоспалительное." },
+{ name: "Имбирный чай с лимоном и мёдом", category: "Светлая", Q_ing: 7, C_cook: 0.7, ritual: "Заваривание", ingredients: "Имбирь (+4), Лимон (+4), Мёд (+7)", rank: 6, comment: "Иммунитет и тепло. Мощный Qₛ." },
+
+// ========== ЗЕЛЕНЬ И ТРАВЫ (15 штук) ==========
+{ name: "Петрушка (свежая)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Петрушка свежая (+5)", rank: 5, comment: "Очищает кровь и поле." },
+{ name: "Укроп (свежий)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Укроп свежий (+5)", rank: 5, comment: "Успокаивает. Для пищеварения." },
+{ name: "Зелёный лук (свежий)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Лук зелёный (+5)", rank: 5, comment: "Витамины. Весенняя энергия." },
+{ name: "Базилик (свежий)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Базилик свежий (+5)", rank: 5, comment: "Королевская трава. Повышает Qₛ." },
+{ name: "Кинза (свежая)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Кинза свежая (+5)", rank: 5, comment: "Очищает от тяжёлых металлов." },
+{ name: "Шпинат (свежий)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Шпинат свежий (+5)", rank: 5, comment: "Железо и Qₛ. Для силы." },
+{ name: "Шпинат тушёный с чесноком", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Тушение", ingredients: "Шпинат (+5), Чеснок (+3), Масло (+3)", rank: 5, comment: "Быстро, полезно, вкусно." },
+{ name: "Щавель (свежий)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Щавель свежий (+5)", rank: 5, comment: "Весенняя кислинка. Очищает." },
+{ name: "Щавелевый суп", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Щавель (+5), Яйцо (+4), Картофель (+3)", rank: 4, comment: "Весенняя классика. Витамины." },
+{ name: "Руккола (свежая)", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Руккола свежая (+5)", rank: 5, comment: "Острая, изысканная. Высокий Qₛ." },
+{ name: "Мята (свежая)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Мята свежая (+4)", rank: 4, comment: "Охлаждает Tₛ. Успокаивает." },
+{ name: "Мятный чай (свежий)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Заваривание", ingredients: "Мята (+4), Вода (+3), Мёд (+7)", rank: 6, comment: "Успокаивает Tₛ. Медитация в чашке." },
+{ name: "Мелисса (свежая)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Мелисса свежая (+4)", rank: 4, comment: "От тревоги. Мягкий Qₛ." },
+{ name: "Чабрец (свежий)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Чабрец свежий (+4)", rank: 4, comment: "Антисептик. Очищает." },
+{ name: "Розмарин (свежий)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Розмарин свежий (+4)", rank: 4, comment: "Для памяти и ясности." },
+
+// ========== ОРЕХИ И СЕМЕНА (15 штук) ==========
+{ name: "Грецкий орех", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Орех грецкий (+4)", rank: 4, comment: "Для мозга. Связь с ноосферой." },
+{ name: "Миндаль (сырой, вымоченный)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Замачивание", ingredients: "Миндаль (+4)", rank: 4, comment: "Очищенный. Лёгкий Qₛ." },
+{ name: "Миндальное молоко (домашнее)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Миндаль (+4), Вода (+3), Мёд (+7)", rank: 5, comment: "Растительное молоко. Живой Qₛ." },
+{ name: "Фундук", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Фундук (+4)", rank: 4, comment: "Лесной орех. Заземляет." },
+{ name: "Кешью (сырой)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Кешью (+4)", rank: 4, comment: "Мягкий орех. Кремовый Qₛ." },
+{ name: "Фисташки", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Фисташки (+4)", rank: 4, comment: "Зелёный орех. Радость." },
+{ name: "Кедровые орехи", category: "Живая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Кедровые орехи (+5)", rank: 5, comment: "Таёжная сила. Высокий Qₛ." },
+{ name: "Семечки подсолнечника (сырые)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Семечки подсолнечника (+4)", rank: 4, comment: "Солнечная энергия в зерне." },
+{ name: "Семечки тыквенные (сырые)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Семечки тыквенные (+4)", rank: 4, comment: "Цинк. Для мужского Qₛ." },
+{ name: "Кунжут (сырой)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Кунжут (+4)", rank: 4, comment: "Кальций. Для костей и ауры." },
+{ name: "Урбеч (из льна)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Перетирание", ingredients: "Семена льна (+5)", rank: 5, comment: "Паста. Омега-3 и Qₛ." },
+{ name: "Урбеч (из кунжута)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Перетирание", ingredients: "Кунжут (+4)", rank: 4, comment: "Кальциевая бомба." },
+{ name: "Кокос (свежий)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Сырое", ingredients: "Кокос цельный (+4)", rank: 4, comment: "Тропическая энергия. Вода и мякоть." },
+{ name: "Кокосовое молоко (свежее)", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Свежее", ingredients: "Кокос (+4)", rank: 4, comment: "Нежное. Для смузи и карри." },
+{ name: "Миндаль жареный (солёный)", category: "Нейтральная", Q_ing: 3, C_cook: 0.5, ritual: "Жарка", ingredients: "Миндаль (+4), Соль (+3), Масло (0)", rank: 3, comment: "Вкусно, но Qₛ ниже сырого." },        
+
+// ========== ПАРТИЯ 3: 100 БЛЮД (СУПЫ, ГОРЯЧЕЕ, ВЫПЕЧКА, НАПИТКИ) ==========
+
+// --- СУПЫ (15 штук) ---
+{ name: "Куриный бульон (домашний)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Долгая варка", ingredients: "Курица (0), Вода (+3), Морковь (+4), Лук (+3)", rank: 4, comment: "Основа всего. Лечит простуду и душу." },
+{ name: "Уха из красной рыбы", category: "Светлая", Q_ing: 5, C_cook: 0.8, ritual: "На природе", ingredients: "Рыба (+2), Вода (+3), Картофель (+3), Зелень (+5)", rank: 5, comment: "Энергия воды. Благородный Qₛ." },
+{ name: "Грибной суп-пюре", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Грибы (+5), Картофель (+3), Сливки (+2)", rank: 5, comment: "Аромат леса. Заземляет." },
+{ name: "Суп харчо", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Говядина (0), Рис (+2), Томаты (+4), Чеснок (+3)", rank: 4, comment: "Острый, согревающий. Кавказская сила." },
+{ name: "Суп-лапша куриная", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Курица (0), Лапша (+1), Морковь (+4), Зелень (+5)", rank: 4, comment: "Детство. Уют." },
+{ name: "Окрошка (на квасе)", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Овощи (+4), Яйца (+4), Квас (+3), Сметана (+3)", rank: 5, comment: "Летняя классика. Охлаждает." },
+{ name: "Свекольник (холодный)", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Свёкла (+4), Огурцы (+4), Яйца (+4), Кефир (+3)", rank: 5, comment: "Освежает. Очищает." },
+{ name: "Том ям", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Варка", ingredients: "Креветки (+2), Грибы (+4), Лимон (+4), Специи (+3)", rank: 4, comment: "Острый тайский суп. Пробуждает." },
+{ name: "Мисо-суп", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Мисо-паста (+3), Водоросли (+5), Тофу (+2)", rank: 5, comment: "Японский завтрак. Гармония." },
+{ name: "Фо бо (вьетнамский суп)", category: "Живая", Q_ing: 5, C_cook: 0.8, ritual: "Долгая варка", ingredients: "Говядина (0), Рисовая лапша (+2), Травы (+5), Лайм (+4)", rank: 4, comment: "Глубокий бульон. Восстанавливает." },
+{ name: "Суп из чечевицы", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Чечевица (+4), Овощи (+4), Зелень (+5)", rank: 5, comment: "Богат белком. Очищает." },
+{ name: "Капустняк (суп с квашеной капустой)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Капуста квашеная (+4), Мясо (0), Пшено (+4)", rank: 4, comment: "Зимний суп. Витамины." },
+{ name: "Суп с фрикадельками", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Фарш (0), Овощи (+4), Зелень (+5)", rank: 4, comment: "Сытное. Домашний Qₛ." },
+{ name: "Гаспачо", category: "Живая", Q_ing: 6, C_cook: 0.6, ritual: "Сырое", ingredients: "Томаты (+4), Огурцы (+4), Перец (+4), Масло (+3)", rank: 5, comment: "Холодный испанский суп. Летний Qₛ." },
+{ name: "Дынный суп (холодный)", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Дыня (+4), Мята (+4), Лайм (+4)", rank: 5, comment: "Десертный суп. Радость." },
+
+// --- ГОРЯЧЕЕ И ОСНОВНЫЕ БЛЮДА (25 штук) ---
+{ name: "Плов с курицей", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Томление", ingredients: "Рис (+2), Курица (0), Морковь (+4), Лук (+3), Специи (+3)", rank: 4, comment: "Сытное. Семейное блюдо." },
+{ name: "Рататуй", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Запекание", ingredients: "Кабачки (+4), Баклажаны (+4), Томаты (+4), Перец (+4)", rank: 6, comment: "Максимум овощей. Очень высокий Qₛ." },
+{ name: "Жаркое по-домашнему", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Тушение", ingredients: "Мясо (0), Картофель (+3), Морковь (+4), Лук (+3)", rank: 4, comment: "Густое, наваристое. Зимнее тепло." },
+{ name: "Бефстроганов", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Жарка", ingredients: "Говядина (0), Лук (+3), Сметана (+3), Томаты (+4)", rank: 3, comment: "Классика русской кухни. Согревает." },
+{ name: "Отбивная (из курицы)", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Жарка", ingredients: "Курица (0), Мука (+1), Масло (0)", rank: 2, comment: "Простое мясное блюдо. Qₛ средний." },
+{ name: "Стейк из лосося (на гриле)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "На огне", ingredients: "Лосось (+2), Лимон (+4), Травы (+4)", rank: 4, comment: "Омега-3. Полезный Qₛ." },
+{ name: "Креветки (варёные)", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Варка", ingredients: "Креветки (+2), Лимон (+4)", rank: 2, comment: "Белок. Лёгкий Qₛ." },
+{ name: "Мидии в белом вине", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Тушение", ingredients: "Мидии (+2), Вино белое (+1), Чеснок (+3)", rank: 3, comment: "Средиземноморский Qₛ." },
+{ name: "Утка, запечённая с яблоками", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Долгое запекание", ingredients: "Утка (0), Яблоки (+4), Специи (+3)", rank: 4, comment: "Праздничный стол. Семейный Qₛ." },
+{ name: "Индейка запечённая", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Индейка (0), Травы (+4), Чеснок (+3)", rank: 3, comment: "Диетическое мясо. Чистый Qₛ." },
+{ name: "Голубцы (ленивые)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Тушение", ingredients: "Фарш (0), Капуста (+4), Рис (+2), Морковь (+4)", rank: 4, comment: "Быстрая версия классики." },
+{ name: "Тефтели в сметанном соусе", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Тушение", ingredients: "Фарш (0), Рис (+2), Сметана (+3)", rank: 3, comment: "Нежные. Детское блюдо." },
+{ name: "Куриные котлеты (рубленые)", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Жарка", ingredients: "Курица (0), Лук (+3), Яйцо (+4)", rank: 3, comment: "Сочнее обычных. Домашний Qₛ." },
+{ name: "Рыбные котлеты", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Жарка", ingredients: "Рыба (+2), Лук (+3), Яйцо (+4)", rank: 3, comment: "Нежные. Полезный жир." },
+{ name: "Овощное соте", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Тушение", ingredients: "Кабачки (+4), Перец (+4), Томаты (+4)", rank: 5, comment: "Быстрое летнее блюдо." },
+{ name: "Картофельная запеканка с фаршем", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Картофель (+3), Фарш (0), Яйца (+4)", rank: 3, comment: "Сытное. Зимний Qₛ." },
+{ name: "Макароны по-флотски", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Жарка", ingredients: "Макароны (+2), Фарш (0), Лук (+3)", rank: 2, comment: "Простое и сытное." },
+{ name: "Блины (на молоке)", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Жарка", ingredients: "Мука (+2), Молоко (+3), Яйца (+4)", rank: 3, comment: "Солнечный круг. Масленица." },
+{ name: "Блины гречневые", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Жарка", ingredients: "Гречневая мука (+4), Молоко (+3), Яйца (+4)", rank: 4, comment: "Тёмные, ароматные. Русская классика." },
+{ name: "Блинчики с творогом", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Жарка", ingredients: "Блины (+3), Творог (+4)", rank: 4, comment: "Нежный десерт. Сытный." },
+{ name: "Блинчики с мясом", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Жарка", ingredients: "Блины (+3), Фарш (0)", rank: 2, comment: "Сытный перекус." },
+{ name: "Сырники со сметаной", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Жарка", ingredients: "Творог (+4), Яйца (+4), Мука (+2), Сметана (+3)", rank: 4, comment: "Идеальный завтрак." },
+{ name: "Ленивые вареники", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Творог (+4), Мука (+2), Яйца (+4)", rank: 4, comment: "Быстро, вкусно, полезно." },
+{ name: "Тыквенные оладьи", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Жарка", ingredients: "Тыква (+4), Мука (+2), Яйца (+4), Мёд (+7)", rank: 5, comment: "Солнечные, яркие. Полезный десерт." },
+{ name: "Кабачковые оладьи", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Жарка", ingredients: "Кабачки (+4), Мука (+2), Яйца (+4)", rank: 4, comment: "Летнее блюдо. Лёгкий Qₛ." },
+
+// --- САЛАТЫ (15 штук) ---
+{ name: "Салат «Цезарь» (классический)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Смешивание", ingredients: "Курица (0), Салат (+4), Помидоры (+4), Соус (0)", rank: 3, comment: "Популярный. Qₛ зависит от соуса." },
+{ name: "Салат из крабовых палочек", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Смешивание", ingredients: "Крабовые палочки (-1), Кукуруза (+2), Яйца (+4), Майонез (-1)", rank: 2, comment: "Быстрый. Qₛ низкий." },
+{ name: "Салат «Мимоза»", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Смешивание", ingredients: "Рыбные консервы (0), Яйца (+4), Майонез (-1)", rank: 2, comment: "Советская классика." },
+{ name: "Салат «Селёдка под шубой»", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Смешивание", ingredients: "Сельдь (0), Свёкла (+4), Морковь (+4), Майонез (-1)", rank: 3, comment: "Праздник. Qₛ смешанный." },
+{ name: "Винегрет (с маслом)", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Свёкла (+4), Морковь (+4), Огурцы солёные (+2), Масло (+3)", rank: 4, comment: "Очищает. Зимний салат." },
+{ name: "Салат из свежих овощей со сметаной", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Огурцы (+4), Помидоры (+4), Зелень (+5), Сметана (+3)", rank: 5, comment: "Максимум живого Qₛ." },
+{ name: "Салат из пекинской капусты", category: "Живая", Q_ing: 4, C_cook: 0.5, ritual: "Смешивание", ingredients: "Пекинская капуста (+4), Огурцы (+4), Масло (+3)", rank: 4, comment: "Лёгкий, хрустящий." },
+{ name: "Морковь по-корейски", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Маринование", ingredients: "Морковь (+4), Уксус (0), Специи (+3)", rank: 3, comment: "Острая закуска. Бодрит." },
+{ name: "Салат из свёклы с чесноком", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Свёкла (+4), Чеснок (+3), Сметана (+3)", rank: 4, comment: "Очищает кровь." },
+{ name: "Салат «Греческий»", category: "Живая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Помидоры (+4), Огурцы (+4), Сыр фета (+2), Маслины (+3)", rank: 5, comment: "Средиземноморье. Гармония." },
+{ name: "Капрезе", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Сырое", ingredients: "Томаты (+4), Моцарелла (+2), Базилик (+5), Масло (+3)", rank: 5, comment: "Итальянская свежесть." },
+{ name: "Салат из авокадо с креветками", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Авокадо (+4), Креветки (+2), Лимон (+4)", rank: 4, comment: "Полезные жиры." },
+{ name: "Фруктовый салат", category: "Светлая", Q_ing: 6, C_cook: 0.5, ritual: "Сырое", ingredients: "Яблоко (+4), Банан (+3), Апельсин (+4), Киви (+4)", rank: 5, comment: "Радость в тарелке." },
+{ name: "Салат из тунца", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Смешивание", ingredients: "Тунец (0), Салат (+4), Огурец (+4)", rank: 3, comment: "Белок + клетчатка." },
+{ name: "Тёплый салат с куриной печенью", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Жарка", ingredients: "Печень куриная (+1), Салат (+4), Помидоры (+4)", rank: 3, comment: "Железо и Qₛ." },
+
+// --- ВЫПЕЧКА И ДЕСЕРТЫ (25 штук) ---
+{ name: "Шарлотка с яблоками", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Яблоки (+4), Мука (+2), Яйца (+4)", rank: 4, comment: "Простой пирог. Уют." },
+{ name: "Пирог с вишней", category: "Живая", Q_ing: 5, C_cook: 0.8, ritual: "Запекание", ingredients: "Вишня (+5), Мука (+2), Масло (+3)", rank: 5, comment: "Летний пирог. Ягодный Qₛ." },
+{ name: "Кекс лимонный", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+2), Масло (+3), Лимон (+4), Сахар (0)", rank: 3, comment: "Ароматный. К чаю." },
+{ name: "Манник", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Запекание", ingredients: "Манка (+1), Кефир (+2), Яйца (+4)", rank: 3, comment: "Простой пирог. Уютный." },
+{ name: "Печенье имбирное (пряники)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+2), Мёд (+7), Имбирь (+4), Корица (+4)", rank: 5, comment: "Новогодний Qₛ. Согревает." },
+{ name: "Творожная запеканка с изюмом", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Творог (+4), Яйца (+4), Изюм (+2)", rank: 4, comment: "Полезный завтрак." },
+{ name: "Шоколадный брауни", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Запекание", ingredients: "Шоколад (+3), Мука (+2), Масло (+3)", rank: 2, comment: "Вкусно, но Qₛ средний." },
+{ name: "Яблочный штрудель", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Запекание", ingredients: "Яблоки (+4), Тесто (+2), Корица (+4)", rank: 4, comment: "Австрийский десерт." },
+{ name: "Медовик", category: "Светлая", Q_ing: 5, C_cook: 0.8, ritual: "Запекание", ingredients: "Мёд (+7), Мука (+2), Сметана (+3)", rank: 5, comment: "Мощный Qₛ мёда." },
+{ name: "Торт «Наполеон»", category: "Нейтральная", Q_ing: 1, C_cook: 0.7, ritual: "Запекание", ingredients: "Тесто (+2), Масло (+3), Крем (-1)", rank: 1, comment: "Вкусно, но тяжело." },
+{ name: "Чизкейк (классический)", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Запекание", ingredients: "Сыр (+2), Яйца (+4), Сахар (0)", rank: 2, comment: "Нежный. Qₛ средний." },
+{ name: "Панна-котта", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Охлаждение", ingredients: "Сливки (+3), Ваниль (+2)", rank: 3, comment: "Итальянский десерт." },
+{ name: "Крем-брюле", category: "Нейтральная", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Сливки (+3), Яйца (+4), Сахар (0)", rank: 3, comment: "Французская классика." },
+{ name: "Мороженое домашнее (из сливок)", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Замораживание", ingredients: "Сливки (+3), Сахар (0)", rank: 2, comment: "Лучше покупного." },
+{ name: "Сорбет (ягодный, домашний)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Замораживание", ingredients: "Ягоды (+5), Мёд (+7)", rank: 5, comment: "Чистый фруктовый Qₛ." },
+{ name: "Печенье овсяное (домашнее)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Овсянка (+3), Масло (+3), Мёд (+7)", rank: 5, comment: "Полезное лакомство." },
+{ name: "Хворост (хрустящее печенье)", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Фритюр", ingredients: "Мука (+2), Яйца (+4), Сахар (0)", rank: 2, comment: "Хрустит, но Qₛ низкий." },
+{ name: "Ватрушка с творогом", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Творог (+4), Мука (+2), Яйца (+4)", rank: 4, comment: "Нежная выпечка." },
+{ name: "Пирожки с капустой (печёные)", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Запекание", ingredients: "Капуста (+4), Мука (+2)", rank: 4, comment: "Традиционная выпечка." },
+{ name: "Пирожки с яблоком (печёные)", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Запекание", ingredients: "Яблоки (+4), Мука (+2)", rank: 4, comment: "Сладкая выпечка." },
+{ name: "Кулебяка (с рыбой)", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Запекание", ingredients: "Рыба (+2), Рис (+2), Лук (+3), Тесто (+2)", rank: 4, comment: "Праздничный пирог." },
+{ name: "Расстегай", category: "Живая", Q_ing: 3, C_cook: 0.8, ritual: "Запекание", ingredients: "Рыба (+2), Тесто (+2), Лук (+3)", rank: 3, comment: "Русская классика." },
+{ name: "Хлеб на закваске (ржаной)", category: "Светлая", Q_ing: 6, C_cook: 0.8, ritual: "Долгая ферментация", ingredients: "Ржаная мука (+3), Закваска (+2), Соль (+3)", rank: 5, comment: "Живой хлеб. Основа стола." },
+{ name: "Фокачча", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+2), Масло оливковое (+3), Розмарин (+4)", rank: 4, comment: "Итальянский хлеб." },
+
+// --- НАПИТКИ (20 штук) ---
+{ name: "Квас домашний (на ржаном хлебе)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Ферментация", ingredients: "Ржаной хлеб (+3), Вода (+3), Сахар (0)", rank: 4, comment: "Традиционный напиток. Освежает." },
+{ name: "Компот из яблок", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Яблоки (+4), Вода (+3), Мёд (+7)", rank: 5, comment: "Домашний. Витамины." },
+{ name: "Компот из сухофруктов (взвар)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Варка", ingredients: "Сухофрукты (+3), Вода (+3), Мёд (+7)", rank: 5, comment: "Традиционный. Qₛ предков." },
+{ name: "Кисель (ягодный, домашний)", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Ягоды (+5), Крахмал (0), Мёд (+7)", rank: 5, comment: "Обволакивает. Защищает." },
+{ name: "Морс клюквенный (домашний)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Смешивание", ingredients: "Клюква (+5), Вода (+3), Мёд (+7)", rank: 6, comment: "Витаминная бомба. Очищает." },
+{ name: "Лимонад домашний (лимон + мята)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Лимон (+4), Мята (+4), Вода (+3), Мёд (+7)", rank: 5, comment: "Освежает. Живой Qₛ." },
+{ name: "Чай зелёный (листовой, крупнолистовой)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Заваривание", ingredients: "Зелёный чай (+3), Вода (+3)", rank: 3, comment: "Антиоксиданты. Ясность." },
+{ name: "Чай белый", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Белый чай (+4), Вода (+3)", rank: 4, comment: "Нежный. Высокий Qₛ." },
+{ name: "Чай улун (молочный)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Улун (+4), Вода (+3)", rank: 4, comment: "Сливочный. Расслабляет." },
+{ name: "Мате (традиционный)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Листья мате (+4), Вода (+3)", rank: 4, comment: "Энергия. Южноамериканский Qₛ." },
+{ name: "Матча (зелёный порошковый чай)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Взбивание", ingredients: "Порошок матча (+6), Вода (+3)", rank: 6, comment: "Концентрат. Мощный антиоксидант." },
+{ name: "Кофе (зерновой, фильтр)", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Заваривание", ingredients: "Кофе в зёрнах (+2), Вода (+3)", rank: 2, comment: "Бодрит, но истощает Qₛ." },
+{ name: "Какао (настоящее, на молоке)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Варка", ingredients: "Какао (+3), Молоко (+3), Мёд (+7)", rank: 5, comment: "Детство. Тепло." },
+{ name: "Глинтвейн (безалкогольный, на соке)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Нагревание", ingredients: "Сок виноградный (+4), Специи (+4), Апельсин (+4)", rank: 5, comment: "Согревает. Зимний Qₛ." },
+{ name: "Смузи (яблоко + шпинат + имбирь)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Смешивание", ingredients: "Яблоко (+4), Шпинат (+5), Имбирь (+4)", rank: 6, comment: "Зелёный заряд энергии." },
+{ name: "Смузи (банан + какао + молоко)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Банан (+3), Какао (+3), Молоко (+3)", rank: 4, comment: "Шоколадный перекус." },
+{ name: "Кефир (домашний, на закваске)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Ферментация", ingredients: "Молоко (+3), Кефирный гриб (+4)", rank: 5, comment: "Пробиотики. Очищает." },
+{ name: "Ряженка (домашняя)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Топление + ферментация", ingredients: "Молоко топлёное (+4), Закваска (+2)", rank: 4, comment: "Нежный вкус. Согревает." },
+{ name: "Айран (домашний)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Йогурт (+3), Вода (+3), Соль (+3)", rank: 4, comment: "Освежает. Кавказский Qₛ." },
+{ name: "Тан", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Мацун (+3), Вода (+3)", rank: 4, comment: "Солёный напиток. Жажда." },
+// ========== ПИРОЖНЫЕ И ДЕСЕРТЫ (100 штук) ==========
+{ name: "Пирожное «Картошка»", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Смешивание", ingredients: "Печенье (0), Масло (+2), Какао (+2), Молоко (+3)", rank: 2, comment: "Советская классика. Просто и вкусно." },
+{ name: "Пирожное «Эклер»", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Масло (+2), Яйца (+4), Крем (-1)", rank: 2, comment: "Заварное. Воздушное." },
+{ name: "Пирожное «Корзиночка»", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Масло (+2), Яйца (+4), Фрукты (+3)", rank: 2, comment: "Песочное с начинкой." },
+{ name: "Пирожное «Буше»", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Яйца (+4), Шоколад (+2)", rank: 2, comment: "Бисквитное. Нежное." },
+{ name: "Макарон (французский)", category: "Живая", Q_ing: 3, C_cook: 0.8, ritual: "Выпечка", ingredients: "Миндаль (+4), Яичный белок (+4), Сахар (0)", rank: 3, comment: "Изысканный. Миндальный Qₛ." },
+{ name: "Тирамису", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Сборка", ingredients: "Кофе (+1), Сыр маскарпоне (+2), Какао (+2)", rank: 2, comment: "Итальянская классика." },
+{ name: "Панна-котта с ягодами", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Варка", ingredients: "Сливки (+3), Ягоды (+5), Мёд (+7)", rank: 5, comment: "Нежная. Ягодный Qₛ." },
+{ name: "Мусс шоколадный (домашний)", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Взбивание", ingredients: "Шоколад (+3), Яйца (+4)", rank: 3, comment: "Воздушный. Чистый вкус." },
+{ name: "Суфле ванильное", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Запекание", ingredients: "Яйца (+4), Молоко (+3), Ваниль (+2)", rank: 3, comment: "Тёплое. Тает во рту." },
+{ name: "Мармелад (домашний, на агар-агаре)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Яблочный сок (+4), Агар-агар (+2), Мёд (+7)", rank: 5, comment: "Чистый фруктовый Qₛ." },
+{ name: "Зефир яблочный (домашний)", category: "Светлая", Q_ing: 5, C_cook: 0.8, ritual: "Взбивание", ingredients: "Яблочное пюре (+4), Белок (+4), Мёд (+7)", rank: 5, comment: "Воздушное облако." },
+{ name: "Пастила яблочная (домашняя)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Сушка", ingredients: "Яблоки (+4), Белок (+4)", rank: 4, comment: "Традиционная сладость." },
+{ name: "Лукум", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Варка", ingredients: "Крахмал (0), Сахар (0), Орехи (+4)", rank: 2, comment: "Восточная сладость." },
+{ name: "Пахлава (домашняя)", category: "Светлая", Q_ing: 6, C_cook: 0.8, ritual: "Запекание", ingredients: "Тесто (+2), Орехи (+4), Мёд (+7)", rank: 5, comment: "Многослойная радость." },
+{ name: "Торт «Птичье молоко»", category: "Нейтральная", Q_ing: 1, C_cook: 0.7, ritual: "Сборка", ingredients: "Белки (+4), Сахар (0), Шоколад (+2)", rank: 2, comment: "Суфле в шоколаде." },
+{ name: "Торт «Прага»", category: "Нейтральная", Q_ing: 1, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+1), Какао (+2), Крем (-1)", rank: 2, comment: "Советская классика." },
+{ name: "Торт «Киевский»", category: "Нейтральная", Q_ing: 2, C_cook: 0.8, ritual: "Запекание", ingredients: "Орехи (+4), Белки (+4), Крем (-1)", rank: 3, comment: "Ореховый. Хрустящий." },
+{ name: "Торт «Сметанник»", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Сборка", ingredients: "Сметана (+3), Мука (+1)", rank: 2, comment: "Влажный. Нежный." },
+{ name: "Торт «Морковный»", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Морковь (+4), Орехи (+4), Специи (+3)", rank: 4, comment: "Полезный десерт." },
+{ name: "Торт «Красный бархат»", category: "Нейтральная", Q_ing: 1, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+1), Какао (+2), Крем (-1)", rank: 2, comment: "Эффектный. Qₛ средний." },
+{ name: "Пирожное «Макарун» (кокосовое)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Запекание", ingredients: "Кокос (+4), Белок (+4)", rank: 4, comment: "Простое, вкусное." },
+{ name: "Чурчхела", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Сушка", ingredients: "Виноградный сок (+4), Орехи (+4)", rank: 4, comment: "Энергия солнца." },
+{ name: "Козинаки (из семечек)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Варка", ingredients: "Семечки (+4), Мёд (+7)", rank: 5, comment: "Хрустящие. Полезный Qₛ." },
+{ name: "Грильяж (ореховый)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Варка", ingredients: "Орехи (+4), Сахар (0)", rank: 3, comment: "Твёрдая карамель с орехами." },
+{ name: "Шоколад ручной работы (тёмный, 85%)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Темперирование", ingredients: "Какао (+5), Какао-масло (+3)", rank: 4, comment: "Мощный антиоксидант." },
+{ name: "Шоколад с миндалём", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Шоколад (+3), Миндаль (+4)", rank: 4, comment: "Классическое сочетание." },
+{ name: "Трюфели шоколадные (домашние)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Сборка", ingredients: "Шоколад (+4), Сливки (+3)", rank: 4, comment: "Тают во рту. Чистый Qₛ." },
+{ name: "Десерт «Флан» (карамельный пудинг)", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Запекание", ingredients: "Молоко (+3), Яйца (+4), Сахар (0)", rank: 3, comment: "Нежный. Испанская классика." },
+{ name: "Клафути (вишнёвый пирог-запеканка)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Вишня (+5), Яйца (+4), Молоко (+3)", rank: 4, comment: "Французский десерт." },
+{ name: "Крамбл яблочный", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Яблоки (+4), Масло (+3), Овсянка (+3)", rank: 4, comment: "Тёплый. Уютный." },
+{ name: "Пудинг рисовый", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Запекание", ingredients: "Рис (+2), Молоко (+3), Яйца (+4)", rank: 3, comment: "Сытный. Английский." },
+{ name: "Пудинг манный", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Варка", ingredients: "Манка (+1), Молоко (+3)", rank: 2, comment: "Из детства." },
+{ name: "Баурсак", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Фритюр", ingredients: "Мука (+1), Масло (0)", rank: 1, comment: "Жареные кусочки теста." },
+{ name: "Пончики (берлинеры с джемом)", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Фритюр", ingredients: "Мука (+1), Джем (+2), Масло (0)", rank: 1, comment: "Пышные. Праздничные." },
+{ name: "Варенье из лепестков роз", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Варка", ingredients: "Лепестки роз (+5), Мёд (+7)", rank: 6, comment: "Ароматное. Высокий Qₛ." },
+{ name: "Варенье из грецких орехов", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Орехи грецкие (+4), Мёд (+7)", rank: 5, comment: "Царское лакомство." },
+{ name: "Варенье из сосновых шишек", category: "Светлая", Q_ing: 6, C_cook: 0.8, ritual: "Долгая варка", ingredients: "Молодые шишки (+5), Мёд (+7)", rank: 6, comment: "Лечебное. Таёжный Qₛ." },
+{ name: "Цукаты (из апельсиновых корок)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Варка", ingredients: "Апельсин (+4), Сахар (0)", rank: 3, comment: "Яркий аромат." },
+{ name: "Мёд в сотах", category: "Светлая", Q_ing: 8, C_cook: 0.9, ritual: "Природный", ingredients: "Мёд (+7), Воск (+2)", rank: 8, comment: "Эталон. Максимальный Qₛ." },
+{ name: "Халва подсолнечная (домашняя)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Взбивание", ingredients: "Семечки (+4), Мёд (+7)", rank: 5, comment: "Рассыпчатая. Восточный Qₛ." },
+{ name: "Халва тахинная", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Взбивание", ingredients: "Кунжут (+4), Мёд (+7)", rank: 5, comment: "Нежная. Кальций." },
+{ name: "Нуга", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Взбивание", ingredients: "Мёд (+7), Орехи (+4), Белок (+4)", rank: 4, comment: "Сладкая, ореховая." },
+{ name: "Рахат-лукум", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Варка", ingredients: "Крахмал (0), Сахар (0), Орехи (+4)", rank: 2, comment: "Жевательный." },
+{ name: "Желе ягодное (на агаре)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Варка", ingredients: "Ягоды (+5), Агар-агар (+2), Мёд (+7)", rank: 5, comment: "Прозрачный десерт." },
+{ name: "Бланманже", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Варка", ingredients: "Молоко (+3), Миндаль (+4), Сахар (0)", rank: 3, comment: "Старинный десерт." },
+{ name: "Парфе ягодное", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заморозка", ingredients: "Ягоды (+5), Сливки (+3)", rank: 4, comment: "Замороженный мусс." },
+{ name: "Семифредо", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Заморозка", ingredients: "Сливки (+3), Яйца (+4)", rank: 3, comment: "Итальянский полузамороженный десерт." },
+{ name: "Торт «Эстерхази»", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Запекание", ingredients: "Орехи (+4), Белки (+4), Крем (-1)", rank: 3, comment: "Ореховый. Венгерский." },
+{ name: "Торт «Захер»", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Запекание", ingredients: "Шоколад (+3), Мука (+1), Абрикосовый джем (+2)", rank: 2, comment: "Венский шоколадный торт." },
+{ name: "Пирожное «Лимонный тарт»", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Лимон (+4), Мука (+2), Яйца (+4)", rank: 4, comment: "Кисло-сладкий. Бодрит." },
+{ name: "Меренги (безе)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Сушка", ingredients: "Белок (+4), Сахар (0)", rank: 2, comment: "Воздушные. Хрустящие." },
+{ name: "Крем-брюле с лавандой", category: "Светлая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Сливки (+3), Лаванда (+4), Яйца (+4)", rank: 4, comment: "Ароматный. Успокаивает." },
+{ name: "Гранатовый сорбет", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Заморозка", ingredients: "Гранатовый сок (+5), Мёд (+7)", rank: 6, comment: "Освежает. Мощный Qₛ." },
+{ name: "Манговый ласси", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Манго (+5), Йогурт (+3)", rank: 4, comment: "Индийский густой напиток-десерт." },
+{ name: "Персики в сиропе (домашние)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Консервирование", ingredients: "Персики (+4), Мёд (+7)", rank: 5, comment: "Лето в банке." },
+{ name: "Вишня в шоколаде", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Сборка", ingredients: "Вишня (+5), Шоколад (+3)", rank: 3, comment: "Конфеты ручной работы." },
+{ name: "Чернослив в шоколаде с орехом", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Сборка", ingredients: "Чернослив (+4), Шоколад (+3), Орех (+4)", rank: 4, comment: "Полезный десерт. Клетчатка." },
+{ name: "Десерт «Павлова»", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Белок (+4), Сливки (+3), Фрукты (+4)", rank: 4, comment: "Воздушный. Знаменитый." },
+{ name: "Кейк-попсы", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Сборка", ingredients: "Бисквит (0), Шоколад (+2)", rank: 1, comment: "Детский десерт." },
+{ name: "Маффин черничный", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+2), Черника (+5), Яйца (+4)", rank: 3, comment: "Ягодный кекс." },
+{ name: "Галета (яблочная)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Яблоки (+4), Мука (+2), Масло (+3)", rank: 4, comment: "Деревенский пирог." },
+{ name: "Слойки с яблоком", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Запекание", ingredients: "Тесто (+1), Яблоки (+4)", rank: 2, comment: "Простая выпечка." },
+{ name: "Булочка с корицей (синнабон)", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Корица (+4), Крем (-1)", rank: 2, comment: "Ароматная сдоба." },
+{ name: "Ромовая баба", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Ром (-1), Сахар (0)", rank: 1, comment: "Пропитанная выпечка." },
+{ name: "Кекс столичный (с изюмом)", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Изюм (+2), Масло (+3)", rank: 2, comment: "Классический. Рассыпчатый." },
+{ name: "Печенье «Курабье»", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Масло (+3), Белок (+4)", rank: 2, comment: "Восточная сладость." },
+{ name: "Печенье «Савоярди»", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Яйца (+4), Сахар (0)", rank: 2, comment: "Бисквитное. Для тирамису." },
+{ name: "Миндальное печенье", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Запекание", ingredients: "Миндаль (+4), Белок (+4)", rank: 4, comment: "Ореховое. Высокий Qₛ." },
+{ name: "Пряник тульский (с начинкой)", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+2), Мёд (+7), Повидло (+2)", rank: 4, comment: "Русская классика." },
+{ name: "Вареники с маком", category: "Живая", Q_ing: 4, C_cook: 0.8, ritual: "Варка", ingredients: "Мука (+2), Мак (+3), Мёд (+7)", rank: 4, comment: "Сладкое блюдо." },
+{ name: "Пончики творожные", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Фритюр", ingredients: "Творог (+4), Мука (+2), Яйца (+4)", rank: 3, comment: "Нежные шарики." },
+{ name: "Хворост (хрустящие ленточки)", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Фритюр", ingredients: "Мука (+1), Яйца (+4), Сахар (0)", rank: 2, comment: "Хрустит. Ностальгия." },
+{ name: "Коврижка медовая", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+2), Мёд (+7), Пряности (+4)", rank: 5, comment: "Ароматная. Пряный Qₛ." },
+{ name: "Чак-чак", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Фритюр", ingredients: "Мука (+1), Яйца (+4), Мёд (+7)", rank: 4, comment: "Татарский десерт." },
+{ name: "Торт «Муравейник»", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Сборка", ingredients: "Печенье (0), Масло (+2), Молоко сгущ. (-1)", rank: 1, comment: "Быстрый десерт." },
+{ name: "Торт «Графские развалины»", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Сборка", ingredients: "Безе (+2), Крем (-1)", rank: 1, comment: "Без выпечки." },
+{ name: "Торт «Черепаха»", category: "Нейтральная", Q_ing: 1, C_cook: 0.6, ritual: "Сборка", ingredients: "Бисквит (0), Сметана (+3)", rank: 2, comment: "Детский торт." },
+{ name: "Торт «Молочная девочка»", category: "Нейтральная", Q_ing: 1, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+1), Молоко сгущ. (-1), Крем (-1)", rank: 1, comment: "Популярный. Тонкие коржи." },
+{ name: "Творожный кекс с цукатами", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Творог (+4), Цукаты (+2), Яйца (+4)", rank: 3, comment: "Пасхальный. Нежный." },
+{ name: "Бискотти (миндальные сухарики)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Двойная выпечка", ingredients: "Миндаль (+4), Мука (+2)", rank: 3, comment: "Итальянское печенье. Для кофе." },
+{ name: "Пирог с ревенём", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Ревень (+4), Мука (+2)", rank: 4, comment: "Кисло-сладкий. Весенний." },
+{ name: "Десерт «Манго с кокосовым рисом»", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Смешивание", ingredients: "Манго (+5), Кокосовое молоко (+4), Рис (+2)", rank: 4, comment: "Тайский. Экзотический Qₛ." },
+{ name: "Десерт «Ягодный крамбл»", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Ягоды (+5), Масло (+3), Овсянка (+3)", rank: 4, comment: "Тёплый десерт." },
+{ name: "Десерт «Тыквенный пирог»", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Запекание", ingredients: "Тыква (+4), Специи (+4), Мука (+2)", rank: 5, comment: "Осенний. Согревающий Qₛ." },
+{ name: "Печенье «Мадлен»", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Запекание", ingredients: "Мука (+1), Масло (+3), Яйца (+4), Лимон (+4)", rank: 3, comment: "Французские ракушки." },
+{ name: "Круассан (классический)", category: "Нейтральная", Q_ing: 1, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+1), Масло (+3)", rank: 2, comment: "Воздушный. Французский завтрак." },
+{ name: "Булочка бриошь", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+1), Масло (+3), Яйца (+4)", rank: 2, comment: "Сдобная. Нежная." },
+{ name: "Панеттоне", category: "Нейтральная", Q_ing: 2, C_cook: 0.8, ritual: "Долгая выпечка", ingredients: "Мука (+1), Цукаты (+2), Масло (+3)", rank: 2, comment: "Итальянский рождественский пирог." },
+{ name: "Штоллен (рождественский)", category: "Живая", Q_ing: 3, C_cook: 0.8, ritual: "Выдержка", ingredients: "Мука (+2), Сухофрукты (+3), Марципан (+3)", rank: 3, comment: "Созревает неделями." },
+{ name: "Кекс с цукатами и орехами", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Запекание", ingredients: "Мука (+2), Орехи (+4), Цукаты (+2)", rank: 3, comment: "Плотный. Насыщенный." },
+{ name: "Пирог с черносливом", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Запекание", ingredients: "Чернослив (+4), Мука (+2)", rank: 3, comment: "Полезный. Для пищеварения." },
+{ name: "Десерт «Банан в карамели»", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Жарка", ingredients: "Банан (+3), Сахар (0)", rank: 2, comment: "Быстрый горячий десерт." },
+{ name: "Гренки сладкие (с яйцом и молоком)", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Жарка", ingredients: "Хлеб (+1), Яйца (+4), Молоко (+3)", rank: 3, comment: "Завтрак из детства." },
+
+// ========== НАПИТКИ (100 штук) ==========
+
+// --- ГОРЯЧИЕ НАПИТКИ (25) ---
+{ name: "Чай чёрный (листовой, индийский)", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Заваривание", ingredients: "Чай чёрный (+1), Вода (+3)", rank: 2, comment: "Классика. Бодрит." },
+{ name: "Чай зелёный (Сенча)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Заваривание", ingredients: "Зелёный чай (+3), Вода (+3)", rank: 3, comment: "Японская классика. Ясность." },
+{ name: "Чай белый (Серебряные иглы)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Белый чай (+4), Вода (+3)", rank: 4, comment: "Элитный. Нежный Qₛ." },
+{ name: "Чай улун (молочный)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Улун (+4), Вода (+3)", rank: 4, comment: "Сливочный. Расслабляет." },
+{ name: "Чай пуэр (выдержанный)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Заваривание", ingredients: "Пуэр (+4), Вода (+3)", rank: 4, comment: "Земляной. Глубокий Qₛ." },
+{ name: "Чай матча (церемониальный)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Взбивание", ingredients: "Порошок матча (+6), Вода (+3)", rank: 6, comment: "Концентрат. Дзен-напиток." },
+{ name: "Чай каркаде (гибискус)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Гибискус (+4), Вода (+3)", rank: 4, comment: "Рубиновый. Освежает." },
+{ name: "Чай масала (индийский пряный)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Чай чёрный (+1), Молоко (+3), Специи (+4), Мёд (+7)", rank: 5, comment: "Согревает. Иммунитет." },
+{ name: "Чай с чабрецом", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Заваривание", ingredients: "Чабрец (+4), Вода (+3), Мёд (+7)", rank: 5, comment: "От простуды. Очищает." },
+{ name: "Чай с мятой", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Мята (+4), Вода (+3)", rank: 4, comment: "Охлаждает. Успокаивает." },
+{ name: "Чай с липой", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Заваривание", ingredients: "Липовый цвет (+5), Вода (+3), Мёд (+7)", rank: 5, comment: "Потогонный. Лечит." },
+{ name: "Чай с облепихой и имбирём", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Заваривание", ingredients: "Облепиха (+5), Имбирь (+4), Мёд (+7)", rank: 6, comment: "Витаминная бомба. Зимний Qₛ." },
+{ name: "Чай иван-чай (ферментированный)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Заваривание", ingredients: "Иван-чай (+5), Вода (+3)", rank: 5, comment: "Русский чай. Традиция." },
+{ name: "Чай ройбуш (африканский)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Заваривание", ingredients: "Ройбуш (+3), Вода (+3)", rank: 3, comment: "Без кофеина. Минералы." },
+{ name: "Чай мате (традиционный)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Мате (+4), Вода (+3)", rank: 4, comment: "Энергия. Южноамериканский Qₛ." },
+{ name: "Чай лапачо (муравьиное дерево)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Заваривание", ingredients: "Кора лапачо (+4), Вода (+3)", rank: 4, comment: "Иммуномодулятор." },
+{ name: "Чай шиповника", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Настаивание", ingredients: "Шиповник (+5), Вода (+3)", rank: 5, comment: "Витамин C. Восстанавливает." },
+{ name: "Чай ромашковый", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Заваривание", ingredients: "Ромашка (+5), Вода (+3)", rank: 5, comment: "Успокаивает. Перед сном." },
+{ name: "Чай с мелиссой", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Заваривание", ingredients: "Мелисса (+4), Вода (+3), Мёд (+7)", rank: 5, comment: "От тревоги. Мягкий Qₛ." },
+{ name: "Чай с имбирём и лимоном", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Заваривание", ingredients: "Имбирь (+4), Лимон (+4), Мёд (+7)", rank: 6, comment: "Классика. Иммунитет." },
+{ name: "Кофе чёрный (зерновой, фильтр)", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Заваривание", ingredients: "Кофе в зёрнах (+2), Вода (+3)", rank: 2, comment: "Бодрит. Но истощает Qₛ при частом употреблении." },
+{ name: "Кофе эспрессо", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Приготовление под давлением", ingredients: "Кофе в зёрнах (+2)", rank: 2, comment: "Концентрат. Быстрый импульс." },
+{ name: "Кофе капучино (домашний)", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Смешивание", ingredients: "Эспрессо (+2), Молоко (+3)", rank: 2, comment: "Мягче эспрессо. Молоко смягчает Qₛ." },
+{ name: "Кофе латте (домашний)", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Смешивание", ingredients: "Эспрессо (+2), Молоко (+3)", rank: 2, comment: "Много молока. Мягкий Qₛ." },
+{ name: "Какао (настоящее, на молоке)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Варка", ingredients: "Какао тёртое (+3), Молоко (+3), Мёд (+7)", rank: 5, comment: "Детство. Тепло и уют." },
+
+// --- ХОЛОДНЫЕ НАПИТКИ (25) ---
+{ name: "Квас домашний (на ржаном хлебе)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Ферментация", ingredients: "Ржаной хлеб (+3), Вода (+3), Изюм (+2)", rank: 4, comment: "Традиционный. Освежает." },
+{ name: "Квас белый (окрошечный)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Ферментация", ingredients: "Мука ржаная (+3), Вода (+3), Закваска (+2)", rank: 4, comment: "Резкий. Для окрошки." },
+{ name: "Лимонад домашний (лимон + мята)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Лимон (+4), Мята (+4), Вода (+3), Мёд (+7)", rank: 5, comment: "Освежает. Живой Qₛ." },
+{ name: "Лимонад тархун (домашний)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Эстрагон (+5), Лимон (+4), Вода (+3)", rank: 5, comment: "Изумрудный. Традиция." },
+{ name: "Морс клюквенный (домашний)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Смешивание", ingredients: "Клюква (+5), Вода (+3), Мёд (+7)", rank: 6, comment: "Витаминная бомба. Очищает." },
+{ name: "Морс брусничный (домашний)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Смешивание", ingredients: "Брусника (+5), Вода (+3), Мёд (+7)", rank: 6, comment: "Горьковатый. Защита." },
+{ name: "Компот из яблок (домашний)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Варка", ingredients: "Яблоки (+4), Вода (+3)", rank: 4, comment: "Домашний. Витамины." },
+{ name: "Компот из сухофруктов (взвар)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Варка", ingredients: "Сухофрукты (+3), Вода (+3), Мёд (+7)", rank: 5, comment: "Традиционный. Qₛ предков." },
+{ name: "Кисель ягодный (домашний, на крахмале)", category: "Живая", Q_ing: 5, C_cook: 0.7, ritual: "Варка", ingredients: "Ягоды (+5), Крахмал (0)", rank: 4, comment: "Обволакивает. Защищает." },
+{ name: "Кисель овсяный (традиционный)", category: "Светлая", Q_ing: 6, C_cook: 0.8, ritual: "Долгая ферментация", ingredients: "Овёс (+3), Вода (+3), Мёд (+7)", rank: 5, comment: "Древний напиток. Слизистый Qₛ." },
+{ name: "Сок яблочный (свежевыжатый)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Яблоки (+4)", rank: 4, comment: "Солнце в стакане." },
+{ name: "Сок апельсиновый (свежевыжатый)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Апельсины (+4)", rank: 4, comment: "Заряд бодрости." },
+{ name: "Сок морковный (свежевыжатый)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Морковь (+4)", rank: 4, comment: "Заземляет. Для глаз." },
+{ name: "Сок свекольный (свежевыжатый)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Свёкла (+4), Яблоко (+4), Лимон (+4)", rank: 5, comment: "Очищает кровь и поле." },
+{ name: "Сок сельдереевый (свежевыжатый)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Сельдерей (+5), Лимон (+4)", rank: 5, comment: "Детокс. Заземляет." },
+{ name: "Сок гранатовый (свежевыжатый)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Гранат (+5)", rank: 5, comment: "Мощный Qₛ. Кроветворный." },
+{ name: "Сок томатный (свежевыжатый)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Томаты (+4)", rank: 4, comment: "Ликопин. Полезен." },
+{ name: "Сок тыквенный (свежевыжатый)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Свежевыжатый", ingredients: "Тыква (+4), Морковь (+4)", rank: 5, comment: "Солнечный. Осенний Qₛ." },
+{ name: "Айран (домашний)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Йогурт (+3), Вода (+3), Соль (+3)", rank: 4, comment: "Освежает. Кавказский Qₛ." },
+{ name: "Тан", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Мацун (+3), Вода (+3), Соль (+3)", rank: 4, comment: "Солёный напиток. Жажда." },
+{ name: "Молоко парное (коровье)", category: "Светлая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Молоко парное (+5)", rank: 5, comment: "Живое. Максимум Qₛ." },
+{ name: "Молоко топлёное (в печи)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Топление", ingredients: "Молоко (+3)", rank: 4, comment: "Кремовый вкус. Уют." },
+{ name: "Молоко с мёдом (тёплое)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Смешивание", ingredients: "Молоко (+3), Мёд (+7)", rank: 6, comment: "Перед сном. Успокаивает." },
+{ name: "Кефир (домашний, на закваске)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Ферментация", ingredients: "Молоко (+3), Кефирный гриб (+4)", rank: 5, comment: "Пробиотики. Очищает." },
+{ name: "Ряженка (домашняя)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Топление + ферментация", ingredients: "Молоко топлёное (+4), Закваска (+2)", rank: 4, comment: "Нежный вкус. Согревает." },
+
+// --- СМУЗИ И КОКТЕЙЛИ (25) ---
+{ name: "Смузи зелёный (шпинат + яблоко)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Смешивание", ingredients: "Шпинат (+5), Яблоко (+4), Вода (+3)", rank: 5, comment: "Детокс. Зелёный заряд." },
+{ name: "Смузи ягодный (малина + банан)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Смешивание", ingredients: "Малина (+5), Банан (+3)", rank: 5, comment: "Антиоксиданты. Радость." },
+{ name: "Смузи тропический (манго + ананас)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Манго (+4), Ананас (+4)", rank: 5, comment: "Солнечный. Экзотика." },
+{ name: "Смузи белковый (банан + протеин)", category: "Нейтральная", Q_ing: 3, C_cook: 0.6, ritual: "Смешивание", ingredients: "Банан (+3), Протеин (0)", rank: 2, comment: "Для мышц. Qₛ средний." },
+{ name: "Смузи шоколадный (банан + какао)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Банан (+3), Какао (+3), Молоко (+3)", rank: 4, comment: "Полезный десерт." },
+{ name: "Молочный коктейль (домашний, с сиропом)", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Смешивание", ingredients: "Молоко (+3), Мороженое (-1), Сироп (-1)", rank: 1, comment: "Вкусно, но Qₛ низкий." },
+{ name: "Смузи боул (асаи + гранола)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Смешивание", ingredients: "Асаи (+5), Гранола (+3), Фрукты (+4)", rank: 5, comment: "Модный завтрак. Qₛ." },
+{ name: "Смузи имбирный (шпинат + имбирь + яблоко)", category: "Светлая", Q_ing: 6, C_cook: 0.6, ritual: "Смешивание", ingredients: "Шпинат (+5), Имбирь (+4), Яблоко (+4)", rank: 6, comment: "Иммунитет. Жжёт негатив." },
+{ name: "Глинтвейн безалкогольный (на соке)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Нагревание", ingredients: "Сок виноградный (+4), Специи (+4), Апельсин (+4)", rank: 5, comment: "Согревает. Зимний Qₛ." },
+{ name: "Пунш ягодный (горячий)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Нагревание", ingredients: "Ягоды (+5), Вода (+3), Специи (+4), Мёд (+7)", rank: 6, comment: "Праздник. Согревает." },
+{ name: "Сбитень (медовый напиток)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Варка", ingredients: "Мёд (+7), Вода (+3), Специи (+4)", rank: 6, comment: "Древнерусский. Мощный Qₛ." },
+{ name: "Какао с маршмеллоу", category: "Нейтральная", Q_ing: 2, C_cook: 0.6, ritual: "Смешивание", ingredients: "Какао (+3), Молоко (+3), Маршмеллоу (-2)", rank: 2, comment: "Детский праздник. Qₛ средний." },
+{ name: "Латте матча (зелёный)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Смешивание", ingredients: "Матча (+6), Молоко (+3)", rank: 5, comment: "Красивый. Модный Qₛ." },
+{ name: "Фраппе (холодный кофе)", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Смешивание", ingredients: "Кофе (+2), Лёд (0), Молоко (+3)", rank: 2, comment: "Летний кофе. Бодрит." },
+{ name: "Лимонад лавандовый (домашний)", category: "Светлая", Q_ing: 5, C_cook: 0.6, ritual: "Смешивание", ingredients: "Лаванда (+5), Лимон (+4), Вода (+3)", rank: 5, comment: "Успокаивает. Ароматный." },
+{ name: "Напиток из гибискуса (холодный)", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Настаивание", ingredients: "Гибискус (+4), Вода (+3)", rank: 4, comment: "Рубиновый. Освежает." },
+{ name: "Вода с лимоном (детокс)", category: "Светлая", Q_ing: 5, C_cook: 0.5, ritual: "Смешивание", ingredients: "Вода (+3), Лимон (+4)", rank: 4, comment: "Утренний ритуал. Очищает." },
+{ name: "Вода с огурцом и мятой (детокс)", category: "Светлая", Q_ing: 5, C_cook: 0.5, ritual: "Настаивание", ingredients: "Вода (+3), Огурец (+4), Мята (+4)", rank: 5, comment: "Спа-напиток. Охлаждает." },
+{ name: "Кокосовая вода (свежая)", category: "Светлая", Q_ing: 5, C_cook: 0.5, ritual: "Сырое", ingredients: "Кокосовая вода (+5)", rank: 5, comment: "Природный изотоник. Чистый Qₛ." },
+{ name: "Берёзовый сок (свежий)", category: "Светлая", Q_ing: 6, C_cook: 0.5, ritual: "Сбор", ingredients: "Берёзовый сок (+6)", rank: 6, comment: "Весенний эликсир. Очищает." },
+{ name: "Кленовый сок (свежий)", category: "Светлая", Q_ing: 5, C_cook: 0.5, ritual: "Сбор", ingredients: "Кленовый сок (+5)", rank: 5, comment: "Сладкий. Природный Qₛ." },
+{ name: "Чайный гриб (комбуча, домашняя)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Ферментация", ingredients: "Чай (+2), Сахар (0), Гриб (+5)", rank: 5, comment: "Пробиотики. Очищает." },
+{ name: "Молочный гриб (тибетский, настой)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Ферментация", ingredients: "Молоко (+3), Гриб (+6)", rank: 6, comment: "Мощный пробиотик. Qₛ." },
+{ name: "Рисовый гриб (настой, морской рис)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Ферментация", ingredients: "Рис (+2), Сахар (0), Гриб (+5)", rank: 5, comment: "Освежает. Очищает." },
+{ name: "Шипучий напиток из имбиря (домашний эль)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Ферментация", ingredients: "Имбирь (+4), Лимон (+4), Сахар (0)", rank: 5, comment: "Жгучий. Пробуждает." },
+
+// ========== НАПИТКИ АЛКОГОЛЬНЫЕ И СПЕЦИАЛЬНЫЕ (25 штук) ==========
+{ name: "Вино красное сухое", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Ферментация", ingredients: "Виноград (+4), Алкоголь (-2)", rank: 2, comment: "Антиоксиданты. Бокал в неделю." },
+{ name: "Вино белое сухое", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Ферментация", ingredients: "Виноград (+4), Алкоголь (-2)", rank: 1, comment: "Лёгкое. Qₛ ниже красного." },
+{ name: "Шампанское (брют)", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Ферментация + выдержка", ingredients: "Виноград (+4), Алкоголь (-2)", rank: 1, comment: "Праздник. Пузырьки." },
+{ name: "Пиво крафтовое (живое, нефильтрованное)", category: "Нейтральная", Q_ing: 2, C_cook: 0.5, ritual: "Ферментация", ingredients: "Ячмень (+2), Хмель (+2), Вода (+3)", rank: 2, comment: "Живое пиво. Лучше магазинного." },
+{ name: "Пиво тёмное (стаут, портер)", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Ферментация", ingredients: "Ячмень (+2), Хмель (+2), Алкоголь (-2)", rank: 1, comment: "Плотное. Qₛ средний." },
+{ name: "Сидр (яблочный, натуральный)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Ферментация", ingredients: "Яблоки (+4), Алкоголь (-1)", rank: 3, comment: "Слабоалкогольный. Фруктовый Qₛ." },
+{ name: "Медовуха (традиционная)", category: "Светлая", Q_ing: 5, C_cook: 0.7, ritual: "Ферментация", ingredients: "Мёд (+7), Вода (+3)", rank: 5, comment: "Древний напиток. Благородный Qₛ." },
+{ name: "Наливка вишнёвая (домашняя)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Настаивание", ingredients: "Вишня (+5), Алкоголь (-2)", rank: 3, comment: "Ягодная. Домашний Qₛ." },
+{ name: "Наливка малиновая (домашняя)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Настаивание", ingredients: "Малина (+5), Алкоголь (-2)", rank: 3, comment: "Сладкая. Лечебная." },
+{ name: "Хреновуха", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Настаивание", ingredients: "Хрен (+4), Алкоголь (-2)", rank: 3, comment: "Ядрёная. Согревает." },
+{ name: "Перцовка", category: "Живая", Q_ing: 3, C_cook: 0.7, ritual: "Настаивание", ingredients: "Перец острый (+3), Алкоголь (-2)", rank: 2, comment: "Жгучая. Для сугреву." },
+{ name: "Клюквенная настойка (домашняя)", category: "Живая", Q_ing: 4, C_cook: 0.7, ritual: "Настаивание", ingredients: "Клюква (+5), Алкоголь (-2)", rank: 3, comment: "Кислая. Витаминная." },
+{ name: "Виски (односолодовый)", category: "Нейтральная", Q_ing: 0, C_cook: 0.5, ritual: "Дистилляция + выдержка", ingredients: "Ячмень (+2), Алкоголь (-3)", rank: 0, comment: "Крепкий. Qₛ низкий." },
+{ name: "Коньяк (выдержанный)", category: "Нейтральная", Q_ing: 0, C_cook: 0.5, ritual: "Дистилляция + выдержка в дубе", ingredients: "Виноград (+4), Алкоголь (-3)", rank: 0, comment: "Благородный, но Qₛ низкий." },
+{ name: "Ром (тёмный, выдержанный)", category: "Нейтральная", Q_ing: 0, C_cook: 0.5, ritual: "Дистилляция", ingredients: "Сахарный тростник (+1), Алкоголь (-3)", rank: -1, comment: "Тропический. Qₛ низкий." },
+{ name: "Текила (серебряная)", category: "Нейтральная", Q_ing: 0, C_cook: 0.5, ritual: "Дистилляция", ingredients: "Агава (+3), Алкоголь (-3)", rank: 0, comment: "Мексиканский. Qₛ средний." },
+{ name: "Джин (лондонский сухой)", category: "Нейтральная", Q_ing: 1, C_cook: 0.5, ritual: "Дистилляция", ingredients: "Зерно (+2), Можжевельник (+4), Алкоголь (-3)", rank: 1, comment: "Ароматный. Qₛ чуть выше." },
+{ name: "Водка", category: "Тёмная", Q_ing: -2, C_cook: 0.3, ritual: "Дистилляция", ingredients: "Спирт (-3), Вода (+1)", rank: -2, comment: "Разрушает Cₛ. Избегать." },
+{ name: "Саке (японское рисовое вино)", category: "Живая", Q_ing: 3, C_cook: 0.6, ritual: "Ферментация", ingredients: "Рис (+2), Вода (+3)", rank: 3, comment: "Традиционное. Мягкий Qₛ." },
+{ name: "Глинтвейн (классический, красное вино)", category: "Нейтральная", Q_ing: 2, C_cook: 0.7, ritual: "Нагревание со специями", ingredients: "Вино красное (+2), Специи (+4), Апельсин (+4)", rank: 3, comment: "Согревает зимой." },
+{ name: "Коктейль «Мохито» (классический)", category: "Тёмная", Q_ing: -1, C_cook: 0.5, ritual: "Смешивание", ingredients: "Ром (-1), Лайм (+4), Мята (+4), Сахар (0)", rank: 0, comment: "Освежает, но Qₛ околонулевой." },
+{ name: "Коктейль «Маргарита»", category: "Тёмная", Q_ing: -1, C_cook: 0.5, ritual: "Смешивание", ingredients: "Текила (0), Лимон (+4), Ликёр (-2)", rank: -1, comment: "Кисло-сладкий. Qₛ низкий." },
+{ name: "Коктейль «Кровавая Мэри»", category: "Нейтральная", Q_ing: 0, C_cook: 0.5, ritual: "Смешивание", ingredients: "Водка (-2), Томатный сок (+3), Специи (+3)", rank: 0, comment: "Овощной. Qₛ почти ноль." },
+{ name: "Безалкогольный Мохито", category: "Живая", Q_ing: 4, C_cook: 0.6, ritual: "Смешивание", ingredients: "Лайм (+4), Мята (+4), Содовая (0), Мёд (+7)", rank: 5, comment: "Освежает без вреда. Высокий Qₛ." },
+{ name: "Сбитень (горячий медовый напиток)", category: "Светлая", Q_ing: 6, C_cook: 0.7, ritual: "Варка", ingredients: "Мёд (+7), Пряности (+4), Травы (+4), Вода (+3)", rank: 6, comment: "Древнерусский зимний напиток. Согревает тело и душу." },
+    ];
+    
+    let currentSortMode = 'rank';
+    const tbody = document.getElementById('tableBody');
+    const indicator = document.getElementById('currentSortIndicator');
+    
+    function getCategoryBadge(category) {
+        if (category === 'Светлая') return 'badge-light';
+        if (category === 'Живая') return 'badge-live';
+        if (category === 'Нейтральная') return 'badge-neutral';
+        if (category === 'Тёмная') return 'badge-dark';
+        return 'badge-toxic';
+    }
+    
+    function getRankClass(rank) {
+        if (rank >= 8) return 'rank-p8';
+        if (rank >= 7) return 'rank-p7';
+        if (rank >= 6) return 'rank-p6';
+        if (rank >= 5) return 'rank-p5';
+        if (rank >= 4) return 'rank-p4';
+        if (rank >= 3) return 'rank-p3';
+        if (rank >= 2) return 'rank-p2';
+        if (rank >= 1) return 'rank-p1';
+        if (rank >= 0) return 'rank-0';
+        if (rank >= -1) return 'rank-m1';
+        if (rank >= -2) return 'rank-m2';
+        return 'rank-m3';
+    }
+    
+    function renderTable() {
+        const sorted = [...foodData].sort((a, b) => {
+            if (currentSortMode === 'rank') {
+                return b.rank - a.rank;
+            } else {
+                return a.name.localeCompare(b.name, 'ru');
+            }
+        });
+        
+        let html = '';
+        sorted.forEach(f => {
+            const badgeClass = getCategoryBadge(f.category);
+            const rankClass = getRankClass(f.rank);
+            html += `<tr class="${rankClass}">`;
+            html += `<td><strong>${f.name}</strong></td>`;
+            html += `<td style="text-align:center;"><span class="badge ${badgeClass}">${f.category}</span></td>`;
+            html += `<td style="text-align:center;">${f.Q_ing}</td>`;
+            html += `<td style="text-align:center;">${f.C_cook}</td>`;
+            html += `<td style="text-align:center;">${f.ritual}</td>`;
+            html += `<td>${f.ingredients.split(',').map(i => `<span class="ingredient-tag">${i.trim()}</span>`).join(' ')}</td>`;
+            html += `<td style="text-align:center; font-weight:bold;">${f.rank}</td>`;
+            html += `<td>${f.comment}</td>`;
+            html += `</tr>`;
+        });
+        tbody.innerHTML = html;
+        
+        indicator.textContent = `Текущая сортировка: ${currentSortMode === 'rank' ? 'по РАНГУ (от +8 к -3)' : 'по НАЗВАНИЮ (А → Я)'}`;
+    }
+    
+    document.getElementById('sortByRankBtn').addEventListener('click', () => {
+        currentSortMode = 'rank';
+        renderTable();
+    });
+    
+    document.getElementById('sortByNameBtn').addEventListener('click', () => {
+        currentSortMode = 'name';
+        renderTable();
+    });
+    
+    renderTable();
+})();
+</script>
+</body>
+</html>

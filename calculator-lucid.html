@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Осознанного Сна • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-stats { color: #a09080; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .moon { font-size: 4rem; animation: float 3s infinite; display: inline-block; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🌙 Осознанный Сон</h1>
+    <div class="subtitle">Калькулятор вероятности осознанного сновидения (§126, Формула P_lucid)</div>
+
+    <div class="calc-section">
+        <div class="section-title">🧘 Подготовка перед сном</div>
+
+        <div class="input-group">
+            <label>🎯 Когерентность перед сном (Cₛ): <span id="csValue">0.6</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (экран, тревога)</span><span>1.0 (медитация, покой)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🌫️ Уровень шума в спальне (S_noise): <span id="noiseValue">0.4</span></label>
+            <input type="range" id="noiseSlider" min="0.1" max="1" value="0.4" step="0.01">
+            <div class="range-labels"><span>0.1 (идеальная тишина)</span><span>1.0 (город, стресс)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>📝 Намерение перед сном (аффирмация):</label>
+            <select id="intentSelect">
+                <option value="1.5">Чёткое, многократное «Я осознаю себя во сне» (×1.5)</option>
+                <option value="1.2">Сформулированное один раз (×1.2)</option>
+                <option value="1.0" selected>Размытое, «хорошо бы» (×1.0)</option>
+                <option value="0.5">Без намерения (×0.5)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>⏰ Техника прерывания сна (WBTB):</label>
+            <select id="wbtbSelect">
+                <option value="2.0">Да, просыпаюсь через 4-5 часов, бодрствую 20-30 минут (×2.0)</option>
+                <option value="1.3">Просыпаюсь, но сразу засыпаю (×1.3)</option>
+                <option value="1.0" selected>Нет, сплю без перерыва (×1.0)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="calc-section">
+        <div class="section-title">🧠 Опыт и способности</div>
+
+        <div class="input-group">
+            <label>📊 Опыт осознанных снов: <span id="expValue">2</span> из 10</label>
+            <input type="range" id="expSlider" min="0" max="10" value="2" step="0.1">
+            <div class="range-labels"><span>0 (никогда)</span><span>5 (иногда)</span><span>10 (регулярно)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🔮 Интуитивная чувствительность (χ): <span id="chiValue">5</span> из 10</label>
+            <input type="range" id="chiSlider" min="1" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>1 (глухарь)</span><span>10 (экстрасенс)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>📓 Ведение дневника снов:</label>
+            <select id="journalSelect">
+                <option value="1.5">Да, каждое утро (×1.5)</option>
+                <option value="1.2">Иногда, нерегулярно (×1.2)</option>
+                <option value="1.0" selected>Нет (×1.0)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🔍 Проверки реальности в течение дня:</label>
+            <select id="rcSelect">
+                <option value="1.8">Да, постоянно (руки, часы, «я сплю?») (×1.8)</option>
+                <option value="1.3">Иногда, когда вспоминаю (×1.3)</option>
+                <option value="1.0" selected>Нет (×1.0)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="moon" id="moonIcon">🌙</div>
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Вероятность осознанного сна этой ночью</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-stats" id="resultStats"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const csSlider = document.getElementById('csSlider');
+    const noiseSlider = document.getElementById('noiseSlider');
+    const intentSelect = document.getElementById('intentSelect');
+    const wbtbSelect = document.getElementById('wbtbSelect');
+    const expSlider = document.getElementById('expSlider');
+    const chiSlider = document.getElementById('chiSlider');
+    const journalSelect = document.getElementById('journalSelect');
+    const rcSelect = document.getElementById('rcSelect');
+    const csValue = document.getElementById('csValue');
+    const noiseValue = document.getElementById('noiseValue');
+    const expValue = document.getElementById('expValue');
+    const chiValue = document.getElementById('chiValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultStats = document.getElementById('resultStats');
+    const resultFormula = document.getElementById('resultFormula');
+    const moonIcon = document.getElementById('moonIcon');
+
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    noiseSlider.addEventListener('input', () => { noiseValue.textContent = parseFloat(noiseSlider.value).toFixed(2); calculate(); });
+    intentSelect.addEventListener('change', calculate);
+    wbtbSelect.addEventListener('change', calculate);
+    expSlider.addEventListener('input', () => { expValue.textContent = parseFloat(expSlider.value).toFixed(1); calculate(); });
+    chiSlider.addEventListener('input', () => { chiValue.textContent = parseFloat(chiSlider.value).toFixed(1); calculate(); });
+    journalSelect.addEventListener('change', calculate);
+    rcSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const C = parseFloat(csSlider.value);
+        const Snoise = parseFloat(noiseSlider.value);
+        const intentCoeff = parseFloat(intentSelect.value);
+        const wbtbCoeff = parseFloat(wbtbSelect.value);
+        const exp = parseFloat(expSlider.value);
+        const chi = parseFloat(chiSlider.value);
+        const journalCoeff = parseFloat(journalSelect.value);
+        const rcCoeff = parseFloat(rcSelect.value);
+
+        // Перекрытие бодрствования и сна: |⟨Ψ_waking|Ψ_dream⟩|²
+        // Зависит от Cₛ, шума, опыта, χ, практик
+        const overlap = C * (1 - Snoise) * (0.3 + 0.7 * exp / 10) * (0.3 + 0.7 * chi / 10);
+
+        // Сила контроля ⟨F_control⟩
+        const Fcontrol = intentCoeff * wbtbCoeff * journalCoeff * rcCoeff * (0.5 + 0.5 * C);
+
+        // Коэффициент γ (сопротивление)
+        const gamma = 2.0;
+
+        // Вероятность осознанного сна
+        let Plucid = overlap * overlap / (1 + gamma / (Fcontrol + 0.01));
+
+        if (Plucid > 1) Plucid = 1;
+        if (Plucid < 0) Plucid = 0;
+
+        const percent = (Plucid * 100).toFixed(1);
+
+        resultNumber.textContent = percent + '%';
+        resultLabel.textContent = 'Вероятность осознанного сна этой ночью';
+
+        let extra = '';
+        let moon = '🌙';
+        if (Plucid >= 0.7) {
+            extra = '🌟 Почти гарантировано! Вы — мастер осознанных сновидений. Наслаждайтесь полётом!';
+            moon = '🌕';
+        } else if (Plucid >= 0.4) {
+            extra = '✨ Высокая вероятность. Сегодня ночью вы, скорее всего, «проснётесь» во сне.';
+            moon = '🌖';
+        } else if (Plucid >= 0.2) {
+            extra = '💫 Хорошие шансы. Продолжайте практику, и ОС придёт.';
+            moon = '🌗';
+        } else if (Plucid >= 0.08) {
+            extra = '🌒 Умеренная вероятность. Возможно, сегодня — не та ночь, но не сдавайтесь.';
+            moon = '🌘';
+        } else if (Plucid >= 0.02) {
+            extra = '🌑 Низкая вероятность. Попробуйте WBTB и проверки реальности.';
+            moon = '🌑';
+        } else {
+            extra = '💤 Очень низкая вероятность. Улучшите гигиену сна и начните вести дневник.';
+            moon = '💤';
+        }
+        resultExtra.textContent = extra;
+        moonIcon.textContent = moon;
+
+        resultStats.textContent = `Перекрытие полей: ${overlap.toFixed(3)} | Сила контроля: ${Fcontrol.toFixed(2)} | Сопротивление γ: ${gamma.toFixed(1)}`;
+
+        resultFormula.textContent = `|⟨Ψ_w|Ψ_d⟩|² = ${C.toFixed(2)} · (1-${Snoise.toFixed(2)}) · ${(0.3+0.7*exp/10).toFixed(2)} · ${(0.3+0.7*chi/10).toFixed(2)} = ${overlap.toFixed(3)} | P = ${overlap.toFixed(3)}² / (1 + ${gamma.toFixed(1)}/${(Fcontrol+0.01).toFixed(2)}) = ${Plucid.toFixed(3)}`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

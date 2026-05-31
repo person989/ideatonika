@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вероятность вещего сна • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-detail { color: #a09080; font-size: 0.85rem; margin-top: 0.8rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🌙 Вероятность вещего сна</h1>
+    <div class="subtitle">Оценка шанса на пророческое сновидение (§18, §75, §126)</div>
+
+    <div class="calc-section">
+        <div class="section-title">😴 Ваши параметры перед сном</div>
+
+        <!-- Чувствительность χ -->
+        <div class="input-group">
+            <label>🔮 Семантическая чувствительность (χ): <span id="chiValue">5</span> из 10</label>
+            <input type="range" id="chiSlider" min="0" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>0 (глухарь)</span><span>5 (средняя)</span><span>10 (медиум)</span></div>
+        </div>
+
+        <!-- Когерентность перед сном -->
+        <div class="input-group">
+            <label>🎯 Когерентность перед сном (Cₛ): <span id="csValue">0.5</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.5" step="0.01">
+            <div class="range-labels"><span>0.1 (экран, тревога)</span><span>1.0 (медитация, покой)</span></div>
+        </div>
+
+        <!-- Фаза Луны -->
+        <div class="input-group">
+            <label>🌙 Фаза Луны:</label>
+            <select id="moonSelect">
+                <option value="1.5">🌕 Полнолуние (коэфф. ×1.5)</option>
+                <option value="1.3">🌖 Убывающая (коэфф. ×1.3)</option>
+                <option value="1.1">🌓 Первая / Последняя четверть (×1.1)</option>
+                <option value="1.0" selected>🌑 Новолуние (×1.0)</option>
+                <option value="0.9">🌒 Растущая (×0.9)</option>
+            </select>
+        </div>
+
+        <!-- Эмоциональное состояние -->
+        <div class="input-group">
+            <label>💭 Эмоциональный фон перед сном:</label>
+            <select id="emotionSelect">
+                <option value="1.3">🙏 Спокойное, молитвенное (×1.3)</option>
+                <option value="1.1">😊 Приподнятое, радостное (×1.1)</option>
+                <option value="1.0" selected>😐 Нейтральное (×1.0)</option>
+                <option value="0.7">😟 Тревожное, напряжённое (×0.7)</option>
+                <option value="0.4">😡 Гневное, раздражённое (×0.4)</option>
+            </select>
+        </div>
+
+        <!-- Близость важного события -->
+        <div class="input-group">
+            <label>📅 Близость важного события (экзамен, встреча, решение):</label>
+            <select id="eventSelect">
+                <option value="1.5">Завтра! (×1.5)</option>
+                <option value="1.3">На этой неделе (×1.3)</option>
+                <option value="1.1">В этом месяце (×1.1)</option>
+                <option value="1.0" selected>Ничего особенного (×1.0)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Вероятность вещего сна этой ночью</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-detail" id="resultDetail"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const chiSlider = document.getElementById('chiSlider');
+    const csSlider = document.getElementById('csSlider');
+    const moonSelect = document.getElementById('moonSelect');
+    const emotionSelect = document.getElementById('emotionSelect');
+    const eventSelect = document.getElementById('eventSelect');
+    const chiValue = document.getElementById('chiValue');
+    const csValue = document.getElementById('csValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultDetail = document.getElementById('resultDetail');
+    const resultFormula = document.getElementById('resultFormula');
+
+    chiSlider.addEventListener('input', () => { chiValue.textContent = parseFloat(chiSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    [moonSelect, emotionSelect, eventSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const chi = parseFloat(chiSlider.value);
+        const C = parseFloat(csSlider.value);
+        const moonK = parseFloat(moonSelect.value);
+        const emotionK = parseFloat(emotionSelect.value);
+        const eventK = parseFloat(eventSelect.value);
+
+        // Базовая вероятность вещего сна: P_base = 1% (один сон из ста бывает вещим)
+        const Pbase = 0.01;
+
+        // Формула: P = P_base · (χ/5) · C · K_moon · K_emotion · K_event
+        const P = Pbase * (chi / 5) * C * moonK * emotionK * eventK;
+        const Ppercent = P * 100;
+
+        // Ограничение: не больше 50%
+        const Pfinal = Math.min(Ppercent, 50);
+
+        resultNumber.textContent = Pfinal.toFixed(1) + '%';
+        resultLabel.textContent = 'Вероятность вещего сна этой ночью';
+
+        let extra = '';
+        if (Pfinal >= 20) extra = '🔮 Очень высокая вероятность! Держите дневник снов рядом с кроватью.';
+        else if (Pfinal >= 8) extra = '🌙 Повышенная вероятность. Сон может содержать подсказки.';
+        else if (Pfinal >= 3) extra = '💤 Средняя вероятность. Иногда сны что-то значат.';
+        else if (Pfinal >= 1) extra = '😴 Низкая вероятность. Скорее всего, просто сон.';
+        else extra = '🛌 Очень низкая вероятность. Спите спокойно, никаких пророчеств.';
+        resultExtra.textContent = extra;
+
+        resultDetail.textContent = `При ваших параметрах примерно 1 сон из ${Math.round(100 / Pfinal)} окажется вещим.`;
+
+        resultFormula.textContent = `P = 1% · (${chi.toFixed(1)}/5) · ${C.toFixed(2)} · ${moonK} · ${emotionK} · ${eventK} = ${Pfinal.toFixed(1)}%`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

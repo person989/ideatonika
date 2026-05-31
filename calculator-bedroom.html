@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Идеальной Спальни • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1.5rem; text-align: left; line-height: 1.8; }
+        .result-extra span { color: #ffd54f; font-weight: bold; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1.5rem; font-family: 'Courier New', monospace; text-align: center; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🛏️ Идеальная спальня</h1>
+    <div class="subtitle">Калькулятор семантического качества сна (§128, Таблица Материалов, Таблица Частот)</div>
+
+    <div class="calc-section">
+        <div class="section-title">🧱 Материалы и атмосфера спальни</div>
+
+        <div class="input-group">
+            <label>🪵 Материал стен:</label>
+            <select id="wallsSelect">
+                <option value="7">Натуральный камень / гранит (+7)</option>
+                <option value="5">Массив дерева / сруб (+5)</option>
+                <option value="2" selected>Кирпич (+2)</option>
+                <option value="0">Гипсокартон (0)</option>
+                <option value="-2">Бетон (–2)</option>
+                <option value="-3">Железобетон (–3)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🪵 Материал пола:</label>
+            <select id="floorSelect">
+                <option value="5">Массив дерева (+5)</option>
+                <option value="2" selected>Паркет (+2)</option>
+                <option value="0">Ламинат (0)</option>
+                <option value="-2">Линолеум (–2)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🛏️ Материал кровати / каркаса:</label>
+            <select id="bedSelect">
+                <option value="6">Массив дерева, резной (+6)</option>
+                <option value="3" selected>Дерево простое (+3)</option>
+                <option value="0">ДСП / МДФ (0)</option>
+                <option value="-1">Металл, пластик (–1)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🛌 Постельное бельё:</label>
+            <select id="linenSelect">
+                <option value="4">Лён (+4)</option>
+                <option value="3">Хлопок (+3)</option>
+                <option value="2" selected>Смесовое (+2)</option>
+                <option value="-1">Синтетика (–1)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🎨 Цвет стен:</label>
+            <select id="colorSelect">
+                <option value="3">Тёплые природные тона (бежевый, кремовый) (+3)</option>
+                <option value="1" selected>Спокойные пастельные (+1)</option>
+                <option value="0">Нейтральные (0)</option>
+                <option value="-2">Серый бетон, холодные тона (–2)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>💡 Освещение (вечернее):</label>
+            <select id="lightSelect">
+                <option value="2">Свечи, камин (+2)</option>
+                <option value="1" selected>Тёплый LED 2700K (+1)</option>
+                <option value="0">Обычный LED 4000K (0)</option>
+                <option value="-2">Холодный LED 6500K, экраны (–2)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🪴 Растения в спальне:</label>
+            <select id="plantsSelect">
+                <option value="3">2-3 живых растения (+3)</option>
+                <option value="1" selected>Одно растение (+1)</option>
+                <option value="0">Нет растений (0)</option>
+                <option value="-1">Искусственные цветы (–1)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🔇 Уровень шума:</label>
+            <select id="noiseSelect">
+                <option value="3">Идеальная тишина (+3)</option>
+                <option value="1" selected>Лёгкий фоновый шум (+1)</option>
+                <option value="-2">Улица за окном, техника (–2)</option>
+                <option value="-4">Громко, беспокойно (–4)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Ранг спальни</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const selects = [
+        document.getElementById('wallsSelect'),
+        document.getElementById('floorSelect'),
+        document.getElementById('bedSelect'),
+        document.getElementById('linenSelect'),
+        document.getElementById('colorSelect'),
+        document.getElementById('lightSelect'),
+        document.getElementById('plantsSelect'),
+        document.getElementById('noiseSelect')
+    ];
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    selects.forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const names = [];
+        let sum = 0;
+        selects.forEach(s => {
+            const val = parseInt(s.value);
+            names.push(val);
+            sum += val;
+        });
+
+        const count = selects.length;
+        const avg = sum / count;
+        const rounded = Math.round(avg * 10) / 10;
+
+        resultNumber.textContent = (rounded >= 0 ? '+' : '') + rounded.toFixed(1);
+        resultLabel.textContent = 'Ранг спальни';
+
+        // Оценка восстановления Qₛ за ночь (8 часов)
+        const recoveryBase = 1.5; // максимальное восстановление за час идеального сна
+        const recoveryPerHour = recoveryBase * (0.3 + 0.7 * (rounded + 5) / 15);
+        const totalRecovery = Math.round(recoveryPerHour * 8 * 10) / 10;
+
+        let interpretation = '';
+        if (rounded >= 5) interpretation = '🏛️ ХРАМ СНА. Ваша спальня — мощный генератор восстановления. Вы просыпаетесь полностью обновлённым.';
+        else if (rounded >= 2) interpretation = '🌿 САД. Очень хорошая спальня. Сон восстанавливает силы.';
+        else if (rounded >= 0) interpretation = '🏠 ДОМ. Нормальная спальня. Можно улучшить.';
+        else if (rounded >= -2) interpretation = '🏢 ОФИС. Спальня с лёгким негативом. Сон не полностью восстанавливает.';
+        else interpretation = '🏭 БУНКЕР. Спальня истощает вас. Срочно меняйте материалы и обстановку!';
+
+        resultExtra.innerHTML = `
+            <strong>🌙 Восстановление Qₛ за 8 часов сна:</strong> <span>+${totalRecovery.toFixed(1)}</span> (из 10 возможных)<br>
+            <strong>📊 Интерпретация:</strong> ${interpretation}<br><br>
+            <strong>💡 Рекомендации:</strong><br>
+            ${rounded < 2 ? '• Замените синтетическое бельё на лён или хлопок<br>' : ''}
+            ${rounded < 0 ? '• Добавьте живое растение (хлорофитум, сансевиерию)<br>' : ''}
+            ${rounded < -2 ? '• Уберите технику из спальни, используйте тёплый свет<br>' : ''}
+            ${rounded >= 2 ? '• Вы на правильном пути! Поддерживайте чистоту и порядок.<br>' : ''}
+            • Перед сном проветривайте комнату 10-15 минут<br>
+            • Используйте плотные шторы для блокировки света
+        `;
+
+        resultFormula.textContent = `Q = (${names.join(' + ')}) / ${count} = ${sum} / ${count} = ${rounded.toFixed(1)}`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

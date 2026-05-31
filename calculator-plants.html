@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Растений • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #81c784; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🪴 Сколько растений нужно?</h1>
+    <div class="subtitle">Калькулятор зелёного щита (§128, Таблица Материалов)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры комнаты и цели</div>
+
+        <div class="input-group">
+            <label>🏠 Площадь комнаты: <span id="areaValue">20</span> м²</label>
+            <input type="range" id="areaSlider" min="5" max="100" value="20" step="0.5">
+            <div class="range-labels"><span>5 м² (келья)</span><span>50 м²</span><span>100 м² (зал)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🧱 Материал стен:</label>
+            <select id="wallsSelect">
+                <option value="7">Натуральный камень / гранит (+7)</option>
+                <option value="4">Массив дерева (+4)</option>
+                <option value="2">Кирпич (+2)</option>
+                <option value="0">Гипсокартон (0)</option>
+                <option value="-2" selected>Бетон (–2)</option>
+                <option value="-4">Железобетон, плесень (–4)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🪟 Естественный свет:</label>
+            <select id="lightSelect">
+                <option value="1.5">Много солнца (южные окна) — коэфф. 1.5</option>
+                <option value="1.0" selected>Умеренный свет — коэфф. 1.0</option>
+                <option value="0.6">Мало света (север, подвал) — коэфф. 0.6</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🌿 Тип растений:</label>
+            <select id="plantTypeSelect">
+                <option value="4">Крупные (фикус, монстера, пальма) — ранг +4</option>
+                <option value="2" selected>Средние (спатифиллум, калатея) — ранг +2</option>
+                <option value="1">Мелкие (суккуленты, кактусы) — ранг +1</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🎯 Желаемый ранг комнаты:</label>
+            <select id="targetSelect">
+                <option value="6">🏛️ Храм (+6)</option>
+                <option value="3" selected>🌿 Сад (+3)</option>
+                <option value="0">🏠 Дом (0)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Растений потребуется</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const areaSlider = document.getElementById('areaSlider');
+    const wallsSelect = document.getElementById('wallsSelect');
+    const lightSelect = document.getElementById('lightSelect');
+    const plantTypeSelect = document.getElementById('plantTypeSelect');
+    const targetSelect = document.getElementById('targetSelect');
+    const areaValue = document.getElementById('areaValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    areaSlider.addEventListener('input', () => { areaValue.textContent = parseFloat(areaSlider.value).toFixed(1); calculate(); });
+    [wallsSelect, lightSelect, plantTypeSelect, targetSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const area = parseFloat(areaSlider.value);
+        const wallsRank = parseInt(wallsSelect.value);
+        const lightCoeff = parseFloat(lightSelect.value);
+        const plantRank = parseInt(plantTypeSelect.value);
+        const targetRank = parseInt(targetSelect.value);
+
+        // Базовый ранг комнаты (без растений)
+        const baseRank = wallsRank;
+        
+        // Сколько ранга нужно добавить растениями
+        const rankNeeded = Math.max(0, targetRank - baseRank);
+        
+        // Одно растение даёт plantRank единиц, но его эффективность зависит от света
+        const effectivePlantRank = plantRank * lightCoeff;
+        
+        // Базовое количество растений на 10 м² для повышения на 1 ранг
+        const plantsPer10m2PerRank = 2;
+        
+        // Сколько нужно растений
+        let plantsNeeded = Math.ceil((rankNeeded / effectivePlantRank) * plantsPer10m2PerRank * (area / 10));
+        
+        // Если стены уже хорошие, может быть 0
+        if (rankNeeded <= 0) {
+            plantsNeeded = 0;
+        }
+
+        resultNumber.textContent = plantsNeeded + ' шт.';
+        resultLabel.textContent = 'Рекомендуемое количество';
+
+        let extra = '';
+        if (plantsNeeded === 0) {
+            extra = '🎉 Ваши стены уже дают нужный ранг! Растения не обязательны, но лишними не будут.';
+        } else if (plantsNeeded <= 3) {
+            extra = '🌱 Достаточно пары зелёных друзей. Поставьте их у окна — и комната задышит.';
+        } else if (plantsNeeded <= 10) {
+            extra = '🪴 Умеренное количество. Превратите подоконник в мини-сад.';
+        } else if (plantsNeeded <= 30) {
+            extra = '🌿 Вам нужен настоящий зимний сад! Рассмотрите стеллажи и подвесные кашпо.';
+        } else {
+            extra = '🏡 Это уже не комната, а оранжерея! Возможно, стоит улучшить стены, чтобы снизить потребность в растениях.';
+        }
+        resultExtra.textContent = extra;
+
+        const wallName = wallsSelect.options[wallsSelect.selectedIndex].text.split(' (')[0];
+        const targetName = targetSelect.options[targetSelect.selectedIndex].text.split(' ').slice(1).join(' ');
+        resultFormula.textContent = `Стены: ${wallName} (ранг ${wallsRank}) → Цель: ${targetName} (ранг ${targetRank}). Добавить: ${rankNeeded} ед. ранга. Эффект. растения: ${effectivePlantRank.toFixed(1)}`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

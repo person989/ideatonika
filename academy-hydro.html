@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гидродинамика Qₛ • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 850px; width: 100%; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 2px solid #ce93d8; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ce93d8; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ce93d8; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .task-box { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; border: 1px solid #5d4a3a; }
+        .task-title { color: #ce93d8; font-size: 1.3rem; margin-bottom: 1rem; }
+        .task-text { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; white-space: pre-line; }
+        .task-input { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .task-input::placeholder { color: #706858; font-style: italic; }
+        .hint { color: #a09080; font-size: 0.85rem; margin-top: 0.5rem; font-style: italic; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #ce93d8; color: #ce93d8; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #ce93d8; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ce93d8; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ce93d8; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>🌊 ГИДРОДИНАМИКА Qₛ</h1>
+    <div class="subtitle">10 задач • ручной ввод • звание «Магистр»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="taskArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-magistr-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-magistr-menu.html" class="back-link">← Вернуться к темам Магистра</a>
+</div>
+
+<script>
+const tasks = [
+    {
+        title: "Задача №1. Число Рейнольдса в храме",
+        text: "Дано: плотность Qₛ (ρ_Q) = 5 усл. ед., скорость потока (v) = 3 усл. ед., характерный размер (L) = 20 м, вязкость (η_sense) = 1.5.\nЧему равно число Рейнольдса Re_sense? Является ли поток ламинарным (Re < 2000)?\nОтвет: введите число Re (округлите до целых) и напишите «да» или «нет» через пробел.",
+        answer: "200 да"
+    },
+    {
+        title: "Задача №2. Ламинарный или турбулентный?",
+        text: "Дано: ρ_Q = 8, v = 10, L = 50, η_sense = 2.0.\nЧему равно Re_sense? Ламинарный (Re < 2000) или турбулентный (Re > 2000)?\nОтвет: число Re (округлите до целых) и слово «ламинарный» или «турбулентный» через пробел.",
+        answer: "2000 турбулентный"
+    },
+    {
+        title: "Задача №3. Число Маха для молитвы",
+        text: "Дано: скорость потока Qₛ (v) = 50 усл. ед., скорость звука в среде (c_sense) = 500 усл. ед.\nЧему равно число Маха M_sense? Дозвуковой (M < 1) или сверхзвуковой (M > 1)?\nОтвет: число M (округлите до сотых) и слово «дозвуковой» или «сверхзвуковой» через пробел.",
+        answer: "0.10 дозвуковой"
+    },
+    {
+        title: "Задача №4. Ударная волна в храме",
+        text: "Дано: v = 1200 усл. ед., c_sense в храме = 1000 усл. ед.\nЧему равно M_sense? Возникнет ли ударная волна (M > 1)?\nОтвет: число M (округлите до десятых) и «да» или «нет» через пробел.",
+        answer: "1.2 да"
+    },
+    {
+        title: "Задача №5. Вязкость и время релаксации",
+        text: "Дано: R_sense = 0.5 Ω, τ_relax = 400 сек.\nЧему равна семантическая вязкость η_sense?\nОтвет: число (округлите до целых).",
+        answer: "200"
+    },
+    {
+        title: "Задача №6. Конвективный поток от свечи",
+        text: "Дано: g_sense = 10, β = 0.02, ΔT_sense = 5, L = 2 м, ν_sense = 0.01, α_sense = 0.05.\nЧему равно число Рэлея Ra_sense? Возникнет ли конвекция (Ra > 1708)?\nОтвет: число Ra (округлите до целых) и «да» или «нет» через пробел.",
+        answer: "16000 да"
+    },
+    {
+        title: "Задача №7. Число Пекле",
+        text: "Дано: скорость v = 2 усл. ед., характерный размер L = 5 м, коэффициент диффузии D_sense = 0.5.\nЧему равно число Пекле Pe_sense? Что доминирует: адвекция (Pe > 1) или диффузия (Pe < 1)?\nОтвет: число Pe (округлите до целых) и слово «адвекция» или «диффузия» через пробел.",
+        answer: "20 адвекция"
+    },
+    {
+        title: "Задача №8. Толщина пограничного слоя",
+        text: "Дано: характерная длина L = 1 м, Re_sense = 2500.\nЧему равна толщина пограничного слоя δ_sense?\nОтвет: число (округлите до сотых) в метрах.",
+        answer: "0.02"
+    },
+    {
+        title: "Задача №9. Число кавитации",
+        text: "Дано: P_sense = 1000, P_crit = 200, ρ_Q = 10, v = 5.\nЧему равно число кавитации Ca_sense? Возникнет ли кавитация (Ca < 1)?\nОтвет: число Ca (округлите до десятых) и «да» или «нет» через пробел.",
+        answer: "6.4 нет"
+    },
+    {
+        title: "Задача №10. Сравнение потоков",
+        text: "Дано: в храме Re = 50 (ламинарный), на вокзале Re = 4000 (турбулентный).\nВо сколько раз турбулентный поток теряет больше энергии на диссипацию?\nОтвет округлите до целых.",
+        answer: "80"
+    }
+];
+
+let idx = 0, answers = Array(10).fill('');
+const tArea = document.getElementById('taskArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn'), next = document.getElementById('nextBtn');
+
+function render() {
+    const t = tasks[idx];
+    let h = `<div class="task-box"><div class="task-title">${t.title}</div><div class="task-text">${t.text}</div>`;
+    h += `<input type="text" class="task-input" id="answerInput" placeholder="Введите ответ..." value="${answers[idx]}">`;
+    <!-- h += `<div class="hint">💡 Ожидаемый формат ответа указан в примере каждой задачи.</div>`; -->
+    h += '</div>';
+    tArea.innerHTML = h;
+    document.getElementById('answerInput').addEventListener('input', function(){
+        answers[idx] = this.value.trim();
+    });
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = idx===0;
+    next.textContent = idx===9 ? '🎉 Завершить' : 'Далее →';
+    if(idx===9) document.getElementById('answerInput').focus();
+}
+
+function showResult() {
+    let correct=0, rows='';
+    tasks.forEach((t,i)=>{
+        const userAns = answers[i].replace(',','.').trim().toLowerCase();
+        const realAns = t.answer.toLowerCase();
+        const ok = userAns === realAns;
+        if(ok) correct++;
+        rows += `<tr><td>${t.title}</td><td style="color:#f3e7c0;">${answers[i]||'—'}</td><td style="color:#a09080;">${t.answer}</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'🌊 Вы — Магистр Гидродинамики!':pct>=70?'📚 Отличный результат, Адепт.':pct>=40?'🔬 Неплохо, но есть куда расти.':'🌱 Сложные задачи требуют практики.';
+    tArea.innerHTML = `<div class="result-container"><div class="result-score">${pct}%</div><p style="color:#c0b090;">${comment}</p><table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table><p style="color:#a09080;">Звание: ${pct>=90?'🌊 Магистр':pct>=70?'📚 Адепт':pct>=40?'🔬 Практик':'🌱 Неофит'}</p></div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', ()=>{ if(idx>0){ idx--; render(); } });
+next.addEventListener('click', ()=>{
+    if(answers[idx]===''){ alert('Введите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

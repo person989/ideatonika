@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Ранга Блюда • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: block; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group select, .input-group input[type="range"] {
+            width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px;
+            color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem;
+        }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .input-group input[type="range"] { padding: 0; height: 8px; -webkit-appearance: none; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group .current-value { color: #ffd54f; font-weight: bold; font-size: 1.2rem; float: right; }
+        .ingredient-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 0.8rem; }
+        .ingredient-row select { flex: 1; }
+        .ingredient-row .remove-btn { background: transparent; border: 1px solid #ef5350; color: #ef5350; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.8rem; }
+        .ingredient-row .remove-btn:hover { background: #ef5350; color: white; }
+        .add-btn { background: transparent; border: 1px solid #81c784; color: #81c784; padding: 0.8rem 1.5rem; border-radius: 30px; cursor: pointer; font-family: inherit; font-size: 1rem; margin-top: 0.5rem; }
+        .add-btn:hover { background: #81c784; color: #1a1a2e; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🍽️ Ранг Блюда</h1>
+    <div class="subtitle">Калькулятор семантической кулинарии (§122, Гастрономическая Таблица)</div>
+
+    <div class="calc-section">
+        <div class="section-title">🥗 Ингредиенты</div>
+        <div id="ingredientsContainer">
+            <!-- Строки с ингредиентами добавляются динамически -->
+        </div>
+        <button class="add-btn" id="addIngredientBtn">➕ Добавить ингредиент</button>
+    </div>
+
+    <div class="calc-section">
+        <div class="section-title">👨‍🍳 Повар и ритуал</div>
+
+        <!-- Cₛ повара -->
+        <div class="input-group">
+            <label>🎯 Когерентность повара (Cₛ): <span class="current-value" id="cookCsValue">0.7</span></label>
+            <input type="range" id="cookCsSlider" min="0.1" max="1" value="0.7" step="0.01">
+            <div class="range-labels"><span>0.1 (спешка, гнев)</span><span>1.0 (медитация, любовь)</span></div>
+        </div>
+
+        <!-- Ритуал -->
+        <div class="input-group">
+            <label>🕯️ Ритуал приготовления:</label>
+            <select id="ritualSelect">
+                <option value="1.5">С молитвой, осознанно, с любовью (коэфф. 1.5)</option>
+                <option value="1.2" selected>Спокойно, в хорошем настроении (коэфф. 1.2)</option>
+                <option value="1.0">Обычное приготовление (коэфф. 1.0)</option>
+                <option value="0.8">В спешке, механически (коэфф. 0.8)</option>
+                <option value="0.5">В гневе, раздражении (коэфф. 0.5)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Итоговый ранг блюда</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    // База ингредиентов (выдержка из Гастрономической Таблицы)
+    const ingredientsDB = [
+        { name: '🥩 Мясо (говядина, сырая)', rank: 0 },
+        { name: '🍗 Курица (филе)', rank: 0 },
+        { name: '🐟 Рыба (свежая)', rank: 2 },
+        { name: '🥚 Яйца (домашние)', rank: 4 },
+        { name: '🥛 Молоко (цельное)', rank: 3 },
+        { name: '🧈 Масло сливочное', rank: 3 },
+        { name: '🫒 Масло оливковое', rank: 3 },
+        { name: '🧀 Сыр (твёрдый)', rank: 2 },
+        { name: '🍞 Хлеб (белый, магазинный)', rank: 1 },
+        { name: '🌾 Мука (пшеничная)', rank: 1 },
+        { name: '🍚 Рис (белый)', rank: 1 },
+        { name: '🥔 Картофель', rank: 3 },
+        { name: '🥕 Морковь', rank: 4 },
+        { name: '🍅 Помидоры', rank: 4 },
+        { name: '🥒 Огурцы', rank: 4 },
+        { name: '🧅 Лук репчатый', rank: 3 },
+        { name: '🧄 Чеснок', rank: 3 },
+        { name: '🥬 Капуста', rank: 4 },
+        { name: '🥦 Брокколи', rank: 5 },
+        { name: '🌿 Зелень (петрушка, укроп)', rank: 5 },
+        { name: '🍄 Грибы (лесные)', rank: 5 },
+        { name: '🍎 Яблоко', rank: 4 },
+        { name: '🍌 Банан', rank: 3 },
+        { name: '🍊 Апельсин', rank: 4 },
+        { name: '🍋 Лимон', rank: 4 },
+        { name: '🫐 Ягоды (свежие)', rank: 5 },
+        { name: '🍯 Мёд (сырой)', rank: 7 },
+        { name: '🧂 Соль (поваренная)', rank: 3 },
+        { name: '🌶️ Специи (перец, паприка)', rank: 3 },
+        { name: '🍫 Шоколад (горький)', rank: 3 },
+        { name: '🥜 Орехи (грецкие)', rank: 4 },
+        { name: '💧 Вода (родниковая)', rank: 3 },
+    ];
+
+    let ingredientCount = 0;
+    const container = document.getElementById('ingredientsContainer');
+    const addBtn = document.getElementById('addIngredientBtn');
+    const cookCsSlider = document.getElementById('cookCsSlider');
+    const cookCsValue = document.getElementById('cookCsValue');
+    const ritualSelect = document.getElementById('ritualSelect');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    // Создание выпадающего списка для ингредиента
+    function createSelect(selectedValue = null) {
+        const select = document.createElement('select');
+        ingredientsDB.forEach(ing => {
+            const option = document.createElement('option');
+            option.value = ing.rank;
+            option.textContent = `${ing.name} (ранг ${ing.rank >= 0 ? '+' : ''}${ing.rank})`;
+            if (selectedValue !== null && ing.rank === selectedValue) option.selected = true;
+            select.appendChild(option);
+        });
+        return select;
+    }
+
+    // Добавление строки ингредиента
+    function addIngredientRow(initialRank = null) {
+        ingredientCount++;
+        const row = document.createElement('div');
+        row.className = 'ingredient-row';
+        row.id = `ingredient-${ingredientCount}`;
+
+        const select = createSelect(initialRank);
+        row.appendChild(select);
+
+        // Кнопка удаления (только если больше одного ингредиента)
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = '✕';
+        removeBtn.className = 'remove-btn';
+        removeBtn.addEventListener('click', () => {
+            if (document.querySelectorAll('.ingredient-row').length > 1) {
+                row.remove();
+                calculate();
+            }
+        });
+        row.appendChild(removeBtn);
+
+        container.appendChild(row);
+        select.addEventListener('change', calculate);
+    }
+
+    // Стартовые ингредиенты
+    addIngredientRow(4); // Помидоры
+    addIngredientRow(4); // Огурцы
+    addIngredientRow(5); // Зелень
+
+    // Кнопка добавления
+    addBtn.addEventListener('click', () => addIngredientRow());
+
+    // Слайдер Cₛ повара
+    cookCsSlider.addEventListener('input', () => {
+        cookCsValue.textContent = parseFloat(cookCsSlider.value).toFixed(2);
+        calculate();
+    });
+
+    // Выбор ритуала
+    ritualSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        // Суммируем ранг всех ингредиентов
+        const selects = document.querySelectorAll('.ingredient-row select');
+        let sumRanks = 0;
+        selects.forEach(s => sumRanks += parseInt(s.value));
+
+        // Средний ранг ингредиентов
+        const avgIngredientRank = sumRanks / selects.length;
+
+        // Cₛ повара
+        const C = parseFloat(cookCsSlider.value);
+
+        // Коэффициент ритуала
+        const ritualCoeff = parseFloat(ritualSelect.value);
+
+        // Итоговая формула: Q_блюда = Q_ингредиентов_ср · Cₛ_повара · K_ритуала
+        const finalRank = avgIngredientRank * (0.5 + 0.5 * C) * ritualCoeff;
+        const roundedRank = Math.round(finalRank * 10) / 10;
+
+        resultNumber.textContent = (roundedRank >= 0 ? '+' : '') + roundedRank.toFixed(1);
+        resultLabel.textContent = 'Итоговый ранг блюда';
+
+        // Интерпретация
+        let interpretation = '';
+        if (roundedRank >= 6) interpretation = '🌟 Светлая еда! Блюдо несёт мощный положительный заряд. Им можно лечить.';
+        else if (roundedRank >= 3) interpretation = '🌿 Живая еда. Хорошее, питательное блюдо. Поднимает настроение.';
+        else if (roundedRank >= 0) interpretation = '🟰 Нейтральная еда. Просто калории. Съедобно, но без души.';
+        else if (roundedRank >= -2) interpretation = '🌑 Тёмная еда. Тяжёлая, «мёртвая». Может вызвать упадок сил.';
+        else interpretation = '☠️ Токсичная еда. Концентрат негатива. Лучше не употреблять.';
+        resultExtra.textContent = interpretation;
+
+        resultFormula.textContent = `Q = (${avgIngredientRank.toFixed(1)}) · (0.5 + 0.5 · ${C.toFixed(2)}) · ${ritualCoeff} = ${roundedRank.toFixed(1)}`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

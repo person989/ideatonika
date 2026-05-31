@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Заземления • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #81c784; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🌍 Заземление</h1>
+    <div class="subtitle">Калькулятор сброса избыточной Tₛ (§2, §109, §128)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваше состояние и поверхность</div>
+
+        <div class="input-group">
+            <label>🌡️ Текущая Tₛ: <span id="tsValue">7.5</span></label>
+            <input type="range" id="tsSlider" min="5" max="10" value="7.5" step="0.1">
+            <div class="range-labels"><span>5 (норма)</span><span>7.5 (стресс)</span><span>10 (перегрев)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🦶 Поверхность для заземления:</label>
+            <select id="surfaceSelect">
+                <option value="1.5">Влажная земля / трава после дождя — коэфф. 1.5</option>
+                <option value="1.0" selected>Сухая земля / газон — коэфф. 1.0</option>
+                <option value="0.7">Деревянный пол (массив) — коэфф. 0.7</option>
+                <option value="0.4">Каменный пол (гранит, мрамор) — коэфф. 0.4</option>
+                <option value="0.2">Бетонный пол — коэфф. 0.2</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🧍 Положение:</label>
+            <select id="positionSelect">
+                <option value="1.5">Босиком, стоя на месте — коэфф. 1.5</option>
+                <option value="1.2" selected>Медленная ходьба босиком — коэфф. 1.2</option>
+                <option value="1.0">Сидя, ступни на поверхности — коэфф. 1.0</option>
+                <option value="0.5">Лёжа на земле — коэфф. 0.5</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🎯 Целевая Tₛ (после заземления): <span id="targetValue">5.0</span></label>
+            <input type="range" id="targetSlider" min="5" max="7" value="5.0" step="0.1">
+            <div class="range-labels"><span>5.0 (оптимум)</span><span>7.0 (всё ещё повышенная)</span></div>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Времени потребуется</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const tsSlider = document.getElementById('tsSlider');
+    const surfaceSelect = document.getElementById('surfaceSelect');
+    const positionSelect = document.getElementById('positionSelect');
+    const targetSlider = document.getElementById('targetSlider');
+    const tsValue = document.getElementById('tsValue');
+    const targetValue = document.getElementById('targetValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    tsSlider.addEventListener('input', () => { tsValue.textContent = parseFloat(tsSlider.value).toFixed(1); calculate(); });
+    targetSlider.addEventListener('input', () => { targetValue.textContent = parseFloat(targetSlider.value).toFixed(1); calculate(); });
+    [surfaceSelect, positionSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const currentTs = parseFloat(tsSlider.value);
+        const targetTs = parseFloat(targetSlider.value);
+        const surfaceCoeff = parseFloat(surfaceSelect.value);
+        const positionCoeff = parseFloat(positionSelect.value);
+
+        // Разница температур, которую нужно сбросить
+        const deltaT = currentTs - targetTs;
+
+        // Мощность заземления (единиц Tₛ в минуту)
+        const groundingPower = 0.25 * surfaceCoeff * positionCoeff;
+        
+        // Время в минутах
+        let minutes = Math.ceil(deltaT / groundingPower);
+
+        // Минимум — 1 минута, максимум — не ограничен, но для реализма — до 120
+        if (minutes < 1) minutes = 0;
+        if (minutes > 120) minutes = 120;
+
+        resultNumber.textContent = minutes + ' мин';
+        resultLabel.textContent = 'Времени потребуется';
+
+        let extra = '';
+        if (minutes === 0) {
+            extra = '😌 Ваша Tₛ уже в норме! Заземление не требуется.';
+        } else if (minutes <= 5) {
+            extra = '🌿 Достаточно короткого сеанса. Снимите обувь и постойте на траве.';
+        } else if (minutes <= 15) {
+            extra = '🌳 Хорошая прогулка босиком в парке — и вы в норме.';
+        } else if (minutes <= 30) {
+            extra = '🚶 Рекомендуется длительная прогулка босиком. Идеально — по влажной траве или у воды.';
+        } else if (minutes <= 60) {
+            extra = '🏕️ Вам нужен сеанс глубокого заземления. Погуляйте босиком по лесу или полю не менее часа.';
+        } else {
+            extra = '🆘 Очень сильный перегрев. Рекомендуется лечь на землю в тени и провести так час-полтора.';
+        }
+        resultExtra.textContent = extra;
+
+        const surfaceName = surfaceSelect.options[surfaceSelect.selectedIndex].text.split(' —')[0];
+        const positionName = positionSelect.options[positionSelect.selectedIndex].text.split(' —')[0];
+        resultFormula.textContent = `ΔT = ${currentTs.toFixed(1)} — ${targetTs.toFixed(1)} = ${deltaT.toFixed(1)}. Мощность: 0.25 · ${surfaceCoeff} · ${positionCoeff} = ${groundingPower.toFixed(3)} ед/мин. Время = ${deltaT.toFixed(1)} / ${groundingPower.toFixed(3)} = ${minutes} мин`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

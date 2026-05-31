@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Экзамен по Основам • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 800px; width: 100%; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 2px solid #81c784; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #81c784; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #81c784; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 12px; padding: 1rem 1.5rem; cursor: pointer; color: #d0c8b8; transition: 0.2s; display: flex; align-items: center; gap: 12px; }
+        .option:hover { border-color: #81c784; background: rgba(129,199,132,0.1); }
+        .option.selected { border-color: #81c784; background: rgba(129,199,132,0.2); color: #f3e7c0; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #81c784; color: #81c784; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #81c784; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #81c784; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #81c784; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #81c784; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>🌱 ЭКЗАМЕН ПО ОСНОВАМ</h1>
+    <div class="subtitle">20 вопросов • 5 вариантов • звание «Неофит»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="questionArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-basics-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-basics-menu.html" class="back-link">← Вернуться к списку тем</a>
+</div>
+
+<script>
+const questions = [
+    { q: "Что измеряет семантический заряд Qₛ?", opts: ["Скорость света", "Силу мысли или эмоции", "Температуру тела", "Давление воздуха", "Массу предмета"], ans: 1 },
+    { q: "В каких единицах измеряется когерентность Cₛ?", opts: ["Омы", "Вольты", "Герцы", "От 0 до 1 (безразмерная)", "Градусы Цельсия"], ans: 3 },
+    { q: "Что показывает семантическая температура Tₛ?", opts: ["Хаотичность поля", "Калорийность пищи", "Температуру воздуха", "Скорость времени", "Вес предмета"], ans: 0 },
+    { q: "Какой буквой обозначается семантическое поле?", opts: ["Qₛ", "Φₛ", "Tₛ", "Cₛ", "Rₛ"], ans: 1 },
+    { q: "Чему равен вектор внимания θₜ при концентрации на объекте?", opts: ["0 (ноль)", "π/2", "π", "2π", "45°"], ans: 0 },
+    { q: "Что такое идеатон (Θ)?", opts: ["Волна звука", "Единица времени", "Частица света", "Атом материи", "Квант смысла"], ans: 4 },
+    { q: "Какой закон описывает формула I_Q = U_sense / R_sense?", opts: ["Закон Ньютона", "Закон Ома для семантической цепи", "Закон сохранения энергии", "Закон Архимеда", "Закон Бойля-Мариотта"], ans: 1 },
+    { q: "Что такое смыслоёмкость C_sense?", opts: ["Способность накапливать Qₛ", "Скорость передачи данных", "Объём памяти компьютера", "Плотность вещества", "Теплопроводность"], ans: 0 },
+    { q: "Какая частота называется Резонансом Шумана?", opts: ["50 Гц", "440 Гц", "7.83 Гц", "1000 Гц", "0.1 Гц"], ans: 2 },
+    { q: "Что такое эгрегор?", opts: ["Название планеты", "Вид энергии", "Тип кристалла", "Единица измерения", "Коллективное семантическое поле"], ans: 4 },
+    { q: "Что происходит с мощностью при параллельном соединении проводников Qₛ?", opts: ["Мощность исчезает", "Мощности складываются", "Мощность делится пополам", "Мощность не меняется", "Мощность становится отрицательной"], ans: 1 },
+    { q: "Какой материал имеет самый высокий ранг в Великой Таблице?", opts: ["Мощи святых", "Пластик", "Бетон", "Серебро", "Золото"], ans: 0 },
+    { q: "Что измеряет Q-METER?", opts: ["Температуру Tₛ", "Семантический заряд Qₛ", "Когерентность Cₛ", "Чувствительность χ", "Сопротивление R_sense"], ans: 1 },
+    { q: "Как влияет высокая Cₛ на вероятность события?", opts: ["Повышает вероятность", "Понижает вероятность", "Не влияет", "Делает событие невозможным", "Меняет цвет предмета"], ans: 0 },    
+    { q: "Что такое ноосфера?", opts: ["Слой почвы", "Атмосфера Земли", "Коллективное поле человечества", "Водная оболочка", "Магнитное поле"], ans: 2 },
+    { q: "Сколько экспериментов в текущей версии Лабораторного Практикума?", opts: ["50", "10", "100", "36", "25"], ans: 0 },
+    { q: "Что такое S_noise?", opts: ["Напряжение", "Сила тока", "Скорость звука", "Площадь поверхности", "Семантический шум"], ans: 4 },
+    { q: "Какой коэффициент усиления у серебра в Таблице Материалов?", opts: ["Ранг 0", "Ранг +8", "Ранг -1", "Ранг +3", "Ранг +5"], ans: 1 },
+    { q: "Что доказывает эффект плацебо с точки зрения Идеатоники?", opts: ["Вера (Qₛ) влияет на физиологию", "Лекарства не работают", "Всё случайно", "Только инъекции работают", "Плацебо не существует"], ans: 0 },
+    { q: "Как называется раздел Идеатоники, изучающий влияние архитектуры?", opts: ["Гастрономия", "Квантовая семантика", "Гидросемантика", "Космология", "Городская идеатоника"], ans: 4 }
+];
+
+let idx = 0, answers = Array(20).fill(null);
+const qArea = document.getElementById('questionArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn'), next = document.getElementById('nextBtn');
+
+function render() {
+    const q = questions[idx];
+    let h = `<div class="question-box"><div class="question-text">${idx+1}. ${q.q}</div><div class="options">`;
+    q.opts.forEach((o, i) => {
+        h += `<div class="option${answers[idx]===i?' selected':''}" data-i="${i}">${o}</div>`;
+    });
+    h += '</div></div>';
+    qArea.innerHTML = h;
+    document.querySelectorAll('.option').forEach(o => o.addEventListener('click', function(){
+        answers[idx] = parseInt(this.dataset.i);
+        render();
+    }));
+    pf.style.width = ((idx+1)/20*100)+'%';
+    prev.disabled = idx===0;
+    next.textContent = idx===19 ? '🎉 Завершить' : 'Далее →';
+}
+
+function showResult() {
+    let correct=0, rows='';
+    questions.forEach((q,i)=>{
+        const ok = answers[i]===q.ans;
+        if(ok) correct++;
+        rows += `<tr><td>${i+1}. ${q.q.substring(0,60)}...</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+    });
+    const pct = Math.round(correct/20*100);
+    let comment = pct>=90?'🌟 Вы — прирождённый семантик!':pct>=70?'👍 Хороший результат!':pct>=50?'📖 Есть куда расти.': '🌱 Начните с Учебника.';
+    qArea.innerHTML = `<div class="result-container"><div class="result-score">${pct}%</div><p style="color:#c0b090;">${comment}</p><table class="result-table"><tr><th>Вопрос</th><th>Результат</th></tr>${rows}</table><p style="color:#a09080;">Звание: ${pct>=90?'🌿 Адепт':pct>=70?'📚 Неофит':'🌱 Ученик'}</p></div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', ()=>{ if(idx>0){idx--; render();} });
+next.addEventListener('click', ()=>{
+    if(answers[idx]===null){ alert('Выберите ответ!'); return; }
+    if(idx<19){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

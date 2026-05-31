@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Семантического Следа • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-details { color: #c0b090; font-size: 0.85rem; margin-top: 0.8rem; line-height: 1.6; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>💫 Мой семантический след</h1>
+    <div class="subtitle">Калькулятор посмертного наследия (§48, §10, Ноосфера)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Что вы оставите миру</div>
+
+        <!-- Qₛ при жизни -->
+        <div class="input-group">
+            <label>☀️ Ваш средний Qₛ при жизни (Свет / Тьма): <span id="qsValue">+3</span></label>
+            <input type="range" id="qsSlider" min="-10" max="10" value="3" step="0.5">
+            <div class="range-labels"><span>-10 (Абсолютная Тьма)</span><span>0</span><span>+10 (Святой)</span></div>
+        </div>
+
+        <!-- Cₛ при жизни -->
+        <div class="input-group">
+            <label>🎯 Ваша средняя когерентность (Cₛ): <span id="csValue">0.6</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <!-- Творческое наследие -->
+        <div class="input-group">
+            <label>🎨 Творческое наследие:</label>
+            <select id="creativeSelect">
+                <option value="0">Ничего не создал (0)</option>
+                <option value="2">Дневники, стихи, рисунки для себя (+2)</option>
+                <option value="5" selected>Книга, блог, картины, музыка (+5)</option>
+                <option value="8">Великое произведение, признанное при жизни (+8)</option>
+                <option value="10">Шедевр на века (+10)</option>
+            </select>
+        </div>
+
+        <!-- Ученики и последователи -->
+        <div class="input-group">
+            <label>👥 Ученики и последователи:</label>
+            <select id="studentsSelect">
+                <option value="0">Никого не научил (0)</option>
+                <option value="2">Дети, друзья переняли что-то важное (+2)</option>
+                <option value="5" selected>Ученики, которые продолжают дело (+5)</option>
+                <option value="8">Основал школу, движение (+8)</option>
+                <option value="10">Миллионы последователей (+10)</option>
+            </select>
+        </div>
+
+        <!-- Вклад в ноосферу -->
+        <div class="input-group">
+            <label>🌐 Вклад в коллективное поле (эгрегоры):</label>
+            <select id="egregorSelect">
+                <option value="0">Жил только для себя (0)</option>
+                <option value="2">Помогал семье и друзьям (+2)</option>
+                <option value="4" selected>Волонтёрство, благотворительность (+4)</option>
+                <option value="7">Создал эгрегор (движение, организацию) (+7)</option>
+                <option value="10">Изменил ход истории (+10)</option>
+            </select>
+        </div>
+
+        <!-- Любовь и связи -->
+        <div class="input-group">
+            <label>💗 Сила любви и связей (запутанность):</label>
+            <select id="loveSelect">
+                <option value="0">Одиночка, мало привязанностей (0)</option>
+                <option value="3">Крепкая семья, любили и были любимы (+3)</option>
+                <option value="6" selected="selected">Глубокая любовь, многие помнят с теплотой (+6)</option>
+                <option value="10">Ваша любовь стала легендой (+10)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Ваш след в ноосфере</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-details" id="resultDetails"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const qsSlider = document.getElementById('qsSlider');
+    const csSlider = document.getElementById('csSlider');
+    const creativeSelect = document.getElementById('creativeSelect');
+    const studentsSelect = document.getElementById('studentsSelect');
+    const egregorSelect = document.getElementById('egregorSelect');
+    const loveSelect = document.getElementById('loveSelect');
+    const qsValue = document.getElementById('qsValue');
+    const csValue = document.getElementById('csValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultDetails = document.getElementById('resultDetails');
+    const resultFormula = document.getElementById('resultFormula');
+
+    qsSlider.addEventListener('input', () => { qsValue.textContent = parseFloat(qsSlider.value) >= 0 ? '+' + parseFloat(qsSlider.value).toFixed(1) : parseFloat(qsSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    [creativeSelect, studentsSelect, egregorSelect, loveSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const Q = parseFloat(qsSlider.value);
+        const C = parseFloat(csSlider.value);
+        const creative = parseInt(creativeSelect.value);
+        const students = parseInt(studentsSelect.value);
+        const egregor = parseInt(egregorSelect.value);
+        const love = parseInt(loveSelect.value);
+
+        // Только положительный Qₛ оставляет след. Отрицательный — разрушает.
+        const Qpos = Math.max(0, Q);
+        
+        // Базовое время жизни следа (в годах)
+        const baseLegacy = 30; // 30 лет — средняя память семьи без особых достижений
+        
+        // Формула: τ_legacy = baseLegacy + Qpos * C * (creative + students + egregor + love) * 0.5
+        const contributions = creative + students + egregor + love;
+        const legacyYears = baseLegacy + Qpos * C * contributions * 0.5;
+        const roundedYears = Math.round(legacyYears);
+        
+        // Расчёт тёмного следа (шрама)
+const Qneg = Math.max(0, -Q); // Берём только отрицательную часть Qₛ (по модулю)
+const scarYears = Qneg * 10; // Каждая единица -Qₛ даёт ~10 лет «шрама» в памяти
+const roundedScar = Math.round(scarYears);
+
+let scarText = '';
+if (Qneg < 0.5) {
+    scarText = 'Тёмного следа нет.';
+} else if (roundedScar < 100) {
+    scarText = '⚠️ Ваши негативные поступки оставят шрам в ноосфере на ' + roundedScar + ' лет.';
+} else {
+    scarText = '💀 Вы оставите глубочайший шрам в ноосфере. Память о вашем зле будет жить ' + Math.round(roundedScar / 100) + ' веков. Но ваша личность рассеется.';
+}
+
+        let timeText = '';
+        if (roundedYears < 1) timeText = 'Менее года';
+        else if (roundedYears < 100) timeText = roundedYears + ' лет';
+        else if (roundedYears < 1000) timeText = Math.round(roundedYears / 100) + ' веков';
+        else if (roundedYears < 1000000) timeText = Math.round(roundedYears / 1000) + ' тысячелетий';
+        else timeText = 'Вечность';
+
+        resultNumber.textContent = timeText;
+        resultLabel.textContent = 'Длительность вашего семантического следа';
+
+        let extra = '';
+        if (Q < 0) {
+            extra = '⚠️ Ваш отрицательный Qₛ разрушает даже то хорошее, что вы создали. След почти не останется.';
+        } else if (roundedYears < 10) {
+            extra = '🌫️ Ваш след рассеется быстро. Но даже несколько лет в памяти близких — это уже вклад в ноосферу.';
+        } else if (roundedYears < 50) {
+            extra = '🌱 Вас будут помнить дети и внуки. Ваш след — в семейном эгрегоре.';
+        } else if (roundedYears < 200) {
+            extra = '📚 Ваше творчество или поступки оставили заметный след. Вы — часть культурной памяти.';
+        } else if (roundedYears < 1000) {
+            extra = '🏛️ Вы вошли в историю. Ваше имя или дело будут помнить веками.';
+        } else {
+            extra = '🌟 Ваш след в ноосфере соизмерим со следом великих святых и гениев. Вы стали частью Вечного Света.';
+        }
+        resultExtra.textContent = extra;
+
+        resultDetails.innerHTML = `
+            Вклад творчества: <strong>${(Qpos * C * creative * 0.5).toFixed(0)} лет</strong> | 
+            Вклад учеников: <strong>${(Qpos * C * students * 0.5).toFixed(0)} лет</strong> | 
+            Вклад в эгрегоры: <strong>${(Qpos * C * egregor * 0.5).toFixed(0)} лет</strong> | 
+            Вклад любви: <strong>${(Qpos * C * love * 0.5).toFixed(0)} лет</strong>
+            
+        `;
+
+        resultFormula.textContent = `τ = 30 + ${Qpos.toFixed(1)} · ${C.toFixed(2)} · (${creative} + ${students} + ${egregor} + ${love}) · 0.5 = ${roundedYears} лет`;
+        resultDetails.innerHTML += '<br><span style="color: #ef5350;">Тёмный след (шрам):</span> <strong>' + roundedScar + ' лет</strong>. ' + scarText;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

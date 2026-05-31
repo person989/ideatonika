@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Интуитивного Предвидения • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔮 Интуитивное Предвидение</h1>
+    <div class="subtitle">Калькулятор времени упреждения интуитивного сигнала (Формула τ_lead)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры интуиции</div>
+
+        <!-- Тип события -->
+        <div class="input-group">
+            <label>🌍 Масштаб будущего события:</label>
+            <select id="eventSelect">
+                <option value="1000">Катастрофа планетарного масштаба (Q=1000)</option>
+                <option value="500">Крупный теракт / война (Q=500)</option>
+                <option value="200">Важная личная встреча (Q=200)</option>
+                <option value="100" selected>Серьёзный разговор / новость (Q=100)</option>
+                <option value="50">Приятный сюрприз (Q=50)</option>
+                <option value="20">Бытовое событие (звонок, письмо) (Q=20)</option>
+                <option value="10">Мелкая случайность (Q=10)</option>
+            </select>
+        </div>
+
+        <!-- χ (интуиция) -->
+        <div class="input-group">
+            <label>🔮 Ваша интуитивная чувствительность (χ): <span id="chiValue">5.0</span> из 10</label>
+            <input type="range" id="chiSlider" min="1" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>1 (глухарь)</span><span>5 (средняя)</span><span>10 (ясновидение)</span></div>
+        </div>
+
+        <!-- S_noise (шум) -->
+        <div class="input-group">
+            <label>🌫️ Уровень внутреннего шума (S_noise): <span id="noiseValue">0.5</span></label>
+            <input type="range" id="noiseSlider" min="0.1" max="1" value="0.5" step="0.01">
+            <div class="range-labels"><span>0.1 (тишина, медитация)</span><span>1.0 (хаос, стресс)</span></div>
+        </div>
+
+        <!-- Состояние -->
+        <div class="input-group">
+            <label>🧘 Ваше текущее состояние:</label>
+            <select id="stateSelect">
+                <option value="1.5">Глубокая медитация (×1.5)</option>
+                <option value="1.2">Спокойное, расслабленное (×1.2)</option>
+                <option value="1.0" selected>Обычное бодрствование (×1.0)</option>
+                <option value="0.7">Усталость, стресс (×0.7)</option>
+                <option value="0.4">Паника, истощение (×0.4)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Время упреждения</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const eventSelect = document.getElementById('eventSelect');
+    const chiSlider = document.getElementById('chiSlider');
+    const noiseSlider = document.getElementById('noiseSlider');
+    const stateSelect = document.getElementById('stateSelect');
+    const chiValue = document.getElementById('chiValue');
+    const noiseValue = document.getElementById('noiseValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    chiSlider.addEventListener('input', () => { chiValue.textContent = parseFloat(chiSlider.value).toFixed(1); calculate(); });
+    noiseSlider.addEventListener('input', () => { noiseValue.textContent = parseFloat(noiseSlider.value).toFixed(2); calculate(); });
+    eventSelect.addEventListener('change', calculate);
+    stateSelect.addEventListener('change', calculate);
+
+    function calculate() {
+    const Qevent = parseFloat(eventSelect.value);
+    const chi = parseFloat(chiSlider.value);
+    const Snoise = parseFloat(noiseSlider.value);
+    const stateCoeff = parseFloat(stateSelect.value);
+
+    const theta0 = 5;
+    const theta = theta0 * (1 + Snoise * 3);
+    const tau0 = 12;
+
+    const signalStrength = Qevent * (chi / 10) * stateCoeff * (1 - Snoise * 0.5);
+    const scaleMultiplier = Math.pow(Qevent / 100, 0.7);
+
+    // ЕДИНАЯ НЕПРЕРЫВНАЯ ФОРМУЛА
+    // Используем гладкую функцию, которая работает при любом signalStrength
+    const ratio = signalStrength / theta;
+    
+    let tauLead;
+    if (ratio <= 0.001) {
+        tauLead = 0;
+    } else {
+        // Гладкая интерполяция: при ratio < 1 работает как ratio*0.5,
+        // при ratio > 1 плавно переходит в 12 * ratio^1.5
+        const smoothFactor = 1 / (1 + Math.exp(-(ratio - 1) * 5)); // Сигмоида
+        const lowFormula = ratio * 0.5;
+        const highFormula = tau0 * Math.pow(ratio, 1.5) * scaleMultiplier;
+        tauLead = lowFormula * (1 - smoothFactor) + highFormula * smoothFactor;
+    }
+
+    if (tauLead < 0) tauLead = 0;
+
+    // Форматирование результата
+    let timeText, timeLabel;
+    if (tauLead <= 0.001) {
+        timeText = '0';
+        timeLabel = 'Сигнал неразличим';
+    } else if (tauLead < 0.02) {
+        timeText = '~1 мин';
+        timeLabel = 'Время упреждения (едва уловимо)';
+    } else if (tauLead < 1) {
+        timeText = (tauLead * 60).toFixed(0) + ' мин';
+        timeLabel = 'Время упреждения';
+    } else if (tauLead < 24) {
+        timeText = tauLead.toFixed(1) + ' ч';
+        timeLabel = 'Время упреждения';
+    } else if (tauLead < 168) {
+        timeText = (tauLead / 24).toFixed(1) + ' дн';
+        timeLabel = 'Время упреждения';
+    } else if (tauLead < 720) {
+        timeText = (tauLead / 168).toFixed(1) + ' нед';
+        timeLabel = 'Время упреждения';
+    } else {
+        timeText = (tauLead / 720).toFixed(1) + ' мес';
+        timeLabel = 'Время упреждения';
+    }
+
+    resultNumber.textContent = timeText;
+    resultLabel.textContent = timeLabel;
+
+    let extra = '';
+    if (tauLead <= 0.001) extra = '🌫️ Сигнал слишком слаб или шум слишком высок. Попробуйте медитацию.';
+    else if (tauLead < 0.02) extra = '💫 Едва уловимое эхо. Где-то на грани сознания.';
+    else if (tauLead < 1) extra = '⏳ Событие близко — интуиция шепчет, а не кричит.';
+    else if (tauLead < 6) extra = '🔔 Вы можете почувствовать это за несколько часов.';
+    else if (tauLead < 24) extra = '🌅 Событие ощущается за день. Возможны вещие сны.';
+    else if (tauLead < 72) extra = '📅 За несколько дней. Интуиция даёт время подготовиться.';
+    else if (tauLead < 168) extra = '🗓️ За неделю или больше. Очень сильный сигнал из будущего.';
+    else if (tauLead < 720) extra = '🌠 За несколько недель. Уровень пророка или глубокого медиума.';
+    else extra = '🌌 Экстраординарная дальновидность! Месяцы предчувствия. Доступно лишь великим провидцам.';
+    resultExtra.textContent = extra;
+
+    const eventName = eventSelect.options[eventSelect.selectedIndex].text.split(' (')[0];
+    resultFormula.textContent = `ratio = ${signalStrength.toFixed(1)}/${theta.toFixed(1)} = ${ratio.toFixed(2)} | τ = ${tauLead.toFixed(1)} ч | ${eventName}`;
+}
+
+    calculate();
+</script>
+
+</body>
+</html>

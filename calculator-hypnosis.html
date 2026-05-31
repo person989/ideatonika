@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Глубины Гипноза • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 3.5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-stats { color: #a09080; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .depth-bar { width: 100%; height: 30px; background: rgba(0,0,0,0.3); border-radius: 15px; margin: 1.5rem 0; overflow: hidden; position: relative; }
+        .depth-fill { height: 100%; background: linear-gradient(90deg, #64b5f6, #ce93d8, #ef5350); border-radius: 15px; transition: width 0.3s; }
+        .depth-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.7rem; margin-top: 0.3rem; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🧠 Глубина Гипноза</h1>
+    <div class="subtitle">Калькулятор глубины транса (§24, Формула D = D_max · (1 — e^(-R̂/R_crit)))</div>
+
+    <div class="calc-section">
+        <div class="section-title">🔗 Параметры раппорта</div>
+
+        <div class="input-group">
+            <label>🤝 Доверие к гипнотизёру: <span id="trustValue">5</span> из 10</label>
+            <input type="range" id="trustSlider" min="0" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>0 (незнакомец)</span><span>10 (абсолютное)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🎯 Когерентность гипнотизёра (Cₛ): <span id="chValue">0.7</span></label>
+            <input type="range" id="chSlider" min="0.1" max="1" value="0.7" step="0.01">
+            <div class="range-labels"><span>0.1 (неуверенный)</span><span>1.0 (мастер)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🗣️ Техника наведения:</label>
+            <select id="techniqueSelect">
+                <option value="1.5">Эриксоновский гипноз (мягкий, метафорический) (×1.5)</option>
+                <option value="1.3">Классический директивный (×1.3)</option>
+                <option value="1.0" selected>Самогипноз / аудиозапись (×1.0)</option>
+                <option value="0.7">Быстрое наведение (шоковое) (×0.7)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="calc-section">
+        <div class="section-title">🧘 Параметры пациента</div>
+
+        <div class="input-group">
+            <label>💡 Внушаемость (природная): <span id="suggValue">5</span> из 10</label>
+            <input type="range" id="suggSlider" min="0" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>0 (скептик)</span><span>10 (сомнамбула)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🎯 Когерентность пациента (Cₛ): <span id="cpValue">0.5</span></label>
+            <input type="range" id="cpSlider" min="0.1" max="1" value="0.5" step="0.01">
+            <div class="range-labels"><span>0.1 (хаос, тревога)</span><span>1.0 (спокоен, сфокусирован)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🌫️ Уровень внутреннего шума (S_noise): <span id="noiseValue">0.5</span></label>
+            <input type="range" id="noiseSlider" min="0.1" max="1" value="0.5" step="0.01">
+            <div class="range-labels"><span>0.1 (тишина)</span><span>1.0 (буря мыслей)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🧪 Предыдущий опыт гипноза:</label>
+            <select id="expSelect">
+                <option value="1.5">Регулярный (более 10 сеансов) (×1.5)</option>
+                <option value="1.2">Несколько раз (×1.2)</option>
+                <option value="1.0" selected>Один-два раза (×1.0)</option>
+                <option value="0.7">Никогда, первый раз (×0.7)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Глубина транса</div>
+        <div class="depth-bar">
+            <div class="depth-fill" id="depthFill" style="width: 0%;"></div>
+        </div>
+        <div class="depth-labels">
+            <span>0: Бодрствование</span><span>I: Лёгкий</span><span>II: Средний</span><span>III: Глубокий</span><span>IV: Сомнамбулизм</span>
+        </div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-stats" id="resultStats"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const trustSlider = document.getElementById('trustSlider');
+    const chSlider = document.getElementById('chSlider');
+    const techniqueSelect = document.getElementById('techniqueSelect');
+    const suggSlider = document.getElementById('suggSlider');
+    const cpSlider = document.getElementById('cpSlider');
+    const noiseSlider = document.getElementById('noiseSlider');
+    const expSelect = document.getElementById('expSelect');
+    const trustValue = document.getElementById('trustValue');
+    const chValue = document.getElementById('chValue');
+    const suggValue = document.getElementById('suggValue');
+    const cpValue = document.getElementById('cpValue');
+    const noiseValue = document.getElementById('noiseValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultStats = document.getElementById('resultStats');
+    const resultFormula = document.getElementById('resultFormula');
+    const depthFill = document.getElementById('depthFill');
+
+    trustSlider.addEventListener('input', () => { trustValue.textContent = parseFloat(trustSlider.value).toFixed(1); calculate(); });
+    chSlider.addEventListener('input', () => { chValue.textContent = parseFloat(chSlider.value).toFixed(2); calculate(); });
+    techniqueSelect.addEventListener('change', calculate);
+    suggSlider.addEventListener('input', () => { suggValue.textContent = parseFloat(suggSlider.value).toFixed(1); calculate(); });
+    cpSlider.addEventListener('input', () => { cpValue.textContent = parseFloat(cpSlider.value).toFixed(2); calculate(); });
+    noiseSlider.addEventListener('input', () => { noiseValue.textContent = parseFloat(noiseSlider.value).toFixed(2); calculate(); });
+    expSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const trust = parseFloat(trustSlider.value);
+        const Ch = parseFloat(chSlider.value);
+        const techCoeff = parseFloat(techniqueSelect.value);
+        const sugg = parseFloat(suggSlider.value);
+        const Cp = parseFloat(cpSlider.value);
+        const Snoise = parseFloat(noiseSlider.value);
+        const expCoeff = parseFloat(expSelect.value);
+
+        // Сила раппорта ⟨R̂⟩
+        const R = trust * Ch * techCoeff * (1 - Snoise * 0.5);
+
+        // Критический раппорт (чем выше внушаемость, тем ниже порог)
+        const Rcrit = 20 / (sugg * Cp * expCoeff + 0.1);
+
+        // Максимальная глубина (зависит от внушаемости)
+        const Dmax = sugg * Cp * expCoeff * 0.8;
+        if (Dmax > 8) Dmax = 8; // Потолок — сомнамбулизм
+
+        // Глубина транса
+        const D = Dmax * (1 - Math.exp(-R / Rcrit));
+
+        resultNumber.textContent = D.toFixed(1) + ' / 8';
+        resultLabel.textContent = 'Глубина транса';
+
+        // Шкала Эриксона: 0=бодрствование, 1-2=лёгкий, 3-4=средний, 5-6=глубокий, 7-8=сомнамбулизм
+        let extra = '';
+        let stageName = '';
+        if (D < 0.5) {
+            extra = '😐 Транс не достигнут. Пациент остаётся в бодрствовании.';
+            stageName = 'Бодрствование';
+        } else if (D < 1.5) {
+            extra = '😌 Лёгкое расслабление. Гипнагогическое состояние. Веки тяжелеют.';
+            stageName = 'Гипнагогия';
+        } else if (D < 3) {
+            extra = '🙂 Лёгкий транс (I стадия). Расслабление, приятная тяжесть. Можно работать с простыми внушениями.';
+            stageName = 'Лёгкий транс';
+        } else if (D < 5) {
+            extra = '😴 Средний транс (II стадия). Каталепсия, частичная амнезия. Эффективные терапевтические внушения.';
+            stageName = 'Средний транс';
+        } else if (D < 7) {
+            extra = '💤 Глубокий транс (III стадия). Полная каталепсия, анальгезия, возрастная регрессия.';
+            stageName = 'Глубокий транс';
+        } else {
+            extra = '🌌 Сомнамбулизм (IV стадия). Полная амнезия, галлюцинации, постгипнотические внушения.';
+            stageName = 'Сомнамбулизм';
+        }
+        resultExtra.textContent = extra;
+        resultStats.textContent = `Сила раппорта: ${R.toFixed(1)} / Критический порог: ${Rcrit.toFixed(1)} / Макс. глубина: ${Dmax.toFixed(1)}`;
+
+        // Визуальная шкала
+        const fillPercent = Math.min(D / 8 * 100, 100);
+        depthFill.style.width = fillPercent + '%';
+
+        resultFormula.textContent = `⟨R̂⟩ = ${trust.toFixed(1)} · ${Ch.toFixed(2)} · ${techCoeff.toFixed(1)} · (1 — ${Snoise.toFixed(2)}·0.5) = ${R.toFixed(1)} | D = ${Dmax.toFixed(1)} · (1 — e^(-${R.toFixed(1)}/${Rcrit.toFixed(1)})) = ${D.toFixed(1)} | Стадия: ${stageName}`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

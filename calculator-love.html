@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Любви с Первого Взгляда • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .heart { font-size: 3rem; animation: pulse 1.5s infinite; display: inline-block; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>💞 Любовь с Первого Взгляда</h1>
+    <div class="subtitle">Калькулятор вероятности семантического резонанса (Формула P_love)</div>
+
+    <div class="calc-section">
+        <div class="section-title">👤 Параметры первого человека</div>
+
+        <div class="input-group">
+            <label>🎯 Когерентность (Cₛ): <span id="c1Value">0.6</span></label>
+            <input type="range" id="c1Slider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🌟 Открытость к любви (Qₛ позитив): <span id="q1Value">5</span></label>
+            <input type="range" id="q1Slider" min="1" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>1 (закрыт)</span><span>10 (распахнут)</span></div>
+        </div>
+    </div>
+
+    <div class="calc-section">
+        <div class="section-title">👤 Параметры второго человека</div>
+
+        <div class="input-group">
+            <label>🎯 Когерентность (Cₛ): <span id="c2Value">0.6</span></label>
+            <input type="range" id="c2Slider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🌟 Открытость к любви (Qₛ позитив): <span id="q2Value">5</span></label>
+            <input type="range" id="q2Slider" min="1" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>1 (закрыт)</span><span>10 (распахнут)</span></div>
+        </div>
+    </div>
+
+    <div class="calc-section">
+        <div class="section-title">🔗 Совместимость</div>
+
+        <div class="input-group">
+            <label>🔄 Сходство интересов и ценностей: <span id="simValue">50</span>%</label>
+            <input type="range" id="simSlider" min="0" max="100" value="50" step="1">
+            <div class="range-labels"><span>0% (чужие)</span><span>100% (родственные души)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🎵 Разность «частот» (темперамент, ритм жизни):</label>
+            <select id="deltaSelect">
+                <option value="0.1">Почти одинаковые (0.1)</option>
+                <option value="0.3">Немного различаются (0.3)</option>
+                <option value="0.5" selected>Умеренная разница (0.5)</option>
+                <option value="0.8">Сильно различаются (0.8)</option>
+                <option value="1.5">Противоположности (1.5)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>👀 Обстоятельства встречи:</label>
+            <select id="contextSelect">
+                <option value="1.5">Романтическая обстановка (закат, музыка) (×1.5)</option>
+                <option value="1.2">Приятная, спокойная (×1.2)</option>
+                <option value="1.0" selected>Обычная, нейтральная (×1.0)</option>
+                <option value="0.7">Стрессовая, спешка (×0.7)</option>
+                <option value="0.4">Неприятная, опасная (×0.4)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="heart" id="heartIcon">💗</div>
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Вероятность любви с первого взгляда</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const c1Slider = document.getElementById('c1Slider');
+    const q1Slider = document.getElementById('q1Slider');
+    const c2Slider = document.getElementById('c2Slider');
+    const q2Slider = document.getElementById('q2Slider');
+    const simSlider = document.getElementById('simSlider');
+    const deltaSelect = document.getElementById('deltaSelect');
+    const contextSelect = document.getElementById('contextSelect');
+    const c1Value = document.getElementById('c1Value');
+    const q1Value = document.getElementById('q1Value');
+    const c2Value = document.getElementById('c2Value');
+    const q2Value = document.getElementById('q2Value');
+    const simValue = document.getElementById('simValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+    const heartIcon = document.getElementById('heartIcon');
+
+    c1Slider.addEventListener('input', () => { c1Value.textContent = parseFloat(c1Slider.value).toFixed(2); calculate(); });
+    q1Slider.addEventListener('input', () => { q1Value.textContent = parseFloat(q1Slider.value).toFixed(1); calculate(); });
+    c2Slider.addEventListener('input', () => { c2Value.textContent = parseFloat(c2Slider.value).toFixed(2); calculate(); });
+    q2Slider.addEventListener('input', () => { q2Value.textContent = parseFloat(q2Slider.value).toFixed(1); calculate(); });
+    simSlider.addEventListener('input', () => { simValue.textContent = parseInt(simSlider.value); calculate(); });
+    deltaSelect.addEventListener('change', calculate);
+    contextSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const C1 = parseFloat(c1Slider.value);
+        const Q1 = parseFloat(q1Slider.value);
+        const C2 = parseFloat(c2Slider.value);
+        const Q2 = parseFloat(q2Slider.value);
+        const similarity = parseInt(simSlider.value) / 100; // 0..1
+        const deltaOmega = parseFloat(deltaSelect.value);
+        const contextCoeff = parseFloat(contextSelect.value);
+
+        // Перекрытие полей: |⟨Φ₁|Φ₂⟩|² ≈ similarity * C1 * C2 * (Q1/10) * (Q2/10)
+        const overlap = similarity * C1 * C2 * (Q1 / 10) * (Q2 / 10);
+
+        // Ширина резонанса γ_love (чем больше разница, тем шире)
+        const gammaLove = 0.3;
+
+        // Вероятность любви
+        const P_love = overlap * overlap / (1 + (deltaOmega / gammaLove) * (deltaOmega / gammaLove)) * contextCoeff;
+
+        // Ограничение
+        let finalP = Math.min(P_love, 1);
+        finalP = Math.max(finalP, 0);
+
+        const percent = (finalP * 100).toFixed(1);
+
+        resultNumber.textContent = percent + '%';
+        resultLabel.textContent = 'Вероятность любви с первого взгляда';
+
+        let extra = '';
+        let heart = '💗';
+        if (finalP >= 0.8) {
+            extra = '💘 Судьба! Семантический резонанс почти идеален. Берегите друг друга!';
+            heart = '💝';
+        } else if (finalP >= 0.5) {
+            extra = '💖 Очень высокая вероятность. Искра почти гарантирована.';
+            heart = '💖';
+        } else if (finalP >= 0.25) {
+            extra = '💕 Хорошие шансы. Есть взаимный резонанс, но нужны правильные обстоятельства.';
+            heart = '💕';
+        } else if (finalP >= 0.1) {
+            extra = '💛 Умеренная вероятность. Может быть, со временем...';
+            heart = '💛';
+        } else if (finalP >= 0.02) {
+            extra = '🤍 Слабая искра. Возможно, просто симпатия, не более.';
+            heart = '🤍';
+        } else {
+            extra = '💔 Семантические поля почти не резонируют. Не тратьте время.';
+            heart = '💔';
+        }
+        resultExtra.textContent = extra;
+        heartIcon.textContent = heart;
+
+        resultFormula.textContent = `|⟨Φ₁|Φ₂⟩|² = ${similarity.toFixed(2)} · ${C1.toFixed(2)} · ${C2.toFixed(2)} · ${(Q1/10).toFixed(2)} · ${(Q2/10).toFixed(2)} = ${overlap.toFixed(3)} | P = ${overlap.toFixed(3)}² / (1 + (${deltaOmega}/${gammaLove})²) · ${contextCoeff} = ${finalP.toFixed(3)}`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

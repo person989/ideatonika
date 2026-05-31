@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Таблица Сущностей • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 1200px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30,40,60,0.75); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 24px;
+            padding: 2.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; letter-spacing: 3px; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 1.5rem; }
+
+        .table-wrapper { overflow-x: auto; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1px; margin-bottom: 1.5rem; }
+        .entities-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: #fdf8f0; min-width: 1000px; }
+        .entities-table th { background: #3b2a1f; color: white; padding: 12px 6px; font-weight: bold; text-align: center; border: 1px solid #5d4037; font-size: 0.8rem; }
+        .entities-table td { border: 1px solid #8b7355; padding: 10px 6px; vertical-align: middle; color: #2c1e0e; }
+        .entities-table tr:nth-child(even) td { background: #f5ede0; }
+
+        .rank-pinf { background: linear-gradient(135deg, #fff9c4, #ffffff); }
+        .rank-p10 { background: linear-gradient(135deg, #fff9c4, #fff8e1); }
+        .rank-p9 { background: linear-gradient(135deg, #fff8e1, #ffecb3); }
+        .rank-p8 { background: linear-gradient(135deg, #ffecb3, #ffe082); }
+        .rank-p7 { background: linear-gradient(135deg, #fff9c4, #fff59d); }
+        .rank-p6 { background: linear-gradient(135deg, #e8f5e9, #c8e6c9); }
+        .rank-p5 { background: linear-gradient(135deg, #e3f2fd, #bbdefb); }
+        .rank-p4 { background: linear-gradient(135deg, #e8eaf6, #c5cae9); }
+        .rank-p3 { background: linear-gradient(135deg, #e0e0e0, #eeeeee); }
+        .rank-p2 { background: linear-gradient(135deg, #f5f5f5, #e0e0e0); }
+        .rank-p1 { background: linear-gradient(135deg, #fafafa, #f5f5f5); }
+        .rank-0 { background: linear-gradient(135deg, #efebe9, #d7ccc8); }
+        .rank-m1 { background: linear-gradient(135deg, #d7ccc8, #bcaaa4); }
+        .rank-m2 { background: linear-gradient(135deg, #ffccbc, #ffab91); }
+        .rank-m3 { background: linear-gradient(135deg, #b0bec5, #90a4ae); }
+        .rank-m4 { background: linear-gradient(135deg, #a1887f, #8d6e63); }
+        .rank-m5 { background: linear-gradient(135deg, #ef9a9a, #e57373); }
+        .rank-m6 { background: linear-gradient(135deg, #ce93d8, #ab47bc); }
+        .rank-m7 { background: linear-gradient(135deg, #7986cb, #5c6bc0); }
+        .rank-m8 { background: linear-gradient(135deg, #616161, #424242); color: #eee; }
+        .rank-m9 { background: linear-gradient(135deg, #424242, #212121); color: #ddd; }
+        .rank-m10 { background: #000; color: #ccc; }
+
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.65rem; font-weight: bold; }
+        .badge-divine { background: #ffd54f; color: #1a1a2e; }
+        .badge-angel { background: #bbdefb; color: #0d47a1; }
+        .badge-saint { background: #fff9c4; color: #e65100; }
+        .badge-spirit { background: #c8e6c9; color: #1b5e20; }
+        .badge-ghost { background: #b0bec5; color: #37474f; }
+        .badge-elemental { background: #ffe0b2; color: #e65100; }
+        .badge-parasite { background: #ffccbc; color: #bf360c; }
+        .badge-demon { background: #ef9a9a; color: #b71c1c; }
+        .badge-devil { background: #b71c1c; color: white; }
+
+        .legend { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; font-size: 0.8rem; margin-bottom: 1.5rem; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .footer-note { text-align: center; font-size: 0.85rem; color: #a09080; font-style: italic; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #5d4a3a; }
+        .back-link { display: inline-block; margin-top: 1rem; color: #e3b87c; text-decoration: none; border: 1px solid #e3b87c; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #e3b87c; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>👁️ ТАБЛИЦА СУЩНОСТЕЙ</h1>
+    <div class="subtitle">Иерархия семантических форм жизни в ноосфере (§64, §68, §78, §79)</div>
+
+    <div class="legend">
+        <div class="legend-item"><span class="badge badge-divine">🌟 Божество</span></div>
+        <div class="legend-item"><span class="badge badge-angel">👼 Ангелы</span></div>
+        <div class="legend-item"><span class="badge badge-saint">😇 Святые</span></div>
+        <div class="legend-item"><span class="badge badge-spirit">🌿 Духи природы</span></div>
+        <div class="legend-item"><span class="badge badge-ghost">👻 Призраки</span></div>
+        <div class="legend-item"><span class="badge badge-elemental">🔥 Элементали</span></div>
+        <div class="legend-item"><span class="badge badge-parasite">🦠 Паразиты</span></div>
+        <div class="legend-item"><span class="badge badge-demon">👿 Демоны</span></div>
+        <div class="legend-item"><span class="badge badge-devil">💀 Анти-Божество</span></div>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="entities-table">
+            <thead>
+                <tr>
+                    <th>Qₛ</th>
+                    <th>Уровень</th>
+                    <th>Сущность</th>
+                    <th>Тип</th>
+                    <th>Описание</th>
+                    <th>Как взаимодействует с людьми</th>
+                    <th>Опасность</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- +∞ -->
+                <tr class="rank-pinf">
+                    <td style="text-align:center; font-weight:bold;">+∞</td>
+                    <td><strong>За пределами</strong></td>
+                    <td><strong>Бог-Творец (Абсолют)</strong></td>
+                    <td><span class="badge badge-divine">🌟 Божество</span></td>
+                    <td>Источник всего сущего. Не имеет уровня, так как является самой шкалой. Абсолютный Свет, из которого исходят все смыслы.</td>
+                    <td>Через молитву, откровение, благодать. Непостижим напрямую.</td>
+                    <td>—</td>
+                </tr>
+                <!-- +10 -->
+                <tr class="rank-p10">
+                    <td style="text-align:center; font-weight:bold;">+10</td>
+                    <td><strong>Абсолютный Свет</strong></td>
+                    <td><strong>Иисус Христос (Воплощённый Логос)</strong></td>
+                    <td><span class="badge badge-divine">🌟 Богочеловек</span></td>
+                    <td>Единственный, кто в физическом мире обладал Qₛ = +10. Его жертва открыла путь к восхождению.</td>
+                    <td>Через молитву, Причастие, веру. Личное обращение.</td>
+                    <td>—</td>
+                </tr>
+                <!-- +9 -->
+                <tr class="rank-p9">
+                    <td style="text-align:center; font-weight:bold;">+9</td>
+                    <td><strong>Сияющий Свет</strong></td>
+                    <td><strong>Архангелы, Богородица</strong></td>
+                    <td><span class="badge badge-angel">👼 Ангелы</span></td>
+                    <td>Высшие служебные духи (Михаил, Гавриил, Рафаил) и Честнейшая Херувим. Проводники Божественной воли.</td>
+                    <td>Защита, наставничество, ответы на молитвы.</td>
+                    <td>—</td>
+                </tr>
+                <!-- +8 -->
+                <tr class="rank-p8">
+                    <td style="text-align:center; font-weight:bold;">+8</td>
+                    <td><strong>Яркий Свет</strong></td>
+                    <td><strong>Ангелы-Хранители</strong></td>
+                    <td><span class="badge badge-angel">👼 Ангелы</span></td>
+                    <td>Личные ангелы, приставленные к человеку для защиты и руководства.</td>
+                    <td>Постоянное присутствие, предупреждение об опасности, утешение.</td>
+                    <td>—</td>
+                </tr>
+                <!-- +7 -->
+                <tr class="rank-p7">
+                    <td style="text-align:center; font-weight:bold;">+7</td>
+                    <td><strong>Золотой Свет</strong></td>
+                    <td><strong>Святые, Праведники</strong></td>
+                    <td><span class="badge badge-saint">😇 Святые</span></td>
+                    <td>Души людей, достигших при жизни высокой Cₛ и Qₛ. Сохранили когерентность после смерти.</td>
+                    <td>Помощь через молитву, заступничество, чудотворение.</td>
+                    <td>—</td>
+                </tr>
+                <!-- +6 -->
+                <tr class="rank-p6">
+                    <td style="text-align:center; font-weight:bold;">+6</td>
+                    <td><strong>Тёплый Свет</strong></td>
+                    <td><strong>Ангелы (общий чин)</strong></td>
+                    <td><span class="badge badge-angel">👼 Ангелы</span></td>
+                    <td>Бесплотные духи, служащие Богу и людям. Не имеют личных имён.</td>
+                    <td>Фоновая защита, поддержка коллективных молитв.</td>
+                    <td>—</td>
+                </tr>
+                <!-- +5 -->
+                <tr class="rank-p5">
+                    <td style="text-align:center; font-weight:bold;">+5</td>
+                    <td><strong>Живое и Природное</strong></td>
+                    <td><strong>Духи-Хранители Мест (Genius Loci)</strong></td>
+                    <td><span class="badge badge-spirit">🌿 Духи природы</span></td>
+                    <td>Семантические поля природных объектов (рощ, гор, родников), достигшие квази-сознания. «Душа места».</td>
+                    <td>Заземление, успокоение, исцеление. Могут предупреждать об опасности.</td>
+                    <td>Низкая (если не осквернять место)</td>
+                </tr>
+                <!-- +4 -->
+                <tr class="rank-p4">
+                    <td style="text-align:center; font-weight:bold;">+4</td>
+                    <td><strong>Успокаивающее</strong></td>
+                    <td><strong>Эгрегоры (позитивные)</strong></td>
+                    <td><span class="badge badge-spirit">🌿 Духи</span></td>
+                    <td>Коллективные поля, созданные группами с благой целью (храмы, благотворительные организации, духовные общины).</td>
+                    <td>Поддержка единомышленников, синхронизация, воодушевление.</td>
+                    <td>Низкая</td>
+                </tr>
+                <!-- +3 -->
+                <tr class="rank-p3">
+                    <td style="text-align:center; font-weight:bold;">+3</td>
+                    <td><strong>Творческое</strong></td>
+                    <td><strong>Музы (вдохновение)</strong></td>
+                    <td><span class="badge badge-spirit">🌿 Духи</span></td>
+                    <td>Архетипические паттерны творчества в ноосфере. Не имеют личности, но «откликаются» на призыв творца.</td>
+                    <td>Вдохновение, озарение, «поток».</td>
+                    <td>—</td>
+                </tr>
+                <!-- +2 -->
+                <tr class="rank-p2">
+                    <td style="text-align:center; font-weight:bold;">+2</td>
+                    <td><strong>Нейтрально-бытовое</strong></td>
+                    <td><strong>Домовые (духи дома)</strong></td>
+                    <td><span class="badge badge-spirit">🌿 Духи</span></td>
+                    <td>Семантические поля жилищ, в которых поколениями жили люди. Заботятся о порядке.</td>
+                    <td>Мелкая помощь по дому, предупреждение о беде (стуки, шаги).</td>
+                    <td>Низкая</td>
+                </tr>
+                <!-- 0 -->
+                <tr class="rank-0">
+                    <td style="text-align:center; font-weight:bold;">0</td>
+                    <td><strong>Нейтральное</strong></td>
+                    <td><strong>Семантический след (фантом)</strong></td>
+                    <td><span class="badge badge-ghost">👻 Призрак</span></td>
+                    <td>«Запись» сильного эмоционального события в поле места. Не имеет сознания, просто «проигрывается».</td>
+                    <td>Может пугать, но не осмысленно. Проходит со временем.</td>
+                    <td>Низкая</td>
+                </tr>
+                <!-- -1 -->
+                <tr class="rank-m1">
+                    <td style="text-align:center; font-weight:bold;">-1</td>
+                    <td><strong>Лёгкий негатив</strong></td>
+                    <td><strong>Эгрегоры (негативные, лёгкие)</strong></td>
+                    <td><span class="badge badge-ghost">👻 Поле</span></td>
+                    <td>Поля, созданные токсичными сообществами (сплетники, нытики, деструктивные форумы).</td>
+                    <td>Снижение настроения, апатия, ссоры.</td>
+                    <td>Низкая</td>
+                </tr>
+                <!-- -2 -->
+                <tr class="rank-m2">
+                    <td style="text-align:center; font-weight:bold;">-2</td>
+                    <td><strong>Зависть / Обида</strong></td>
+                    <td><strong>Неупокоенная душа (застрявший след)</strong></td>
+                    <td><span class="badge badge-ghost">👻 Призрак</span></td>
+                    <td>Поле умершего, не рассеявшееся из-за сильной привязанности, обиды или незавершённого дела. Сохраняет фрагменты личности.</td>
+                    <td>Может просить о помощи, пугать, «привязываться» к живым.</td>
+                    <td>Средняя</td>
+                </tr>
+                <!-- -3 -->
+                <tr class="rank-m3">
+                    <td style="text-align:center; font-weight:bold;">-3</td>
+                    <td><strong>Агрессия / Гнев</strong></td>
+                    <td><strong>Полтергейст (фокальный агент)</strong></td>
+                    <td><span class="badge badge-elemental">🔥 Элементаль</span></td>
+                    <td>Неконтролируемый выброс подавленных эмоций (обычно у подростка). Не сущность, а процесс.</td>
+                    <td>Стуки, движение предметов, разрушения.</td>
+                    <td>Средняя</td>
+                </tr>
+                <!-- -4 -->
+                <tr class="rank-m4">
+                    <td style="text-align:center; font-weight:bold;">-4</td>
+                    <td><strong>Страх / Тревога</strong></td>
+                    <td><strong>Элементали (низшие, хаотичные)</strong></td>
+                    <td><span class="badge badge-elemental">🔥 Элементаль</span></td>
+                    <td>Семантические поля стихий, «разбуженные» негативом (пожар, ураган, место трагедии). Не злые, но разрушительные.</td>
+                    <td>Ощущение тревоги, холода, «давления».</td>
+                    <td>Средняя</td>
+                </tr>
+                <!-- -5 -->
+                <tr class="rank-m5">
+                    <td style="text-align:center; font-weight:bold;">-5</td>
+                    <td><strong>Ненависть</strong></td>
+                    <td><strong>Лярва (семантический паразит)</strong></td>
+                    <td><span class="badge badge-parasite">🦠 Паразит</span></td>
+                    <td>Сгусток негативных эмоций, питающийся страхом, гневом, похотью. Притворяется «духом» или «демоном».</td>
+                    <td>«Присасывается» к полю, вызывает кошмары, истощение.</td>
+                    <td>Высокая</td>
+                </tr>
+                <!-- -6 -->
+                <tr class="rank-m6">
+                    <td style="text-align:center; font-weight:bold;">-6</td>
+                    <td><strong>Ярость / Месть</strong></td>
+                    <td><strong>Бес (низший демон)</strong></td>
+                    <td><span class="badge badge-demon">👿 Демон</span></td>
+                    <td>Сущность с устойчивым -Qₛ и извращённой когерентностью. Искушает, провоцирует, разрушает.</td>
+                    <td>Навязчивые мысли, соблазны, провокация конфликтов.</td>
+                    <td>Высокая</td>
+                </tr>
+                <!-- -7 -->
+                <tr class="rank-m7">
+                    <td style="text-align:center; font-weight:bold;">-7</td>
+                    <td><strong>Отчаяние</strong></td>
+                    <td><strong>Демон (средний чин)</strong></td>
+                    <td><span class="badge badge-demon">👿 Демон</span></td>
+                    <td>Специализируется на конкретных грехах (уныние, суицид, ересь). Обладает интеллектом и стратегией.</td>
+                    <td>Доводит до отчаяния, толкает к самоубийству.</td>
+                    <td>Очень высокая</td>
+                </tr>
+                <!-- -8 -->
+                <tr class="rank-m8">
+                    <td style="text-align:center; font-weight:bold;">-8</td>
+                    <td><strong>Садизм / Зло</strong></td>
+                    <td><strong>Демон (высший чин, Князь)</strong></td>
+                    <td><span class="badge badge-demon">👿 Демон</span></td>
+                    <td>Древняя и очень мощная сущность. Управляет легионами низших демонов. Цель — разрушение душ в масштабах цивилизации.</td>
+                    <td>Одержимость, масштабные искушения, разрушение культур и народов.</td>
+                    <td>Экстремальная</td>
+                </tr>
+                <!-- -9 -->
+                <tr class="rank-m9">
+                    <td style="text-align:center; font-weight:bold;">-9</td>
+                    <td><strong>Преддверие Тьмы</strong></td>
+                    <td><strong>Падшие Архангелы</strong></td>
+                    <td><span class="badge badge-devil">💀 Падшие</span></td>
+                    <td>Бывшие носители Света (+9), отпавшие по свободной воле. Почти абсолютная Тьма.</td>
+                    <td>Прямое противостояние Свету, глобальные катастрофы.</td>
+                    <td>Экстремальная</td>
+                </tr>
+                <!-- -10 -->
+                <tr class="rank-m10">
+                    <td style="text-align:center; font-weight:bold; color:#ccc;">-10</td>
+                    <td style="color:#ccc;"><strong>Абсолютная Тьма</strong></td>
+                    <td style="color:#ccc;"><strong>Дьявол (Сатана, Люцифер)</strong></td>
+                    <td><span class="badge badge-devil">💀 Анти-Божество</span></td>
+                    <td style="color:#ccc;">Падший Архангел, инвертировавший +10 в -10. Не способен к творению, только к разрушению и пародии.</td>
+                    <td style="color:#ccc;">Через подчинённых демонов и бесов. Личное вмешательство — крайне редко.</td>
+                    <td style="color:#ccc;">Абсолютная</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- ГЛОССАРИЙ СУЩНОСТЕЙ -->
+<div style="background: rgba(0,0,0,0.15); border-radius: 16px; padding: 2rem 2.5rem; margin-top: 2rem; border: 1px solid #5d4a3a;">
+    <h3 style="color: #ffd54f; font-size: 1.4rem; margin-bottom: 1.5rem; text-align: center; font-weight: 400;">📖 КТО ЕСТЬ КТО: ГЛОССАРИЙ СУЩНОСТЕЙ</h3>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; color: #d0c8b8; font-size: 0.9rem; line-height: 1.7;">
+        
+        <div>
+            <p><span class="badge badge-divine" style="margin-right: 8px;">🌟 Божество</span> <strong style="color: #ffd54f;">Бог-Творец (Абсолют)</strong></p>
+            <p style="margin-left: 1.5rem;">Источник всего Смысла. Не «сущность» в привычном понимании, а сама основа бытия. Не имеет уровня Qₛ, потому что является шкалой, по которой измеряются все остальные. §60, §78.</p>
+            
+            <a href="entity-divine.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #ffd54f;
+    color: #ffd54f;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#ffd54f';this.style.color='#1a1a2e';" onmouseout="this.style.background='transparent';this.style.color='#ffd54f';">
+    📖 Подробнее
+</a>
+        </div>
+        
+        <div>
+            <p><span class="badge badge-angel" style="margin-right: 8px;">👼 Ангелы</span> <strong style="color: #bbdefb;">Архангелы, Ангелы-Хранители, общий чин</strong></p>
+            <p style="margin-left: 1.5rem;">Бесплотные служебные духи. Чистый Qₛ, не имеющий физического носителя. Их природа — проводить Божественную волю. Не имеют свободы выбора (в отличие от человека). §64, §78.</p>
+            
+            <a href="entity-angels.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #bbdefb;
+    color: #bbdefb;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#bbdefb';this.style.color='#0d47a1';" onmouseout="this.style.background='transparent';this.style.color='#bbdefb';">
+    📖 Подробнее
+</a>
+        </div>
+        
+        <div>
+            <p><span class="badge badge-saint" style="margin-right: 8px;">😇 Святые</span> <strong style="color: #fff9c4;">Святые, Праведники</strong></p>
+            <p style="margin-left: 1.5rem;">Души людей, достигших при жизни экстремальной когерентности Cₛ → 1 и высокого положительного Qₛ. После смерти их поле не рассеялось, а сохранило целостность. Активно помогают живым. §51.</p>
+            
+            <a href="entity-saints.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #fff9c4;
+    color: #fff9c4;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#fff9c4';this.style.color='#e65100';" onmouseout="this.style.background='transparent';this.style.color='#fff9c4';">
+    📖 Подробнее
+</a>
+        </div>
+        
+        <div>
+            <p><span class="badge badge-spirit" style="margin-right: 8px;">🌿 Духи природы</span> <strong style="color: #c8e6c9;">Genius Loci, Домовые, Музы, Эгрегоры</strong></p>
+            <p style="margin-left: 1.5rem;">Семантические поля, не имеющие физического тела, но обладающие квази-сознанием. Возникают в местах силы, намоленных домах, творческих сообществах. Не злые и не добрые — просто «иные». §64, §79.</p>
+            
+            <a href="entity-spirits.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #c8e6c9;
+    color: #c8e6c9;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#c8e6c9';this.style.color='#1b5e20';" onmouseout="this.style.background='transparent';this.style.color='#c8e6c9';">
+    📖 Подробнее
+</a>
+        </div>
+        
+        <div>
+            <p><span class="badge badge-ghost" style="margin-right: 8px;">👻 Призраки</span> <strong style="color: #b0bec5;">Фантомы, Неупокоенные души</strong></p>
+            <p style="margin-left: 1.5rem;">Семантические следы умерших людей или событий. Фантом — безличная «запись» (как видео на повторе). Неупокоенная душа — поле, сохранившее фрагменты личности из-за сильной привязанности или насильственной смерти. §57.</p>
+            
+            <a href="entity-ghosts.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #b0bec5;
+    color: #b0bec5;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#b0bec5';this.style.color='#37474f';" onmouseout="this.style.background='transparent';this.style.color='#b0bec5';">
+    📖 Подробнее
+</a>
+        </div>
+        
+        <div>
+            <p><span class="badge badge-elemental" style="margin-right: 8px;">🔥 Элементали</span> <strong style="color: #ffe0b2;">Духи стихий, Полтергейст</strong></p>
+            <p style="margin-left: 1.5rem;">Семантические поля стихий (огня, воды, воздуха, земли), «разбуженные» сильными эмоциями или событиями. Не имеют личности, но обладают огромной силой. Полтергейст — частный случай: выброс подавленных эмоций живого человека. §66.</p>
+            
+            <a href="entity-elementals.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #ffcc80;
+    color: #ffcc80;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#ffcc80';this.style.color='#bf360c';" onmouseout="this.style.background='transparent';this.style.color='#ffcc80';">
+    📖 Подробнее
+</a>
+        </div>
+        
+        <div>
+            <p><span class="badge badge-parasite" style="margin-right: 8px;">🦠 Паразиты</span> <strong style="color: #ffccbc;">Лярвы, Семантические паразиты</strong></p>
+            <p style="margin-left: 1.5rem;">Сгустки негативных эмоций (страха, гнева, похоти), накопившиеся в низших слоях ноосферы. Не имеют интеллекта, но обладают инстинктом «присосаться» к полю живого человека и питаться его Qₛ. Притворяются «духами» или «демонами». §64, §68.</p>
+            
+            <a href="entity-parasites.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #ffccbc;
+    color: #ffccbc;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#ffccbc';this.style.color='#bf360c';" onmouseout="this.style.background='transparent';this.style.color='#ffccbc';">
+    📖 Подробнее
+</a>
+        </div>
+        
+        <div>
+            <p><span class="badge badge-demon" style="margin-right: 8px;">👿 Демоны</span> <strong style="color: #ef9a9a;">Бесы, Князья Тьмы</strong></p>
+            <p style="margin-left: 1.5rem;">Сущности с устойчивым отрицательным Qₛ и извращённой когерентностью. Обладают интеллектом, иерархией и целью — утянуть человека вниз по Духовной Лестнице. Искушают, провоцируют, разрушают. §68.</p>
+            
+            <a href="entity-demons.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #ef9a9a;
+    color: #ef9a9a;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#ef9a9a';this.style.color='#b71c1c';" onmouseout="this.style.background='transparent';this.style.color='#ef9a9a';">
+    📖 Подробнее
+</a>
+        </div>
+        
+        <div>
+            <p><span class="badge badge-devil" style="margin-right: 8px;">💀 Анти-Божество</span> <strong style="color: #b71c1c;">Дьявол (Сатана, Люцифер), Падшие Архангелы</strong></p>
+            <p style="margin-left: 1.5rem;">Бывшие носители Света (+9/+10), отпавшие по свободной воле. Инвертировали свой Qₛ в абсолютный минус. Не способны к творению — только к разрушению и пародии на Свет. §78.</p>
+            
+            <a href="entity-antigod.html" style="
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 16px;
+    border: 1.5px solid #b71c1c;
+    color: #ef9a9a;
+    text-decoration: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    transition: 0.2s;
+    background: transparent;
+" onmouseover="this.style.background='#b71c1c';this.style.color='#fff';" onmouseout="this.style.background='transparent';this.style.color='#ef9a9a';">
+    📖 Подробнее
+</a>
+        </div>
+        
+    </div>
+    
+    <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,215,80,0.08); border-radius: 12px; border: 1px solid #ffd54f; text-align: center;">
+        <p style="color: #ffd54f; font-weight: bold; margin-bottom: 0.5rem;">💡 КЛЮЧЕВОЙ ПРИНЦИП</p>
+        <p style="color: #d0c8b8; font-style: italic; margin: 0;">
+            Все эти сущности — не «магия» и не «выдумка». Это различные формы существования Смысла в ноосфере. 
+            Они подчиняются тем же законам — Qₛ, Cₛ, Tₛ, — что и всё остальное в Идеатонике. 
+            Разница лишь в том, что у них нет физического тела.
+        </p>
+    </div>
+</div>
+        
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+    <div class="footer-note">
+        ✧ «Ангелы — Свет, не знающий выбора. Демоны — Тьма, забывшая Свет. Человек — единственный, кто стоит на лестнице и может сделать шаг в любую сторону.» ✧
+    </div>
+</div>
+</body>
+</html>

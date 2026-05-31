@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Ранга Материала • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 900px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .input-group input[type="text"] { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .switch-row { display: flex; gap: 1rem; margin-bottom: 2rem; justify-content: center; }
+        .switch-btn { padding: 0.8rem 2rem; border: 1px solid #ffd54f; background: transparent; color: #ffd54f; border-radius: 30px; cursor: pointer; font-family: inherit; font-size: 1rem; transition: 0.3s; }
+        .switch-btn.active { background: #ffd54f; color: #1a1a2e; }
+        .switch-btn:hover { background: #ffc107; color: #1a1a2e; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .bar-chart { margin-top: 1.5rem; text-align: left; }
+        .bar-row { display: flex; align-items: center; margin-bottom: 0.5rem; color: #d0c8b8; font-size: 0.85rem; }
+        .bar-label { width: 120px; text-align: right; margin-right: 1rem; }
+        .bar-fill { height: 20px; background: #ffd54f; border-radius: 4px; min-width: 2px; transition: width 0.3s; }
+        .bar-value { margin-left: 0.5rem; color: #ffd54f; font-weight: bold; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🧱 Ранг Материала</h1>
+    <div class="subtitle">Калькулятор семантического паспорта вещества (§82, §121)</div>
+
+    <!-- Переключатель режимов -->
+    <div class="switch-row">
+        <button class="switch-btn active" id="selectModeBtn">📋 Выбрать из Таблицы</button>
+        <button class="switch-btn" id="customModeBtn">🧪 Создать новый</button>
+    </div>
+
+    <!-- Режим 1: Выбор из таблицы -->
+    <div class="calc-section" id="selectSection">
+        <div class="section-title">📋 Выберите материал из Великой Таблицы</div>
+        <div class="input-group">
+            <label>Материал:</label>
+            <select id="materialSelect">
+                <!-- JS заполнит -->
+            </select>
+        </div>
+    </div>
+
+    <!-- Режим 2: Создание нового -->
+    <div class="calc-section hidden" id="customSection">
+        <div class="section-title">🧪 Параметры нового материала</div>
+        <div class="input-group">
+            <label>Название материала:</label>
+            <input type="text" id="customName" placeholder="Введите название...">
+        </div>
+        <div class="input-group">
+            <label>🔋 Смыслоёмкость (C_sense): <span id="cValue">5</span></label>
+            <input type="range" id="cSlider" min="1" max="10" value="5" step="1">
+            <div class="range-labels"><span>1 (пластик)</span><span>10 (мощи)</span></div>
+        </div>
+        <div class="input-group">
+            <label>⚡ Смыслопроводимость (σ_sense): <span id="sValue">5</span></label>
+            <input type="range" id="sSlider" min="1" max="10" value="5" step="1">
+            <div class="range-labels"><span>1 (изолятор)</span><span>10 (сверхпроводник)</span></div>
+        </div>
+        <div class="input-group">
+            <label>🌀 Индуктивность (L_sense): <span id="lValue">100</span> H</label>
+            <input type="range" id="lSlider" min="1" max="1000" value="100" step="1">
+            <div class="range-labels"><span>1 (вода)</span><span>1000 (древний храм)</span></div>
+        </div>
+        <div class="input-group">
+            <label>🎯 Добротность (Q_factor): <span id="qValue">10</span></label>
+            <input type="range" id="qSlider" min="0.1" max="100" value="10" step="0.1">
+            <div class="range-labels"><span>0.1 (шум)</span><span>100 (чистый резонанс)</span></div>
+        </div>
+        <div class="input-group">
+            <label>🌟 Генерация Qₛ (Gen): <span id="gValue">0</span></label>
+            <input type="range" id="gSlider" min="-10" max="10" value="0" step="1">
+            <div class="range-labels"><span>-10 (разрушение)</span><span>+10 (вечный Свет)</span></div>
+        </div>
+        <div class="input-group">
+            <label>🏛️ Архетипический вес:</label>
+            <select id="archetypeSelect">
+                <option value="5">Сакральное (+5) — золото, ладан, святая вода</option>
+                <option value="3">Духовное (+3) — кварц, сандал, шалфей</option>
+                <option value="1">Традиционное (+1) — дуб, лён, глина</option>
+                <option value="0" selected>Нейтральное (0) — бетон, сталь</option>
+                <option value="-3">Негативное (–3) — плутоний, свинец</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Итоговый ранг</div>
+        <div class="bar-chart" id="barChart"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    // ========== БАЗА МАТЕРИАЛОВ (100+ позиций) ==========
+    const materialsDB = [
+        { name: "Мощи святых (нетленные)", C: 10, S: 9, L: 999, Q: 999, G: 10, A: 5 },
+        { name: "Храм (во время службы)", C: 9, S: 9, L: 1000, Q: 141, G: 9, A: 5 },
+        { name: "Золото (освящённое)", C: 9, S: 6, L: 300, Q: 40, G: 0, A: 5 },
+        { name: "Серебро (освящённое)", C: 8, S: 9, L: 100, Q: 40, G: 0, A: 5 },
+        { name: "Платина", C: 9, S: 8, L: 180, Q: 8, G: 0, A: 4 },
+        { name: "Гранит", C: 8, S: 2, L: 800, Q: 5, G: 0, A: 2 },
+        { name: "Кварц (горный хрусталь)", C: 8, S: 5, L: 150, Q: 15, G: 1, A: 4 },
+        { name: "Мрамор", C: 7, S: 3, L: 400, Q: 4, G: 0, A: 2 },
+        { name: "Шунгит", C: 7, S: 4, L: 120, Q: 6, G: 2, A: 3 },
+        { name: "Медь", C: 6, S: 8, L: 40, Q: 8, G: 0, A: 1 },
+        { name: "Железо", C: 5, S: 7, L: 30, Q: 5, G: 0, A: 1 },
+        { name: "Дерево (сухое, обработанное)", C: 5, S: 4, L: 80, Q: 4, G: 0, A: 2 },
+        { name: "Дерево (живое, дуб)", C: 7, S: 6, L: 200, Q: 15, G: 3, A: 3 },
+        { name: "Шерсть, лён", C: 5, S: 6, L: 50, Q: 5, G: 0, A: 1 },
+        { name: "Святая вода", C: 5, S: 10, L: 2, Q: 5, G: 2, A: 5 },
+        { name: "Родниковая вода", C: 3, S: 9, L: 1, Q: 2, G: 1, A: 3 },
+        { name: "Ладан", C: 3, S: 8, L: 1, Q: 8, G: 2, A: 5 },
+        { name: "Соль", C: 4, S: 5, L: 5, Q: 5, G: 0, A: 1 },
+        { name: "Бумага (старая, намоленная)", C: 4, S: 3, L: 20, Q: 2, G: 0, A: 1 },
+        { name: "Бетон", C: 2, S: 0.5, L: 1, Q: 0.5, G: 0, A: 0 },
+        { name: "Железобетон", C: 1, S: 0.3, L: 0.5, Q: 0.2, G: 0, A: 0 },
+        { name: "Пластик", C: 1, S: 1, L: 0.1, Q: 0.1, G: 0, A: 0 },
+        { name: "Синтетика (полиэстер)", C: 1, S: 1, L: 0.1, Q: 0.1, G: 0, A: 0 },
+        { name: "Плутоний-239", C: 5, S: 7, L: 250, Q: 0.05, G: -8, A: -5 },
+        { name: "Уран (обогащённый)", C: 4, S: 6, L: 200, Q: 0.1, G: -7, A: -5 },
+        { name: "Свинец", C: 7, S: 3, L: 150, Q: 3, G: 0, A: -2 },
+        { name: "Янтарь", C: 7, S: 5, L: 100, Q: 5, G: 2, A: 3 },
+        { name: "Аметист", C: 7, S: 5, L: 100, Q: 6, G: 0, A: 4 },
+        { name: "Розовый кварц", C: 7, S: 6, L: 90, Q: 6, G: 1, A: 4 },
+        { name: "Обсидиан (чёрный)", C: 7, S: 3, L: 130, Q: 3, G: 0, A: 3 },
+        { name: "Нефрит", C: 8, S: 4, L: 160, Q: 5, G: 0, A: 3 },
+        { name: "Лазурит", C: 8, S: 5, L: 130, Q: 6, G: 0, A: 4 },
+        { name: "Малахит", C: 7, S: 5, L: 100, Q: 5, G: 0, A: 3 },
+        { name: "Коралл", C: 6, S: 5, L: 80, Q: 5, G: 2, A: 3 },
+        { name: "Жемчуг", C: 7, S: 6, L: 80, Q: 6, G: 1, A: 3 },
+        { name: "Огонь (костёр, свеча)", C: 2, S: 8, L: 1, Q: 2, G: 2, A: 4 },
+        { name: "Магнетит", C: 6, S: 5, L: 100, Q: 5, G: 1, A: 2 },
+        { name: "Мёд (сырой)", C: 7, S: 7, L: 60, Q: 7, G: 2, A: 2 },
+        { name: "Зерно (живое)", C: 6, S: 5, L: 80, Q: 6, G: 3, A: 2 },
+        { name: "Кость (резная, старая)", C: 6, S: 3, L: 120, Q: 3, G: 0, A: 1 }
+    ];
+
+    let currentMode = 'select'; // 'select' или 'custom'
+
+    // ========== DOM-элементы ==========
+    const selectModeBtn = document.getElementById('selectModeBtn');
+    const customModeBtn = document.getElementById('customModeBtn');
+    const selectSection = document.getElementById('selectSection');
+    const customSection = document.getElementById('customSection');
+    const materialSelect = document.getElementById('materialSelect');
+    const customName = document.getElementById('customName');
+    const cSlider = document.getElementById('cSlider');
+    const sSlider = document.getElementById('sSlider');
+    const lSlider = document.getElementById('lSlider');
+    const qSlider = document.getElementById('qSlider');
+    const gSlider = document.getElementById('gSlider');
+    const archetypeSelect = document.getElementById('archetypeSelect');
+    const cValue = document.getElementById('cValue');
+    const sValue = document.getElementById('sValue');
+    const lValue = document.getElementById('lValue');
+    const qValue = document.getElementById('qValue');
+    const gValue = document.getElementById('gValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const barChart = document.getElementById('barChart');
+    const resultFormula = document.getElementById('resultFormula');
+
+    // ========== Заполнение выпадающего списка ==========
+    materialsDB.forEach((m, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = m.name;
+        materialSelect.appendChild(opt);
+    });
+
+    // ========== Переключение режимов ==========
+    selectModeBtn.addEventListener('click', () => {
+        currentMode = 'select';
+        selectModeBtn.classList.add('active');
+        customModeBtn.classList.remove('active');
+        selectSection.classList.remove('hidden');
+        customSection.classList.add('hidden');
+        calculate();
+    });
+
+    customModeBtn.addEventListener('click', () => {
+        currentMode = 'custom';
+        customModeBtn.classList.add('active');
+        selectModeBtn.classList.remove('active');
+        customSection.classList.remove('hidden');
+        selectSection.classList.add('hidden');
+        calculate();
+    });
+
+    // ========== Слайдеры ==========
+    cSlider.addEventListener('input', () => { cValue.textContent = cSlider.value; if (currentMode === 'custom') calculate(); });
+    sSlider.addEventListener('input', () => { sValue.textContent = sSlider.value; if (currentMode === 'custom') calculate(); });
+    lSlider.addEventListener('input', () => { lValue.textContent = lSlider.value; if (currentMode === 'custom') calculate(); });
+    qSlider.addEventListener('input', () => { qValue.textContent = qSlider.value; if (currentMode === 'custom') calculate(); });
+    gSlider.addEventListener('input', () => { gValue.textContent = gSlider.value; if (currentMode === 'custom') calculate(); });
+    archetypeSelect.addEventListener('change', () => { if (currentMode === 'custom') calculate(); });
+    materialSelect.addEventListener('change', calculate);
+
+    // ========== Главная функция расчёта ==========
+    function calculate() {
+        let C, S, L, Q, G, A, name;
+
+        if (currentMode === 'select') {
+            const idx = parseInt(materialSelect.value);
+            const m = materialsDB[idx];
+            C = m.C; S = m.S; L = m.L; Q = m.Q; G = m.G; A = m.A; name = m.name;
+        } else {
+            C = parseInt(cSlider.value);
+            S = parseInt(sSlider.value);
+            L = parseInt(lSlider.value);
+            Q = parseFloat(qSlider.value);
+            G = parseInt(gSlider.value);
+            A = parseInt(archetypeSelect.value);
+            name = customName.value.trim() || 'Новый материал';
+        }
+
+        // Нормировка (делим на максимумы)
+        const Cnorm = C / 10;
+        const Snorm = S / 10;
+        const Lnorm = Math.log(L + 1) / Math.log(1000);
+        const Qnorm = Math.log(Q + 1) / Math.log(100);
+        const Gnorm = (G + 10) / 20; // от -10..+10 к 0..1
+        const Anorm = (A + 5) / 10; // от -5..+5 к 0..1
+
+        // Веса
+        const wC = 0.25, wS = 0.20, wL = 0.15, wQ = 0.15, wG = 0.15, wA = 0.10;
+        const rawRank = wC * Cnorm + wS * Snorm + wL * Lnorm + wQ * Qnorm + wG * Gnorm + wA * Anorm;
+        const rank = Math.round((rawRank * 20 - 10) * 10) / 10;
+
+        resultNumber.textContent = (rank >= 0 ? '+' : '') + rank.toFixed(1);
+        resultLabel.textContent = `Ранг материала: ${name}`;
+
+        // Столбчатая диаграмма
+        barChart.innerHTML = `
+            <div class="bar-row"><span class="bar-label">C_sense:</span><span class="bar-fill" style="width:${Cnorm*200}px"></span><span class="bar-value">${(wC*Cnorm*100).toFixed(0)}%</span></div>
+            <div class="bar-row"><span class="bar-label">σ_sense:</span><span class="bar-fill" style="width:${Snorm*200}px"></span><span class="bar-value">${(wS*Snorm*100).toFixed(0)}%</span></div>
+            <div class="bar-row"><span class="bar-label">L_sense:</span><span class="bar-fill" style="width:${Lnorm*200}px"></span><span class="bar-value">${(wL*Lnorm*100).toFixed(0)}%</span></div>
+            <div class="bar-row"><span class="bar-label">Q_factor:</span><span class="bar-fill" style="width:${Qnorm*200}px"></span><span class="bar-value">${(wQ*Qnorm*100).toFixed(0)}%</span></div>
+            <div class="bar-row"><span class="bar-label">Gen:</span><span class="bar-fill" style="width:${Gnorm*200}px"></span><span class="bar-value">${(wG*Gnorm*100).toFixed(0)}%</span></div>
+            <div class="bar-row"><span class="bar-label">Архетип:</span><span class="bar-fill" style="width:${Anorm*200}px"></span><span class="bar-value">${(wA*Anorm*100).toFixed(0)}%</span></div>
+        `;
+
+        resultFormula.textContent = `Rank = 0.25·C_norm + 0.20·σ_norm + 0.15·log(L_norm) + 0.15·Q_norm + 0.15·Gen_norm + 0.10·Архетип_norm`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Смысловой Чёрной Дыры • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0a0a1a 0%, #050510 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(100,50,150,0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 30% 70%, rgba(50,100,200,0.08) 0%, transparent 50%);
+        }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(15, 20, 40, 0.9); backdrop-filter: blur(15px);
+            border: 1px solid rgba(150, 100, 255, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 60px rgba(100,50,200,0.2);
+        }
+        h1 { font-size: 2.5rem; color: #d4c0ff; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #a090c0; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #4a3a6a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #4a3a6a; }
+        .section-title { font-size: 1.4rem; color: #b388ff; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #c0b8d8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #b388ff; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #3a2a5a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #b388ff; border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px rgba(179,136,255,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706890; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.4); border: 1px solid #4a3a6a; border-radius: 10px; color: #d4c0ff; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #0a0a1a; color: #d4c0ff; }
+        .result-box { background: rgba(100,50,200,0.08); border: 2px solid #7c4dff; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 3rem; font-weight: bold; color: #b388ff; line-height: 1; }
+        .result-label { color: #a090c0; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #c0b8d8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-horizon { color: #ff6d6d; font-size: 1.1rem; margin-top: 0.8rem; font-weight: bold; }
+        .result-formula { color: #706890; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .blackhole-visual { width: 150px; height: 150px; margin: 1rem auto; border-radius: 50%; background: radial-gradient(circle, black 40%, #3a1050 60%, #7c4dff 80%, transparent 100%); box-shadow: 0 0 30px rgba(124,77,255,0.5); transition: all 0.3s; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #b388ff; text-decoration: none; border: 1px solid #b388ff; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #b388ff; color: #0a0a1a; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🌌 Смысловая Чёрная Дыра</h1>
+    <div class="subtitle">Калькулятор коллапса идеи (Формулы r_g = 2G_s M_s, T_s = 1/(8πG_s M_s))</div>
+
+    <div class="calc-section">
+        <div class="section-title">💡 Параметры идеи</div>
+
+        <div class="input-group">
+            <label>🧠 «Масса» идеи (M_s — семантическая плотность): <span id="massValue">5</span> из 10</label>
+            <input type="range" id="massSlider" min="0.1" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>0.1 (мимолётная мысль)</span><span>5 (навязчивая)</span><span>10 (смысл жизни)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🔄 Когерентность идеи (Cₛ — насколько она «сфокусирована»): <span id="csValue">0.7</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.7" step="0.01">
+            <div class="range-labels"><span>0.1 (размытая)</span><span>1.0 (лазерный мем)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>👥 Число людей, вовлечённых в идею: <span id="peopleValue">1000</span></label>
+            <input type="range" id="peopleSlider" min="1" max="10000000" value="1000" step="1">
+            <div class="range-labels"><span>1 (личная)</span><span>1K</span><span>1M</span><span>10M (планетарная)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>📡 Виральность (способность заражать умы):</label>
+            <select id="viralSelect">
+                <option value="3.0">Экстремальная (религия, революция) (×3.0)</option>
+                <option value="2.0">Очень высокая (вирусный мем) (×2.0)</option>
+                <option value="1.0" selected>Средняя (популярная идея) (×1.0)</option>
+                <option value="0.5">Низкая (нишевая) (×0.5)</option>
+                <option value="0.1">Почти нулевая (личная мысль) (×0.1)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="blackhole-visual" id="blackholeVisual"></div>
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Статус идеи</div>
+        <div class="result-horizon" id="resultHorizon"></div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const massSlider = document.getElementById('massSlider');
+    const csSlider = document.getElementById('csSlider');
+    const peopleSlider = document.getElementById('peopleSlider');
+    const viralSelect = document.getElementById('viralSelect');
+    const massValue = document.getElementById('massValue');
+    const csValue = document.getElementById('csValue');
+    const peopleValue = document.getElementById('peopleValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultHorizon = document.getElementById('resultHorizon');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+    const blackholeVisual = document.getElementById('blackholeVisual');
+
+    massSlider.addEventListener('input', () => { massValue.textContent = parseFloat(massSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    peopleSlider.addEventListener('input', () => { peopleValue.textContent = parseInt(peopleSlider.value).toLocaleString(); calculate(); });
+    viralSelect.addEventListener('change', calculate);
+
+    function calculate() {
+    const M0 = parseFloat(massSlider.value);
+    const C = parseFloat(csSlider.value);
+    const N = parseInt(peopleSlider.value);
+    const viralCoeff = parseFloat(viralSelect.value);
+
+    // Семантическая «масса» со степенным ростом от числа людей
+    const Ms = M0 * C * viralCoeff * Math.pow(N, 0.3);
+
+    // Фундаментальная константа G_s (увеличена для достижимости ЧД)
+    const Gs = 0.05;
+
+    // Радиус горизонта смысловой чёрной дыры
+    const rg = 2 * Gs * Ms;
+
+    // Температура Хокинга
+    let Ts;
+    if (Ms > 0.01) {
+        Ts = 1 / (8 * Math.PI * Gs * Ms);
+    } else {
+        Ts = 100;
+    }
+
+    // Определение статуса
+    let statusText, horizonText, extraText;
+    if (rg >= 10) {
+        statusText = '🌌 СМЫСЛОВАЯ ЧЁРНАЯ ДЫРА';
+        horizonText = `Радиус горизонта: ${rg.toFixed(1)} ед. Идея неотвратимо притягивает всё внимание.`;
+        extraText = 'Эта идея уже не принадлежит вам. Она живёт своей жизнью, поглощая умы. Религии, революции, культовые франшизы — вот примеры таких дыр.';
+    } else if (rg >= 1) {
+        statusText = '🌀 Гравитационный коллапс смысла';
+        horizonText = `Радиус горизонта: ${rg.toFixed(2)} ед. Идея активно искривляет семантическое пространство.`;
+        extraText = 'Идея стала «вирусной». Она всплывает в разговорах, снах, медиа. Высока вероятность, что она станет чёрной дырой.';
+    } else if (rg >= 0.1) {
+        statusText = '⭐ Яркая звезда смысла';
+        horizonText = `Радиус горизонта: ${rg.toFixed(3)} ед. Идея заметна, но не доминирует.`;
+        extraText = 'Хорошая, сильная идея. Она привлекает внимание, но не «засасывает» без остатка.';
+    } else if (rg >= 0.01) {
+        statusText = '💡 Обычная идея';
+        horizonText = `Радиус горизонта: ${rg.toFixed(4)} ед. Идея существует, но не искривляет реальность.`;
+        extraText = 'Обычная мысль. Может быть полезной, но не способна захватить умы.';
+    } else {
+        statusText = '🌫️ Семантический туман';
+        horizonText = `Радиус горизонта: ${rg.toExponential(2)} ед. Идея слишком слаба.`;
+        extraText = 'Мимолётная мысль. Растворится в шуме через несколько секунд.';
+    }
+    resultNumber.textContent = statusText;
+    resultLabel.textContent = `Температура Хокинга: ${Ts.toFixed(2)} ед. (излучение смысла)`;
+    resultHorizon.textContent = horizonText;
+    resultExtra.textContent = extraText;
+
+    // Визуализация чёрной дыры
+    const intensity = Math.min(rg / 10, 1);
+    const glowColor = `rgba(124, 77, 255, ${0.3 + intensity * 0.7})`;
+    blackholeVisual.style.boxShadow = `0 0 ${20 + intensity * 60}px ${glowColor}`;
+    blackholeVisual.style.background = `radial-gradient(circle, black ${30 + intensity * 20}%, #3a1050 ${50 + intensity * 20}%, #7c4dff ${70 + intensity * 20}%, transparent 100%)`;
+
+    resultFormula.textContent = `M_s = ${M0.toFixed(1)} · ${C.toFixed(2)} · ${viralCoeff.toFixed(1)} · ${N}^0.3 = ${Ms.toFixed(2)} | r_g = 2 · 0.05 · ${Ms.toFixed(2)} = ${rg.toFixed(3)} | T_s = 1/(8π · 0.05 · ${Ms.toFixed(2)}) = ${Ts.toFixed(2)}`;
+}
+
+    calculate();
+</script>
+
+</body>
+</html>

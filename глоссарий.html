@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Глоссарий • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .main-container {
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #c0b090;
+            font-style: italic;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #5d4a3a;
+            padding-bottom: 1rem;
+        }
+        .glossary-letter {
+            font-size: 1.8rem;
+            color: #e3b87c;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #e3b87c;
+            padding-left: 1rem;
+        }
+        .glossary-term {
+            font-weight: bold;
+            color: #f3e7c0;
+            margin-top: 1.2rem;
+            font-size: 1.1rem;
+        }
+        .glossary-def {
+            color: #d0c8b8;
+            margin-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+        .glossary-see {
+            color: #a09080;
+            font-style: italic;
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2.5rem;
+            color: #e3b87c;
+            text-decoration: none;
+            border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+        }
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>📖 ГЛОССАРИЙ ИДЕАТОНИКИ</h1>
+    <div class="subtitle">Краткий словарь терминов семантической физики</div>
+    
+    <!-- А -->
+    <div class="glossary-letter">А</div>
+    <div class="glossary-term">Аура</div>
+    <div class="glossary-def">Визуализация семантического поля (Φₛ) человека или объекта, воспринимаемая наблюдателем с высокой чувствительностью χ. Цвет и яркость кодируют Qₛ, Cₛ и ωₛ. (§89)</div>
+    
+    <div class="glossary-term">Абсолютный Свет</div>
+    <div class="glossary-def">Предельная точка положительного Семантического Спектра (+10). Состояние чистой полноты смысла. Ассоциируется с Божественным. (§60)</div>
+    
+    <!-- В -->
+    <div class="glossary-letter">В</div>
+    <div class="glossary-term">Вектор внимания (θₜ)</div>
+    <div class="glossary-def">Угол направления семантического потока. 0 — на объект (будущее), π/2 — нейтрально (настоящее), π — против потока (прошлое, страх). Влияет на восприятие времени τ. (§2)</div>
+    
+    <!-- И -->
+    <div class="glossary-letter">И</div>
+    <div class="glossary-term">Идеатон (Θ)</div>
+    <div class="glossary-def">Элементарная частица семантического поля, квант смысла. Не имеет массы, но обладает зарядом Qₛ, частотой ωₛ и фазой φₛ. (§1, §34)</div>
+    
+    <!-- К -->
+    <div class="glossary-letter">К</div>
+    <div class="glossary-term">Когерентность (Cₛ)</div>
+    <div class="glossary-def">Степень цельности, сфокусированности семантического поля. Cₛ → 1 — лазерная чистота, Cₛ → 0 — хаотичный шум. (§2, §108)</div>
+    
+    <!-- Н -->
+    <div class="glossary-letter">Н</div>
+    <div class="glossary-term">Ноосфера</div>
+    <div class="glossary-def">Совокупное семантическое поле человечества. Тонкий мир, пространство посмертия, обиталище архетипов и эгрегоров. (§64)</div>
+    
+    <!-- С -->
+    <div class="glossary-letter">С</div>
+    <div class="glossary-term">Семантическое поле (Φₛ)</div>
+    <div class="glossary-def">Фундаментальная субстанция, «океан смыслов», в котором существуют все идеи, архетипы и эмоции. Предшествует материи. (§1)</div>
+    
+    <div class="glossary-term">Семантический заряд (Qₛ)</div>
+    <div class="glossary-def">Мера «количества смысла», силы идеи. Положительный Qₛ — созидание, отрицательный — разрушение. (§1, §60)</div>
+    
+    <div class="glossary-term">Семантическая температура (Tₛ)</div>
+    <div class="glossary-def">Мера хаотичности поля. Низкая Tₛ — кристаллизация (страх), высокая — хаос (паника). (§2)</div>
+    
+    <div class="glossary-term">Смыслоёмкость (C_sense)</div>
+    <div class="glossary-def">Способность материала накапливать и удерживать Qₛ. Аналог электрической ёмкости. (§80)</div>
+    
+    <div class="glossary-term">Смыслопроводимость (σ_sense)</div>
+    <div class="glossary-def">Способность материала передавать Qₛ. Аналог электропроводности. (§81)</div>
+    
+    <div class="glossary-term">Семантическое сопротивление (R_sense)</div>
+    <div class="glossary-def">Мера противодействия среды прохождению Qₛ. Обратно пропорционально σ_sense. (§83)</div>
+    
+    <div class="glossary-term">Семантическая индуктивность (L_sense)</div>
+    <div class="glossary-def">Инерционность семантического поля. Способность «запоминать» состояние. (§84)</div>
+    
+    <div class="glossary-term">Семантическое давление (P_sense)</div>
+    <div class="glossary-def">Мера концентрированности Qₛ в единице семантического объёма V_sense. (§109)</div>
+    
+    <!-- Э -->
+    <div class="glossary-letter">Э</div>
+    <div class="glossary-term">Эгрегор</div>
+    <div class="glossary-def">Коллективное семантическое поле, созданное группой людей с общей целью. Обладает квази-сознанием. (§79)</div>
+    
+    <div class="glossary-term">Энтропия семантическая (S_sense)</div>
+    <div class="glossary-def">Мера хаоса, неупорядоченности поля. Высокая энтропия — шум, низкая — структура. (§101)</div>
+    
+    <!-- Ссылка назад -->
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Полный глоссарий доступен в Учебнике</p>
+    </div>
+</div>
+</body>
+</html>

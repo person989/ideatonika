@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оценщик параметров материала • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 900px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .input-group input[type="text"] { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-params { color: #d0c8b8; font-size: 0.9rem; margin-top: 1rem; text-align: left; }
+        .result-params span { color: #ffd54f; font-weight: bold; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔬 Оценщик параметров</h1>
+    <div class="subtitle">Из физических свойств — в семантический паспорт материала</div>
+
+    <div class="calc-section">
+        <div class="section-title">🧪 Физические свойства материала</div>
+
+        <div class="input-group">
+            <label>Название материала:</label>
+            <input type="text" id="materialName" placeholder="Например: Мой сплав">
+        </div>
+
+        <div class="input-group">
+            <label>💎 Кристаллическая структура:</label>
+            <select id="structureSelect">
+                <option value="5">Монокристалл (кварц, алмаз) — 5</option>
+                <option value="4" selected>Поликристалл (гранит, металл) — 4</option>
+                <option value="3">Волокнистая (дерево, шерсть) — 3</option>
+                <option value="1">Аморфная (стекло, пластик) — 1</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🌿 Происхождение:</label>
+            <select id="originSelect">
+                <option value="3">Живое (дерево, шерсть) — 3</option>
+                <option value="2" selected>Природный минерал — 2</option>
+                <option value="1">Искусственное, но освящённое — 1</option>
+                <option value="0">Синтетика — 0</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🏛️ Архетипический вес:</label>
+            <select id="archetypeSelect">
+                <option value="5">Сакральное (+5) — золото, ладан, святая вода</option>
+                <option value="3">Духовное (+3) — кварц, сандал, шалфей</option>
+                <option value="1" selected>Традиционное (+1) — дуб, лён, глина</option>
+                <option value="0">Нейтральное (0) — бетон, сталь</option>
+                <option value="-3">Негативное (–3) — плутоний, свинец</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>⚡ Электропроводность: <span id="condValue">Средняя</span></label>
+            <input type="range" id="condSlider" min="0" max="7" value="3" step="1">
+            <div class="range-labels"><span>0 (диэлектрик)</span><span>3 (средняя)</span><span>7 (серебро)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>💧 Полярность молекул:</label>
+            <select id="polaritySelect">
+                <option value="3">Сильно полярное (вода) — 3</option>
+                <option value="2" selected>Умеренное (дерево) — 2</option>
+                <option value="0">Неполярное (пластик) — 0</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>⚖️ Плотность: <span id="densityValue">2000</span> кг/м³</label>
+            <input type="range" id="densitySlider" min="10" max="20000" value="2000" step="10">
+            <div class="range-labels"><span>10 (воздух)</span><span>2000</span><span>20000 (осмий)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🔩 Средняя атомная масса (A): <span id="atomValue">30</span></label>
+            <input type="range" id="atomSlider" min="1" max="250" value="30" step="1">
+            <div class="range-labels"><span>1 (водород)</span><span>30</span><span>250 (уран, плутоний)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🌟 Генерация Qₛ (Gen):</label>
+            <select id="genSelect">
+                <option value="0" selected>Нет (0) — большинство материалов</option>
+                <option value="3">Живое (3) — дерево, трава</option>
+                <option value="1">Пьезоэлектрик (1) — кварц</option>
+                <option value="-5">Радиоактивный (–5) — уран, плутоний</option>
+                <option value="10">Вечный генератор (10) — мощи святых</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Итоговый ранг</div>
+        <div class="result-params" id="resultParams"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const structureSelect = document.getElementById('structureSelect');
+    const originSelect = document.getElementById('originSelect');
+    const archetypeSelect = document.getElementById('archetypeSelect');
+    const condSlider = document.getElementById('condSlider');
+    const polaritySelect = document.getElementById('polaritySelect');
+    const densitySlider = document.getElementById('densitySlider');
+    const atomSlider = document.getElementById('atomSlider');
+    const genSelect = document.getElementById('genSelect');
+    const condValue = document.getElementById('condValue');
+    const densityValue = document.getElementById('densityValue');
+    const atomValue = document.getElementById('atomValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultParams = document.getElementById('resultParams');
+    const resultFormula = document.getElementById('resultFormula');
+
+    const condLabels = ['Диэлектрик', 'Очень низкая', 'Низкая', 'Средняя', 'Выше средней', 'Высокая', 'Очень высокая', 'Сверхпроводник'];
+
+    condSlider.addEventListener('input', () => { condValue.textContent = condLabels[parseInt(condSlider.value)]; calculate(); });
+    densitySlider.addEventListener('input', () => { densityValue.textContent = parseInt(densitySlider.value); calculate(); });
+    atomSlider.addEventListener('input', () => { atomValue.textContent = parseInt(atomSlider.value); calculate(); });
+    [structureSelect, originSelect, archetypeSelect, polaritySelect, genSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const structure = parseInt(structureSelect.value);
+        const origin = parseInt(originSelect.value);
+        const archetype = parseInt(archetypeSelect.value);
+        const conductivity = parseInt(condSlider.value);
+        const polarity = parseInt(polaritySelect.value);
+        const density = parseInt(densitySlider.value);
+        const atomMass = parseInt(atomSlider.value);
+        const gen = parseInt(genSelect.value);
+
+        // === C_sense (0–10) ===
+        const archetypeBonus = archetype > 0 ? Math.min(2, Math.floor(archetype / 3) + 1) : 0;
+        const C_sense_raw = structure + origin + archetypeBonus;
+        const C_sense = Math.max(1, Math.min(10, C_sense_raw));
+
+        // === σ_sense (0–10) ===
+        const sigma_raw = conductivity + polarity;
+        const sigma_sense = Math.max(1, Math.min(10, sigma_raw + 1));
+
+        // === L_sense ===
+        const structureQ = structure >= 5 ? 10 : (structure >= 4 ? 6 : (structure >= 3 ? 4 : 1));
+        const L_sense = Math.round(0.0001 * density * atomMass * structureQ);
+        const L_sense_clamped = Math.max(1, Math.min(1000, L_sense));
+
+        // === R_sense ===
+        const R_sense = sigma_sense > 0 ? (1 / sigma_sense) : 1.0;
+
+        // === Q_factor ===
+        const Q_factor_raw = (1 / R_sense) * Math.sqrt(L_sense_clamped / C_sense);
+        const Q_factor = Math.max(0.1, Math.min(999, Math.round(Q_factor_raw * 10) / 10));
+
+        // === Нормировка ===
+        const Cnorm = C_sense / 10;
+        const Snorm = sigma_sense / 10;
+        const Lnorm = Math.log(L_sense_clamped + 1) / Math.log(1000);
+        const Qnorm = Math.log(Q_factor + 1) / Math.log(100);
+        const Gnorm = (gen + 10) / 20;
+        const Anorm = (archetype + 5) / 10;
+
+        const wC = 0.25, wS = 0.20, wL = 0.15, wQ = 0.15, wG = 0.15, wA = 0.10;
+        const rawRank = wC * Cnorm + wS * Snorm + wL * Lnorm + wQ * Qnorm + wG * Gnorm + wA * Anorm;
+        const rank = Math.round((rawRank * 20 - 10) * 10) / 10;
+
+        resultNumber.textContent = (rank >= 0 ? '+' : '') + rank.toFixed(1);
+        const name = document.getElementById('materialName').value.trim() || 'Новый материал';
+        resultLabel.textContent = 'Ранг: ' + name;
+
+        resultParams.innerHTML = `
+            <span>C_sense:</span> ${C_sense} / 10 &nbsp;|&nbsp;
+            <span>σ_sense:</span> ${sigma_sense} / 10 &nbsp;|&nbsp;
+            <span>L_sense:</span> ${L_sense_clamped} H &nbsp;|&nbsp;
+            <span>Q_factor:</span> ${Q_factor} &nbsp;|&nbsp;
+            <span>Gen:</span> ${gen}
+        `;
+
+        resultFormula.textContent = `Оценка по 6-факторной модели (§121). Точный ранг может отличаться из-за культурных поправок.`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

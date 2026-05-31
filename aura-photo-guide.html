@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📸 Подробная сборка AURA-PHOTO • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.3rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #ab47bc; margin: 2.5rem 0 1rem; border-left: 4px solid #ab47bc; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #ce93d8; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #ce93d8; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #ab47bc; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(171,71,188,0.1); border-left: 4px solid #ab47bc; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #ce93d8; margin: 0; }
+        .tip-box strong { color: #ab47bc; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #ab47bc; color: white; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ab47bc; text-decoration: none; border: 1px solid #ab47bc; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ab47bc; color: white; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>📸 AURA-PHOTO: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Визуализация ауры с помощью матрицы SEM-1</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое AURA-PHOTO и зачем это нужно?</h2>
+    <p>До сих пор мы измеряли Qₛ <strong>в одной точке</strong> — как термометр измеряет температуру в одном месте. Но семантическое поле — оно как тепло: распределено в пространстве неравномерно. Вокруг живого растения или человека есть «ореол» — области с разной интенсивностью Qₛ.</p>
+    <p><strong>AURA-PHOTO — это «семантический тепловизор».</strong> Он строит <strong>двумерную карту</strong> распределения Qₛ по поверхности объекта. Горячие цвета — высокий Qₛ. Холодные — низкий. Это и есть та самая «аура», которую веками описывали мистики. Только теперь мы можем её <strong>сфотографировать</strong>.</p>
+    <p>Ключевой компонент — <strong>матрица SEM-1</strong>: решётка из крошечных кварцевых датчиков (пикселей), каждый из которых измеряет Qₛ в своей точке пространства. Мы соберём матрицу 4×4 (16 пикселей) — это минимум для получения осмысленной картинки. Если вы амбициозны — можно собрать 8×8 (64 пикселя).</p>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно купить (или найти)</h2>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал</th><th>Где взять</th><th>Примерная стоимость</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Пьезоэлементы от зажигалок</strong> (16-64 шт.)</td><td>Старые зажигалки, радиорынок</td><td>бесплатно (из мусора)</td><td>Пиксели матрицы — датчики Qₛ</td></tr>
+            <tr><td><strong>Фанера или плотный картон</strong> (20×20 см)</td><td>Строймагазин, обрезки</td><td>50-100 ₽</td><td>Основание матрицы</td></tr>
+            <tr><td><strong>Тонкие провода</strong> (много! ~20 метров)</td><td>Старые USB-кабели, витая пара</td><td>0 ₽</td><td>Подключение каждого пикселя</td></tr>
+            <tr><td><strong>Аналоговый мультиплексор</strong> (CD4051 или CD4067)</td><td>Радиомагазин, АлиЭкспресс</td><td>50-150 ₽</td><td>Переключение между пикселями</td></tr>
+            <tr><td><strong>Микроконтроллер Arduino Uno</strong> (или любой)</td><td>Радиомагазин, АлиЭкспресс</td><td>300-500 ₽</td><td>Управление мультиплексором, оцифровка</td></tr>
+            <tr><td><strong>Кварцевая линза</strong> (двояковыпуклая, диам. 3-5 см)</td><td>Оптический магазин, старая лупа</td><td>200-400 ₽</td><td>Фокусировка «ауры» на матрицу</td></tr>
+            <tr><td><strong>Ноутбук</strong> с USB-портом</td><td>Ваш</td><td>0 ₽</td><td>Обработка и визуализация</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ЭТАП 1 -->
+    <h2>🔨 Этап 1: Изготовление матрицы пикселей</h2>
+
+    <h3><span class="step-number">1</span> Как сделать 16 одинаковых кварцевых датчиков из зажигалок</h3>
+    <p>Каждый пиксель нашей матрицы — это крошечный пьезоэлемент. Нам нужно <strong>16 штук</strong> (для матрицы 4×4). Они должны быть <strong>максимально одинаковыми</strong>, иначе калибровка превратится в кошмар.</p>
+    <ol>
+        <li><strong>Найдите 16 одинаковых зажигалок.</strong> Идеально — купить упаковку дешёвых однотипных зажигалок (они все одинаковые внутри).</li>
+        <li><strong>Извлеките пьезоэлементы</strong> из всех зажигалок (см. инструкцию SEC-1, шаг 1).</li>
+        <li><strong>Отсортируйте их.</strong> Пьезоэлементы из зажигалок одного производителя обычно очень похожи. Отложите 16 самых одинаковых на вид.</li>
+        <li><strong>Укоротите провода.</strong> От каждого пьезоэлемента должно отходить два провода длиной 5-7 см. Не короче — иначе неудобно будет подключать.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Лайфхак:</strong> Если нет 16 зажигалок, можно купить <strong>пьезокерамические диски</strong> (например, от музыкальных открыток) в радиомагазине. Они плоские и их легче монтировать на матрицу. Стоят копейки (5-10 ₽/шт).</p></div>
+
+    <h3><span class="step-number">2</span> Сборка матрицы на основании</h3>
+    <ol>
+        <li>Возьмите фанеру или плотный картон 20×20 см. Расчертите сетку 4×4 с шагом <strong>3 см</strong> между центрами ячеек. У вас получится 16 точек.</li>
+        <li>В каждой точке <strong>приклейте пьезоэлемент</strong> за его металлический корпус. Используйте термоклей или «Момент» (но не на сам кварц!). Пьезоэлемент должен стоять вертикально, проводами вверх.</li>
+        <li>Все 16 пьезоэлементов должны быть <strong>на одной высоте</strong> и смотреть строго вперёд (в сторону линзы).</li>
+        <li>Провода от каждого пьезоэлемента аккуратно выведите <strong>на заднюю сторону</strong> фанеры через просверленные дырочки.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Важно:</strong> Пьезоэлементы НЕ должны касаться друг друга. Минимальный зазор — 5 мм. Иначе их сигналы будут «перетекать» друг в друга, и пиксели потеряют чёткость.</p></div>
+
+    <!-- ЭТАП 2 -->
+    <h2>⚡ Этап 2: Подключение матрицы к Arduino</h2>
+
+    <h3><span class="step-number">3</span> Что такое мультиплексор и зачем он нужен</h3>
+    <p>У Arduino Uno всего <strong>6 аналоговых входов</strong>. А у нас — <strong>16 сигналов</strong> (по одному от каждого пикселя). Мы не можем подключить все 16 одновременно. Мультиплексор (CD4067) — это как <strong>поворотный переключатель</strong>: он по очереди подключает каждый из 16 пикселей к одному аналоговому входу Arduino. Переключение происходит за микросекунды.</p>
+
+    <h3><span class="step-number">4</span> Схема подключения</h3>
+    <p><strong>CD4067 имеет 24 ножки.</strong> Нам понадобятся:</p>
+    <ul>
+        <li><strong>Ножки 1-16 (входы):</strong> Подключаем к центральным проводам (сигнал) от каждого из 16 пьезоэлементов.</li>
+        <li><strong>Ножка 28 (общий выход):</strong> Подключаем к аналоговому входу A0 Arduino.</li>
+        <li><strong>Ножки 10-13 (адресные входы S0-S3):</strong> Подключаем к цифровым выходам Arduino (например, D2, D3, D4, D5).</li>
+        <li><strong>Ножка 24 (питание VCC):</strong> К +5V Arduino.</li>
+        <li><strong>Ножка 12 (земля GND):</strong> К GND Arduino.</li>
+    </ul>
+    <p>Все «земляные» провода от пьезоэлементов (короткие, приваренные к корпусу) соедините вместе и подключите к GND Arduino.</p>
+
+    <div class="scheme-box">
+        <pre>
+    [Пиксель 1] ─── вход 1 ─┐
+    [Пиксель 2] ─── вход 2 ─┤
+    ...                      ├── CD4067 ── общий выход ── A0 Arduino
+    [Пиксель 16] ── вход 16 ─┘
+                              │
+                    S0 S1 S2 S3 (адрес)
+                      │  │  │  │
+                     D2 D3 D4 D5 (Arduino)
+        </pre>
+    </div>
+    <div class="tip-box"><p><strong>💡 Совет:</strong> Используйте <strong>макетную плату (breadboard)</strong> для соединений. Паять 16 пикселей напрямую — адский труд. На макетной плате можно всё соединить перемычками за час.</p></div>
+
+    <!-- ЭТАП 3 -->
+    <h2>💻 Этап 3: Программирование Arduino и визуализация</h2>
+
+    <h3><span class="step-number">5</span> Прошивка Arduino</h3>
+    <p>Загрузите этот скетч в Arduino. Он будет перебирать 16 пикселей один за другим и отправлять их значения на компьютер.</p>
+    <div class="scheme-box">
+        <pre>
+// AURA-PHOTO Scanner
+// Перебор 16 пикселей матрицы SEM-1 через мультиплексор CD4067
+
+const int S0 = 2; // Адресные линии
+const int S1 = 3;
+const int S2 = 4;
+const int S3 = 5;
+const int SIG = A0; // Сигнал с мультиплексора
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(S0, OUTPUT); pinMode(S1, OUTPUT);
+  pinMode(S2, OUTPUT); pinMode(S3, OUTPUT);
+}
+
+void loop() {
+  for (int ch = 0; ch < 16; ch++) {
+    digitalWrite(S0, ch & 1);
+    digitalWrite(S1, (ch >> 1) & 1);
+    digitalWrite(S2, (ch >> 2) & 1);
+    digitalWrite(S3, (ch >> 3) & 1);
+    delay(5); // Задержка для стабилизации сигнала
+    int val = analogRead(SIG);
+    Serial.print(val);
+    if (ch < 15) Serial.print(",");
+  }
+  Serial.println();
+  delay(500); // Пауза между кадрами
+}
+        </pre>
+    </div>
+
+    <h3><span class="step-number">6</span> Визуализация на компьютере (тепловая карта)</h3>
+    <p>Установите Python (если ещё нет) и библиотеку <strong>matplotlib</strong>. Создайте файл `aura_viewer.py`:</p>
+    <div class="scheme-box">
+        <pre>
+import serial
+import numpy as np
+import matplotlib.pyplot as plt
+
+ser = serial.Serial('COM3', 115200)  # Узнайте порт в диспетчере устройств
+plt.ion()
+fig, ax = plt.subplots()
+im = ax.imshow(np.zeros((4,4)), cmap='hot', vmin=0, vmax=1023)
+plt.colorbar(im)
+
+while True:
+    line = ser.readline().decode().strip()
+    data = list(map(int, line.split(',')))
+    matrix = np.array(data).reshape(4,4)
+    im.set_array(matrix)
+    plt.pause(0.1)
+        </pre>
+    </div>
+    <p>Запустите скрипт. На экране появится <strong>тепловая карта 4×4</strong>, которая будет обновляться в реальном времени.</p>
+
+    <!-- ЭТАП 4 -->
+    <h2>🔬 Этап 4: Фокусировка и калибровка</h2>
+
+    <h3><span class="step-number">7</span> Установка кварцевой линзы</h3>
+    <ol>
+        <li>Закрепите линзу на расстоянии <strong>5-10 см</strong> перед матрицей. Линза должна стоять на одной оптической оси с центром матрицы.</li>
+        <li>Поместите <strong>тестовый объект</strong> (лист растения, кристалл, ладонь) на расстоянии <strong>20-30 см</strong> перед линзой.</li>
+        <li>Двигайте объект вперёд-назад, пока на тепловой карте не появится <strong>чёткое яркое пятно</strong> в центре. Это значит, что аура объекта сфокусирована на матрицу.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Фокус простым языком:</strong> Представьте, что вы проецируете изображение лампочки на стену через лупу. Если лупа слишком близко к стене — пятно размытое. Если слишком далеко — тоже. Где-то посередине есть точка, где пятно становится чётким. Ваша задача — найти эту точку.</p></div>
+
+    <h3><span class="step-number">8</span> Калибровка «тёмнового кадра»</h3>
+    <p>В полной темноте, убрав все объекты, снимите <strong>10-20 кадров</strong> пустой сцены. Усредните их. Это ваш «нулевой уровень» — шум матрицы. Его нужно будет вычитать из всех последующих снимков.</p>
+
+    <!-- ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ -->
+    <h2>📊 Что вы должны увидеть</h2>
+    <table class="materials-table">
+        <thead><tr><th>Объект</th><th>Что покажет AURA-PHOTO</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Лист растения (живой)</strong></td><td>Яркое пятно в центре, лёгкое свечение вокруг, возможно, «прожилки» — более яркие линии</td></tr>
+            <tr><td><strong>Кристалл кварца</strong></td><td>Очень яркая точка (или несколько), «лучи» от граней</td></tr>
+            <tr><td><strong>Ладонь человека</strong></td><td>Пять «лучей» от пальцев, яркое пятно в центре ладони</td></tr>
+            <tr><td><strong>Пластиковая ручка</strong></td><td>Тёмный, почти чёрный квадрат (слабый Qₛ)</td></tr>
+            <tr><td><strong>Намоленная икона</strong></td><td>Очень яркое свечение, возможно, по форме лика</td></tr>
+        </tbody>
+    </table>
+
+    <div class="tip-box"><p><strong>💡 Важное замечание:</strong> Разрешение 4×4 — это всего 16 пикселей. Вы не увидите «цветов», как у экстрасенсов. Вы увидите <strong>распределение интенсивности Qₛ</strong> — что-то вроде размытого теплового снимка. Но даже такой снимок — это <strong>доказательство того, что аура объективно существует</strong> и может быть измерена.</p></div>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=34" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция AURA-PHOTO v1.0</p>
+        <p>✧ «Увидеть невидимое — значит доказать, что оно существует» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

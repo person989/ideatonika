@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дальность Семантической Связи • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', 'Times New Roman', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 800px; width: 100%; background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px); border: 2px solid #ffb74d; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ffb74d; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ffb74d; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 12px; padding: 1rem 1.5rem; cursor: pointer; color: #d0c8b8; transition: 0.2s; display: flex; align-items: center; gap: 12px; }
+        .option:hover { border-color: #ffb74d; background: rgba(255,183,77,0.1); }
+        .option.selected { border-color: #ffb74d; background: rgba(255,183,77,0.2); color: #f3e7c0; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #ffb74d; color: #ffb74d; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #ffb74d; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ffb74d; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ffb74d; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ffb74d; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>📡 ДАЛЬНОСТЬ СЕМАНТИЧЕСКОЙ СВЯЗИ</h1>
+    <div class="subtitle">10 задач • 5 вариантов • звание «Адепт»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="questionArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-practicum-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-practicum-menu.html" class="back-link">← Вернуться к темам Практики</a>
+</div>
+
+<script>
+const questions = [
+    {
+        q: "Дано: Q_отправл = 200 ед., расстояние r = 5 км, α_среды = 0.1, ретранслятор = ×3. Сколько Qₛ дойдёт до цели?",
+        opts: ["~200 ед.", "~600 ед.", "~363 ед.", "~100 ед.", "~50 ед."],
+        ans: 2
+    },
+    {
+        q: "Дано: Q_отправл = 500 ед., расстояние r = 100 км, α_воздуха = 0.01, без ретранслятора. Сколько Qₛ дойдёт?",
+        opts: ["~500 ед.", "~0 ед.", "~184 ед.", "~368 ед.", "~50 ед."],
+        ans: 2
+    },
+    {
+        q: "Дано: Q_отправл = 100 ед., расстояние r = 2 км, среда = бетон (α = 5.0). Дойдёт ли сигнал без ретранслятора?",
+        opts: ["~100 ед.", "~0 ед.", "~50 ед.", "~10 ед.", "~1 ед."],
+        ans: 1
+    },
+    {
+        q: "Дано: Q_прин должно быть ≥ 10 ед., Q_отправл = 300 ед., α_среды = 2.0, ретранслятор = ×5. Найти максимальное расстояние r.",
+        opts: ["~2.0 км", "~0.5 км", "~1.0 км", "~5.0 км", "~10.0 км"],
+        ans: 0
+    },
+    {
+        q: "Дано: Q_отправл = 150 ед., расстояние r = 10 км, α_среды = 0.5, ретранслятор = ×10. Сколько Qₛ дойдёт?",
+        opts: ["~1500 ед.", "~0 ед.", "~100 ед.", "~10 ед.", "~1 ед."],
+        ans: 3
+    },
+    {
+        q: "Дано: Q_отправл = 80 ед., расстояние r = 0.5 км, α_воздуха = 0.01, без ретранслятора. Сколько Qₛ дойдёт?",
+        opts: ["~40 ед.", "~80 ед.", "~60 ед.", "~20 ед.", "~0 ед."],
+        ans: 1
+    },
+    {
+        q: "Дано: Q_отправл = 1000 ед., расстояние r = 3 км, α_гранита = 2.0, ретранслятор = ×100. Сколько Qₛ дойдёт?",
+        opts: ["~100000 ед.", "~0 ед.", "~248 ед.", "~1000 ед.", "~500 ед."],
+        ans: 2
+    },
+    {
+        q: "Дано: Q_отправл = 50 ед., расстояние r = 1 км, α_дерева = 0.5, без ретранслятора. Сколько Qₛ дойдёт?",
+        opts: ["~50 ед.", "~0 ед.", "~10 ед.", "~30 ед.", "~5 ед."],
+        ans: 3
+    },
+    {
+        q: "Дано: Q_прин должно быть ≥ 1 ед., Q_отправл = 100 ед., α_среды = 0.1. Найти максимальное расстояние r без ретранслятора.",
+        opts: ["~10 км", "~23 км", "~5 км", "~100 км", "~46 км"],
+        ans: 4
+    },
+    {
+        q: "Дано: Q_отправл = 400 ед., расстояние r = 0.2 км, α_свинца = 20.0, ретранслятор = ×3. Сколько Qₛ дойдёт?",
+        opts: ["~1200 ед.", "~400 ед.", "~0 ед.", "~100 ед.", "~22 ед."],
+        ans: 4
+    }
+];
+
+let idx = 0;
+let answers = Array(10).fill(null);
+
+const qArea = document.getElementById('questionArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn');
+const next = document.getElementById('nextBtn');
+
+function render() {
+    const q = questions[idx];
+    let h = `<div class="question-box"><div class="question-text">${idx+1}. ${q.q}</div><div class="options">`;
+    q.opts.forEach((opt, i) => {
+        h += `<div class="option${answers[idx]===i?' selected':''}" data-i="${i}">${opt}</div>`;
+    });
+    h += '</div></div>';
+    qArea.innerHTML = h;
+    
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            answers[idx] = parseInt(this.dataset.i);
+            render();
+        });
+    });
+    
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = (idx === 0);
+    next.textContent = (idx === 9) ? '🎉 Завершить' : 'Далее →';
+}
+
+function showResult() {
+    let correct = 0;
+    let rows = '';
+    questions.forEach((q, i) => {
+        const chosen = answers[i];
+        const isCorrect = (chosen !== null && chosen === q.ans);
+        if (isCorrect) correct++;
+        const chosenText = (chosen !== null) ? q.opts[chosen] : '—';
+        const correctText = q.opts[q.ans];
+        rows += `<tr>
+            <td>${i+1}. ${q.q.substring(0,50)}...</td>
+            <td style="color:#f3e7c0;">${chosenText}</td>
+            <td style="color:#a09080;">${correctText}</td>
+            <td class="${isCorrect?'correct':'wrong'}">${isCorrect?'✅':'❌'}</td>
+        </tr>`;
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'📡 Вы — Магистр Связи!':pct>=70?'🔬 Отличный результат, Адепт!':pct>=50?'📐 Хорошо, но есть куда расти.':'📖 Нужно повторить теорию распространения Qₛ.';
+    qArea.innerHTML = `<div class="result-container">
+        <div class="result-score">${pct}%</div>
+        <p style="color:#c0b090;">${comment}</p>
+        <table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table>
+        <p style="color:#a09080;">Звание: ${pct>=90?'📡 Магистр':pct>=70?'🔬 Адепт':pct>=50?'📐 Практик':'📖 Ученик'}</p>
+    </div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', () => { if(idx>0){ idx--; render(); } });
+next.addEventListener('click', () => {
+    if(answers[idx]===null){ alert('Выберите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

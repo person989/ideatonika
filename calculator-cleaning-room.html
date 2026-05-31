@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Очистки Пространства • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-recipe { text-align: left; color: #d0c8b8; font-size: 1rem; line-height: 2; }
+        .result-recipe span { color: #ffd54f; font-weight: bold; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1.5rem; font-family: 'Courier New', monospace; text-align: center; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🧹 Очистка пространства</h1>
+    <div class="subtitle">Калькулятор семантической уборки (§47, §128, Эксперимент SALT-CLEAN)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры комнаты и загрязнения</div>
+
+        <!-- Площадь -->
+        <div class="input-group">
+            <label>📏 Площадь комнаты: <span id="areaValue">20</span> м²</label>
+            <input type="range" id="areaSlider" min="5" max="100" value="20" step="1">
+            <div class="range-labels"><span>5 м²</span><span>100 м²</span></div>
+        </div>
+
+        <!-- Материал стен -->
+        <div class="input-group">
+            <label>🧱 Материал стен:</label>
+            <select id="wallsSelect">
+                <option value="7">Натуральный камень / гранит</option>
+                <option value="4">Массив дерева</option>
+                <option value="2" selected>Кирпич</option>
+                <option value="0">Гипсокартон</option>
+                <option value="-2">Бетон</option>
+                <option value="-3">Железобетон</option>
+            </select>
+        </div>
+
+        <!-- Степень загрязнения -->
+        <div class="input-group">
+            <label>☠️ Степень загрязнения:</label>
+            <select id="dirtSelect">
+                <option value="1">Лёгкое (пыль, бытовой шум)</option>
+                <option value="2" selected>Среднее (давно не убирали, ссорились)</option>
+                <option value="3">Сильное (завалы хлама, тяжёлые эмоции)</option>
+                <option value="5">Экстремальное (проклятое место, трагедия)</option>
+            </select>
+        </div>
+
+        <!-- Тип очистителя -->
+        <div class="input-group">
+            <label>🧂 Основной очиститель:</label>
+            <select id="cleanerSelect">
+                <option value="0.63">Поваренная соль</option>
+                <option value="0.79" selected>Морская соль</option>
+                <option value="0.84">Шунгитовая крошка</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-recipe" id="resultRecipe"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const areaSlider = document.getElementById('areaSlider');
+    const wallsSelect = document.getElementById('wallsSelect');
+    const dirtSelect = document.getElementById('dirtSelect');
+    const cleanerSelect = document.getElementById('cleanerSelect');
+    const areaValue = document.getElementById('areaValue');
+    const resultRecipe = document.getElementById('resultRecipe');
+    const resultFormula = document.getElementById('resultFormula');
+
+    areaSlider.addEventListener('input', () => { areaValue.textContent = parseInt(areaSlider.value); calculate(); });
+    [wallsSelect, dirtSelect, cleanerSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const area = parseInt(areaSlider.value);
+        const wallsRank = parseInt(wallsSelect.value);
+        const dirtLevel = parseInt(dirtSelect.value);
+        const cleanerEff = parseFloat(cleanerSelect.value);
+
+        // Базовые константы (из эксперимента SALT-CLEAN)
+        const SALT_PER_SQM = 200; // грамм соли на м² при среднем загрязнении
+        const AIR_PER_SQM = 3;    // минуты проветривания на м²
+        const CANDLE_PER_SQM = 2; // минуты свечи на м²
+
+        // Поправка на материал стен: чем "хуже" стены, тем больше усилий
+        const wallFactor = wallsRank < 0 ? 1 + Math.abs(wallsRank) * 0.3 : 1;
+
+        // Расчёт ресурсов
+        const saltGrams = Math.round(SALT_PER_SQM * area * dirtLevel * wallFactor * 0.5);
+        const saltKg = (saltGrams / 1000).toFixed(1);
+        const airMinutes = Math.round(AIR_PER_SQM * area * dirtLevel * wallFactor);
+        const airHours = (airMinutes / 60).toFixed(1);
+        const candleMinutes = Math.round(CANDLE_PER_SQM * area * dirtLevel * wallFactor);
+        const candleHours = (candleMinutes / 60).toFixed(1);
+
+        // Эффективность очистителя
+        const totalEff = Math.round(cleanerEff * 100);
+        const cleanerName = cleanerSelect.options[cleanerSelect.selectedIndex].text;
+
+        // Если загрязнение экстремальное — добавляем особые рекомендации
+        let extraTips = '';
+        if (dirtLevel >= 5) {
+            extraTips = '<br><br>⚠️ <span>Экстремальное загрязнение!</span> Рекомендуется также:<br>'
+                + '• Пригласить священника для освящения<br>'
+                + '• Использовать ладан или шалфей дополнительно<br>'
+                + '• Повторить очистку через 7 дней';
+        } else if (dirtLevel >= 3) {
+            extraTips = '<br><br>💡 <span>Совет:</span> После очистки поставьте в угол миску с солью на 24 часа для "финишной" абсорбции остатков.';
+        }
+
+        resultRecipe.innerHTML = `
+            <strong>🧂 Соль (${cleanerName}):</strong> <span>${saltKg} кг</span> (рассыпать по углам и вдоль стен на 24 часа)<br>
+            <strong>💨 Проветривание:</strong> <span>${airMinutes} минут</span> (открыть все окна, создать сквозняк)<br>
+            <strong>🕯️ Свеча:</strong> <span>${candleMinutes} минут</span> горения (в центре комнаты)<br>
+            <strong>📊 Эффективность очистителя:</strong> <span>${totalEff}%</span> негатива будет удалено
+            ${extraTips}
+        `;
+
+        resultFormula.textContent = `Площадь: ${area} м² | Стены: ранг ${wallsRank} | Загрязнение: уровень ${dirtLevel} | Очиститель: ${cleanerName} (КПД ${totalEff}%)`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

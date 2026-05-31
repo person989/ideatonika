@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантическая электротехника • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 850px; width: 100%; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 2px solid #ce93d8; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ce93d8; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ce93d8; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .task-box { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; border: 1px solid #5d4a3a; }
+        .task-title { color: #ce93d8; font-size: 1.3rem; margin-bottom: 1rem; }
+        .task-text { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; white-space: pre-line; }
+        .task-input { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .task-input::placeholder { color: #706858; font-style: italic; }
+        .hint { color: #a09080; font-size: 0.85rem; margin-top: 0.5rem; font-style: italic; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #ce93d8; color: #ce93d8; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #ce93d8; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ce93d8; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ce93d8; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>⚡ СЕМАНТИЧЕСКАЯ ЭЛЕКТРОТЕХНИКА</h1>
+    <div class="subtitle">10 задач • числовой ответ • звание «Магистр»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="taskArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-magistr-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-magistr-menu.html" class="back-link">← Вернуться к темам Магистра</a>
+</div>
+
+<script>
+const tasks = [
+    {
+        title: "Задача №1. Импеданс семантической цепи",
+        text: "Дано: R_sense = 3 Ω, L_sense = 0.5 H, C_sense = 0.2 F, частота ω = 2 рад/с.\nЧему равен импеданс Z_sense?\nОтвет округлите до десятых.",
+        answer: "3.4"
+    },
+    {
+        title: "Задача №2. Резонансная частота",
+        text: "Дано: L_sense = 0.8 H, C_sense = 0.05 F.\nЧему равна резонансная частота ω_res?\nОтвет округлите до целых.",
+        answer: "5"
+    },
+    {
+        title: "Задача №3. Импеданс на резонансе",
+        text: "Дано: R_sense = 2 Ω, L_sense = 0.5 H, C_sense = 0.08 F, ω = 5 рад/с.\nЧему равен импеданс Z_sense? Наступил ли резонанс?\nОтвет: число Z (округлите до сотых) и «да» или «нет» через пробел.",
+        answer: "2.00 да"
+    },
+    {
+        title: "Задача №4. Добротность контура",
+        text: "Дано: R_sense = 0.5 Ω, L_sense = 2 H, C_sense = 0.02 F.\nЧему равна добротность Q_factor?\nОтвет округлите до целых.",
+        answer: "20"
+    },
+    {
+        title: "Задача №5. Полоса пропускания",
+        text: "Дано: резонансная частота ω_res = 10 рад/с, добротность Q_factor = 5.\nЧему равна полоса пропускания Δω?\nОтвет округлите до целых.",
+        answer: "2"
+    },
+    {
+        title: "Задача №6. Последовательное соединение R-L-C",
+        text: "Дано: три одинаковых резистора R_sense = 6 Ω соединены последовательно.\nЧему равно общее сопротивление R_total?\nОтвет округлите до целых.",
+        answer: "18"
+    },
+    {
+        title: "Задача №7. Параллельное соединение проводников",
+        text: "Дано: R₁ = 4 Ω, R₂ = 12 Ω соединены параллельно.\nЧему равно общее сопротивление R_total?\nОтвет округлите до целых.",
+        answer: "3"
+    },
+    {
+        title: "Задача №8. Реактивная мощность",
+        text: "Дано: U_sense = 10 V, I_Q = 3 A, разность фаз φ = 60°.\nЧему равна активная мощность P_active?\nОтвет округлите до целых.",
+        answer: "15"
+    },
+    {
+        title: "Задача №9. Время затухания колебаний",
+        text: "Дано: L_sense = 4 H, R_sense = 0.2 Ω.\nЧему равно время релаксации τ_relax?\nОтвет округлите до целых.",
+        answer: "20"
+    },
+    {
+        title: "Задача №10. Коэффициент усиления по напряжению",
+        text: "Дано: входное напряжение U_in = 2 V, выходное U_out = 18 V.\nЧему равен коэффициент усиления K_u?\nОтвет округлите до целых.",
+        answer: "9"
+    }
+];
+
+let idx = 0, answers = Array(10).fill('');
+const tArea = document.getElementById('taskArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn'), next = document.getElementById('nextBtn');
+
+function render() {
+    const t = tasks[idx];
+    let h = `<div class="task-box"><div class="task-title">${t.title}</div><div class="task-text">${t.text}</div>`;
+    h += `<input type="text" class="task-input" id="answerInput" placeholder="Введите числовой ответ..." value="${answers[idx]}">`;
+    h += `<div class="hint">💡 Введите только число (или число и слово через пробел для задачи №3).</div>`;
+    h += '</div>';
+    tArea.innerHTML = h;
+    document.getElementById('answerInput').addEventListener('input', function(){
+        answers[idx] = this.value.trim();
+    });
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = idx===0;
+    next.textContent = idx===9 ? '🎉 Завершить' : 'Далее →';
+    if(idx===9) document.getElementById('answerInput').focus();
+}
+
+function toNumber(str) {
+    return parseFloat(str.replace(',', '.').trim());
+}
+
+function showResult() {
+    let correct=0, rows='';
+    tasks.forEach((t,i)=>{
+        const userAns = answers[i].replace(',','.').trim().toLowerCase();
+        const realAns = t.answer.toLowerCase();
+        // Для задачи №3 — сравниваем как строку
+        if (i === 2) {
+            const userParts = userAns.split(/\s+/);
+            const realParts = realAns.split(/\s+/);
+            let ok = false;
+            if (userParts.length >= 2) {
+                const userNum = toNumber(userParts[0]);
+                const realNum = toNumber(realParts[0]);
+                ok = !isNaN(userNum) && Math.abs(userNum - realNum) < 0.015 && userParts[1] === realParts[1];
+            }
+            if (ok) correct++;
+            rows += `<tr><td>${t.title}</td><td style="color:#f3e7c0;">${answers[i]||'—'}</td><td style="color:#a09080;">${t.answer}</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+        } else {
+            const userNum = toNumber(answers[i]);
+            const realNum = toNumber(t.answer);
+            const ok = !isNaN(userNum) && Math.abs(userNum - realNum) < 0.015;
+            if(ok) correct++;
+            rows += `<tr><td>${t.title}</td><td style="color:#f3e7c0;">${answers[i]||'—'}</td><td style="color:#a09080;">${t.answer}</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+        }
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'⚡ Вы — Магистр Электротехники!':pct>=70?'📚 Отличный результат, Адепт.':pct>=40?'🔬 Неплохо, но есть куда расти.':'🌱 Электротехника требует практики.';
+    tArea.innerHTML = `<div class="result-container"><div class="result-score">${pct}%</div><p style="color:#c0b090;">${comment}</p><table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table><p style="color:#a09080;">Звание: ${pct>=90?'⚡ Магистр':pct>=70?'📚 Адепт':pct>=40?'🔬 Практик':'🌱 Неофит'}</p></div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', ()=>{ if(idx>0){ idx--; render(); } });
+next.addEventListener('click', ()=>{
+    if(answers[idx]===''){ alert('Введите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

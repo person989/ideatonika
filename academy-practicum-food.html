@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гастрономический Ранг • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', 'Times New Roman', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 800px; width: 100%; background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px); border: 2px solid #ffb74d; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ffb74d; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ffb74d; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 12px; padding: 1rem 1.5rem; cursor: pointer; color: #d0c8b8; transition: 0.2s; display: flex; align-items: center; gap: 12px; }
+        .option:hover { border-color: #ffb74d; background: rgba(255,183,77,0.1); }
+        .option.selected { border-color: #ffb74d; background: rgba(255,183,77,0.2); color: #f3e7c0; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #ffb74d; color: #ffb74d; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #ffb74d; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ffb74d; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ffb74d; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ffb74d; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>🍽️ ГАСТРОНОМИЧЕСКИЙ РАНГ</h1>
+    <div class="subtitle">10 задач • 5 вариантов • звание «Адепт»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="questionArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-practicum-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-practicum-menu.html" class="back-link">← Вернуться к темам Практики</a>
+</div>
+
+<script>
+const questions = [
+    {
+        q: "Дано: средний ранг ингредиентов = 4.0, Cₛ_повара = 0.9, K_ритуала = 1.5 (с молитвой). Чему равен итоговый ранг блюда?",
+        opts: ["Q ≈ +5.7", "Q ≈ +4.0", "Q ≈ +6.5", "Q ≈ +5.4", "Q ≈ +7.2"],
+        ans: 0
+    },
+    {
+        q: "Дано: Q_ингр = 3.5, Cₛ_повара = 0.4, K_ритуала = 1.0. Чему равен Q_блюда?",
+        opts: ["Q ≈ +2.5", "Q ≈ +3.5", "Q ≈ +1.5", "Q ≈ +4.0", "Q ≈ +2.0"],
+        ans: 0
+    },
+    {
+        q: "Дано: Q_ингр = 2.0, Cₛ_повара = 0.8, K_ритуала = 0.5 (в гневе). Чему равен Q_блюда?",
+        opts: ["Q ≈ +0.9", "Q ≈ +0.5", "Q ≈ +1.5", "Q ≈ +1.0", "Q ≈ +2.0"],
+        ans: 0
+    },
+    {
+        q: "Дано: нужно Q_блюда ≥ +5.0, Q_ингр = 4.0, Cₛ_повара = 0.7. Какой минимальный K_ритуала нужен?",
+        opts: ["K ≈ 1.2", "K ≈ 1.5", "K ≈ 2.0", "K ≈ 1.0", "K ≈ 1.8"],
+        ans: 1
+    },
+    {
+        q: "Дано: Q_блюда = +3.2, K_ритуала = 1.0, Cₛ_повара = 0.5. Чему равен средний ранг ингредиентов?",
+        opts: ["Q_ингр ≈ 5.0", "Q_ингр ≈ 4.0", "Q_ингр ≈ 4.3", "Q_ингр ≈ 3.0", "Q_ингр ≈ 2.5"],
+        ans: 2
+    },
+    {
+        q: "Дано: Q_ингр = 5.0, Cₛ_повара = 1.0 (медитация), K_ритуала = 1.5. Чему равен Q_блюда?",
+        opts: ["Q ≈ +7.5", "Q ≈ +5.0", "Q ≈ +10.0", "Q ≈ +8.5", "Q ≈ +6.0"],
+        ans: 0
+    },
+    {
+        q: "Дано: Q_ингр = 1.5 (фастфуд), Cₛ_повара = 0.2, K_ритуала = 0.8. Чему равен Q_блюда?",
+        opts: ["Q ≈ +0.7", "Q ≈ +1.5", "Q ≈ +0.3", "Q ≈ +2.0", "Q ≈ +1.0"],
+        ans: 0
+    },
+    {
+        q: "Дано: Q_ингр = 3.5, Cₛ_повара = 0.9, K_ритуала = 1.2. Чему равен Q_блюда?",
+        opts: ["Q ≈ +3.5", "Q ≈ +4.0", "Q ≈ +5.0", "Q ≈ +2.5", "Q ≈ +4.5"],
+        ans: 1
+    },
+    {
+        q: "Дано: Q_ингр = 4.5, Cₛ_повара = 0.6, K_ритуала = 0.5 (спешка). Чему равен Q_блюда?",
+        opts: ["Q ≈ +1.8", "Q ≈ +1.5", "Q ≈ +3.0", "Q ≈ +2.0", "Q ≈ +4.5"],
+        ans: 0
+    },
+    {
+        q: "Дано: Q_ингр = 2.5, Cₛ_повара = 0.5, Q_блюда = +2.5. Найти K_ритуала.",
+        opts: ["K ≈ 1.3", "K ≈ 1.5", "K ≈ 1.0", "K ≈ 2.0", "K ≈ 0.8"],
+        ans: 0
+    }
+];
+
+let idx = 0;
+let answers = Array(10).fill(null);
+
+const qArea = document.getElementById('questionArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn');
+const next = document.getElementById('nextBtn');
+
+function render() {
+    const q = questions[idx];
+    let h = `<div class="question-box"><div class="question-text">${idx+1}. ${q.q}</div><div class="options">`;
+    q.opts.forEach((opt, i) => {
+        h += `<div class="option${answers[idx]===i?' selected':''}" data-i="${i}">${opt}</div>`;
+    });
+    h += '</div></div>';
+    qArea.innerHTML = h;
+    
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            answers[idx] = parseInt(this.dataset.i);
+            render();
+        });
+    });
+    
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = (idx === 0);
+    next.textContent = (idx === 9) ? '🎉 Завершить' : 'Далее →';
+}
+
+function showResult() {
+    let correct = 0;
+    let rows = '';
+    questions.forEach((q, i) => {
+        const chosen = answers[i];
+        const isCorrect = (chosen !== null && chosen === q.ans);
+        if (isCorrect) correct++;
+        const chosenText = (chosen !== null) ? q.opts[chosen] : '—';
+        const correctText = q.opts[q.ans];
+        rows += `<tr>
+            <td>${i+1}. ${q.q.substring(0,50)}...</td>
+            <td style="color:#f3e7c0;">${chosenText}</td>
+            <td style="color:#a09080;">${correctText}</td>
+            <td class="${isCorrect?'correct':'wrong'}">${isCorrect?'✅':'❌'}</td>
+        </tr>`;
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'🍽️ Вы — Магистр Кулинарии!':pct>=70?'🔬 Отличный результат, Адепт!':pct>=50?'📐 Хорошо, но есть куда расти.':'📖 Нужно повторить Гастрономическую Таблицу.';
+    qArea.innerHTML = `<div class="result-container">
+        <div class="result-score">${pct}%</div>
+        <p style="color:#c0b090;">${comment}</p>
+        <table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table>
+        <p style="color:#a09080;">Звание: ${pct>=90?'🍽️ Магистр':pct>=70?'🔬 Адепт':pct>=50?'📐 Практик':'📖 Ученик'}</p>
+    </div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', () => { if(idx>0){ idx--; render(); } });
+next.addEventListener('click', () => {
+    if(answers[idx]===null){ alert('Выберите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантическое Время • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; justify-content: center; align-items: flex-start;
+        }
+        .main-container {
+            max-width: 800px; width: 100%;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 2px solid #ffb74d; border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { text-align: center; color: #ffb74d; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ffb74d; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option {
+            background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 12px;
+            padding: 1rem 1.5rem; cursor: pointer; color: #d0c8b8; transition: 0.2s;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .option:hover { border-color: #ffb74d; background: rgba(255,183,77,0.1); }
+        .option.selected { border-color: #ffb74d; background: rgba(255,183,77,0.2); color: #f3e7c0; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn {
+            background: transparent; border: 1.5px solid #ffb74d; color: #ffb74d;
+            padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; font-family: inherit;
+        }
+        .btn:hover { background: #ffb74d; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ffb74d; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ffb74d; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ffb74d; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>⏳ СЕМАНТИЧЕСКОЕ ВРЕМЯ</h1>
+    <div class="subtitle">10 задач • 5 вариантов • звание «Адепт»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="questionArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-practicum-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-practicum-menu.html" class="back-link">← Вернуться к темам Практики</a>
+</div>
+
+<script>
+const questions = [
+    {
+        q: "Дано: t_реальное = 60 мин, Cₛ = 0.9, dI/dt = 2 (высокий), θₜ = 0° (в будущее), κ = 0.5. Сколько минут субъективно длился процесс? (dτ/dt = 1 + κ · Cₛ · dI/dt · cos θₜ)",
+        opts: ["114 мин", "30 мин", "60 мин", "6 мин", "90 мин"],
+        correctIndex: 0
+    },
+    {
+    q: "Дано: t_реальное = 10 мин, Cₛ = 0.3, dI/dt = 1 (средний), θₜ = 180° (в прошлое), κ = 0.5. Сколько минут субъективно длился процесс?",
+    opts: ["8.5 мин", "11.5 мин", "10 мин", "5 мин", "15 мин"],
+    correctIndex: 0
+},
+    {
+        q: "Дано: t_реальное = 30 мин, Cₛ = 0.6, dI/dt = 3 (экстремальный), θₜ = 0° (в будущее). Чему равен коэффициент ускорения dτ/dt?",
+        opts: ["0.1", "1.9", "1.0", "2.8", "0.5"],
+        correctIndex: 1
+    },
+    {
+        q: "Дано: τ_субъективное = 90 мин, t_реальное = 30 мин. Во сколько раз субъективное время быстрее реального?",
+        opts: ["В 3 раза", "В 2 раза", "В 1.5 раза", "В 4 раза", "В 0.3 раза"],
+        correctIndex: 0
+    },
+    {
+    q: "Дано: t_реальное = 45 мин, нужно чтобы τ_суб = 90 мин (ускорение). Cₛ = 0.8, θₜ = 0°. Какой нужен dI/dt?",
+    opts: ["dI/dt = 3", "dI/dt = 1", "dI/dt = 2.5", "dI/dt = 4", "dI/dt = 0"],
+    correctIndex: 2
+},
+    {
+    q: "Дано: t_реальное = 5 мин, Cₛ = 0.2, dI/dt = 1, θₜ = 180° (замедление). Сколько субъективно длился процесс?",
+    opts: ["4.5 мин", "5.5 мин", "5 мин", "10 мин", "2.5 мин"],
+    correctIndex: 0
+},
+    {
+        q: "Дано: dτ/dt = 2.5, t_реальное = 20 мин. Чему равно τ_субъективное?",
+        opts: ["50 мин", "20 мин", "8 мин", "100 мин", "30 мин"],
+        correctIndex: 0
+    },
+    {
+        q: "Дано: τ_суб = 120 мин, t_реальное = 40 мин. Найти dτ/dt.",
+        opts: ["2.0", "1.0", "0.3", "3.0", "4.0"],
+        correctIndex: 3
+    },
+    {
+        q: "Дано: t_реальное = 15 мин, Cₛ = 0.5, dI/dt = 1, θₜ = 90° (в настоящее). Сколько субъективно длился процесс?",
+        opts: ["15 мин", "30 мин", "7.5 мин", "22.5 мин", "10 мин"],
+        correctIndex: 0
+    },
+    {
+        q: "Дано: t_реальное = 60 мин, Cₛ = 0.4, dI/dt = 0 (почти нет), θₜ = 180°. Сколько субъективно длился процесс?",
+        opts: ["60 мин", "120 мин", "30 мин", "90 мин", "0 мин"],
+        correctIndex: 0
+    }
+];
+
+const tasks = questions.map(q => {
+    const options = q.opts.map((text, i) => ({
+        text: text,
+        isCorrect: (i === q.correctIndex)
+    }));
+    return { question: q.q, options: options };
+});
+
+let idx = 0;
+let answers = Array(10).fill(null);
+
+const qArea = document.getElementById('questionArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn');
+const next = document.getElementById('nextBtn');
+
+function render() {
+    const t = tasks[idx];
+    let h = `<div class="question-box"><div class="question-text">${idx+1}. ${t.question}</div><div class="options">`;
+    t.options.forEach((opt, i) => {
+        h += `<div class="option${answers[idx]===i?' selected':''}" data-i="${i}">${opt.text}</div>`;
+    });
+    h += '</div></div>';
+    qArea.innerHTML = h;
+    
+    document.querySelectorAll('.option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            answers[idx] = parseInt(this.dataset.i);
+            render();
+        });
+    });
+    
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = (idx === 0);
+    next.textContent = (idx === 9) ? '🎉 Завершить' : 'Далее →';
+}
+
+function showResult() {
+    let correct = 0;
+    let rows = '';
+    tasks.forEach((t, i) => {
+        const chosen = answers[i];
+        const isCorrect = (chosen !== null && t.options[chosen].isCorrect);
+        if (isCorrect) correct++;
+        const chosenText = (chosen !== null) ? t.options[chosen].text : '—';
+        const correctOption = t.options.find(opt => opt.isCorrect);
+        const correctText = correctOption ? correctOption.text : '';
+        rows += `<tr>
+            <td>${i+1}. ${t.question.substring(0,50)}...</td>
+            <td style="color:#f3e7c0;">${chosenText}</td>
+            <td style="color:#a09080;">${correctText}</td>
+            <td class="${isCorrect?'correct':'wrong'}">${isCorrect?'✅':'❌'}</td>
+        </tr>`;
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'⏳ Вы — Хрономастер!':pct>=70?'🔬 Отличный результат, Адепт!':pct>=50?'📐 Хорошо, но есть куда расти.':'📖 Нужно повторить Хроносемантику.';
+    qArea.innerHTML = `<div class="result-container">
+        <div class="result-score">${pct}%</div>
+        <p style="color:#c0b090;">${comment}</p>
+        <table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table>
+        <p style="color:#a09080;">Звание: ${pct>=90?'⏳ Магистр':pct>=70?'🔬 Адепт':pct>=50?'📐 Практик':'📖 Ученик'}</p>
+    </div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', () => { if(idx>0){ idx--; render(); } });
+next.addEventListener('click', () => {
+    if(answers[idx]===null){ alert('Выберите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

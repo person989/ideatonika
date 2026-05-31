@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантическая цепь • Основы Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 800px; width: 100%; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 2px solid #81c784; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #81c784; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #81c784; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.2rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option { background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 12px; padding: 1rem 1.5rem; cursor: pointer; color: #d0c8b8; transition: 0.2s; display: flex; align-items: center; gap: 12px; }
+        .option:hover { border-color: #81c784; background: rgba(129,199,132,0.1); }
+        .option.selected { border-color: #81c784; background: rgba(129,199,132,0.2); color: #f3e7c0; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #81c784; color: #81c784; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #81c784; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #81c784; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #81c784; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #81c784; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>⚡ СЕМАНТИЧЕСКАЯ ЦЕПЬ</h1>
+    <div class="subtitle">10 вопросов • 5 вариантов • Основы Идеатоники</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="questionArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-basics-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-basics-menu.html" class="back-link">← Вернуться к списку тем</a>
+</div>
+
+<script>
+const questions = [
+    { q: "Что такое семантическое напряжение U_sense?", opts: ["Разность семантических потенциалов", "Скорость потока Qₛ", "Температура поля", "Масса объекта", "Частота колебаний"], ans: 0 },
+    { q: "В каких единицах измеряется семантический ток I_Q?", opts: ["Вольты смысла", "Омы смысла", "Амперы смысла", "Ватты смысла", "Герцы смысла"], ans: 2 },
+    { q: "Что такое семантическое сопротивление R_sense?", opts: ["Способность накапливать Qₛ", "Мера противодействия потоку Qₛ", "Скорость передачи Qₛ", "Сила мысли", "Частота резонанса"], ans: 1 },
+    { q: "Как звучит закон Ома для семантической цепи?", opts: ["I_Q = U_sense · R_sense", "I_Q = U_sense / R_sense", "I_Q = U_sense + R_sense", "I_Q = R_sense / U_sense", "I_Q = U_sense — R_sense"], ans: 1 },
+    { q: "Что такое смыслопроводимость σ_sense?", opts: ["Величина, обратная сопротивлению", "Способность накапливать заряд", "Мера хаотичности поля", "Скорость времени", "Температура среды"], ans: 0 },
+    { q: "Какой материал является лучшим проводником Qₛ?", opts: ["Пластик", "Бетон", "Серебро (освящённое)", "Дерево", "Вода"], ans: 2 },
+    { q: "Что происходит с током I_Q при увеличении сопротивления R_sense?", opts: ["Ток увеличивается", "Ток уменьшается", "Ток не меняется", "Ток становится бесконечным", "Ток меняет направление"], ans: 1 },
+    { q: "В каких единицах измеряется семантическая мощность P_sense?", opts: ["Амперы смысла", "Вольты смысла", "Омы смысла", "Ватты смысла", "Герцы смысла"], ans: 3 },
+    { q: "Что такое смыслоёмкость C_sense?", opts: ["Способность проводить Qₛ", "Способность накапливать Qₛ", "Мера инерции поля", "Частота резонанса", "Скорость передачи"], ans: 1 },
+    { q: "Какой материал является изолятором (плохим проводником) Qₛ?", opts: ["Серебро", "Медь", "Шунгит", "Пластик", "Святая вода"], ans: 3 }
+];
+
+let idx = 0, answers = Array(10).fill(null);
+const qArea = document.getElementById('questionArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn'), next = document.getElementById('nextBtn');
+
+function render() {
+    const q = questions[idx];
+    let h = `<div class="question-box"><div class="question-text">${idx+1}. ${q.q}</div><div class="options">`;
+    q.opts.forEach((o, i) => {
+        h += `<div class="option${answers[idx]===i?' selected':''}" data-i="${i}">${o}</div>`;
+    });
+    h += '</div></div>';
+    qArea.innerHTML = h;
+    document.querySelectorAll('.option').forEach(o => o.addEventListener('click', function(){
+        answers[idx] = parseInt(this.dataset.i);
+        render();
+    }));
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = idx===0;
+    next.textContent = idx===9 ? '🎉 Завершить' : 'Далее →';
+}
+
+function showResult() {
+    let correct=0, rows='';
+    questions.forEach((q,i)=>{
+        const ok = answers[i]===q.ans;
+        if(ok) correct++;
+        rows += `<tr><td>${i+1}. ${q.q.substring(0,70)}...</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'⚡ Вы — Мастер Цепей!':pct>=70?'👍 Хорошее понимание цепи!':pct>=50?'📖 Есть куда расти.': '🌱 Повторите §83-86 Учебника.';
+    qArea.innerHTML = `<div class="result-container"><div class="result-score">${pct}%</div><p style="color:#c0b090;">${comment}</p><table class="result-table"><tr><th>Вопрос</th><th>Результат</th></tr>${rows}</table><p style="color:#a09080;">Звание: ${pct>=90?'⚡ Электротехник Смысла':pct>=70?'🔌 Проводник':pct>=50?'📖 Ученик Цепи':'🌱 Новобранец'}</p></div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', ()=>{ if(idx>0){idx--; render();} });
+next.addEventListener('click', ()=>{
+    if(answers[idx]===null){ alert('Выберите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>

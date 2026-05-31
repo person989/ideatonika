@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Идеальное меню • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 900px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+        .menu-card { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1.5rem; border: 1px solid #5d4a3a; text-align: center; }
+        .menu-card h3 { color: #ffd54f; font-size: 1.3rem; margin-bottom: 1rem; }
+        .menu-item { color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; padding: 0.5rem; background: rgba(255,215,80,0.05); border-radius: 8px; }
+        .menu-item .rank { color: #ffd54f; font-weight: bold; float: right; }
+        .total-rank { text-align: center; margin-top: 2rem; font-size: 1.8rem; color: #ffd54f; font-weight: bold; }
+        .total-rank span { font-size: 2.5rem; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 0.5rem; text-align: center; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🍽️ Идеальное меню</h1>
+    <div class="subtitle">Персональный семантический диетолог (§122, Гастрономическая Таблица)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваши параметры</div>
+
+        <div class="input-group">
+            <label>🎯 Текущая когерентность (Cₛ): <span id="csValue">0.6</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (туман)</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🌡️ Семантическая температура (Tₛ): <span id="tsValue">5.0</span></label>
+            <input type="range" id="tsSlider" min="0" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>0 (лёд, апатия)</span><span>5 (оптимум)</span><span>10 (перегрев)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>☀️ Текущий Qₛ: <span id="qsValue">3</span></label>
+            <input type="range" id="qsSlider" min="-5" max="10" value="3" step="0.5">
+            <div class="range-labels"><span>-5 (истощён)</span><span>+10 (сияю)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🎯 Цель на день:</label>
+            <select id="goalSelect">
+                <option value="energy">⚡ Взбодриться, энергия, драйв</option>
+                <option value="calm" selected>😌 Успокоиться, снять стресс</option>
+                <option value="focus">🎯 Максимальная концентрация</option>
+                <option value="heal">💚 Восстановление, исцеление</option>
+                <option value="joy">🌟 Радость, творчество, вдохновение</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Меню -->
+    <div class="menu-grid" id="menuGrid"></div>
+
+    <div class="total-rank" id="totalRank"></div>
+    <div class="result-formula" id="resultFormula"></div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    // ========== БАЗА БЛЮД ==========
+    const breakfastDB = [
+        { name: 'Каша овсяная с ягодами и мёдом', rank: 5, effect: '↑Cₛ, заземление', bestFor: ['calm', 'focus', 'heal'] },
+        { name: 'Омлет с зеленью и сыром', rank: 4, effect: '↑Энергия, бодрость', bestFor: ['energy', 'joy'] },
+        { name: 'Смузи зелёный (шпинат, банан, яблоко)', rank: 5, effect: '↑Qₛ, очищение', bestFor: ['energy', 'heal'] },
+        { name: 'Творог с мёдом и орехами', rank: 5, effect: '↑Cₛ, сытость', bestFor: ['focus', 'calm'] },
+        { name: 'Блинчики с ягодами', rank: 3, effect: 'Радость, удовольствие', bestFor: ['joy'] },
+        { name: 'Яйцо пашот с авокадо', rank: 4, effect: 'Энергия, лёгкость', bestFor: ['energy', 'focus'] },
+        { name: 'Хлеб на закваске с маслом и сыром', rank: 3, effect: 'Заземление, уют', bestFor: ['calm'] },
+        { name: 'Фруктовый салат с мёдом', rank: 5, effect: 'Радость, витамины', bestFor: ['joy', 'heal'] }
+    ];
+
+    const lunchDB = [
+        { name: 'Суп-пюре из тыквы', rank: 5, effect: 'Согревает, успокаивает', bestFor: ['calm', 'heal'] },
+        { name: 'Греческий салат', rank: 5, effect: 'Свежесть, гармония', bestFor: ['energy', 'joy'] },
+        { name: 'Борщ домашний', rank: 5, effect: 'Сила рода, заземление', bestFor: ['calm', 'heal'] },
+        { name: 'Ризотто с грибами', rank: 4, effect: 'Медитативность, сытость', bestFor: ['focus'] },
+        { name: 'Курица запечённая с овощами', rank: 4, effect: 'Энергия, восстановление', bestFor: ['energy', 'heal'] },
+        { name: 'Паста с томатным соусом и базиликом', rank: 4, effect: 'Радость, творчество', bestFor: ['joy'] },
+        { name: 'Стейк из лосося с киноа', rank: 4, effect: 'Концентрация, Омега-3', bestFor: ['focus', 'energy'] },
+        { name: 'Овощное рагу', rank: 5, effect: 'Очищение, лёгкость', bestFor: ['calm', 'heal'] }
+    ];
+
+    const dinnerDB = [
+        { name: 'Травяной чай с мёдом и лимоном', rank: 6, effect: 'Успокоение, подготовка ко сну', bestFor: ['calm', 'heal'] },
+        { name: 'Кефир с зеленью и огурцом', rank: 3, effect: 'Очищение, пробиотики', bestFor: ['heal'] },
+        { name: 'Запечённые яблоки с корицей', rank: 6, effect: 'Тепло, уют, мелатонин', bestFor: ['calm', 'joy'] },
+        { name: 'Омлет с травами (лёгкий)', rank: 4, effect: 'Лёгкий белок, восстановление', bestFor: ['heal', 'energy'] },
+        { name: 'Чечевичный суп', rank: 4, effect: 'Заземление, сытость', bestFor: ['calm', 'focus'] },
+        { name: 'Тосты с авокадо и помидорами', rank: 3, effect: 'Лёгкость, быстрый ужин', bestFor: ['energy'] },
+        { name: 'Творожная запеканка', rank: 4, effect: 'Триптофан, спокойный сон', bestFor: ['calm', 'heal'] },
+        { name: 'Чай с имбирём и мёдом', rank: 5, effect: 'Согревание, иммунитет', bestFor: ['heal', 'focus'] }
+    ];
+
+    function pickBest(dishes, goal, count) {
+        const scored = dishes.map(d => ({
+            ...d,
+            score: d.bestFor.includes(goal) ? 2 : 1
+        }));
+        scored.sort((a, b) => b.score - a.score || b.rank - a.rank);
+        return scored.slice(0, count);
+    }
+
+    function updateMenu() {
+        const C = parseFloat(document.getElementById('csSlider').value);
+        const T = parseFloat(document.getElementById('tsSlider').value);
+        const Q = parseFloat(document.getElementById('qsSlider').value);
+        const goal = document.getElementById('goalSelect').value;
+
+        // Бонус к рангу от состояния
+        const stateBonus = (C - 0.5) * 0.5; // ±0.25
+
+        const breakfast = pickBest(breakfastDB, goal, 2);
+        const lunch = pickBest(lunchDB, goal, 2);
+        const dinner = pickBest(dinnerDB, goal, 2);
+
+        let html = '';
+
+        html += '<div class="menu-card"><h3>🌅 Завтрак</h3>';
+        breakfast.forEach(d => {
+            const finalRank = Math.round((d.rank + stateBonus) * 10) / 10;
+            html += `<div class="menu-item">${d.name} <span class="rank">${finalRank >= 0 ? '+' : ''}${finalRank.toFixed(1)}</span></div>`;
+        });
+        html += '</div>';
+
+        html += '<div class="menu-card"><h3>☀️ Обед</h3>';
+        lunch.forEach(d => {
+            const finalRank = Math.round((d.rank + stateBonus) * 10) / 10;
+            html += `<div class="menu-item">${d.name} <span class="rank">${finalRank >= 0 ? '+' : ''}${finalRank.toFixed(1)}</span></div>`;
+        });
+        html += '</div>';
+
+        html += '<div class="menu-card"><h3>🌙 Ужин</h3>';
+        dinner.forEach(d => {
+            const finalRank = Math.round((d.rank + stateBonus) * 10) / 10;
+            html += `<div class="menu-item">${d.name} <span class="rank">${finalRank >= 0 ? '+' : ''}${finalRank.toFixed(1)}</span></div>`;
+        });
+        html += '</div>';
+
+        document.getElementById('menuGrid').innerHTML = html;
+
+        const allRanks = [...breakfast, ...lunch, ...dinner].map(d => d.rank + stateBonus);
+        const avgRank = allRanks.reduce((a, b) => a + b, 0) / allRanks.length;
+        const rounded = Math.round(avgRank * 10) / 10;
+
+        document.getElementById('totalRank').innerHTML = `🍽️ Средний ранг дневного меню: <span>${rounded >= 0 ? '+' : ''}${rounded.toFixed(1)}</span>`;
+        document.getElementById('resultFormula').textContent = `Ранги блюд скорректированы на вашу Cₛ=${C.toFixed(2)} (бонус: ${stateBonus >= 0 ? '+' : ''}${stateBonus.toFixed(2)})`;
+    }
+
+    document.getElementById('csSlider').addEventListener('input', function() {
+        document.getElementById('csValue').textContent = parseFloat(this.value).toFixed(2);
+        updateMenu();
+    });
+    document.getElementById('tsSlider').addEventListener('input', function() {
+        document.getElementById('tsValue').textContent = parseFloat(this.value).toFixed(1);
+        updateMenu();
+    });
+    document.getElementById('qsSlider').addEventListener('input', function() {
+        document.getElementById('qsValue').textContent = parseFloat(this.value).toFixed(1);
+        updateMenu();
+    });
+    document.getElementById('goalSelect').addEventListener('change', updateMenu);
+
+    updateMenu();
+</script>
+
+</body>
+</html>

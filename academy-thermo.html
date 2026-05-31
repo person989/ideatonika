@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантическая термодинамика • Академия Идеатоники</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; justify-content: center; align-items: flex-start; }
+        .main-container { max-width: 850px; width: 100%; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 2px solid #ce93d8; border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #ce93d8; font-size: 2.5rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ce93d8; border-radius: 3px; width: 0%; transition: width 0.3s; }
+        .task-box { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; border: 1px solid #5d4a3a; }
+        .task-title { color: #ce93d8; font-size: 1.3rem; margin-bottom: 1rem; }
+        .task-text { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; white-space: pre-line; }
+        .task-input { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .task-input::placeholder { color: #706858; font-style: italic; }
+        .hint { color: #a09080; font-size: 0.85rem; margin-top: 0.5rem; font-style: italic; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 10px; }
+        .btn { background: transparent; border: 1.5px solid #ce93d8; color: #ce93d8; padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px; cursor: pointer; font-family: inherit; }
+        .btn:hover { background: #ce93d8; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; color: #ce93d8; font-weight: bold; }
+        .result-table { width: 100%; margin: 2rem 0; border-collapse: collapse; }
+        .result-table th, .result-table td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: left; }
+        .result-table th { background: #2a2a4a; color: #ce93d8; }
+        .correct { color: #81c784; } .wrong { color: #ef5350; }
+        .hidden { display: none; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="main-container" id="quizContainer">
+    <h1>🌡️ СЕМАНТИЧЕСКАЯ ТЕРМОДИНАМИКА</h1>
+    <div class="subtitle">10 задач • числовой ответ • звание «Магистр»</div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div id="taskArea"></div>
+    <div class="nav-buttons">
+        <button class="btn" id="prevBtn" disabled>← Назад</button>
+        <button class="btn" id="exitBtn" onclick="window.location.href='academy-magistr-menu.html'">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <a href="academy-magistr-menu.html" class="back-link">← Вернуться к темам Магистра</a>
+</div>
+
+<script>
+const tasks = [
+    {
+        title: "Задача №1. Теплота нереализованного страха",
+        text: "Дано: Qₛ_страх = 8, Cₛ_страх = 0.95, КПД действия η = 0 (страх не перешёл в действие), коэффициент α = 0.5.\nНа сколько градусов Цельсия повысится семантическая температура Tₛ тела? Ответ округлите до десятых.",
+        answer: "3.8"
+    },
+    {
+        title: "Задача №2. Остывание после адреналинового шторма",
+        text: "Дано: начальная Tₛ = 8.5, комнатная T_комн = 5.0, время t = 30 мин, постоянная времени τ_ост = 20 мин.\nЧему равна Tₛ через 30 минут? Ответ округлите до десятых.",
+        answer: "5.8"
+    },
+    {
+        title: "Задача №3. Семантическая теплоёмкость",
+        text: "Дано: чтобы нагреть гранитный блок на ΔT_sense = 2°, потребовалось Qₛ = 1600 ед. Объём блока V = 100 м³.\nЧему равна удельная теплоёмкость c_sense (на единицу объёма)? Ответ округлите до целых.",
+        answer: "8"
+    },
+    {
+        title: "Задача №4. Свободная энергия",
+        text: "Дано: внутренняя энергия U_sense = 500 Дж, T_sense = 6, S_sense = 40.\nЧему равна свободная энергия F_sense? Ответ округлите до целых.",
+        answer: "260"
+    },
+    {
+        title: "Задача №5. Рост энтропии при конфликте",
+        text: "Дано: начальная энтропия S₁ = 10, после ссоры S₂ = 45, T_sense = 5.\nСколько семантической энергии ΔQₛ «связалось» в хаосе? Ответ округлите до целых.",
+        answer: "175"
+    },
+    {
+        title: "Задача №6. Семантическая энтальпия",
+        text: "Дано: U_sense = 300 Дж, P_sense = 20 Па, V_sense = 5 м³.\nЧему равна энтальпия H_sense? Ответ округлите до целых.",
+        answer: "400"
+    },
+    {
+        title: "Задача №7. Теплопроводность и тепловой поток",
+        text: "Дано: k_sense = 4 (вода), градиент температуры ∇T = 2 К/м.\nЧему равна плотность теплового потока J_Q_heat? Ответ округлите до целых.",
+        answer: "8"
+    },
+    {
+        title: "Задача №8. Температуропроводность",
+        text: "Дано: k_sense = 4, ρ = 1000, c_sense = 4.\nЧему равен коэффициент температуропроводности α_sense? Ответ: введите число (десятичную дробь).",
+        answer: "0.001"
+    },
+    {
+        title: "Задача №9. Время выравнивания температуры",
+        text: "Дано: комната прогрелась с T_нач = 2 до T_кон = 5 при T_обогревателя = 10. Постоянная времени τ = 30 мин.\nСколько минут потребовалось на нагрев? Выразите t.\nОтвет округлите до целых.",
+        answer: "14"
+    },
+    {
+        title: "Задача №10. КПД семантического двигателя",
+        text: "Дано: горячий источник T_hot = 10, холодный сток T_cold = 3.\nЧему равен максимальный теоретический КПД (в процентах). Ответ округлите до целых.",
+        answer: "70"
+    }
+];
+
+let idx = 0, answers = Array(10).fill('');
+const tArea = document.getElementById('taskArea');
+const pf = document.getElementById('progressFill');
+const prev = document.getElementById('prevBtn'), next = document.getElementById('nextBtn');
+
+function render() {
+    const t = tasks[idx];
+    let h = `<div class="task-box"><div class="task-title">${t.title}</div><div class="task-text">${t.text}</div>`;
+    h += `<input type="text" class="task-input" id="answerInput" placeholder="Введите числовой ответ..." value="${answers[idx]}">`;
+    h += `<div class="hint">💡 Введите только число (целое или десятичную дробь).</div>`;
+    h += '</div>';
+    tArea.innerHTML = h;
+    document.getElementById('answerInput').addEventListener('input', function(){
+        answers[idx] = this.value.trim();
+    });
+    pf.style.width = ((idx+1)/10*100)+'%';
+    prev.disabled = idx===0;
+    next.textContent = idx===9 ? '🎉 Завершить' : 'Далее →';
+    if(idx===9) document.getElementById('answerInput').focus();
+}
+
+function toNumber(str) {
+    return parseFloat(str.replace(',', '.').trim());
+}
+
+function showResult() {
+    let correct=0, rows='';
+    tasks.forEach((t,i)=>{
+        const userNum = toNumber(answers[i]);
+        const realNum = toNumber(t.answer);
+        const ok = !isNaN(userNum) && Math.abs(userNum - realNum) < 0.015;
+        if(ok) correct++;
+        rows += `<tr><td>${t.title}</td><td style="color:#f3e7c0;">${answers[i]||'—'}</td><td style="color:#a09080;">${t.answer}</td><td class="${ok?'correct':'wrong'}">${ok?'✅':'❌'}</td></tr>`;
+    });
+    const pct = Math.round(correct/10*100);
+    let comment = pct>=90?'🌡️ Вы — Магистр Термодинамики!':pct>=70?'📚 Отличный результат, Адепт.':pct>=40?'🔬 Неплохо, но есть куда расти.':'🌱 Термодинамика требует практики.';
+    tArea.innerHTML = `<div class="result-container"><div class="result-score">${pct}%</div><p style="color:#c0b090;">${comment}</p><table class="result-table"><tr><th>Задача</th><th>Ваш ответ</th><th>Правильный</th><th>Результат</th></tr>${rows}</table><p style="color:#a09080;">Звание: ${pct>=90?'🌡️ Магистр':pct>=70?'📚 Адепт':pct>=40?'🔬 Практик':'🌱 Неофит'}</p></div>`;
+    document.querySelector('.nav-buttons').classList.add('hidden');
+}
+
+prev.addEventListener('click', ()=>{ if(idx>0){ idx--; render(); } });
+next.addEventListener('click', ()=>{
+    if(answers[idx]===''){ alert('Введите ответ!'); return; }
+    if(idx<9){ idx++; render(); } else showResult();
+});
+render();
+</script>
+</body>
+</html>
