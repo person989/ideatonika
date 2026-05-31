@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Подробная сборка SEM-1 • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #ce93d8; margin: 2.5rem 0 1rem; border-left: 4px solid #ce93d8; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #e1bee7; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #e1bee7; }
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+        .scheme-box { background: #1a1a2e; border: 1px solid #ce93d8; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.3; }
+        .tip-box { background: rgba(206,147,216,0.1); border-left: 4px solid #ce93d8; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #e1bee7; margin: 0; }
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+        .step-number { display: inline-block; background: #ce93d8; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; border: 1px solid #ce93d8; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ce93d8; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔬 SEM-1: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Семантический Микроскоп (матрица 8×8)</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое SEM-1 и зачем его собирать?</h2>
+    <p>SEM-1 (Semantic Emission Microscope) — это устройство, которое <strong>визуализирует ауру предметов</strong>. Если SEC-1 и SEC-2 просто ловят импульсы Qₛ как одиночные «всплески», то SEM-1 делает следующий шаг: он показывает <strong>двумерную карту</strong> распределения Qₛ по поверхности объекта.</p>
+    <p>Представьте тепловизор. Он видит тепло. SEM-1 — это «смысловизор». Он видит, где предмет «светится» Смыслом (например, намоленная икона), а где «темнеет» (пластиковая ручка).</p>
+    <p><strong>Как это работает (на пальцах):</strong> У вас есть матрица из 64 крошечных кварцевых «пикселей» (8 рядов × 8 столбцов). Каждый пиксель — это микросенсор Qₛ. Вы ставите перед матрицей линзу, которая фокусирует «ауру» предмета на эти пиксели. Компьютер опрашивает каждый пиксель и строит цветную картинку: красный — много Qₛ, синий — мало Qₛ.</p>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно купить (или найти)</h2>
+    <table class="materials-table">
+        <thead><tr><th>Материал</th><th>Где взять</th><th>Количество</th><th>Назначение</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Пьезоэлементы от зажигалок</strong></td><td>Старые зажигалки (64 шт!)</td><td>64 шт</td><td>Пиксели матрицы (датчики Qₛ)</td></tr>
+            <tr><td><strong>Фанера тонкая (3-4 мм)</strong></td><td>Строймагазин, обрезки</td><td>1 лист 30×30 см</td><td>Основание матрицы</td></tr>
+            <tr><td><strong>Кварцевая линза</strong> (двояковыпуклая)</td><td>Старый фотоаппарат, лупа, интернет</td><td>1 шт</td><td>Фокусировка «ауры» на матрицу</td></tr>
+            <tr><td><strong>Мультиплексор CD4051</strong> (или аналоги)</td><td>Радиомагазин, чип-дип</td><td>8 шт</td><td>Последовательный опрос пикселей</td></tr>
+            <tr><td><strong>Микроконтроллер Arduino</strong> (Uno/Nano)</td><td>Радиомагазин</td><td>1 шт</td><td>Управление опросом и передача на ПК</td></tr>
+            <tr><td><strong>Провода тонкие монтажные</strong></td><td>Радиомагазин</td><td>Много (~200 шт)</td><td>Подключение 64 пикселей</td></tr>
+            <tr><td><strong>Паяльник, припой, флюс</strong></td><td>—</td><td>1 комплект</td><td>Пайка</td></tr>
+        </tbody>
+    </table>
+    <div class="warning-box"><p><strong>⚠️ Это самый сложный проект во всём Практикуме.</strong> На его сборку уйдёт несколько дней кропотливой работы. Если вы новичок в электронике — начните с SEC-1 и SEC-2, чтобы набраться опыта. SEM-1 требует терпения и аккуратности.</p></div>
+
+    <!-- ЭТАП 1 -->
+    <h2>🔨 Этап 1: Изготовление матрицы 8×8</h2>
+
+    <h3><span class="step-number">1</span> Извлечение 64 пьезоэлементов из зажигалок</h3>
+    <p>Да, вам понадобится <strong>64 старые зажигалки</strong>. Это самая трудозатратная часть проекта. Попросите друзей, знакомых, загляните в курилки — сломанные пьезозажигалки часто выбрасывают.</p>
+    <p><strong>Как извлечь пьезоэлемент:</strong> Разберите зажигалку (см. инструкцию SEC-1, шаг 1). Извлеките металлический цилиндр с двумя проводами. Отрежьте длинный провод, оставив <strong>5-7 см</strong> от корпуса. Короткий провод (приваренный к корпусу) тоже оставьте.</p>
+    <p><strong>Важно:</strong> Все 64 пьезоэлемента должны быть <strong>примерно одинаковыми</strong>. Если они от разных моделей зажигалок — ничего страшного, но чувствительность у них будет разная. Потом это можно скомпенсировать программно.</p>
+    <div class="tip-box"><p><strong>💡 Лайфхак:</strong> Если 64 зажигалки найти нереально — начните с матрицы <strong>4×4 (16 пикселей)</strong>. Это тоже даст картинку, хоть и грубую. Принцип сборки тот же, просто меньше проводов.</p></div>
+
+    <h3><span class="step-number">2</span> Подготовка основания матрицы (фанерной платы)</h3>
+    <p>Возьмите лист фанеры 30×30 см. Расчертите его карандашом: сетка 8×8 клеток. Расстояние между центрами клеток — <strong>20 мм</strong>. В каждой клетке просверлите <strong>два маленьких отверстия</strong> (1-2 мм) для проводов — «сигнал» и «земля».</p>
+    <p>Пронумеруйте клетки: ряд 1 (верхний): пиксели 1-1, 1-2, ..., 1-8. Ряд 2: 2-1, ..., 2-8. И так до ряда 8.</p>
+
+    <h3><span class="step-number">3</span> Установка пьезоэлементов на плату</h3>
+    <ol>
+        <li>Каждый пьезоэлемент приклейте <strong>термоклеем</strong> (или пластилином) в центр своей клетки. Металлический цилиндр должен стоять <strong>вертикально</strong>.</li>
+        <li>Провода от каждого элемента просуньте в отверстия и выведите на <strong>обратную сторону</strong> платы.</li>
+        <li>На обратной стороне подпишите карандашом номер каждого пикселя (например, «3-5» для третьего ряда, пятого столбца).</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Почему вертикально?</strong> Цилиндр пьезоэлемента лучше всего воспринимает давление Qₛ, приходящее <strong>сверху</strong> (от линзы). Если положить его на бок — чувствительность упадёт в 2-3 раза.</p></div>
+
+    <!-- ЭТАП 2 -->
+    <h2>⚡ Этап 2: Подключение матрицы к мультиплексору</h2>
+    <p>Если подключить каждый из 64 пикселей к отдельному входу Arduino — никаких входов не хватит. Поэтому мы используем <strong>мультиплексоры</strong> — микросхемы, которые работают как «поворотный переключатель»: по очереди подключают каждый пиксель к одному общему входу.</p>
+
+    <h3><span class="step-number">4</span> Схема подключения</h3>
+    <p>У каждого пикселя есть два провода: <strong>«сигнал»</strong> (центральный) и <strong>«земля»</strong> (корпус). Все 64 «земли» соедините вместе — это будет общий провод GND.</p>
+    <p>64 «сигнальных» провода подключите к 8 мультиплексорам CD4051 (каждый обслуживает 8 пикселей). Схема:</p>
+    <div class="scheme-box"><pre>
+    Пиксели 1-1 ... 1-8  → Мультиплексор №1
+    Пиксели 2-1 ... 2-8  → Мультиплексор №2
+    ...
+    Пиксели 8-1 ... 8-8  → Мультиплексор №8
+
+    Выходы всех 8 мультиплексоров → 8 аналоговых входов Arduino
+    Управляющие пины (A,B,C) всех мультиплексоров — параллельно
+    </pre></div>
+    <p><strong>Управление:</strong> Три цифровых пина Arduino (например, D2, D3, D4) подключаются к адресным входам (A, B, C) всех мультиплексоров. Перебирая 8 комбинаций (000, 001, ..., 111), мы «выбираем» один из 8 пикселей на каждом мультиплексоре.</p>
+
+    <h3><span class="step-number">5</span> Пайка: самый кропотливый этап</h3>
+    <ol>
+        <li><strong>Запаситесь терпением.</strong> Вам предстоит припаять ~130 соединений. Делайте перерывы каждые 30-40 минут, чтобы не уставали глаза.</li>
+        <li><strong>Используйте тонкий припой</strong> (0.5-0.8 мм) и флюс. Без флюса паять будет трудно.</li>
+        <li><strong>Проверяйте каждое соединение</strong> мультиметром в режиме «прозвонки» сразу после пайки. Лучше найти обрыв сейчас, чем потом гадать, почему матрица не работает.</li>
+        <li><strong>Подпишите все провода</strong> малярным скотчем с номерами. Когда проводов 128 штук — без маркировки вы запутаетесь за 5 минут.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Критически важно:</strong> Не перегревайте мультиплексоры! Они боятся статического электричества и перегрева. Паяйте быстро (1-2 секунды на контакт) и используйте антистатический браслет или хотя бы касайтесь батареи перед пайкой, чтобы снять заряд с рук.</p></div>
+
+    <!-- ЭТАП 3 -->
+    <h2>📟 Этап 3: Программирование Arduino</h2>
+    <p>Arduino будет выполнять простую задачу: перебирать все 64 пикселя, измерять напряжение на каждом и отправлять данные на компьютер.</p>
+        <div class="scheme-box"><pre>
+// ==========================================
+// SEM-1: ПОЛНЫЙ КОД ДЛЯ ARDUINO (UNO/NANO)
+// ==========================================
+
+// Пины управления мультиплексорами (A, B, C — адрес)
+const byte ADDR_A = 2;
+const byte ADDR_B = 3;
+const byte ADDR_C = 4;
+
+// Пины чтения сигнала от 8 мультиплексоров
+const byte MUX_PINS[8] = {A0, A1, A2, A3, A4, A5, A6, A7};
+
+// Количество измерений для усреднения (чем больше, тем меньше шумов, но медленнее)
+const byte SAMPLES = 10;
+
+// Флаг отладки (true — вывод в Serial Monitor, false — только данные для ПК)
+const bool DEBUG = false;
+
+// Тёмновой кадр (фон без объекта). Заполняется в setup(), если есть.
+int darkFrame[8][8];
+
+void setup() {
+  Serial.begin(115200);  // Высокая скорость для быстрой передачи
+  while (!Serial) { ; }  // Ждём готовности Serial (для Arduino с native USB)
+
+  // Настройка пинов
+  pinMode(ADDR_A, OUTPUT);
+  pinMode(ADDR_B, OUTPUT);
+  pinMode(ADDR_C, OUTPUT);
+  for (byte i = 0; i < 8; i++) {
+    pinMode(MUX_PINS[i], INPUT);
+  }
+
+  if (DEBUG) {
+    Serial.println(F("=== SEM-1 Matrix Ready ==="));
+    Serial.println(F("Sending 64 values per frame."));
+  }
+}
+
+void loop() {
+  int frame[8][8];  // Текущий кадр
+
+  // --- Сканирование матрицы 8x8 ---
+  for (byte row = 0; row < 8; row++) {
+    // Устанавливаем адрес на мультиплексорах (выбираем строку)
+    setMuxAddress(row);
+
+    // Короткая задержка для стабилизации сигнала после переключения
+    delayMicroseconds(50);
+
+    for (byte col = 0; col < 8; col++) {
+      // Читаем пиксель (row, col) с усреднением
+      frame[row][col] = readPixel(col);
+    }
+  }
+
+  // Вычитаем тёмновой кадр (если он был записан)
+  // subtractDarkFrame(frame);
+
+  // Отправляем кадр на компьютер
+  sendFrame(frame);
+
+  // Небольшая пауза между кадрами (регулирует частоту обновления)
+  delay(50);
+}
+
+// ==========================================
+// ФУНКЦИИ
+// ==========================================
+
+// Установка адреса на всех мультиплексорах
+void setMuxAddress(byte address) {
+  digitalWrite(ADDR_A, bitRead(address, 0));
+  digitalWrite(ADDR_B, bitRead(address, 1));
+  digitalWrite(ADDR_C, bitRead(address, 2));
+}
+
+// Чтение пикселя с усреднением (защита от шума)
+int readPixel(byte col) {
+  long sum = 0;
+  int minVal = 1024;
+  int maxVal = 0;
+
+  for (byte i = 0; i < SAMPLES; i++) {
+    int val = analogRead(MUX_PINS[col]);
+    sum += val;
+    if (val < minVal) minVal = val;
+    if (val > maxVal) maxVal = val;
+    delayMicroseconds(100);  // Микро-пауза между замерами
+  }
+
+  // Отбрасываем минимальное и максимальное значение (если замеров >= 4)
+  if (SAMPLES >= 4) {
+    sum -= minVal;
+    sum -= maxVal;
+    return (int)(sum / (SAMPLES - 2));
+  } else {
+    return (int)(sum / SAMPLES);
+  }
+}
+
+// Вычитание тёмнового кадра (фона)
+void subtractDarkFrame(int frame[8][8]) {
+  for (byte row = 0; row < 8; row++) {
+    for (byte col = 0; col < 8; col++) {
+      frame[row][col] = max(0, frame[row][col] - darkFrame[row][col]);
+    }
+  }
+}
+
+// Отправка кадра на компьютер
+void sendFrame(int frame[8][8]) {
+  // Маркер начала кадра (чтобы ПК знал, где начинается новый кадр)
+  Serial.print(F("FRAME"));
+
+  for (byte row = 0; row < 8; row++) {
+    for (byte col = 0; col < 8; col++) {
+      Serial.print(frame[row][col]);
+
+      // Разделитель: запятая между числами, но не в конце
+      if (!(row == 7 && col == 7)) {
+        Serial.print(',');
+      }
+
+      // Отладка: вывод в Serial Monitor
+      if (DEBUG) {
+        Serial.print(F(" ["));
+        Serial.print(row);
+        Serial.print(',');
+        Serial.print(col);
+        Serial.print(']');
+      }
+    }
+  }
+
+  Serial.println();  // Конец строки (кадра)
+
+  if (DEBUG) {
+    Serial.println(F("--- End of Frame ---"));
+  }
+}
+    </pre></div>
+    <p>Каждые 100 миллисекунд Arduino отправляет на компьютер строку из 64 чисел, разделённых запятыми. Например: <code>120,45,230,10,...</code> — это значения всех 64 пикселей.</p>
+
+    <!-- ЭТАП 4 -->
+    <h2>💻 Этап 4: Визуализация на компьютере</h2>
+    <p>На компьютере (или ноутбуке) запускается простая программа на Python, которая принимает данные из Serial-порта и строит <strong>тепловую карту</strong>.</p>
+    <div class="scheme-box"><pre>
+import serial, numpy as np, matplotlib.pyplot as plt
+ser = serial.Serial('COM3', 9600)
+plt.ion()
+fig, ax = plt.subplots()
+
+while True:
+    line = ser.readline().decode().strip()
+    values = [int(x) for x in line.split(',') if x]
+    if len(values) == 64:
+        frame = np.array(values).reshape(8, 8)
+        ax.imshow(frame, cmap='hot', interpolation='nearest')
+        plt.pause(0.05)
+    </pre></div>
+    <p>На экране появится окно с квадратом 8×8 пикселей. Цвет каждого пикселя — от чёрного (Qₛ=0) через красный и жёлтый до белого (Qₛ=максимум). Это и есть «аура» предмета.</p>
+
+    <!-- ЭТАП 5 -->
+    <h2>🔍 Этап 5: Настройка фокуса и первый скан</h2>
+    <ol>
+        <li><strong>Установите линзу</strong> перед матрицей на расстоянии 10-15 см. Закрепите её на штативе (можно сделать из проволоки).</li>
+        <li><strong>Поместите объект</strong> (например, намоленную икону) за линзой, с другой стороны.</li>
+        <li><strong>Двигайте линзу вперёд-назад</strong>, пока изображение на экране не станет максимально чётким (пиксели в центре — яркие, по краям — тёмные).</li>
+        <li><strong>Сделайте скриншот.</strong> Это «аура» объекта.</li>
+    </ol>
+
+    <!-- ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ -->
+    <h2>📊 Что вы должны увидеть</h2>
+    <table class="materials-table">
+        <thead><tr><th>Объект</th><th>Ожидаемая картинка</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Намоленная икона</strong></td><td>Яркое пятно в центре (вокруг лика), плавно затухающее к краям</td></tr>
+            <tr><td><strong>Кристалл кварца</strong></td><td>Несколько ярких точек (на гранях), свечение изнутри</td></tr>
+            <tr><td><strong>Пластиковая ручка</strong></td><td>Равномерно тёмный квадрат, почти без структуры</td></tr>
+            <tr><td><strong>Живое растение</strong></td><td>Размытое пятно, которое слегка пульсирует (если смотреть в реальном времени)</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=18" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция SEM-1 v1.0</p>
+        <p>✧ «Увидеть невидимое — первый шаг к пониманию Смысла» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

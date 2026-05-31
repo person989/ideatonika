@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Одиночка или Часть Целого? • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh; font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem; display: flex; flex-direction: column; align-items: center;
+            transition: background 0.5s ease;
+        }
+        .cosmic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .test-container {
+            max-width: 700px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+        .test-header { text-align: center; margin-bottom: 2rem; }
+        .test-header h1 { font-size: 2.2rem; color: #f3e7c0; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1.5rem 0; }
+        .progress-fill { height: 100%; background: #ffb74d; border-radius: 3px; width: 0%; transition: width 0.3s ease; }
+        .progress-text { text-align: right; color: #a09080; font-size: 0.8rem; margin-top: 0.3rem; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.3rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option {
+            background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1rem 1.5rem; cursor: pointer; transition: all 0.2s ease;
+            color: #d0c8b8; display: flex; align-items: center; gap: 15px;
+        }
+        .option:hover { background: rgba(255, 183, 77, 0.15); border-color: #ffb74d; }
+        .option.selected { background: rgba(255, 183, 77, 0.25); border-color: #ffb74d; color: #f3e7c0; }
+        .option-marker { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #5d4a3a; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .option.selected .option-marker { border-color: #ffb74d; background: #ffb74d; box-shadow: 0 0 10px #ffb74d; }
+        .option.selected .option-marker::after { content: "✓"; color: #1a1a2e; font-weight: bold; }
+        .option-text { flex: 1; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 15px; }
+        .btn {
+            background: transparent; border: 1.5px solid #ffb74d; color: #ffb74d;
+            padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold;
+            border-radius: 40px; cursor: pointer; transition: 0.2s; font-family: inherit;
+        }
+        .btn:hover { background: #ffb74d; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-secondary { border-color: #5d4a3a; color: #a09080; }
+        .btn-secondary:hover { background: #5d4a3a; color: #d0c8b8; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; font-weight: bold; margin: 1rem 0; }
+        .result-scale { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .result-comment { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 1.5rem; margin: 1.5rem 0; line-height: 1.6; }
+        .result-advice { background: rgba(255, 183, 77, 0.1); border-left: 4px solid #ffb74d; padding: 1.2rem 1.5rem; border-radius: 0 12px 12px 0; text-align: left; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffb74d; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body id="mainBody">
+<div class="cosmic-bg"></div>
+<div class="test-container" id="testContainer">
+    
+    <div class="test-header">
+        <h1>
+            <span>🏛️</span>
+            <span id="testTitle">Одиночка или Часть Целого?</span>
+            <span>👥</span>
+        </h1>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Вопрос 1 из 7</div>
+    </div>
+    
+    <div id="questionContainer"></div>
+    
+    <div class="nav-buttons">
+        <button class="btn btn-secondary" id="prevBtn" disabled>← Назад</button>
+        <button class="btn btn-secondary" id="exitBtn">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="diagnostics-hub.html" class="back-link">← Вернуться в Хаб Диагностики</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const questions = [
+            {
+                text: "Находясь в большой толпе (концерт, митинг, храм), что вы обычно чувствуете?",
+                options: [
+                    { text: "Дискомфорт, хочется уйти, энергия толпы давит на меня", value: -3 },
+                    { text: "Лёгкое напряжение, я предпочитаю быть на периферии", value: -1 },
+                    { text: "Нейтрально, я не сливаюсь с толпой, но и не против", value: 0 },
+                    { text: "Приятное возбуждение, чувствую единение с людьми", value: 2 },
+                    { text: "Полный экстаз, я растворяюсь в коллективной энергии, теряю себя", value: 3 }
+                ]
+            },
+            {
+                text: "Когда кто-то в вашем окружении (семья, коллектив) сильно расстроен, что с вами?",
+                options: [
+                    { text: "Я ставлю «щит», чтобы не заразиться негативом", value: -3 },
+                    { text: "Я замечаю, но стараюсь не вовлекаться эмоционально", value: -1 },
+                    { text: "Сочувствую, но остаюсь собой", value: 0 },
+                    { text: "Я быстро перенимаю их настроение, начинаю грустить", value: 2 },
+                    { text: "Я буквально чувствую их боль как свою, долго не могу отпустить", value: 3 }
+                ]
+            },
+            {
+                text: "Как вы относитесь к участию в групповых ритуалах (общая молитва, медитация, флешмоб)?",
+                options: [
+                    { text: "Избегаю, это не для меня, я сам по себе", value: -3 },
+                    { text: "Иногда участвую, но чувствую себя неловко", value: -1 },
+                    { text: "Могу поучаствовать, если компания приятная", value: 0 },
+                    { text: "Люблю, это даёт мне чувство принадлежности и силы", value: 2 },
+                    { text: "Это моя стихия, я чувствую, что вместе мы — нечто большее", value: 3 }
+                ]
+            },
+            {
+                text: "Представьте, что вы болеете за любимую команду на стадионе. Что вы чувствуете, когда она забивает гол?",
+                options: [
+                    { text: "Я бы не пошёл на стадион, это не моё", value: -3 },
+                    { text: "Сдержанно радуюсь, но не кричу", value: -1 },
+                    { text: "Кричу и радуюсь вместе со всеми, это весело", value: 1 },
+                    { text: "Я в экстазе, обнимаю незнакомых людей, я — часть единого организма!", value: 3 }
+                ]
+            },
+            {
+                text: "Как долго вы можете комфортно находиться в одиночестве, без общения?",
+                options: [
+                    { text: "Неделями, я самодостаточен, люди утомляют", value: -3 },
+                    { text: "Несколько дней — это приятная передышка", value: -1 },
+                    { text: "День-два, потом хочется к людям", value: 1 },
+                    { text: "Несколько часов, я быстро начинаю скучать и чувствовать пустоту", value: 3 }
+                ]
+            },
+            {
+                text: "Если вам нужно принять важное решение, вы скорее:",
+                options: [
+                    { text: "Всё решу сам, мне не нужны чужие советы", value: -3 },
+                    { text: "Обдумаю сам, но могу спросить одного-двух близких", value: -1 },
+                    { text: "Посоветуюсь с теми, кому доверяю, их мнение важно", value: 1 },
+                    { text: "Мне нужно обсудить это с как можно большим числом людей, чтобы почувствовать «общее поле»", value: 3 }
+                ]
+            },
+            {
+                text: "Какое утверждение лучше всего описывает ваше отношение к коллективам (семья, нация, человечество)?",
+                options: [
+                    { text: "Я — сам по себе. Коллективы — это иллюзия", value: -3 },
+                    { text: "Я — часть семьи, но не более широких групп", value: -1 },
+                    { text: "Я чувствую связь с семьёй, друзьями, возможно, с народом", value: 1 },
+                    { text: "Я чувствую глубокую связь со всем человечеством и даже с ноосферой в целом", value: 3 }
+                ]
+            }
+        ];
+        
+        const totalQuestions = questions.length;
+        let currentIndex = 0;
+        let answers = new Array(totalQuestions).fill(null);
+        
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const exitBtn = document.getElementById('exitBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const testContainer = document.getElementById('testContainer');
+        const mainBody = document.getElementById('mainBody');
+        const testTitle = document.getElementById('testTitle');
+        
+        let isResultMode = false;
+        
+        function renderQuestion(index) {
+            const q = questions[index];
+            let html = `<div class="question-box">`;
+            html += `<div class="question-text">${index + 1}. ${q.text}</div>`;
+            html += `<div class="options">`;
+            
+            q.options.forEach((opt) => {
+                const isSelected = answers[index] === opt.value;
+                html += `
+                    <div class="option ${isSelected ? 'selected' : ''}" data-value="${opt.value}">
+                        <div class="option-marker"></div>
+                        <div class="option-text">${opt.text}</div>
+                    </div>
+                `;
+            });
+            
+            html += `</div></div>`;
+            questionContainer.innerHTML = html;
+            
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    const value = parseInt(opt.dataset.value);
+                    answers[index] = value;
+                    renderQuestion(index);
+                });
+            });
+            
+            const progress = ((index + 1) / totalQuestions) * 100;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = `Вопрос ${index + 1} из ${totalQuestions}`;
+            
+            prevBtn.disabled = index === 0;
+            if (index === totalQuestions - 1) {
+                nextBtn.textContent = '🎉 Завершить';
+            } else {
+                nextBtn.textContent = 'Далее →';
+            }
+        }
+        
+        function calculateResult() {
+            const sum = answers.reduce((acc, val) => acc + val, 0);
+            // Сумма от -21 до +21. Делим на 21 и умножаем на 10 для шкалы от -10 до +10
+            const normalized = Math.round((sum / 21) * 10);
+            return Math.max(-10, Math.min(10, normalized));
+        }
+        
+        function getResultColor(score) {
+            if (score >= 7) return '#ffb74d'; // Оранжевый (мощный коллективист)
+            if (score >= 3) return '#81c784'; // Зелёный (умеренный коллективист)
+            if (score >= -3) return '#90caf9'; // Голубой (баланс)
+            if (score >= -7) return '#7986cb'; // Синий (индивидуалист)
+            return '#5c6bc0'; // Тёмно-синий (волк-одиночка)
+        }
+        
+        function getResultComment(score) {
+            if (score >= 8) return "🏛️ Вы — ЧАСТЬ ЦЕЛОГО (Максимальный коллективист). Вы легко растворяетесь в эгрегорах, чувствуете настроение толпы, можете быть «хамелеоном». Ваша сила — в единении, но есть риск потери индивидуальности.";
+            if (score >= 4) return "👥 Вы — КОМАНДНЫЙ ИГРОК. Вам комфортно в коллективах, вы чувствуете поддержку группы и умеете работать в команде. Вы сохраняете баланс между «я» и «мы».";
+            if (score >= 0) return "⚖️ Вы — ГАРМОНИЧНЫЙ БАЛАНС. Вы способны быть и в группе, и в одиночестве. Вы не теряете себя в толпе, но и не изолируетесь от неё. Это здоровый баланс.";
+            if (score >= -4) return "🦅 Вы — НЕЗАВИСИМЫЙ ИНДИВИДУАЛИСТ. Вам комфортнее одному или в очень маленьком кругу. Вы самодостаточны, но иногда вам не хватает «подпитки» от коллективного поля.";
+            if (score >= -7) return "🐺 Вы — ВОЛК-ОДИНОЧКА. Вы очень независимы, толпа вас утомляет, ритуалы раздражают. Ваша сила — в автономности, но есть риск семантической изоляции.";
+            return "🏝️ Вы — ОТШЕЛЬНИК. Вы почти полностью отрезаны от коллективных эгрегоров. Вы живёте в своём мире. Это даёт огромную независимость, но лишает вас мощного источника Qₛ.";
+        }
+        
+        function getResultAdvice(score) {
+            if (score >= 4) return "💡 Совет: Ваша способность соединяться с коллективным полем — это дар. Используйте его для добрых дел. Но учитесь также ставить «щит» (§124), чтобы не перегружаться чужими эмоциями.";
+            if (score >= 0) return "💡 Совет: Вы в балансе. Продолжайте осознанно выбирать, когда быть в группе, а когда — в одиночестве. Качество вашего окружения важнее его количества.";
+            if (score >= -7) return "💡 Совет: Вам полезно иногда «выходить в люди». Попробуйте сходить на концерт любимой группы, в храм во время службы, на групповую медитацию. Это мягко «разомкнёт» ваше поле и даст приток Qₛ.";
+            return "💡 Совет: Полная изоляция истощает поле. Даже если вам комфортно одному, попробуйте завести домашнее животное или растение. Это создаст канал связи с живым Qₛ.";
+        }
+        
+        function showResult() {
+            isResultMode = true;
+            const score = calculateResult();
+            const color = getResultColor(score);
+            const comment = getResultComment(score);
+            const advice = getResultAdvice(score);
+            
+            mainBody.style.background = `linear-gradient(145deg, ${color}20 0%, #16213e 100%)`;
+            testContainer.style.borderColor = color;
+            
+            let html = `<div class="result-container">`;
+            html += `<h2 style="color: ${color};">Ваш результат</h2>`;
+            html += `<div class="result-score" style="color: ${color};">${score > 0 ? '+' : ''}${score}</div>`;
+            html += `<div class="result-scale">по шкале «Одиночка — Часть Целого» (от -10 до +10)</div>`;
+            html += `<div class="result-comment" style="color: #d0c8b8;">${comment}</div>`;
+            html += `<div class="result-advice" style="color: #d0c8b8;">${advice}</div>`;
+            html += `<p style="margin-top: 1.5rem; color: #a09080; font-style: italic;">Этот параметр не «хороший» и не «плохой». Это просто ваша природа. Главное — осознавать её и использовать мудро.</p>`;
+            html += `</div>`;
+            
+            questionContainer.innerHTML = html;
+            
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            exitBtn.textContent = '🔄 Пройти заново';
+            exitBtn.classList.remove('btn-secondary');
+            exitBtn.classList.add('btn');
+            
+            testTitle.textContent = `Результат: ${score > 0 ? '+' : ''}${score}`;
+            progressText.textContent = `Тест завершён`;
+            
+            setTimeout(function() {
+    const passportBtn = document.createElement('button');
+    passportBtn.textContent = '💾 Сохранить результат в Семантический Паспорт';
+    passportBtn.style.cssText = 'display: block; margin: 2rem auto; padding: 1rem 2rem; background: #ffd54f; color: #1a1a2e; border: none; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s;';
+    passportBtn.onmouseover = () => passportBtn.style.background = '#ffc107';
+    passportBtn.onmouseout = () => passportBtn.style.background = '#ffd54f';
+
+    passportBtn.addEventListener('click', function() {
+        const scoreElement = document.querySelector('.result-score');
+        if (scoreElement) {
+            const resultValue = scoreElement.textContent.trim();
+            if (resultValue) {
+                localStorage.setItem('ideatonika_test_egregor', resultValue);
+                passportBtn.textContent = '✅ Сохранено в Паспорт!';
+                passportBtn.style.background = '#ff8f00';
+                passportBtn.disabled = true;
+            }
+        }
+    });
+
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(passportBtn);
+    }
+}, 100);
+
+// ========== КНОПКА "ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ" ==========
+setTimeout(function() {
+    const shareContainer = document.createElement('div');
+    shareContainer.style.cssText = 'text-align: center; margin-top: 1.5rem;';
+
+    const shareBtn = document.createElement('button');
+    shareBtn.textContent = '📤 Поделиться результатом';
+    shareBtn.style.cssText = 'display: block; margin: 0 auto 0.8rem auto; padding: 0.8rem 2rem; background: transparent; color: #81c784; border: 1.5px solid #81c784; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: Georgia, serif;';
+    shareBtn.onmouseover = () => shareBtn.style.background = '#81c784';
+    shareBtn.onmouseout = () => shareBtn.style.background = 'transparent';
+    shareBtn.onmouseover = () => shareBtn.style.color = '#1a1a2e';
+    shareBtn.onmouseout = () => shareBtn.style.color = '#81c784';
+
+    shareBtn.addEventListener('click', function() {
+        // Получаем название теста из заголовка страницы
+        const testName = document.title.replace(' • Идеатоника', '').trim();
+        
+        // Получаем результат из элемента .result-score
+        const scoreElement = document.querySelector('.result-score');
+        let resultText = '';
+        if (scoreElement) {
+            resultText = scoreElement.textContent.trim();
+        }
+        
+        // Получаем комментарий из элемента .result-comment или .result-interpretation
+        const commentElement = document.querySelector('.result-comment') || document.querySelector('.result-interpretation');
+        let commentText = '';
+        if (commentElement) {
+            commentText = commentElement.textContent.trim();
+        }
+        
+        // Формируем текст для отправки
+        const shareText = `🧪 Я прошёл тест «${testName}» на портале Идеатоника!\n\n` +
+            `📊 Мой результат: ${resultText}\n` +
+            `💬 ${commentText}\n\n` +
+            `🎯 А какой результат у тебя?\n` +
+            `👉 Пройти тест: ${window.location.href}\n\n` +
+            `🌌 Идеатоника — физика смысла.`;
+        
+        // Пытаемся использовать Web Share API (мобильные устройства)
+        if (navigator.share) {
+            navigator.share({
+                title: `Мой результат теста «${testName}»`,
+                text: shareText,
+                url: window.location.href
+            }).catch(() => {
+                // Если не получилось — копируем в буфер
+                copyToClipboard(shareText);
+            });
+        } else {
+            // Если Web Share API не поддерживается — копируем в буфер
+            copyToClipboard(shareText);
+        }
+    });
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = shareBtn.textContent;
+                shareBtn.textContent = '✅ Скопировано! Отправь другу';
+                shareBtn.style.borderColor = '#ffd54f';
+                shareBtn.style.color = '#ffd54f';
+                setTimeout(() => {
+                    shareBtn.textContent = originalText;
+                    shareBtn.style.borderColor = '#81c784';
+                    shareBtn.style.color = '#81c784';
+                }, 2500);
+            }).catch(() => {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = '✅ Скопировано! Отправь другу';
+            shareBtn.style.borderColor = '#ffd54f';
+            shareBtn.style.color = '#ffd54f';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+                shareBtn.style.borderColor = '#81c784';
+                shareBtn.style.color = '#81c784';
+            }, 2500);
+        } catch(e) {
+            shareBtn.textContent = '❌ Не удалось скопировать';
+            shareBtn.style.borderColor = '#ef5350';
+            shareBtn.style.color = '#ef5350';
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Добавляем подсказку
+    const hint = document.createElement('div');
+    hint.style.cssText = 'color: #a09080; font-size: 0.8rem; font-style: italic;';
+    hint.textContent = 'Нажмите, чтобы скопировать результат и отправить другу';
+    shareContainer.appendChild(shareBtn);
+    shareContainer.appendChild(hint);
+
+    // Ищем контейнер с результатом
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(shareContainer);
+    }
+}, 100);
+
+        }
+        
+        function resetTest() {
+            isResultMode = false;
+            currentIndex = 0;
+            answers = new Array(totalQuestions).fill(null);
+            
+            mainBody.style.background = '';
+            testContainer.style.borderColor = '';
+            testTitle.textContent = 'Одиночка или Часть Целого?';
+            
+            prevBtn.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+            exitBtn.textContent = '🚪 Выйти';
+            exitBtn.classList.add('btn-secondary');
+            
+            renderQuestion(0);
+        }
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) { currentIndex--; renderQuestion(currentIndex); }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (answers[currentIndex] === null) {
+                alert('Пожалуйста, выберите один из вариантов ответа.');
+                return;
+            }
+            if (currentIndex < totalQuestions - 1) {
+                currentIndex++;
+                renderQuestion(currentIndex);
+            } else {
+                if (answers.includes(null)) {
+                    alert('Пожалуйста, ответьте на все вопросы.');
+                    return;
+                }
+                showResult();
+            }
+        });
+        
+        exitBtn.addEventListener('click', () => {
+            if (isResultMode) {
+                resetTest();
+            } else {
+                if (confirm('Вы уверены, что хотите выйти? Прогресс будет потерян.')) {
+                    window.location.href = 'diagnostics-hub.html';
+                }
+            }
+        });
+        
+        renderQuestion(0);
+    })();
+</script>
+</body>
+</html>

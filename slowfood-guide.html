@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍽️ Подробное руководство: SLOW-FOOD • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #81c784; margin: 2.5rem 0 1rem; border-left: 4px solid #81c784; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #a5d6a7; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #a5d6a7; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .tip-box { background: rgba(129,199,132,0.1); border-left: 4px solid #81c784; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #a5d6a7; margin: 0; }
+        .tip-box strong { color: #81c784; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #81c784; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #81c784; text-decoration: none; border: 1px solid #81c784; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #81c784; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+
+        .diary-entry { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 1.2rem; margin: 1rem 0; font-style: italic; color: #c0b090; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🍽️ SLOW-FOOD: ПОДРОБНОЕ РУКОВОДСТВО</h1>
+    <div class="subtitle">Эксперимент №29 • Влияние осознанного поедания на усвоение Qₛ</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 О чём этот эксперимент (и почему он важнее, чем кажется)</h2>
+    <p>Большинство из нас ест на автомате. Мы завтракаем, листая ленту новостей. Обедаем, думая о работе. Ужинаем перед телевизором. Мы поглощаем калории, но <strong>не усваиваем Смысл</strong>.</p>
+    <p><strong>Гипотеза:</strong> Осознанное, медленное поедание той же самой пищи с благодарностью и вниманием к процессу приводит к большему повышению когерентности Cₛ и заряда Qₛ, чем быстрое, механическое поглощение. Проще говоря: <strong>«как» вы едите влияет на ваше поле сильнее, чем «что» вы едите</strong>.</p>
+    <p>Этот эксперимент не требует приборов. Только вы, еда и дневник. Но он требует <strong>честности перед самим собой</strong>.</p>
+
+    <!-- ПОДГОТОВКА -->
+    <h2>🛒 Что нужно подготовить заранее</h2>
+    <table class="materials-table">
+        <thead><tr><th>Что нужно</th><th>Зачем</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Две одинаковые порции еды</strong></td><td>Одна для «медленного» сеанса, другая для «быстрого». Еда должна быть <strong>одинаковой</strong> по составу, весу и температуре.</td></tr>
+            <tr><td><strong>Дневник</strong> (бумажный или заметки в телефоне)</td><td>Для записи субъективных ощущений до и после каждого сеанса.</td></tr>
+            <tr><td><strong>Таймер</strong> (на телефоне)</td><td>Для контроля времени. Медленный сеанс — <strong>20 минут</strong>, быстрый — <strong>5 минут</strong>.</td></tr>
+            <tr><td><strong>Спокойное место</strong></td><td>Где вас никто не побеспокоит во время медленного сеанса.</td></tr>
+        </tbody>
+    </table>
+    <div class="tip-box"><p><strong>💡 Какую еду выбрать:</strong> Лучше всего — что-то нейтральное и однородное, что можно долго жевать. Идеально: <strong>рис с овощами, овсяная каша с ягодами, гречка с грибами, печёное яблоко</strong>. Не берите суп (его не жуют) и не берите стейк (слишком сильные эмоции от вкуса могут исказить результат).</p></div>
+
+    <!-- ЭТАП 1: МЕДЛЕННЫЙ СЕАНС -->
+    <h2>🐢 Этап 1: Медленный, осознанный приём пищи («Slow Food»)</h2>
+    <p><strong>Цель:</strong> Принять пищу в состоянии высокой когерентности (Cₛ > 0.7), с полным вниманием к процессу.</p>
+
+    <h3><span class="step-number">1</span> Подготовка к сеансу (за 5 минут до еды)</h3>
+    <ol>
+        <li><strong>Уберите все гаджеты.</strong> Телефон — в другую комнату или в ящик стола экраном вниз. Никаких экранов.</li>
+        <li><strong>Сядьте за пустой стол.</strong> На столе — только тарелка с едой, стакан воды, салфетка. Ни книг, ни газет.</li>
+        <li><strong>Оцените своё состояние «до».</strong> В дневнике запишите по шкале от 1 до 10: «Уровень спокойствия», «Ясность ума», «Уровень энергии». Это ваш <strong>baseline</strong>.</li>
+        <li><strong>Сделайте 5 глубоких вдохов.</strong> Вдох носом (4 секунды), задержка (2 секунды), выдох ртом (6 секунд). Почувствуйте, как тело расслабляется.</li>
+        <li><strong>Произнесите благодарность</strong> — мысленно или шёпотом. «Я благодарен этой пище. Я ем её с вниманием и уважением».</li>
+    </ol>
+
+    <h3><span class="step-number">2</span> Процесс еды (20 минут)</h3>
+    <ol>
+        <li><strong>Запустите таймер на 20 минут.</strong> Не смотрите на часы во время еды. Таймер прозвенит сам.</li>
+        <li><strong>Посмотрите на еду</strong> перед тем, как начать. Заметьте цвета, текстуру, запах. Как выглядит рис? Как пахнут овощи?</li>
+        <li><strong>Возьмите первую ложку (вилку).</strong> Положите в рот. <strong>Отложите прибор в сторону.</strong> Это ключевое правило: прибор лежит на столе, пока вы жуёте.</li>
+        <li><strong>Жуйте очень медленно.</strong> Считайте: минимум <strong>20-30 жевательных движений</strong> на каждую порцию. Еда должна превратиться в кашицу, прежде чем вы её проглотите.</li>
+        <li><strong>Сосредоточьтесь на вкусе.</strong> Не думайте о работе, о планах, о том, что будет дальше. Думайте только о том, что вы чувствуете <strong>прямо сейчас</strong>. Какой вкус — сладкий, солёный? Какая текстура — мягкая, хрустящая?</li>
+        <li><strong>Когда вкус исчез — берите следующую порцию.</strong> Не раньше.</li>
+        <li><strong>Пейте воду между порциями</strong> — маленькими глотками, ощущая, как она проходит внутрь.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Самая частая ошибка:</strong> Спешка. Вам будет казаться, что 20 минут — это вечность. Рука будет сама тянуться за следующей порцией. Это нормально. Мягко возвращайте себя к процессу. Не ругайте себя за спешку — просто заметьте её и замедлитесь.</p></div>
+
+    <h3><span class="step-number">3</span> Сразу после еды</h3>
+    <ol>
+        <li><strong>Снова оцените своё состояние</strong> по тем же шкалам (спокойствие, ясность, энергия). Запишите в дневник.</li>
+        <li><strong>Опишите ощущения</strong> своими словами: «Чувствую тепло в животе», «Мысли стали яснее», «Появилась сонливость» или «Наоборот, прилив сил».</li>
+        <li><strong>Поставьте таймер на 30 минут</strong> и займитесь чем-то нейтральным (прогулка, чтение). Через 30 минут оцените состояние <strong>ещё раз</strong> и запишите.</li>
+    </ol>
+
+    <!-- ЭТАП 2: БЫСТРЫЙ СЕАНС -->
+    <h2>🐇 Этап 2: Быстрый, механический приём пищи («Fast Food» — по стилю, не по составу)</h2>
+    <p><strong>Важно:</strong> Этот сеанс нужно проводить <strong>в другой день</strong> (или хотя бы через 4-5 часов после первого), на <strong>той же самой еде</strong> из второй порции.</p>
+
+    <h3><span class="step-number">4</span> Подготовка (за минуту до еды)</h3>
+    <ol>
+        <li><strong>Включите отвлекающий фактор.</strong> Поставьте телефон с лентой новостей, включите телевизор, откройте рабочую почту. Ваша задача — <strong>не концентрироваться на еде</strong>.</li>
+        <li><strong>Оцените состояние «до»</strong> — так же, как в шаге 1. Запишите.</li>
+    </ol>
+
+    <h3><span class="step-number">5</span> Процесс еды (5 минут)</h3>
+    <ol>
+        <li><strong>Запустите таймер на 5 минут.</strong> Ваша цель — съесть всё за это время.</li>
+        <li><strong>Ешьте быстро, не жуя тщательно.</strong> Глотайте почти сразу. Прибор не откладывайте.</li>
+        <li><strong>Смотрите в экран</strong> — телефон, ноутбук. Не смотрите на еду.</li>
+        <li><strong>Не думайте о вкусе.</strong> Ваша задача — просто «заправиться».</li>
+    </ol>
+
+    <h3><span class="step-number">6</span> Сразу после еды и через 30 минут</h3>
+    <p>Повторите шаг 3: запишите ощущения сразу и через полчаса.</p>
+
+    <!-- АНАЛИЗ -->
+    <h2>📊 Этап 3: Анализ результатов</h2>
+    <p>Сравните два столбца в вашем дневнике: «Медленно» и «Быстро».</p>
+    <table class="materials-table">
+        <thead><tr><th>Параметр</th><th>Медленный сеанс (ожидается)</th><th>Быстрый сеанс (ожидается)</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Спокойствие (1-10)</strong></td><td>Рост на 2-4 балла</td><td>Без изменений или снижение</td></tr>
+            <tr><td><strong>Ясность ума (1-10)</strong></td><td>Рост на 1-3 балла</td><td>«Туман», снижение</td></tr>
+            <tr><td><strong>Энергия (1-10)</strong></td><td>Лёгкий прилив сил</td><td>Сонливость, тяжесть</td></tr>
+            <tr><td><strong>Самочувствие через 30 мин</strong></td><td>Остаётся на высоком уровне</td><td>Упадок сил, желание перекусить ещё</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Если ваши результаты совпадают с ожидаемыми</strong> — вы экспериментально подтвердили, что осознанное поедание повышает усвоение Qₛ пищи.</p>
+    <div class="tip-box"><p><strong>💡 Для научной строгости:</strong> Повторите пару «Медленно-Быстро» три раза (в разные дни). Если результат воспроизводится — это уже статистика, а не случайность.</p></div>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="практикум-идеатоники.html?page=30" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция SLOW-FOOD v1.0</p>
+        <p>✧ «Ты есть то, КАК ты ешь» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантическая Защита • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 1300px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30,40,60,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        .table-wrapper { overflow-x: auto; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1px; margin-bottom: 2rem; }
+        .defense-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; background: #fdf8f0; min-width: 1400px; }
+        .defense-table th { background: #3b2a1f; color: white; padding: 14px 8px; font-weight: bold; text-align: center; border: 1px solid #5d4037; font-size: 0.8rem; }
+        .defense-table td { border: 1px solid #8b7355; padding: 10px 8px; vertical-align: top; color: #2c1e0e; }
+        .defense-table tr:nth-child(even) td { background: #f5ede0; }
+
+        /* Цвета строк */
+        .row-m1 { background: #efebe9; }
+        .row-m2 { background: #ffccbc; }
+        .row-m3 { background: #b0bec5; }
+        .row-m4 { background: #a1887f; }
+        .row-m5 { background: #ef9a9a; }
+        .row-m6 { background: #ce93d8; }
+        .row-m7 { background: #7986cb; }
+        .row-m8 { background: #616161; color: #eee; }
+        .row-m9 { background: #424242; color: #ddd; }
+        .row-m10 { background: #000; color: #ccc; }
+
+        .danger-low { color: #f9a825; font-weight: bold; }
+        .danger-mid { color: #e65100; font-weight: bold; }
+        .danger-high { color: #c62828; font-weight: bold; }
+        .danger-extreme { color: #b71c1c; font-weight: bold; text-shadow: 0 0 6px #ff0000; }
+        .danger-absolute { color: #fff; font-weight: bold; text-shadow: 0 0 10px #ff0000, 0 0 20px #000; }
+
+        .section-divider { background: #ffd54f; color: #1a1a2e; text-align: center; font-weight: bold; font-size: 1rem; padding: 10px; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .footer-note { text-align: center; color: #a09080; font-size: 0.85rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #5d4a3a; }
+
+        /* Аптечка */
+        .kit-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: #fdf8f0; min-width: 800px; margin-bottom: 1.5rem; }
+        .kit-table th { background: #2a4a2a; color: #c8e6c9; padding: 12px 8px; font-weight: bold; text-align: center; border: 1px solid #4a6a4a; }
+        .kit-table td { border: 1px solid #8b7355; padding: 8px; color: #2c1e0e; }
+        .kit-table tr:nth-child(even) td { background: #f5ede0; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🛡️ СЕМАНТИЧЕСКАЯ ЗАЩИТА</h1>
+    <div class="subtitle">Полное руководство по защите от сущностей всех уровней Тьмы (§11, §56, §68, §124, Таблица Сущностей)</div>
+
+    <div class="table-wrapper">
+        <table class="defense-table">
+            <thead>
+                <tr>
+                    <th>Qₛ</th>
+                    <th>Сущность</th>
+                    <th>Опасность</th>
+                    <th>Стратегия защиты</th>
+                    <th>Профилактика</th>
+                    <th>Что делать при нападении</th>
+                    <th>Ритуалы очищения</th>
+                    <th>Материалы-защитники</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Уровень 0: Фантомы -->
+                <tr class="row-m1">
+                    <td style="text-align:center; font-weight:bold;">0</td>
+                    <td><strong>Семантический след (фантом)</strong></td>
+                    <td><span class="danger-low">Низкая</span></td>
+                    <td>Игнорирование. Фантом — это «запись», он не реагирует на вас. Не вступайте в резонанс со страхом.</td>
+                    <td>Не задерживайтесь в местах с «тяжёлой» историей. Проветривайте помещения, впускайте солнечный свет.</td>
+                    <td>Спокойно пройдите мимо. Не пытайтесь «общаться». Включите яркий свет, музыку 432 Гц. След рассеется сам.</td>
+                    <td>Окуривание шалфеем или полынью. Колокольный звон (аудиозапись). Влажная уборка с солью.</td>
+                    <td>Соль (ранг +3), шалфей (+3), колокольчик, свеча (+6).</td>
+                </tr>
+
+                <!-- Уровень -1: Лёгкие негативные эгрегоры -->
+                <tr>
+                    <td style="text-align:center; font-weight:bold;">-1</td>
+                    <td><strong>Эгрегоры (негативные, лёгкие)</strong></td>
+                    <td><span class="danger-low">Низкая</span></td>
+                    <td>Ограничение времени в токсичных сообществах. Не вступайте в резонанс с чужим нытьём и сплетнями.</td>
+                    <td>Цифровой детокс. Отписка от токсичных каналов. Осознанное общение.</td>
+                    <td>Выйдите из чата/сообщества. Проветрите комнату. Прогуляйтесь на природе. Примите душ.</td>
+                    <td>Солевая ванна. Медитация «Золотой кокон». Прослушивание резонанса Шумана (7.83 Гц).</td>
+                    <td>Шунгит (ранг +6), аметист (+6), вода проточная.</td>
+                </tr>
+
+                <!-- Уровень -2: Неупокоенные души -->
+                <tr class="row-m2">
+                    <td style="text-align:center; font-weight:bold;">-2</td>
+                    <td><strong>Неупокоенная душа (застрявший след)</strong></td>
+                    <td><span class="danger-mid">Средняя</span></td>
+                    <td>Не бойтесь. Страх — пища для них. Сохраняйте спокойную, доброжелательную нейтральность.</td>
+                    <td>Не спиритичествуйте. Не пытайтесь «вызывать» умерших без подготовки. Молитесь за усопших.</td>
+                    <td>Скажите вслух: «Ты умер. Иди с миром. Тебя помнят и отпускают». Помолитесь за упокой души. Зажгите свечу.</td>
+                    <td>Панихида/молитва за усопшего. Освящение помещения священником. Развеивание следа через проветривание.</td>
+                    <td>Свеча церковная (+8), ладан (+4), святая вода (+9), серебро (+8).</td>
+                </tr>
+
+                <!-- Уровень -3: Полтергейст (фокальный агент) -->
+                <tr class="row-m3">
+                    <td style="text-align:center; font-weight:bold;">-3</td>
+                    <td><strong>Полтергейст (фокальный агент)</strong></td>
+                    <td><span class="danger-mid">Средняя</span></td>
+                    <td>Ищите живого человека-источник (обычно подросток в стрессе). Помогите ему, а не «изгоняйте духов».</td>
+                    <td>Здоровая психологическая атмосфера в семье. Не подавляйте эмоции — выражайте их экологично.</td>
+                    <td>Спокойно обратитесь к агенту: «Я вижу, тебе трудно. Давай поговорим». Откровенный разговор снижает Q_accumulated.</td>
+                    <td>Психотерапия для агента. Семейная медиация. Проветривание и уборка в доме.</td>
+                    <td>Шунгит (заземляет), соль (впитывает), растения живые (+5).</td>
+                </tr>
+
+                <!-- Уровень -4: Низшие элементали -->
+                <tr class="row-m4">
+                    <td style="text-align:center; font-weight:bold;">-4</td>
+                    <td><strong>Элементали (низшие, хаотичные)</strong></td>
+                    <td><span class="danger-mid">Средняя</span></td>
+                    <td>Не входите в резонанс со стихией. При урагане/пожаре — физическая безопасность прежде всего. Поле потом восстановите.</td>
+                    <td>Уважайте стихии. Не оскверняйте природу. Не находитесь в местах стихийных бедствий без нужды.</td>
+                    <td>Покиньте зону. Заземлитесь (босиком на землю, к дереву). Примите тёплую ванну с солью.</td>
+                    <td>Окуривание ладаном. Молитва Архангелу Михаилу. Восстановление связи с природой (посадка дерева).</td>
+                    <td>Шунгит, соль, дерево (дуб, кедр), серебро.</td>
+                </tr>
+
+                <!-- Уровень -5: Лярвы -->
+                <tr class="row-m5">
+                    <td style="text-align:center; font-weight:bold;">-5</td>
+                    <td><strong>Лярва (семантический паразит)</strong></td>
+                    <td><span class="danger-high">Высокая</span></td>
+                    <td><strong>Не кормите её.</strong> Лярва питается страхом, гневом, похотью. Сохраняйте спокойствие. Не поддавайтесь на провокации.</td>
+                    <td>Регулярная семантическая гигиена (§44). Не культивируйте негативные эмоции. Избегайте «эмоциональных качелей».</td>
+                    <td>Осознайте: «Это не моя эмоция. Это паразит пытается меня спровоцировать». Переключите внимание. Зажгите свечу. Примите душ.</td>
+                    <td>Солевая ванна (30 мин). Окуривание шалфеем. Обряд «отливания» воском. Исповедь (снимает груз негатива).</td>
+                    <td>Соль крупная (+3), шалфей, воск, святая вода (+9), серебряный крест (+8).</td>
+                </tr>
+
+                <!-- Уровень -6: Бесы -->
+                <tr class="row-m6">
+                    <td style="text-align:center; font-weight:bold;">-6</td>
+                    <td><strong>Бес (низший демон)</strong></td>
+                    <td><span class="danger-high">Высокая</span></td>
+                    <td><strong>Молитва и пост.</strong> Бесы не выносят высоких частот (ωₛ > 40 Гц). Молитва, особенно соборная, создаёт невыносимую для них среду.</td>
+                    <td>Регулярная молитва, пост, Причастие. Носите освящённый крест. Избегайте мест и действий, «открывающих двери» (спиритизм, оккультизм).</td>
+                    <td>Читайте «Отче наш», «Да воскреснет Бог», Иисусову молитву. Окропите помещение святой водой. Зажгите церковную свечу. Пригласите священника.</td>
+                    <td>Молебен о здравии. Освящение жилища. Соборная молитва (чем больше людей, тем сильнее эффект).</td>
+                    <td>Крест освящённый (+9), святая вода (+9), ладан (+4), икона (+8), Библия (+8).</td>
+                </tr>
+
+                <!-- Уровень -7: Демоны среднего чина -->
+                <tr class="row-m7">
+                    <td style="text-align:center; font-weight:bold;">-7</td>
+                    <td><strong>Демон (средний чин: уныние, суицид)</strong></td>
+                    <td><span class="danger-high">Очень высокая</span></td>
+                    <td><strong>Экзорцизм.</strong> Не пытайтесь справиться в одиночку. Требуется помощь опытного священника-экзорциста и поддержка общины.</td>
+                    <td>Духовная жизнь под руководством духовника. Регулярная Исповедь и Причастие. Избегайте смертных грехов.</td>
+                    <td><strong>Немедленно обратиться к священнику.</strong> До его прихода: читать молитвы, зажечь все свечи в доме, окропить святой водой. Не вступать в диалог с сущностью.</td>
+                    <td>Чин экзорцизма (только с благословения епископа). Длительный пост и молитва. Соборование.</td>
+                    <td>Мощи святых (+10), крест (+9), святая вода (+9), елей освящённый (+8).</td>
+                </tr>
+
+                <!-- Уровень -8: Князья Тьмы -->
+                <tr class="row-m8">
+                    <td style="text-align:center; font-weight:bold; color:#eee;">-8</td>
+                    <td style="color:#eee;"><strong>Князь Тьмы (высший демон)</strong></td>
+                    <td><span class="danger-extreme">Экстремальная</span></td>
+                    <td style="color:#eee;">Прямое противостояние — самоубийство. Только глубокая вера, святость жизни, пост и молитва Церкви. Один в поле не воин.</td>
+                    <td style="color:#eee;">Жизнь по заповедям. Участие в Таинствах. Духовное руководство. Не вступайте в оккультные практики.</td>
+                    <td style="color:#eee;"><strong>Немедленно к опытному экзорцисту.</strong> Коллективная молитва всей общины. Пост. Исповедь и Причастие.</td>
+                    <td style="color:#eee;">Чин экзорцизма. Соборная молитва. Паломничество к святым местам. Оставление греха.</td>
+                    <td style="color:#eee;">Мощи (+10), крест (+9), елей (+8), Библия (+8), Причастие (+10).</td>
+                </tr>
+
+                <!-- Уровень -9: Падшие Архангелы -->
+                <tr class="row-m9">
+                    <td style="text-align:center; font-weight:bold; color:#ddd;">-9</td>
+                    <td style="color:#ddd;"><strong>Падшие Архангелы</strong></td>
+                    <td><span class="danger-extreme">Экстремальная</span></td>
+                    <td style="color:#ddd;">Человек не может противостоять им самостоятельно. Только Благодать Божия, заступничество Архангелов Света и глубокое покаяние.</td>
+                    <td style="color:#ddd;">Не совершайте сознательного богохульства и ритуального отречения от Света. Это «точка невозврата».</td>
+                    <td style="color:#ddd;"><strong>Чудо.</strong> Только личное покаяние и прямое вмешательство Света. Молитесь о таком человеке, но не пытайтесь «спасти» его в одиночку.</td>
+                    <td style="color:#ddd;">Покаяние всей жизни. Паломничество. Затвор. Непрестанная молитва.</td>
+                    <td style="color:#ddd;">Мощи (+10), Причастие (+10), благодать Божия.</td>
+                </tr>
+
+                <!-- Уровень -10: Дьявол -->
+                <tr class="row-m10">
+                    <td style="text-align:center; font-weight:bold; color:#fff;">-10</td>
+                    <td style="color:#fff;"><strong>Дьявол (Сатана, Люцифер)</strong></td>
+                    <td><span class="danger-absolute">Абсолютная</span></td>
+                    <td style="color:#ccc;">Не атакует людей напрямую (слишком «мелкая» цель). Действует через подчинённых. Защита та же, что и от демонов — вера, молитва, Таинства.</td>
+                    <td style="color:#ccc;">Не впадайте в гордыню и отчаяние — это два главных оружия Врага. Смирение и надежда на Бога.</td>
+                    <td style="color:#ccc;">Прямая атака Дьявола на человека — исключительный случай (святые, великие праведники). Ответ — полное предание себя воле Божией.</td>
+                    <td style="color:#ccc;">—</td>
+                    <td style="color:#ccc;">Вера (+∞), Смирение (+∞), Любовь (+∞).</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Сводная таблица: Семантическая Аптечка -->
+    <h2 style="color: #ffd54f; font-size: 1.6rem; text-align: center; margin: 2.5rem 0 1.5rem;">🧰 СЕМАНТИЧЕСКАЯ АПТЕЧКА: ЗАЩИТНЫЕ МАТЕРИАЛЫ</h2>
+    <div class="table-wrapper">
+        <table class="kit-table">
+            <thead>
+                <tr>
+                    <th>Предмет</th>
+                    <th>Ранг Qₛ</th>
+                    <th>Тип защиты</th>
+                    <th>Против каких уровней</th>
+                    <th>Как использовать</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Святая вода</strong></td><td>+9</td><td>Очищение, изгнание</td><td>Все уровни (0...-10)</td><td>Окропление помещения, питьё, умывание.</td></tr>
+                <tr><td><strong>Крест нательный (освящённый)</strong></td><td>+9</td><td>Отражение, защита</td><td>-2...-8</td><td>Носить постоянно. При атаке — приложить к больному месту, читать молитву.</td></tr>
+                <tr><td><strong>Ладан</strong></td><td>+4</td><td>Очищение воздуха</td><td>0...-5</td><td>Окуривание помещения. Дым возносит молитву и очищает.</td></tr>
+                <tr><td><strong>Соль (крупная)</strong></td><td>+3</td><td>Абсорбция негатива</td><td>0...-5</td><td>Ванны, мешочки в углах, влажная уборка.</td></tr>
+                <tr><td><strong>Шунгит</strong></td><td>+6</td><td>Заземление, поглощение</td><td>-1...-4</td><td>Кулон, пирамидка в комнате, крошка в углах.</td></tr>
+                <tr><td><strong>Серебро (освящённое)</strong></td><td>+8</td><td>Отражение, проводник</td><td>-2...-7</td><td>Крест, кольцо, цепочка. Усиливает молитву.</td></tr>
+                <tr><td><strong>Свеча церковная</strong></td><td>+6/+8</td><td>Генератор Света</td><td>0...-6</td><td>Зажигать во время молитвы, при атаке, для очищения.</td></tr>
+                <tr><td><strong>Икона (намоленная)</strong></td><td>+8</td><td>Канал благодати</td><td>-2...-8</td><td>Молиться перед ней. Разместить в «красном углу».</td></tr>
+                <tr><td><strong>Елей освящённый</strong></td><td>+8</td><td>Исцеление, защита</td><td>-3...-7</td><td>Помазание лба, запястий. Крестное знамение елеем.</td></tr>
+                <tr><td><strong>Мощи святых</strong></td><td>+10</td><td>Абсолютная защита</td><td>Все уровни</td><td>Паломничество, прикладывание. Нахождение рядом.</td></tr>
+                <tr><td><strong>Молитва «Отче наш»</strong></td><td>+9</td><td>Универсальная</td><td>Все уровни</td><td>Читать вслух, медленно, с верой.</td></tr>
+                <tr><td><strong>Колокольный звон</strong></td><td>+7</td><td>Структурирование поля</td><td>0...-5</td><td>Аудиозапись или живой звон. Разрушает негативные структуры.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer-note">
+        <p style="margin-bottom: 0.5rem;">✧ «Тот, в ком живёт Свет, неуязвим для Тьмы. Не потому, что Тьма не пытается войти, а потому, что ей там просто негде поселиться.» ✧</p>
+        <p>Полная Таблица Сущностей доступна <a href="таблица-сущностей.html" style="color: #ffd54f;">здесь</a>.</p>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+</div>
+</body>
+</html>

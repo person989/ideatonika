@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Лёд или Пламя? • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.5s ease;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .test-container {
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+        
+        /* Заголовок */
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .test-header h1 {
+            font-size: 2.2rem;
+            color: #f3e7c0;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 3px;
+            margin: 1.5rem 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #42a5f5, #ef5350);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            text-align: right;
+            color: #a09080;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+        
+        /* Вопрос */
+        .question-box {
+            margin-bottom: 2rem;
+        }
+        .question-text {
+            color: #f3e7c0;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid #5d4a3a;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #d0c8b8;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .option:hover {
+            background: rgba(239, 83, 80, 0.15);
+            border-color: #ef5350;
+        }
+        .option.selected {
+            background: rgba(239, 83, 80, 0.25);
+            border-color: #ef5350;
+            color: #f3e7c0;
+        }
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #5d4a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .option.selected .option-marker {
+            border-color: #ef5350;
+            background: #ef5350;
+            box-shadow: 0 0 10px #ef5350;
+        }
+        .option.selected .option-marker::after {
+            content: "✓";
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        .option-text {
+            flex: 1;
+        }
+        
+        /* Навигация */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 15px;
+        }
+        .btn {
+            background: transparent;
+            border: 1.5px solid #ef5350;
+            color: #ef5350;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .btn:hover {
+            background: #ef5350;
+            color: #1a1a2e;
+        }
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            border-color: #5d4a3a;
+            color: #a09080;
+        }
+        .btn-secondary:hover {
+            background: #5d4a3a;
+            color: #d0c8b8;
+        }
+        
+        /* Результат */
+        .result-container {
+            text-align: center;
+        }
+        .result-score {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        .result-scale {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .result-comment {
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            line-height: 1.6;
+        }
+        .result-advice {
+            background: rgba(239, 83, 80, 0.1);
+            border-left: 4px solid #ef5350;
+            padding: 1.2rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            text-align: left;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #ef5350;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body id="mainBody">
+<div class="cosmic-bg"></div>
+<div class="test-container" id="testContainer">
+    
+    <!-- Шапка -->
+    <div class="test-header">
+        <h1>
+            <span>❄️</span>
+            <span id="testTitle">Лёд или Пламя?</span>
+            <span>🔥</span>
+        </h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Вопрос 1 из 7</div>
+    </div>
+    
+    <!-- Контейнер вопроса -->
+    <div id="questionContainer"></div>
+    
+    <!-- Навигация -->
+    <div class="nav-buttons">
+        <button class="btn btn-secondary" id="prevBtn" disabled>← Назад</button>
+        <button class="btn btn-secondary" id="exitBtn">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    
+    <!-- Ссылка назад -->
+    <div style="text-align: center;">
+        <a href="diagnostics-hub.html" class="back-link">← Вернуться в Хаб Диагностики</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Вопросы теста
+        const questions = [
+            {
+                text: "Вы внезапно слышите громкий, резкий звук (сигнал автомобиля, крик, что-то упало). Ваша первая реакция?",
+                options: [
+                    { text: "Замираю, сердце падает, не могу пошевелиться несколько секунд", value: -3 },
+                    { text: "Сильно вздрагиваю, чувствую холод или дрожь", value: -2 },
+                    { text: "Вздрагиваю, но быстро успокаиваюсь", value: -1 },
+                    { text: "Спокойно оцениваю источник звука", value: 0 },
+                    { text: "Чувствую лёгкий всплеск адреналина, но быстро беру себя в руки", value: 1 },
+                    { text: "Сердце начинает колотиться, чувствую прилив энергии, готов действовать", value: 2 },
+                    { text: "Мгновенно вскипаю, могу накричать в ответ или резко среагировать", value: 3 }
+                ]
+            },
+            {
+                text: "Вам предстоит важное событие (экзамен, выступление, собеседование). Что вы чувствуете за час до него?",
+                options: [
+                    { text: "Оцепенение, пустоту в голове, хочется спрятаться", value: -3 },
+                    { text: "Холодные руки, дрожь, тошноту", value: -2 },
+                    { text: "Лёгкое волнение, которое собирает меня", value: -1 },
+                    { text: "Спокойную уверенность, я готов(а)", value: 0 },
+                    { text: "Энергичное возбуждение, желание поскорее начать", value: 1 },
+                    { text: "Сильное сердцебиение, мысли скачут, трудно усидеть на месте", value: 2 },
+                    { text: "Я на взводе, могу сорваться на близких, всё раздражает", value: 3 }
+                ]
+            },
+            {
+                text: "Как вы обычно ведёте себя в конфликтной ситуации (ссора, спор)?",
+                options: [
+                    { text: "Замыкаюсь в себе, ухожу в «глухую оборону», молчу", value: -3 },
+                    { text: "Чувствую себя подавленно, хочется плакать", value: -2 },
+                    { text: "Стараюсь сгладить углы, уйти от конфликта", value: -1 },
+                    { text: "Спокойно и аргументированно отстаиваю свою позицию", value: 0 },
+                    { text: "Активно спорю, но контролирую эмоции", value: 1 },
+                    { text: "Повышаю голос, перебиваю, эмоции зашкаливают", value: 2 },
+                    { text: "Взрываюсь, могу наговорить лишнего, потом жалею", value: 3 }
+                ]
+            },
+            {
+                text: "Вечером, ложась спать, вы прокручиваете в голове прошедший день. Какие эмоции преобладают?",
+                options: [
+                    { text: "Апатия, пустота, «день прошёл зря»", value: -3 },
+                    { text: "Грусть, сожаление о сделанном или несделанном", value: -2 },
+                    { text: "Лёгкая усталость, но в целом нормально", value: -1 },
+                    { text: "Спокойное принятие дня, благодарность", value: 0 },
+                    { text: "Радость от приятных моментов, предвкушение завтрашнего дня", value: 1 },
+                    { text: "Мысли скачут, трудно «выключиться», мозг кипит", value: 2 },
+                    { text: "Раздражение, злость на себя или других, не могу уснуть", value: 3 }
+                ]
+            },
+            {
+                text: "Представьте, что ваш рейс задерживают на неопределённое время. Ваша типичная реакция?",
+                options: [
+                    { text: "Впадаю в ступор, не знаю, что делать, сижу и жду", value: -3 },
+                    { text: "Чувствую себя беспомощным и подавленным", value: -2 },
+                    { text: "Расстраиваюсь, но ищу альтернативы", value: -1 },
+                    { text: "Спокойно принимаю ситуацию, читаю книгу, работаю", value: 0 },
+                    { text: "Активно ищу пути решения, общаюсь с персоналом", value: 1 },
+                    { text: "Начинаю нервничать, ходить туда-сюда, не могу расслабиться", value: 2 },
+                    { text: "Взрываюсь, ругаюсь с сотрудниками, требую немедленного решения", value: 3 }
+                ]
+            },
+            {
+                text: "Как часто вы чувствуете, что вас «переполняют» эмоции, и вы не можете их контролировать?",
+                options: [
+                    { text: "Никогда. Я вообще мало что чувствую", value: -3 },
+                    { text: "Очень редко. Я скорее склонен подавлять эмоции", value: -2 },
+                    { text: "Редко. Обычно я держу себя в руках", value: -1 },
+                    { text: "Иногда, в особо стрессовых ситуациях", value: 0 },
+                    { text: "Периодически, но я быстро восстанавливаюсь", value: 1 },
+                    { text: "Часто. Эмоции захлёстывают меня, я как вулкан", value: 2 },
+                    { text: "Постоянно. Я живу на эмоциональных качелях", value: 3 }
+                ]
+            },
+            {
+                text: "Какое утверждение лучше всего описывает ваше типичное состояние в течение дня?",
+                options: [
+                    { text: "«Я как будто в анабиозе. Чувствую холод и отстранённость»", value: -3 },
+                    { text: "«Я часто чувствую себя замёрзшим и медлительным»", value: -2 },
+                    { text: "«Я спокоен, но иногда бывает лёгкая прохлада»", value: -1 },
+                    { text: "«Я в балансе. Мне комфортно, как в тёплый летний день»", value: 0 },
+                    { text: "«Я энергичен, чувствую приятное тепло и драйв»", value: 1 },
+                    { text: "«Я часто чувствую жар, суету, как будто внутри всё кипит»", value: 2 },
+                    { text: "«Я как огненный шар. Меня легко вывести из себя, я сгораю от эмоций»", value: 3 }
+                ]
+            }
+        ];
+        
+        const totalQuestions = questions.length;
+        let currentIndex = 0;
+        let answers = new Array(totalQuestions).fill(null);
+        
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const exitBtn = document.getElementById('exitBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const testContainer = document.getElementById('testContainer');
+        const mainBody = document.getElementById('mainBody');
+        const testTitle = document.getElementById('testTitle');
+        
+        let isResultMode = false;
+        
+        function renderQuestion(index) {
+            const q = questions[index];
+            let html = `<div class="question-box">`;
+            html += `<div class="question-text">${index + 1}. ${q.text}</div>`;
+            html += `<div class="options">`;
+            
+            q.options.forEach((opt, optIndex) => {
+                const isSelected = answers[index] === opt.value;
+                html += `
+                    <div class="option ${isSelected ? 'selected' : ''}" data-value="${opt.value}">
+                        <div class="option-marker"></div>
+                        <div class="option-text">${opt.text}</div>
+                    </div>
+                `;
+            });
+            
+            html += `</div></div>`;
+            questionContainer.innerHTML = html;
+            
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    const value = parseInt(opt.dataset.value);
+                    answers[index] = value;
+                    renderQuestion(index);
+                });
+            });
+            
+            const progress = ((index + 1) / totalQuestions) * 100;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = `Вопрос ${index + 1} из ${totalQuestions}`;
+            
+            prevBtn.disabled = index === 0;
+            if (index === totalQuestions - 1) {
+                nextBtn.textContent = '🎉 Завершить';
+            } else {
+                nextBtn.textContent = 'Далее →';
+            }
+        }
+        
+        function calculateResult() {
+            const sum = answers.reduce((acc, val) => acc + val, 0);
+            // Максимум 21, минимум -21. Tₛ — это значение от 0 до 10 (где 0 — абсолютный ноль, 10 — перегрев, 5 — оптимум)
+            const normalized = (sum + 21) / 42 * 10;
+            return Math.round(normalized * 10) / 10;
+        }
+        
+        function getResultColor(ts) {
+            if (ts < 1) return '#42a5f5'; // Ледяной синий
+            if (ts < 2.5) return '#90caf9'; // Холодный голубой
+            if (ts < 4) return '#b0bec5'; // Прохладный серый
+            if (ts < 6) return '#81c784'; // Комфортный зелёный (оптимум)
+            if (ts < 7.5) return '#ffb74d'; // Тёплый оранжевый
+            if (ts < 9) return '#ef5350'; // Горячий красный
+            return '#b71c1c'; // Перегрев, тёмно-красный
+        }
+        
+        function getResultComment(ts) {
+            if (ts < 1.5) return "❄️ АБСОЛЮТНЫЙ НОЛЬ. Вы в глубокой семантической заморозке. Это состояние ступора, апатии или клинической депрессии. Ваше поле почти не vibriruet.";
+            if (ts < 2.5) return "🧊 ЛЁД. Вы склонны к «замерзанию» в стрессе. Вы медлительны, осторожны, но можете впадать в ступор. Вам не хватает «огня» для действий.";
+            if (ts < 4) return "❄️ ПРОХЛАДА. Вы спокойны и рассудительны, но иногда слишком холодны. В стрессе вы скорее замкнётесь, чем вспылите.";
+            if (ts < 6) return "🌿 ОПТИМУМ. Ваша семантическая температура близка к идеальной. Вы сохраняете спокойствие, но способны на здоровую энергию и энтузиазм. Вы в балансе.";
+            if (ts < 7.5) return "☀️ ТЕПЛО. Вы энергичны, эмоциональны, быстро реагируете. В стрессе вы склонны к лёгкому возбуждению, но контролируете себя.";
+            if (ts < 9) return "🔥 ПЛАМЯ. Вы «горячий» человек. Эмоции бьют через край. В стрессе вы вспыхиваете, можете накричать или впасть в панику. Вам нужно учиться «остывать».";
+            return "🌋 ПЕРЕГРЕВ. Вы на грани семантического выгорания. Постоянная тревога, гнев, суета сжигают ваше поле. Срочно требуется «охлаждение» и отдых.";
+        }
+        
+        function getResultAdvice(ts) {
+            if (ts < 2.5) return "🔥 Совет: Вам нужно «разогреться». Займитесь активным спортом (бег, танцы), слушайте энергичную музыку, добавьте в рацион согревающие специи (имбирь, перец). Общайтесь с «горячими» людьми.";
+            if (ts < 4) return "🌞 Совет: Добавьте в жизнь немного «огня». Найдите хобби, которое зажигает. Чаще бывайте на солнце. Практикуйте дыхание «Капалабхати» (активный выдох).";
+            if (ts < 6) return "⚖️ Совет: Вы в балансе. Поддерживайте его! Регулярно практикуйте медитацию и осознанность. Избегайте крайностей — как перегрева, так и переохлаждения.";
+            if (ts < 7.5) return "💧 Совет: Учитесь «остывать». Практикуйте глубокое диафрагмальное дыхание (выдох длиннее вдоха). Пейте прохладную воду. Слушайте спокойную музыку (432 Гц). Гуляйте у воды.";
+            if (ts < 9) return "❄️ Совет: Вам срочно нужно «охлаждение». Исключите кофеин, алкоголь, острые специи. Принимайте прохладный душ. Медитируйте на образ льда или горного озера. Больше тишины.";
+            return "🆘 Совет: Вы на грани. Полный покой, тишина, природа. Исключите все стимуляторы. Обратитесь к психотерапевту. Практикуйте «Йога-нидру» (глубокое расслабление).";
+        }
+        
+        function showResult() {
+            isResultMode = true;
+            const ts = calculateResult();
+            const color = getResultColor(ts);
+            const comment = getResultComment(ts);
+            const advice = getResultAdvice(ts);
+            
+            mainBody.style.background = `linear-gradient(145deg, ${color}20 0%, #16213e 100%)`;
+            testContainer.style.borderColor = color;
+            
+            let html = `<div class="result-container">`;
+            html += `<h2 style="color: ${color};">Ваш результат</h2>`;
+            html += `<div class="result-score" style="color: ${color};">${ts.toFixed(1)}</div>`;
+            html += `<div class="result-scale">по шкале Tₛ (от 0 до 10, оптимум ~5)</div>`;
+            html += `<div class="result-comment" style="color: #d0c8b8;">${comment}</div>`;
+            html += `<div class="result-advice" style="color: #d0c8b8;">${advice}</div>`;
+            html += `<p style="margin-top: 1.5rem; color: #a09080; font-style: italic;">Помните: Tₛ можно регулировать. Ваша задача — стремиться к «зелёной зоне» (4-6).</p>`;
+            html += `</div>`;
+            
+            questionContainer.innerHTML = html;
+            
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            exitBtn.textContent = '🔄 Пройти заново';
+            exitBtn.classList.remove('btn-secondary');
+            exitBtn.classList.add('btn');
+            
+            testTitle.textContent = `Результат: Tₛ = ${ts.toFixed(1)}`;
+            progressText.textContent = `Тест завершён`;
+            
+// --- СОХРАНЕНИЕ В ПАСПОРТ (УНИВЕРСАЛЬНЫЙ БЛОК + ИСТОРИЯ) ---
+setTimeout(function() {
+    const passportBtn = document.createElement('button');
+    passportBtn.textContent = '💾 Сохранить результат в Семантический Паспорт';
+    passportBtn.style.cssText = 'display: block; margin: 2rem auto; padding: 1rem 2rem; background: #ff8a65; color: #1a1a2e; border: none; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s;';
+    passportBtn.onmouseover = () => passportBtn.style.background = '#ff5722';
+    passportBtn.onmouseout = () => passportBtn.style.background = '#ff8a65';
+
+    passportBtn.addEventListener('click', function() {
+        const scoreElement = document.querySelector('.result-score');
+        if (scoreElement) {
+            const resultValue = parseFloat(scoreElement.textContent);
+            if (!isNaN(resultValue)) {
+                // 1. Сохраняем для Паспорта (как раньше)
+                localStorage.setItem('ideatonika_test_ts', resultValue);
+                // 2. Сохраняем в историю (НОВОЕ!)
+                saveToHistory('ts_history', resultValue);
+                
+                passportBtn.textContent = '✅ Сохранено в Паспорт!';
+                passportBtn.style.background = '#bf360c';
+                passportBtn.style.color = 'white';
+                passportBtn.disabled = true;
+            }
+        }
+    });
+
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(passportBtn);
+    }
+}, 100);
+
+// Функция сохранения истории (НОВАЯ!)
+function saveToHistory(historyKey, value) {
+    const raw = localStorage.getItem(historyKey);
+    const history = raw ? JSON.parse(raw) : [];
+    history.push({
+        date: new Date().toISOString().split('T')[0],
+        value: value
+    });
+    localStorage.setItem(historyKey, JSON.stringify(history));
+}
+
+// ========== КНОПКА "ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ" ==========
+setTimeout(function() {
+    const shareContainer = document.createElement('div');
+    shareContainer.style.cssText = 'text-align: center; margin-top: 1.5rem;';
+
+    const shareBtn = document.createElement('button');
+    shareBtn.textContent = '📤 Поделиться результатом';
+    shareBtn.style.cssText = 'display: block; margin: 0 auto 0.8rem auto; padding: 0.8rem 2rem; background: transparent; color: #81c784; border: 1.5px solid #81c784; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: Georgia, serif;';
+    shareBtn.onmouseover = () => shareBtn.style.background = '#81c784';
+    shareBtn.onmouseout = () => shareBtn.style.background = 'transparent';
+    shareBtn.onmouseover = () => shareBtn.style.color = '#1a1a2e';
+    shareBtn.onmouseout = () => shareBtn.style.color = '#81c784';
+
+    shareBtn.addEventListener('click', function() {
+        // Получаем название теста из заголовка страницы
+        const testName = document.title.replace(' • Идеатоника', '').trim();
+        
+        // Получаем результат из элемента .result-score
+        const scoreElement = document.querySelector('.result-score');
+        let resultText = '';
+        if (scoreElement) {
+            resultText = scoreElement.textContent.trim();
+        }
+        
+        // Получаем комментарий из элемента .result-comment или .result-interpretation
+        const commentElement = document.querySelector('.result-comment') || document.querySelector('.result-interpretation');
+        let commentText = '';
+        if (commentElement) {
+            commentText = commentElement.textContent.trim();
+        }
+        
+        // Формируем текст для отправки
+        const shareText = `🧪 Я прошёл тест «${testName}» на портале Идеатоника!\n\n` +
+            `📊 Мой результат: ${resultText}\n` +
+            `💬 ${commentText}\n\n` +
+            `🎯 А какой результат у тебя?\n` +
+            `👉 Пройти тест: ${window.location.href}\n\n` +
+            `🌌 Идеатоника — физика смысла.`;
+        
+        // Пытаемся использовать Web Share API (мобильные устройства)
+        if (navigator.share) {
+            navigator.share({
+                title: `Мой результат теста «${testName}»`,
+                text: shareText,
+                url: window.location.href
+            }).catch(() => {
+                // Если не получилось — копируем в буфер
+                copyToClipboard(shareText);
+            });
+        } else {
+            // Если Web Share API не поддерживается — копируем в буфер
+            copyToClipboard(shareText);
+        }
+    });
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = shareBtn.textContent;
+                shareBtn.textContent = '✅ Скопировано! Отправь другу';
+                shareBtn.style.borderColor = '#ffd54f';
+                shareBtn.style.color = '#ffd54f';
+                setTimeout(() => {
+                    shareBtn.textContent = originalText;
+                    shareBtn.style.borderColor = '#81c784';
+                    shareBtn.style.color = '#81c784';
+                }, 2500);
+            }).catch(() => {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = '✅ Скопировано! Отправь другу';
+            shareBtn.style.borderColor = '#ffd54f';
+            shareBtn.style.color = '#ffd54f';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+                shareBtn.style.borderColor = '#81c784';
+                shareBtn.style.color = '#81c784';
+            }, 2500);
+        } catch(e) {
+            shareBtn.textContent = '❌ Не удалось скопировать';
+            shareBtn.style.borderColor = '#ef5350';
+            shareBtn.style.color = '#ef5350';
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Добавляем подсказку
+    const hint = document.createElement('div');
+    hint.style.cssText = 'color: #a09080; font-size: 0.8rem; font-style: italic;';
+    hint.textContent = 'Нажмите, чтобы скопировать результат и отправить другу';
+    shareContainer.appendChild(shareBtn);
+    shareContainer.appendChild(hint);
+
+    // Ищем контейнер с результатом
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(shareContainer);
+    }
+}, 100);
+
+        }
+        
+        function resetTest() {
+            isResultMode = false;
+            currentIndex = 0;
+            answers = new Array(totalQuestions).fill(null);
+            
+            mainBody.style.background = '';
+            testContainer.style.borderColor = '';
+            testTitle.textContent = 'Лёд или Пламя?';
+            
+            prevBtn.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+            exitBtn.textContent = '🚪 Выйти';
+            exitBtn.classList.add('btn-secondary');
+            
+            renderQuestion(0);
+        }
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion(currentIndex);
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (answers[currentIndex] === null) {
+                alert('Пожалуйста, выберите один из вариантов ответа.');
+                return;
+            }
+            
+            if (currentIndex < totalQuestions - 1) {
+                currentIndex++;
+                renderQuestion(currentIndex);
+            } else {
+                if (answers.includes(null)) {
+                    alert('Пожалуйста, ответьте на все вопросы.');
+                    return;
+                }
+                showResult();
+            }
+        });
+        
+        exitBtn.addEventListener('click', () => {
+            if (isResultMode) {
+                resetTest();
+            } else {
+                if (confirm('Вы уверены, что хотите выйти? Прогресс будет потерян.')) {
+                    window.location.href = 'diagnostics-hub.html';
+                }
+            }
+        });
+        
+        renderQuestion(0);
+    })();
+</script>
+</body>
+</html>

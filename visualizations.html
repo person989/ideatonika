@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Визуализации • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0; }
+        .main-container { max-width: 1200px; width: 100%; position: relative; z-index: 1; }
+
+        /* Заголовок */
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 { font-size: 3.5rem; font-weight: 400; letter-spacing: 4px; color: #f3e7c0;
+            text-shadow: 0 0 20px rgba(255,215,150,0.5), 0 4px 10px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem; font-family: 'Times New Roman', serif; }
+        .hero .subtitle { font-size: 1.2rem; color: #c0b090; font-style: italic;
+            border-bottom: 1px solid #c0b090; display: inline-block; padding-bottom: 0.5rem; }
+        .hero .epigraph { margin-top: 1.5rem; color: #a09080; font-size: 1rem; }
+
+        /* Сетка карточек */
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem; }
+        @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+
+        .card {
+            background: rgba(30, 40, 60, 0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3); border-radius: 24px;
+            padding: 2rem 1.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transition: transform 0.2s, box-shadow 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .card:hover { transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px #e3b87c;
+            border-color: #e3b87c; }
+        .card-icon { font-size: 3rem; margin-bottom: 1rem; text-align: center; }
+        .card h2 { color: #f3e7c0; font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem;
+            text-align: center; border-bottom: 1px dashed #8b7355; padding-bottom: 0.8rem; }
+        .card p { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+        .card .meta { color: #a09080; font-size: 0.85rem; margin-bottom: 1.5rem; text-align: center; }
+        .btn { display: inline-block; background: transparent; border: 1.5px solid #e3b87c;
+            color: #e3b87c; padding: 0.8rem 1.5rem; text-decoration: none; font-size: 1rem;
+            font-weight: bold; border-radius: 40px; text-align: center; transition: 0.2s;
+            letter-spacing: 1px; margin-top: auto; }
+        .btn:hover { background: #e3b87c; color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(227,184,124,0.5); }
+
+        /* Подвал */
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem;
+            border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+        .back-link { display: inline-block; margin-top: 1rem; color: #e3b87c; text-decoration: none;
+            border: 1px solid #e3b87c; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #e3b87c; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>🎬 ВИЗУАЛИЗАЦИИ</h1>
+        <div class="subtitle">Ожившие формулы семантической физики</div>
+        <div class="epigraph">✧ «Лучше один раз увидеть интерференцию Qₛ, чем сто раз прочитать о ней» ✧</div>
+    </div>
+
+    <div class="grid">
+
+        <!-- Карточка 1: Интерференция волн -->
+        <div class="card">
+            <div class="card-icon">🌊</div>
+            <h2>Интерференция Qₛ</h2>
+            <p>Два источника семантического поля. Усиление и гашение при разной разности фаз. Визуализация §92.</p>
+            <div class="meta">🎨 Canvas-анимация • слайдеры</div>
+            <a href="viz-interference.html" class="btn">🌊 Смотреть</a>
+        </div>
+
+        <!-- Карточка 2: Когерентность -->
+        <div class="card">
+            <div class="card-icon">🎯</div>
+            <h2>Лазер vs Лампочка</h2>
+            <p>Визуализация когерентности Cₛ: от рассеянного света до тонкого луча. §108.</p>
+            <div class="meta">🎨 Canvas-анимация • слайдер Cₛ</div>
+            <a href="viz-coherence.html" class="btn">🎯 Смотреть</a>
+        </div>
+
+        <!-- Карточка 3: Турбулентность -->
+        <div class="card">
+            <div class="card-icon">🌪️</div>
+            <h2>Турбулентность</h2>
+            <p>Ламинарный и турбулентный поток Qₛ. Меняйте число Рейнольдса и смотрите на вихри. §111.</p>
+            <div class="meta">🎨 Canvas-анимация • слайдер Re</div>
+            <a href="viz-turbulence.html" class="btn">🌪️ Смотреть</a>
+        </div>
+
+        <!-- Карточка 4: Семантическое время -->
+        <div class="card">
+            <div class="card-icon">⏳</div>
+            <h2>Семантическое Время</h2>
+            <p>Два маятника: реальное время t и субъективное τ. Ускорение и замедление. §13.</p>
+            <div class="meta">🎨 Canvas-анимация • слайдеры</div>
+            <a href="viz-time.html" class="btn">⏳ Смотреть</a>
+        </div>
+
+        <!-- Карточка 5: Запутанность -->
+        <div class="card">
+            <div class="card-icon">🔗</div>
+            <h2>Запутанность</h2>
+            <p>Две частицы, связанные нелокальной семантической связью. Мгновенная реакция. §104.</p>
+            <div class="meta">🎨 Canvas-анимация • слайдеры</div>
+            <a href="viz-entanglement.html" class="btn">🔗 Смотреть</a>
+        </div>
+
+        <!-- Карточка 6: Затухание сигнала -->
+        <div class="card">
+            <div class="card-icon">📡</div>
+            <h2>Затухание Qₛ</h2>
+            <p>Луч Qₛ проходит через разные среды и гаснет по экспоненте. Закон Бугера-Ламберта. §129.</p>
+            <div class="meta">🎨 Canvas-анимация • слайдер α</div>
+            <a href="viz-attenuation.html" class="btn">📡 Смотреть</a>
+        </div>
+        
+        <!-- Карточка 7: Семантическая конвекция -->
+<div class="card">
+    <div class="card-icon">🔥</div>
+    <h2>Конвекция Qₛ</h2>
+    <p>Тёплый Qₛ поднимается вверх, холодный опускается. Визуализация §119.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер Tₛ</div>
+    <a href="viz-convection.html" class="btn">🔥 Смотреть</a>
+</div>
+
+<!-- Карточка 8: Эффект Бернулли -->
+<div class="card">
+    <div class="card-icon">💨</div>
+    <h2>Эффект Бернулли</h2>
+    <p>Ускорение потока Qₛ в сужении канала и падение давления. §117.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер ширины</div>
+    <a href="viz-bernoulli.html" class="btn">💨 Смотреть</a>
+</div>
+
+<!-- Карточка 9: Ударная волна -->
+<div class="card">
+    <div class="card-icon">💥</div>
+    <h2>Ударная Волна (M>1)</h2>
+    <p>Сверхзвуковой импульс Qₛ пробивает Семантический Экран. Конус Маха. §118.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер M_sense</div>
+    <a href="viz-shockwave.html" class="btn">💥 Смотреть</a>
+</div>
+
+<!-- Карточка 10: Дифракция Qₛ -->
+<div class="card">
+    <div class="card-icon">🌊</div>
+    <h2>Дифракция Qₛ</h2>
+    <p>Семантическая волна огибает препятствие и проникает в «тень». §91.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер λ</div>
+    <a href="viz-diffraction.html" class="btn">🌊 Смотреть</a>
+</div>
+
+<!-- Карточка 11: Резонансный всплеск -->
+<div class="card">
+    <div class="card-icon">🎵</div>
+    <h2>Резонанс Шумана</h2>
+    <p>Амплитуда Qₛ резко возрастает при совпадении частоты с 7.83 Гц. §96.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер ω</div>
+    <a href="viz-resonance.html" class="btn">🎵 Смотреть</a>
+</div>
+
+<!-- Карточка 12: Кавитация -->
+<div class="card">
+    <div class="card-icon">🫧</div>
+    <h2>Кавитация Qₛ</h2>
+    <p>Образование пузырьков семантического вакуума и их схлопывание. §116.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер P</div>
+    <a href="viz-cavitation.html" class="btn">🫧 Смотреть</a>
+</div>
+
+<!-- Карточка 13: Семантическая линза -->
+<div class="card">
+    <div class="card-icon">🔍</div>
+    <h2>Семантическая Линза</h2>
+    <p>Фокусировка рассеянного Qₛ в мощный когерентный пучок. §90.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер фокуса</div>
+    <a href="viz-lens.html" class="btn">🔍 Смотреть</a>
+</div>
+
+<!-- Карточка 14: Интерференция коллективная -->
+<div class="card">
+    <div class="card-icon">👥</div>
+    <h2>Коллективная Синергия</h2>
+    <p>N источников Qₛ. При синхронизации мощность растёт как N². §92, §123.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер N</div>
+    <a href="viz-sync.html" class="btn">👥 Смотреть</a>
+</div>
+
+<!-- Карточка 15: SEC-1 Аннигиляция -->
+<div class="card">
+    <div class="card-icon">⚡</div>
+    <h2>SEC-1: Аннигиляция</h2>
+    <p>Потоки +Qₛ и -Qₛ сталкиваются в резонаторе. Рождение семантического импульса. Эксперимент №10.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдеры Qₛ</div>
+    <a href="viz-sec1.html" class="btn">⚡ Смотреть</a>
+</div>
+
+<!-- Карточка 16: PHANTOM-SCAN -->
+<div class="card">
+    <div class="card-icon">👻</div>
+    <h2>Семантический След</h2>
+    <p>Визуализация остаточного поля Φₛ после ухода оператора. Затухание следа во времени. Эксперимент №40.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер τ</div>
+    <a href="viz-phantom.html" class="btn">👻 Смотреть</a>
+</div>
+
+<!-- Карточка 17: GRAV-SENSE -->
+<div class="card">
+    <div class="card-icon">⚖️</div>
+    <h2>Семантическая Гравитация</h2>
+    <p>Предмет с высоким Qₛ парит над чашей весов. Визуализация эффекта левитации. Эксперимент №41.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер Qₛ</div>
+    <a href="viz-gravity.html" class="btn">⚖️ Смотреть</a>
+</div>
+
+<!-- Карточка 18: SYNC-TEST -->
+<div class="card">
+    <div class="card-icon">👥</div>
+    <h2>Синхронизация Группы</h2>
+    <p>Несколько операторов входят в резонанс. Амплитуда растёт квадратично. Эксперимент №45.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер N</div>
+    <a href="viz-sync-group.html" class="btn">👥 Смотреть</a>
+</div>
+
+<!-- Карточка 19: SOUND-RES -->
+<div class="card">
+    <div class="card-icon">🎵</div>
+    <h2>Резонанс Растений</h2>
+    <p>Три растения под разную музыку: тишина, 440 Гц, 432 Гц. Рост и свечение Qₛ. Эксперимент №49.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер частоты</div>
+    <a href="viz-plants.html" class="btn">🎵 Смотреть</a>
+</div>
+
+<!-- Карточка 20: Пограничный слой -->
+<div class="card">
+    <div class="card-icon">📐</div>
+    <h2>Пограничный Слой</h2>
+    <p>Поток Qₛ обтекает поверхность. Ламинарный и турбулентный слой. Эффект шероховатости. §115.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдеры</div>
+    <a href="viz-boundary.html" class="btn">📐 Смотреть</a>
+</div>
+
+<!-- Карточка 21: Семантический Волновод -->
+<div class="card">
+    <div class="card-icon">📡</div>
+    <h2>Семантический Волновод</h2>
+    <p>Направление потока Qₛ по заданному пути с минимальными потерями. §93.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдеры</div>
+    <a href="viz-waveguide.html" class="btn">📡 Смотреть</a>
+</div>
+
+<!-- Карточка 22: Семантический Спектр -->
+<div class="card">
+    <div class="card-icon">🌈</div>
+    <h2>Семантический Спектр</h2>
+    <p>Разложение Qₛ на частоты. От дельта-ритмов до гамма-озарений. Визуализация ауры. §60, §89.</p>
+    <div class="meta">🎨 Canvas-анимация • слайдер ω</div>
+    <a href="viz-spectrum.html" class="btn">🌈 Смотреть</a>
+</div>
+
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Визуализации семантической физики</p>
+        <p>✧ «Формулы — это застывшая поэзия. Анимации — её живое дыхание.» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

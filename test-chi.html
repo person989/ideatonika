@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Чувствуете ли вы невидимое? • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.5s ease;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .test-container {
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .test-header h1 {
+            font-size: 2.2rem;
+            color: #f3e7c0;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 3px;
+            margin: 1.5rem 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #ce93d8;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .progress-text {
+            text-align: right;
+            color: #a09080;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+        
+        .question-box {
+            margin-bottom: 2rem;
+        }
+        .question-text {
+            color: #f3e7c0;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .option {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid #5d4a3a;
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #d0c8b8;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .option:hover {
+            background: rgba(206, 147, 216, 0.15);
+            border-color: #ce93d8;
+        }
+        .option.selected {
+            background: rgba(206, 147, 216, 0.25);
+            border-color: #ce93d8;
+            color: #f3e7c0;
+        }
+        .option-marker {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #5d4a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .option.selected .option-marker {
+            border-color: #ce93d8;
+            background: #ce93d8;
+            box-shadow: 0 0 10px #ce93d8;
+        }
+        .option.selected .option-marker::after {
+            content: "✓";
+            color: #1a1a2e;
+            font-weight: bold;
+        }
+        .option-text {
+            flex: 1;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 15px;
+        }
+        .btn {
+            background: transparent;
+            border: 1.5px solid #ce93d8;
+            color: #ce93d8;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .btn:hover {
+            background: #ce93d8;
+            color: #1a1a2e;
+        }
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            border-color: #5d4a3a;
+            color: #a09080;
+        }
+        .btn-secondary:hover {
+            background: #5d4a3a;
+            color: #d0c8b8;
+        }
+        
+        .result-container {
+            text-align: center;
+        }
+        .result-score {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        .result-scale {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+        .result-comment {
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            line-height: 1.6;
+        }
+        .result-advice {
+            background: rgba(206, 147, 216, 0.1);
+            border-left: 4px solid #ce93d8;
+            padding: 1.2rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            text-align: left;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #ce93d8;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body id="mainBody">
+<div class="cosmic-bg"></div>
+<div class="test-container" id="testContainer">
+    
+    <div class="test-header">
+        <h1>
+            <span>🔮</span>
+            <span id="testTitle">Чувствуете ли вы невидимое?</span>
+            <span>✨</span>
+        </h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Вопрос 1 из 7</div>
+    </div>
+    
+    <div id="questionContainer"></div>
+    
+    <div class="nav-buttons">
+        <button class="btn btn-secondary" id="prevBtn" disabled>← Назад</button>
+        <button class="btn btn-secondary" id="exitBtn">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="diagnostics-hub.html" class="back-link">← Вернуться в Хаб Диагностики</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const questions = [
+            {
+                text: "Бывает ли, что вы думаете о человеке, и он внезапно звонит или пишет?",
+                options: [
+                    { text: "Никогда. Совпадения, не более", value: -3 },
+                    { text: "Крайне редко, можно списать на случайность", value: -2 },
+                    { text: "Иногда бывает, но я не придаю значения", value: -1 },
+                    { text: "Да, время от времени замечаю такие совпадения", value: 0 },
+                    { text: "Довольно часто. Это больше, чем просто случайность", value: 1 },
+                    { text: "Очень часто. Я чувствую, когда обо мне думают", value: 2 },
+                    { text: "Постоянно. Я знаю, кто и когда выйдет на связь", value: 3 }
+                ]
+            },
+            {
+                text: "Чувствуете ли вы атмосферу места? (Например, в одной комнате уютно, а в другой — «давит»)",
+                options: [
+                    { text: "Никогда. Все комнаты одинаковы", value: -3 },
+                    { text: "Редко, только в очень очевидных случаях (подвал, морг)", value: -2 },
+                    { text: "Иногда, если специально прислушаться", value: -1 },
+                    { text: "Да, я замечаю разницу между помещениями", value: 0 },
+                    { text: "Часто. Я сразу чувствую, «хорошее» место или «плохое»", value: 1 },
+                    { text: "Очень остро. Могу описать «настроение» комнаты в деталях", value: 2 },
+                    { text: "Я вижу/чувствую ауру мест. Это мой основной навигатор", value: 3 }
+                ]
+            },
+            {
+                text: "Случались ли у вас предчувствия, которые потом сбывались?",
+                options: [
+                    { text: "Никогда. Это всё сказки", value: -3 },
+                    { text: "Один-два раза в жизни, но скорее совпадение", value: -2 },
+                    { text: "Иногда бывает что-то смутное", value: -1 },
+                    { text: "Да, несколько раз были довольно точные предчувствия", value: 0 },
+                    { text: "Регулярно. Я часто знаю, чем закончится дело", value: 1 },
+                    { text: "Очень часто. Мои предчувствия — мой компас", value: 2 },
+                    { text: "Я живу в потоке предвидения. Я знаю будущее", value: 3 }
+                ]
+            },
+            {
+                text: "Насколько вы эмпатичны? Чувствуете ли вы эмоции других людей, даже если они их скрывают?",
+                options: [
+                    { text: "Совсем нет. Я не понимаю, что чувствуют другие", value: -3 },
+                    { text: "Слабо. Только если эмоции очень яркие (крик, слёзы)", value: -2 },
+                    { text: "Умеренно. Близких людей я понимаю хорошо", value: -1 },
+                    { text: "Да, я обычно считываю настроение собеседника", value: 0 },
+                    { text: "Хорошо. Я чувствую фальшь и скрытые эмоции", value: 1 },
+                    { text: "Очень сильно. Я «заражаюсь» эмоциями других", value: 2 },
+                    { text: "Я — эмпатический «радар». Я чувствую боль и радость даже незнакомцев на расстоянии", value: 3 }
+                ]
+            },
+            {
+                text: "Как часто вы видите яркие, сюжетные сны, которые кажутся «вещими» или полными символов?",
+                options: [
+                    { text: "Никогда. Я не запоминаю сны", value: -3 },
+                    { text: "Очень редко. Обычно сны — это просто «шум»", value: -2 },
+                    { text: "Иногда снятся интересные сны", value: -1 },
+                    { text: "Регулярно вижу яркие сны, которые могу истолковать", value: 0 },
+                    { text: "Часто. Мои сны — это послания и подсказки", value: 1 },
+                    { text: "Почти каждую ночь. Я веду дневник сновидений", value: 2 },
+                    { text: "Мои сны — это портал в другие миры. Я там живу", value: 3 }
+                ]
+            },
+            {
+                text: "Чувствуете ли вы взгляд в спину? Можете ли вы определить, что на вас смотрят, не видя этого?",
+                options: [
+                    { text: "Никогда. Это миф", value: -3 },
+                    { text: "Очень редко, может, показалось", value: -2 },
+                    { text: "Иногда, в тихой обстановке", value: -1 },
+                    { text: "Да, бывает, что я оборачиваюсь и встречаюсь взглядом", value: 0 },
+                    { text: "Часто. Я почти всегда знаю, когда на меня смотрят", value: 1 },
+                    { text: "Очень остро. Могу определить, кто именно и с какой эмоцией смотрит", value: 2 },
+                    { text: "Я чувствую направленное внимание как физическое прикосновение", value: 3 }
+                ]
+            },
+            {
+                text: "Случалось ли вам испытывать «дежавю» (ощущение, что это уже было)?",
+                options: [
+                    { text: "Никогда. Не понимаю, о чём речь", value: -3 },
+                    { text: "Один-два раза в жизни", value: -2 },
+                    { text: "Иногда, несколько раз в год", value: -1 },
+                    { text: "Регулярно, наверно раз в месяц", value: 0 },
+                    { text: "Часто, несколько раз в месяц", value: 1 },
+                    { text: "Очень часто. Это мой обычный опыт", value: 2 },
+                    { text: "Я живу в «дежавю». Время для меня — петля", value: 3 }
+                ]
+            }
+        ];
+        
+        const totalQuestions = questions.length;
+        let currentIndex = 0;
+        let answers = new Array(totalQuestions).fill(null);
+        
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const exitBtn = document.getElementById('exitBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const testContainer = document.getElementById('testContainer');
+        const mainBody = document.getElementById('mainBody');
+        const testTitle = document.getElementById('testTitle');
+        
+        let isResultMode = false;
+        
+        function renderQuestion(index) {
+            const q = questions[index];
+            let html = `<div class="question-box">`;
+            html += `<div class="question-text">${index + 1}. ${q.text}</div>`;
+            html += `<div class="options">`;
+            
+            q.options.forEach((opt) => {
+                const isSelected = answers[index] === opt.value;
+                html += `
+                    <div class="option ${isSelected ? 'selected' : ''}" data-value="${opt.value}">
+                        <div class="option-marker"></div>
+                        <div class="option-text">${opt.text}</div>
+                    </div>
+                `;
+            });
+            
+            html += `</div></div>`;
+            questionContainer.innerHTML = html;
+            
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    const value = parseInt(opt.dataset.value);
+                    answers[index] = value;
+                    renderQuestion(index);
+                });
+            });
+            
+            const progress = ((index + 1) / totalQuestions) * 100;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = `Вопрос ${index + 1} из ${totalQuestions}`;
+            
+            prevBtn.disabled = index === 0;
+            if (index === totalQuestions - 1) {
+                nextBtn.textContent = '🎉 Завершить';
+            } else {
+                nextBtn.textContent = 'Далее →';
+            }
+        }
+        
+        function calculateResult() {
+            const sum = answers.reduce((acc, val) => acc + val, 0);
+            // Максимум 21, минимум -21. χ — это значение от 0 до 10.
+            const normalized = (sum + 21) / 42 * 10;
+            return Math.round(normalized * 10) / 10;
+        }
+        
+        function getResultColor(chi) {
+            if (chi < 2) return '#78909c';
+            if (chi < 4) return '#90caf9';
+            if (chi < 6) return '#81c784';
+            if (chi < 8) return '#ce93d8';
+            return '#e1bee7';
+        }
+        
+        function getResultComment(chi) {
+            if (chi < 2) return "🪨 Вы — «семантический глухарь». Ваша чувствительность χ очень низкая. Вы живёте в плотном, материальном мире и редко замечаете «тонкое». Это не плохо, это просто ваша природа.";
+            if (chi < 4) return "🌫️ Вы — «туманный». Иногда вы что-то чувствуете, но списываете на совпадения. Ваша интуиция пробивается, но вы ей не доверяете. Развивайте её!";
+            if (chi < 6) return "🌿 Вы — «чувствующий». У вас средняя, нормальная интуиция. Вы замечаете атмосферу, эмпатичны, иногда предчувствуете. Доверяйте своему «нутрю» больше.";
+            if (chi < 8) return "🔮 Вы — «сенситив». Ваша чувствительность выше среднего. Вы легко считываете людей, места, предчувствуете события. Вам нужно учиться защищать своё поле от перегрузок.";
+            if (chi < 9.5) return "✨ Вы — «экстрасенс». Очень высокая чувствительность. Вы видите ауры, вещие сны, тонкие миры. Это дар, но и большая ответственность. Берегите себя.";
+            return "🌌 Вы — «медиум». Ваша чувствительность почти запредельна. Вы — мост между мирами. Вам необходимы специальные практики заземления и защиты, иначе вы «сгорите».";
+        }
+        
+        function getResultAdvice(chi) {
+            if (chi < 4) return "🌱 Совет: Развивайте интуицию. Начните с малого: перед тем как посмотреть на часы, попробуйте угадать время. Ведите дневник снов. Медитируйте на образ «третьего глаза».";
+            if (chi < 6) return "💧 Совет: Укрепляйте доверие к себе. Когда чувствуете «что-то», не отмахивайтесь. Записывайте свои предчувствия и проверяйте их. Практикуйте тест с угадыванием карт Зенера.";
+            if (chi < 8) return "🛡️ Совет: Учитесь защищаться. Высокая чувствительность — это уязвимость. Практикуйте «семантический щит» (визуализация золотого кокона). Избегайте мест с тяжёлой энергетикой. Заземляйтесь через спорт и природу.";
+            if (chi < 9.5) return "⚡ Совет: Вам нужен наставник. Ваш дар слишком силён, чтобы развивать его в одиночку. Ищите учителя по медитации, йоге или духовным практикам. Изучайте техники очищения и защиты.";
+            return "🕊️ Совет: Ваша миссия — служение. Но сначала — выживание. Строгий режим дня, здоровая еда, минимум стресса. Регулярные практики заземления (работа с землёй, деревом, камнями). Найдите сообщество «таких же», чтобы не чувствовать себя одиноко.";
+        }
+        
+        function showResult() {
+            isResultMode = true;
+            const chi = calculateResult();
+            const color = getResultColor(chi);
+            const comment = getResultComment(chi);
+            const advice = getResultAdvice(chi);
+            
+            mainBody.style.background = `linear-gradient(145deg, ${color}20 0%, #16213e 100%)`;
+            testContainer.style.borderColor = color;
+            
+            let html = `<div class="result-container">`;
+            html += `<h2 style="color: ${color};">Ваш результат</h2>`;
+            html += `<div class="result-score" style="color: ${color};">${chi.toFixed(1)}</div>`;
+            html += `<div class="result-scale">по шкале χ (от 0 до 10)</div>`;
+            html += `<div class="result-comment" style="color: #d0c8b8;">${comment}</div>`;
+            html += `<div class="result-advice" style="color: #d0c8b8;">${advice}</div>`;
+            html += `<p style="margin-top: 1.5rem; color: #a09080; font-style: italic;">χ — это не магия, а чувствительность к семантическому полю. Её можно развивать.</p>`;
+            html += `</div>`;
+            
+            questionContainer.innerHTML = html;
+            
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            exitBtn.textContent = '🔄 Пройти заново';
+            exitBtn.classList.remove('btn-secondary');
+            exitBtn.classList.add('btn');
+            
+            testTitle.textContent = `Результат: χ = ${chi.toFixed(1)}`;
+            progressText.textContent = `Тест завершён`;
+            
+// --- СОХРАНЕНИЕ В ПАСПОРТ (УНИВЕРСАЛЬНЫЙ БЛОК + ИСТОРИЯ) ---
+setTimeout(function() {
+    const passportBtn = document.createElement('button');
+    passportBtn.textContent = '💾 Сохранить результат в Семантический Паспорт';
+    passportBtn.style.cssText = 'display: block; margin: 2rem auto; padding: 1rem 2rem; background: #ce93d8; color: #1a1a2e; border: none; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s;';
+    passportBtn.onmouseover = () => passportBtn.style.background = '#ab47bc';
+    passportBtn.onmouseout = () => passportBtn.style.background = '#ce93d8';
+
+    passportBtn.addEventListener('click', function() {
+        const scoreElement = document.querySelector('.result-score');
+        if (scoreElement) {
+            const resultValue = parseFloat(scoreElement.textContent);
+            if (!isNaN(resultValue)) {
+                // 1. Сохраняем для Паспорта (как раньше)
+                localStorage.setItem('ideatonika_test_chi', resultValue);
+                // 2. Сохраняем в историю (НОВОЕ!)
+                saveToHistory('chi_history', resultValue);
+                
+                passportBtn.textContent = '✅ Сохранено в Паспорт!';
+                passportBtn.style.background = '#6a1b9a';
+                passportBtn.style.color = 'white';
+                passportBtn.disabled = true;
+            }
+        }
+    });
+
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(passportBtn);
+    }
+}, 100);
+
+// Функция сохранения истории (НОВАЯ!)
+function saveToHistory(historyKey, value) {
+    const raw = localStorage.getItem(historyKey);
+    const history = raw ? JSON.parse(raw) : [];
+    history.push({
+        date: new Date().toISOString().split('T')[0],
+        value: value
+    });
+    localStorage.setItem(historyKey, JSON.stringify(history));
+}
+
+// ========== КНОПКА "ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ" ==========
+setTimeout(function() {
+    const shareContainer = document.createElement('div');
+    shareContainer.style.cssText = 'text-align: center; margin-top: 1.5rem;';
+
+    const shareBtn = document.createElement('button');
+    shareBtn.textContent = '📤 Поделиться результатом';
+    shareBtn.style.cssText = 'display: block; margin: 0 auto 0.8rem auto; padding: 0.8rem 2rem; background: transparent; color: #81c784; border: 1.5px solid #81c784; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: Georgia, serif;';
+    shareBtn.onmouseover = () => shareBtn.style.background = '#81c784';
+    shareBtn.onmouseout = () => shareBtn.style.background = 'transparent';
+    shareBtn.onmouseover = () => shareBtn.style.color = '#1a1a2e';
+    shareBtn.onmouseout = () => shareBtn.style.color = '#81c784';
+
+    shareBtn.addEventListener('click', function() {
+        // Получаем название теста из заголовка страницы
+        const testName = document.title.replace(' • Идеатоника', '').trim();
+        
+        // Получаем результат из элемента .result-score
+        const scoreElement = document.querySelector('.result-score');
+        let resultText = '';
+        if (scoreElement) {
+            resultText = scoreElement.textContent.trim();
+        }
+        
+        // Получаем комментарий из элемента .result-comment или .result-interpretation
+        const commentElement = document.querySelector('.result-comment') || document.querySelector('.result-interpretation');
+        let commentText = '';
+        if (commentElement) {
+            commentText = commentElement.textContent.trim();
+        }
+        
+        // Формируем текст для отправки
+        const shareText = `🧪 Я прошёл тест «${testName}» на портале Идеатоника!\n\n` +
+            `📊 Мой результат: ${resultText}\n` +
+            `💬 ${commentText}\n\n` +
+            `🎯 А какой результат у тебя?\n` +
+            `👉 Пройти тест: ${window.location.href}\n\n` +
+            `🌌 Идеатоника — физика смысла.`;
+        
+        // Пытаемся использовать Web Share API (мобильные устройства)
+        if (navigator.share) {
+            navigator.share({
+                title: `Мой результат теста «${testName}»`,
+                text: shareText,
+                url: window.location.href
+            }).catch(() => {
+                // Если не получилось — копируем в буфер
+                copyToClipboard(shareText);
+            });
+        } else {
+            // Если Web Share API не поддерживается — копируем в буфер
+            copyToClipboard(shareText);
+        }
+    });
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = shareBtn.textContent;
+                shareBtn.textContent = '✅ Скопировано! Отправь другу';
+                shareBtn.style.borderColor = '#ffd54f';
+                shareBtn.style.color = '#ffd54f';
+                setTimeout(() => {
+                    shareBtn.textContent = originalText;
+                    shareBtn.style.borderColor = '#81c784';
+                    shareBtn.style.color = '#81c784';
+                }, 2500);
+            }).catch(() => {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = '✅ Скопировано! Отправь другу';
+            shareBtn.style.borderColor = '#ffd54f';
+            shareBtn.style.color = '#ffd54f';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+                shareBtn.style.borderColor = '#81c784';
+                shareBtn.style.color = '#81c784';
+            }, 2500);
+        } catch(e) {
+            shareBtn.textContent = '❌ Не удалось скопировать';
+            shareBtn.style.borderColor = '#ef5350';
+            shareBtn.style.color = '#ef5350';
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Добавляем подсказку
+    const hint = document.createElement('div');
+    hint.style.cssText = 'color: #a09080; font-size: 0.8rem; font-style: italic;';
+    hint.textContent = 'Нажмите, чтобы скопировать результат и отправить другу';
+    shareContainer.appendChild(shareBtn);
+    shareContainer.appendChild(hint);
+
+    // Ищем контейнер с результатом
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(shareContainer);
+    }
+}, 100);
+
+        }
+        
+        function resetTest() {
+            isResultMode = false;
+            currentIndex = 0;
+            answers = new Array(totalQuestions).fill(null);
+            
+            mainBody.style.background = '';
+            testContainer.style.borderColor = '';
+            testTitle.textContent = 'Чувствуете ли вы невидимое?';
+            
+            prevBtn.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+            exitBtn.textContent = '🚪 Выйти';
+            exitBtn.classList.add('btn-secondary');
+            
+            renderQuestion(0);
+        }
+        
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion(currentIndex);
+            }
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            if (answers[currentIndex] === null) {
+                alert('Пожалуйста, выберите один из вариантов ответа.');
+                return;
+            }
+            
+            if (currentIndex < totalQuestions - 1) {
+                currentIndex++;
+                renderQuestion(currentIndex);
+            } else {
+                if (answers.includes(null)) {
+                    alert('Пожалуйста, ответьте на все вопросы.');
+                    return;
+                }
+                showResult();
+            }
+        });
+        
+        exitBtn.addEventListener('click', () => {
+            if (isResultMode) {
+                resetTest();
+            } else {
+                if (confirm('Вы уверены, что хотите выйти? Прогресс будет потерян.')) {
+                    window.location.href = 'diagnostics-hub.html';
+                }
+            }
+        });
+        
+        renderQuestion(0);
+    })();
+</script>
+</body>
+</html>

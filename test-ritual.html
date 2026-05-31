@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Хаос или Порядок? • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background 0.5s ease;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .test-container {
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+        .test-header { text-align: center; margin-bottom: 2rem; }
+        .test-header h1 { font-size: 2.2rem; color: #f3e7c0; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1.5rem 0; }
+        .progress-fill { height: 100%; background: #ffb74d; border-radius: 3px; width: 0%; transition: width 0.3s ease; }
+        .progress-text { text-align: right; color: #a09080; font-size: 0.8rem; margin-top: 0.3rem; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.3rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option {
+            background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1rem 1.5rem; cursor: pointer; transition: all 0.2s ease; color: #d0c8b8;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .option:hover { background: rgba(255, 183, 77, 0.15); border-color: #ffb74d; }
+        .option.selected { background: rgba(255, 183, 77, 0.25); border-color: #ffb74d; color: #f3e7c0; }
+        .option-marker {
+            width: 24px; height: 24px; border-radius: 50%; border: 2px solid #5d4a3a;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .option.selected .option-marker { border-color: #ffb74d; background: #ffb74d; box-shadow: 0 0 10px #ffb74d; }
+        .option.selected .option-marker::after { content: "✓"; color: #1a1a2e; font-weight: bold; }
+        .option-text { flex: 1; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 15px; }
+        .btn {
+            background: transparent; border: 1.5px solid #ffb74d; color: #ffb74d;
+            padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit;
+        }
+        .btn:hover { background: #ffb74d; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-secondary { border-color: #5d4a3a; color: #a09080; }
+        .btn-secondary:hover { background: #5d4a3a; color: #d0c8b8; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 5rem; font-weight: bold; margin: 1rem 0; }
+        .result-scale { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .result-comment { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 1.5rem; margin: 1.5rem 0; line-height: 1.6; }
+        .result-advice { background: rgba(255, 183, 77, 0.1); border-left: 4px solid #ffb74d; padding: 1.2rem 1.5rem; border-radius: 0 12px 12px 0; text-align: left; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffb74d; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body id="mainBody">
+<div class="cosmic-bg"></div>
+<div class="test-container" id="testContainer">
+    
+    <div class="test-header">
+        <h1>
+            <span>🕯️</span>
+            <span id="testTitle">Хаос или Порядок?</span>
+            <span>📿</span>
+        </h1>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Вопрос 1 из 7</div>
+    </div>
+    
+    <div id="questionContainer"></div>
+    
+    <div class="nav-buttons">
+        <button class="btn btn-secondary" id="prevBtn" disabled>← Назад</button>
+        <button class="btn btn-secondary" id="exitBtn">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="diagnostics-hub.html" class="back-link">← Вернуться в Хаб Диагностики</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const questions = [
+            {
+                text: "Есть ли у вас утренний ритуал? Как начинается ваш типичный день?",
+                options: [
+                    { text: "У меня есть чёткий, осознанный ритуал (медитация, зарядка, благодарность, планирование дня). Это занимает 15-30 минут.", value: 3 },
+                    { text: "У меня есть пара привычек (душ, кофе), но без особого смысла. На автомате.", value: 1 },
+                    { text: "Я просыпаюсь и сразу хватаю телефон, проверяю соцсети/почту. Это затягивает на 15-30 минут.", value: -2 },
+                    { text: "Утро — это хаос. Всё в спешке, я часто опаздываю, нет времени даже на завтрак.", value: -3 }
+                ]
+            },
+            {
+                text: "Как вы принимаете пищу в обычный день?",
+                options: [
+                    { text: "Я ем осознанно, в тишине или с приятной компанией, не отвлекаясь на гаджеты. Я благодарен за еду.", value: 3 },
+                    { text: "Обычно я ем за столом, но могу параллельно смотреть что-то или читать.", value: 1 },
+                    { text: "Я часто ем на ходу, перед компьютером или телевизором, почти не замечая вкуса.", value: -2 },
+                    { text: "Я перекусываю чем попало, когда придётся. Режима питания нет.", value: -3 }
+                ]
+            },
+            {
+                text: "Есть ли у вас вечерний ритуал перед сном?",
+                options: [
+                    { text: "Да, я готовлюсь ко сну осознанно: выключаю гаджеты за час, читаю, медитирую, принимаю ванну, благодарю за день.", value: 3 },
+                    { text: "Я стараюсь соблюдать режим, но не всегда получается.", value: 1 },
+                    { text: "Я засыпаю под телевизор или с телефоном в руке, часто «залипаю» допоздна.", value: -2 },
+                    { text: "У меня бессонница или сбитый режим. Я ложусь и встаю в разное время.", value: -3 }
+                ]
+            },
+            {
+                text: "Как часто вы выделяете время для тишины и «ничегонеделания» (без гаджетов, без задач)?",
+                options: [
+                    { text: "Каждый день. Это моя священная практика (хотя бы 15-30 минут).", value: 3 },
+                    { text: "Несколько раз в неделю, когда получается.", value: 1 },
+                    { text: "Очень редко. Я постоянно чем-то занят или «в телефоне».", value: -2 },
+                    { text: "Никогда. Тишина меня пугает или кажется бесполезной тратой времени.", value: -3 }
+                ]
+            },
+            {
+                text: "Ведёте ли вы дневник (благодарности, мыслей, снов, планов)?",
+                options: [
+                    { text: "Да, регулярно, это часть моей практики.", value: 3 },
+                    { text: "Иногда, когда есть настроение или что-то важное происходит.", value: 1 },
+                    { text: "Пробовал(а), но бросил(а).", value: -1 },
+                    { text: "Никогда не вёл(а) и не вижу смысла.", value: -3 }
+                ]
+            },
+            {
+                text: "Как часто вы проводите «семантическую уборку» (избавляетесь от хлама, проветриваете, зажигаете свечи, окуриваете пространство)?",
+                options: [
+                    { text: "Регулярно (раз в неделю или чаще). Для меня это ритуал очищения.", value: 3 },
+                    { text: "Раз в месяц или по настроению.", value: 1 },
+                    { text: "Только перед большими праздниками или когда уже совсем «заросло».", value: -1 },
+                    { text: "Никогда. Уборка — это скучная обязанность.", value: -3 }
+                ]
+            },
+            {
+                text: "Какое утверждение лучше всего описывает ваше отношение к повседневной рутине?",
+                options: [
+                    { text: "Рутина — это священнодействие. Я наполняю смыслом даже мытьё посуды.", value: 3 },
+                    { text: "Рутина — это нормально. Я делаю дела без особых эмоций.", value: 0 },
+                    { text: "Рутина меня угнетает. Я стараюсь её избегать или делать побыстрее.", value: -2 },
+                    { text: "Я ненавижу рутину. Она крадёт мою жизнь.", value: -3 }
+                ]
+            }
+        ];
+        
+        const totalQuestions = questions.length;
+        let currentIndex = 0;
+        let answers = new Array(totalQuestions).fill(null);
+        
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const exitBtn = document.getElementById('exitBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const testContainer = document.getElementById('testContainer');
+        const mainBody = document.getElementById('mainBody');
+        const testTitle = document.getElementById('testTitle');
+        
+        let isResultMode = false;
+        
+        function renderQuestion(index) {
+            const q = questions[index];
+            let html = `<div class="question-box"><div class="question-text">${index + 1}. ${q.text}</div><div class="options">`;
+            q.options.forEach((opt) => {
+                const isSelected = answers[index] === opt.value;
+                html += `<div class="option ${isSelected ? 'selected' : ''}" data-value="${opt.value}"><div class="option-marker"></div><div class="option-text">${opt.text}</div></div>`;
+            });
+            html += `</div></div>`;
+            questionContainer.innerHTML = html;
+            
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    answers[index] = parseInt(opt.dataset.value);
+                    renderQuestion(index);
+                });
+            });
+            
+            const progress = ((index + 1) / totalQuestions) * 100;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = `Вопрос ${index + 1} из ${totalQuestions}`;
+            prevBtn.disabled = index === 0;
+            nextBtn.textContent = index === totalQuestions - 1 ? '🎉 Завершить' : 'Далее →';
+        }
+        
+        function calculateResult() {
+            const sum = answers.reduce((acc, val) => acc + val, 0);
+            const maxSum = totalQuestions * 3;
+            const minSum = totalQuestions * (-3);
+            const normalized = Math.round(((sum - minSum) / (maxSum - minSum)) * 10);
+            return Math.max(0, Math.min(10, normalized));
+        }
+        
+        function getResultColor(score) {
+            if (score >= 8) return '#ffd54f';
+            if (score >= 6) return '#ffb74d';
+            if (score >= 4) return '#90caf9';
+            if (score >= 2) return '#b0bec5';
+            return '#78909c';
+        }
+        
+        function getResultComment(score) {
+            if (score >= 9) return "🕯️ Вы — МАСТЕР РИТУАЛОВ. Ваша жизнь — это осознанная практика. Вы превратили рутину в священнодействие. Ваше поле структурировано, Cₛ стабильно высока.";
+            if (score >= 7) return "📿 Вы — ПРАКТИК. У вас есть хорошие ритуалы, вы цените порядок и осознанность. Есть куда расти, но вы на верном пути.";
+            if (score >= 5) return "⚖️ Вы — НА ПЕРЕПУТЬЕ. Иногда вы осознанны, иногда — нет. Ваше поле колеблется между порядком и хаосом. Добавьте один маленький утренний ритуал.";
+            if (score >= 3) return "🌪️ Вы — В ЛЁГКОМ ХАОСЕ. Повседневность часто захлёстывает вас. Ритуалы есть, но они слабы или нерегулярны. Ваше Cₛ нестабильно.";
+            if (score >= 1) return "💨 Вы — В ХАОСЕ. Ваша жизнь лишена структуры. Вы реагируете на события, а не формируете их. S_noise высок, Cₛ низка.";
+            return "🌫️ Вы — В ТУМАНЕ. Полное отсутствие ритуалов и порядка. Ваше семантическое поле истощено и дезориентировано. Требуется срочная «перезагрузка».";
+        }
+        
+        function getResultAdvice(score) {
+            if (score >= 7) return "🌟 Совет: Продолжайте! Ваши ритуалы — ваша сила. Попробуйте добавить что-то новое: ведение дневника сновидений, еженедельную «семантическую уборку» с солью и свечами, практику благодарности перед едой.";
+            if (score >= 5) return "📋 Совет: Начните с одного нового ритуала. Например, «утренняя страница» (3 вещи, за которые вы благодарны, сразу после пробуждения). Или за час до сна выключайте все гаджеты и читайте бумажную книгу.";
+            if (score >= 3) return "🧹 Совет: Вам нужно «расчистить» пространство для ритуалов. Начните с малого: завтрак без телефона. Прогулка без наушников. 5 минут тишины перед сном. Эти «якоря» структурируют ваше поле.";
+            if (score >= 1) return "⏰ Совет: Введите хотя бы ОДИН жёсткий, незыблемый ритуал. Например, в 22:00 вы выключаете телефон и зажигаете свечу. Или в 07:30 вы делаете 5-минутную зарядку. Дисциплина — это мышца. Тренируйте её.";
+            return "🆘 Совет: Начните с базового: ложитесь и вставайте в одно и то же время. Принимайте душ утром и вечером, представляя, как вода смывает «грязь дня». Ешьте в тишине хотя бы раз в день. Это база.";
+        }
+        
+        function showResult() {
+            isResultMode = true;
+            const score = calculateResult();
+            const color = getResultColor(score);
+            const comment = getResultComment(score);
+            const advice = getResultAdvice(score);
+            
+            mainBody.style.background = `linear-gradient(145deg, ${color}20 0%, #16213e 100%)`;
+            testContainer.style.borderColor = color;
+            
+            let html = `<div class="result-container">`;
+            html += `<h2 style="color: ${color};">Ваш результат</h2>`;
+            html += `<div class="result-score" style="color: ${color};">${score}</div>`;
+            html += `<div class="result-scale">Индекс Ритуализации (от 0 до 10)</div>`;
+            html += `<div class="result-comment" style="color: #d0c8b8;">${comment}</div>`;
+            html += `<div class="result-advice" style="color: #d0c8b8;">${advice}</div>`;
+            html += `<p style="margin-top: 1.5rem; color: #a09080; font-style: italic;">Помните: ритуалы — это якоря, которые удерживают ваше поле в гармонии. Даже маленький ритуал лучше, чем его отсутствие.</p>`;
+            html += `</div>`;
+            
+            questionContainer.innerHTML = html;
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            exitBtn.textContent = '🔄 Пройти заново';
+            exitBtn.classList.remove('btn-secondary');
+            exitBtn.classList.add('btn');
+            testTitle.textContent = `Результат: Индекс = ${score}/10`;
+            progressText.textContent = `Тест завершён`;
+            
+            setTimeout(function() {
+    const passportBtn = document.createElement('button');
+    passportBtn.textContent = '💾 Сохранить результат в Семантический Паспорт';
+    passportBtn.style.cssText = 'display: block; margin: 2rem auto; padding: 1rem 2rem; background: #ffcc80; color: #1a1a2e; border: none; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s;';
+    passportBtn.onmouseover = () => passportBtn.style.background = '#ff9800';
+    passportBtn.onmouseout = () => passportBtn.style.background = '#ffcc80';
+
+    passportBtn.addEventListener('click', function() {
+        const scoreElement = document.querySelector('.result-score');
+        if (scoreElement) {
+            const resultText = scoreElement.textContent.trim();
+            const resultValue = parseFloat(resultText);
+            if (!isNaN(resultValue)) {
+                localStorage.setItem('ideatonika_test_ritual', resultValue);
+            } else {
+                localStorage.setItem('ideatonika_test_ritual', resultText);
+            }
+            passportBtn.textContent = '✅ Сохранено в Паспорт!';
+            passportBtn.style.background = '#e65100';
+            passportBtn.style.color = 'white';
+            passportBtn.disabled = true;
+        }
+    });
+
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(passportBtn);
+    }
+}, 100);
+
+// ========== КНОПКА "ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ" ==========
+setTimeout(function() {
+    const shareContainer = document.createElement('div');
+    shareContainer.style.cssText = 'text-align: center; margin-top: 1.5rem;';
+
+    const shareBtn = document.createElement('button');
+    shareBtn.textContent = '📤 Поделиться результатом';
+    shareBtn.style.cssText = 'display: block; margin: 0 auto 0.8rem auto; padding: 0.8rem 2rem; background: transparent; color: #81c784; border: 1.5px solid #81c784; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: Georgia, serif;';
+    shareBtn.onmouseover = () => shareBtn.style.background = '#81c784';
+    shareBtn.onmouseout = () => shareBtn.style.background = 'transparent';
+    shareBtn.onmouseover = () => shareBtn.style.color = '#1a1a2e';
+    shareBtn.onmouseout = () => shareBtn.style.color = '#81c784';
+
+    shareBtn.addEventListener('click', function() {
+        // Получаем название теста из заголовка страницы
+        const testName = document.title.replace(' • Идеатоника', '').trim();
+        
+        // Получаем результат из элемента .result-score
+        const scoreElement = document.querySelector('.result-score');
+        let resultText = '';
+        if (scoreElement) {
+            resultText = scoreElement.textContent.trim();
+        }
+        
+        // Получаем комментарий из элемента .result-comment или .result-interpretation
+        const commentElement = document.querySelector('.result-comment') || document.querySelector('.result-interpretation');
+        let commentText = '';
+        if (commentElement) {
+            commentText = commentElement.textContent.trim();
+        }
+        
+        // Формируем текст для отправки
+        const shareText = `🧪 Я прошёл тест «${testName}» на портале Идеатоника!\n\n` +
+            `📊 Мой результат: ${resultText}\n` +
+            `💬 ${commentText}\n\n` +
+            `🎯 А какой результат у тебя?\n` +
+            `👉 Пройти тест: ${window.location.href}\n\n` +
+            `🌌 Идеатоника — физика смысла.`;
+        
+        // Пытаемся использовать Web Share API (мобильные устройства)
+        if (navigator.share) {
+            navigator.share({
+                title: `Мой результат теста «${testName}»`,
+                text: shareText,
+                url: window.location.href
+            }).catch(() => {
+                // Если не получилось — копируем в буфер
+                copyToClipboard(shareText);
+            });
+        } else {
+            // Если Web Share API не поддерживается — копируем в буфер
+            copyToClipboard(shareText);
+        }
+    });
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = shareBtn.textContent;
+                shareBtn.textContent = '✅ Скопировано! Отправь другу';
+                shareBtn.style.borderColor = '#ffd54f';
+                shareBtn.style.color = '#ffd54f';
+                setTimeout(() => {
+                    shareBtn.textContent = originalText;
+                    shareBtn.style.borderColor = '#81c784';
+                    shareBtn.style.color = '#81c784';
+                }, 2500);
+            }).catch(() => {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = '✅ Скопировано! Отправь другу';
+            shareBtn.style.borderColor = '#ffd54f';
+            shareBtn.style.color = '#ffd54f';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+                shareBtn.style.borderColor = '#81c784';
+                shareBtn.style.color = '#81c784';
+            }, 2500);
+        } catch(e) {
+            shareBtn.textContent = '❌ Не удалось скопировать';
+            shareBtn.style.borderColor = '#ef5350';
+            shareBtn.style.color = '#ef5350';
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Добавляем подсказку
+    const hint = document.createElement('div');
+    hint.style.cssText = 'color: #a09080; font-size: 0.8rem; font-style: italic;';
+    hint.textContent = 'Нажмите, чтобы скопировать результат и отправить другу';
+    shareContainer.appendChild(shareBtn);
+    shareContainer.appendChild(hint);
+
+    // Ищем контейнер с результатом
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(shareContainer);
+    }
+}, 100);
+
+        }
+        
+        function resetTest() {
+            isResultMode = false;
+            currentIndex = 0;
+            answers = new Array(totalQuestions).fill(null);
+            mainBody.style.background = '';
+            testContainer.style.borderColor = '';
+            testTitle.textContent = 'Хаос или Порядок?';
+            prevBtn.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+            exitBtn.textContent = '🚪 Выйти';
+            exitBtn.classList.add('btn-secondary');
+            renderQuestion(0);
+        }
+        
+        prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderQuestion(currentIndex); } });
+        nextBtn.addEventListener('click', () => {
+            if (answers[currentIndex] === null) { alert('Пожалуйста, выберите один из вариантов ответа.'); return; }
+            if (currentIndex < totalQuestions - 1) { currentIndex++; renderQuestion(currentIndex); }
+            else { if (answers.includes(null)) { alert('Пожалуйста, ответьте на все вопросы.'); return; } showResult(); }
+        });
+        exitBtn.addEventListener('click', () => {
+            if (isResultMode) { resetTest(); }
+            else { if (confirm('Вы уверены, что хотите выйти? Прогресс будет потерян.')) { window.location.href = 'diagnostics-hub.html'; } }
+        });
+        
+        renderQuestion(0);
+    })();
+</script>
+</body>
+</html>

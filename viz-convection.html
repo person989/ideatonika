@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конвекция Qₛ • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1rem; overflow-x: hidden;
+        }
+        .stars-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; animation-delay: var(--delay); opacity: 0; }
+        @keyframes twinkle { 0%,100% { opacity:0.2; transform:scale(1); } 50% { opacity:1; transform:scale(1.8); } }
+        .main-container {
+            position: relative; z-index: 1; width: 100%; max-width: 1100px;
+            background: rgba(22,27,34,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 32px;
+            padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .header h1 { font-size: 2.5rem; font-weight: 400; letter-spacing: 3px; color: #f3e7c0; text-shadow: 0 0 20px rgba(255,215,80,0.4); margin-bottom: 0.3rem; }
+        .header .subtitle { font-size: 1rem; color: #c0b090; font-style: italic; border-bottom: 1px solid #5d4a3a; display: inline-block; padding-bottom: 0.4rem; }
+        .canvas-wrapper { position: relative; width: 100%; background: radial-gradient(ellipse at center, #1a2030 0%, #0a0e14 100%); border-radius: 20px; border: 1px solid #5d4a3a; overflow: hidden; margin-bottom: 1.5rem; box-shadow: inset 0 0 80px rgba(0,0,0,0.5); }
+        canvas { display: block; width: 100%; height: auto; }
+        .controls-panel { background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 20px; padding: 1.5rem 2rem; }
+        .controls-title { font-size: 1.2rem; color: #ffd54f; margin-bottom: 1.2rem; text-align: center; letter-spacing: 1px; }
+        .slider-group { margin-bottom: 1.2rem; }
+        .slider-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .slider-group label .param-value { color: #ffd54f; font-weight: bold; font-size: 1.1rem; min-width: 50px; text-align: right; }
+        .slider-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: linear-gradient(90deg, #3a2a4a, #5d4a3a, #3a2a4a); border-radius: 4px; outline: none; cursor: pointer; }
+        .slider-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: radial-gradient(circle at 40% 40%, #ffe082, #ff8f00); border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px rgba(255,215,80,0.6); border: 2px solid #ffd54f; }
+        .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.75rem; margin-top: 0.2rem; }
+        .info-box { margin-top: 1.5rem; padding: 1rem 1.5rem; background: rgba(255,215,80,0.05); border: 1px solid rgba(255,215,80,0.2); border-radius: 12px; text-align: center; color: #c0b090; font-size: 0.9rem; font-style: italic; }
+        .info-box .formula-display { font-family: 'Courier New', monospace; color: #ffd54f; font-size: 1rem; margin: 0.3rem 0; }
+        .back-row { text-align: center; margin-top: 1.5rem; }
+        .back-link { display: inline-block; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.3s; font-size: 0.9rem; }
+        .back-link:hover { background: #ffd54f; color: #0d1117; }
+        @media (max-width: 700px) { .main-container { padding: 1rem; } .header h1 { font-size: 1.8rem; } .controls-panel { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="stars-bg" id="starsBg"></div>
+<div class="main-container">
+    <div class="header">
+        <h1>🔥 Конвекция Qₛ</h1>
+        <div class="subtitle">Визуализация §119: тёплый Qₛ всплывает, холодный — оседает</div>
+    </div>
+    <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="convectionCanvas"></canvas>
+    </div>
+    <div class="controls-panel">
+        <div class="controls-title">🎛️ Параметры</div>
+        <div class="slider-group">
+            <label><span>🌡️ Семантическая температура Tₛ</span><span class="param-value" id="tsValue">5.0 (оптимум)</span></label>
+            <input type="range" id="tsSlider" min="0.5" max="9.5" value="5" step="0.1">
+            <div class="range-labels"><span>0.5 (лёд, ступор)</span><span>5 (оптимум)</span><span>9.5 (перегрев, паника)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>🔥 Мощность источника тепла</span><span class="param-value" id="heatValue">50%</span></label>
+            <input type="range" id="heatSlider" min="0" max="100" value="50" step="1">
+            <div class="range-labels"><span>0% (нет нагрева)</span><span>100% (максимум)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>⏱️ Скорость анимации</span><span class="param-value" id="speedValue">1.0x</span></label>
+            <input type="range" id="speedSlider" min="0.1" max="2.0" value="1.0" step="0.1">
+            <div class="range-labels"><span>0.1x</span><span>1.0x</span><span>2.0x</span></div>
+        </div>
+        <div class="slider-group" style="text-align:center;">
+            <button id="pauseBtn" style="padding:0.6rem 2rem;background:rgba(255,215,80,0.1);border:1px solid #ffd54f;color:#ffd54f;border-radius:30px;font-family:Georgia,serif;font-size:1rem;cursor:pointer;">⏯️ Пауза</button>
+        </div>
+        <div class="info-box">
+            <span id="statusText" style="color:#ffd54f;font-weight:bold;">🌿 Оптимальная конвекция</span>
+            <div class="formula-display" id="formulaDisplay"></div>
+        </div>
+    </div>
+    <div class="back-row">
+        <a href="visualizations.html" class="back-link">← К списку визуализаций</a>
+    </div>
+</div>
+
+<script>
+(function(){
+    const starsBg=document.getElementById('starsBg');
+    for(let i=0;i<100;i++){
+        const d=document.createElement('div');d.className='star';
+        d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';
+        const s=Math.random()*2.5+0.5;d.style.width=s+'px';d.style.height=s+'px';
+        d.style.setProperty('--duration',(Math.random()*4+2)+'s');
+        d.style.setProperty('--delay',(Math.random()*5)+'s');
+        starsBg.appendChild(d);
+    }
+})();
+
+const canvas=document.getElementById('convectionCanvas');
+const ctx=canvas.getContext('2d');
+const wrapper=document.getElementById('canvasWrapper');
+let time=0,paused=false,animId;
+
+// Массив частиц Qₛ
+let particles=[];
+const NUM_PARTICLES=200;
+
+function resize(){
+    const r=wrapper.getBoundingClientRect();
+    canvas.width=r.width;
+    canvas.height=Math.max(500,Math.min(650,r.width*0.7));
+    wrapper.style.height=canvas.height+'px';
+    initParticles();
+}
+function initParticles(){
+    particles=[];
+    const w=canvas.width,h=canvas.height;
+    for(let i=0;i<NUM_PARTICLES;i++){
+        particles.push({
+            x:Math.random()*w,
+            y:Math.random()*h,
+            vx:0,vy:0,
+            temp:3+Math.random()*4, // начальная температура 3-7
+            life:Math.random()
+        });
+    }
+}
+resize();window.addEventListener('resize',resize);
+
+const tsSlider=document.getElementById('tsSlider');
+const heatSlider=document.getElementById('heatSlider');
+const speedSlider=document.getElementById('speedSlider');
+const tsValue=document.getElementById('tsValue');
+const heatValue=document.getElementById('heatValue');
+const speedValue=document.getElementById('speedValue');
+const pauseBtn=document.getElementById('pauseBtn');
+const statusText=document.getElementById('statusText');
+const formulaDisplay=document.getElementById('formulaDisplay');
+
+tsSlider.oninput=function(){
+    const ts=parseFloat(this.value);
+    if(ts<2) tsValue.textContent=ts.toFixed(1)+' (лёд)';
+    else if(ts<4) tsValue.textContent=ts.toFixed(1)+' (прохладно)';
+    else if(ts<6) tsValue.textContent=ts.toFixed(1)+' (оптимум)';
+    else if(ts<8) tsValue.textContent=ts.toFixed(1)+' (тепло)';
+    else tsValue.textContent=ts.toFixed(1)+' (перегрев)';
+    updateInfo();
+};
+heatSlider.oninput=function(){heatValue.textContent=this.value+'%';};
+speedSlider.oninput=function(){speedValue.textContent=parseFloat(this.value).toFixed(1)+'x';};
+
+pauseBtn.onclick=function(){
+    paused=!paused;
+    this.textContent=paused?'▶️ Продолжить':'⏯️ Пауза';
+};
+
+function updateInfo(){
+    const ts=parseFloat(tsSlider.value);
+    if(ts<2) statusText.textContent='❄️ Кристаллизация — поле застыло, конвекции почти нет';
+    else if(ts<4) statusText.textContent='🧊 Слабая конвекция — холодный Qₛ оседает';
+    else if(ts<6) statusText.textContent='🌿 Оптимальная конвекция — плавная циркуляция';
+    else if(ts<8) statusText.textContent='🔥 Активная конвекция — Qₛ энергично поднимается';
+    else statusText.textContent='🌋 Турбулентная конвекция — хаотичные потоки, перегрев';
+    formulaDisplay.textContent='Ra_sense = g·β·ΔT·L³/(ν·α) | Tₛ='+ts.toFixed(1);
+}
+updateInfo();
+
+function getParticleColor(temp,alpha){
+    // Холодный = синий, тёплый = оранжевый, горячий = красный
+    const t=(temp-0.5)/9; // 0..1
+    const r=Math.floor(50+t*205);
+    const g=Math.floor(80+t*150*(1-t));
+    const b=Math.floor(220*(1-t)+30*t);
+    return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function drawFrame(){
+    const ts=parseFloat(tsSlider.value);
+    const heatPower=parseFloat(heatSlider.value)/100;
+    const speed=parseFloat(speedSlider.value);
+    const w=canvas.width,h=canvas.height;
+    
+    if(!paused) time+=0.016*speed;
+    
+    // Очистка
+    ctx.fillStyle='#060a10';
+    ctx.fillRect(0,0,w,h);
+    
+    // Источник тепла (свеча) внизу по центру
+    const srcX=w/2,srcY=h*0.85;
+    const srcRadius=20+heatPower*15;
+    
+    // Свечение источника
+    if(heatPower>0.01){
+        const heatGlow=ctx.createRadialGradient(srcX,srcY,0,srcX,srcY,srcRadius*3);
+        heatGlow.addColorStop(0,'rgba(255,200,50,0.8)');
+        heatGlow.addColorStop(0.3,'rgba(255,140,20,0.4)');
+        heatGlow.addColorStop(0.7,'rgba(255,60,10,0.1)');
+        heatGlow.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=heatGlow;
+        ctx.beginPath();ctx.arc(srcX,srcY,srcRadius*3,0,Math.PI*2);ctx.fill();
+    }
+    
+    // Рисуем свечу
+    ctx.fillStyle='#8b6914';
+    ctx.fillRect(srcX-8,srcY-30,16,40);
+    ctx.fillStyle='#3e2723';
+    ctx.beginPath();ctx.arc(srcX,srcY-30,10,Math.PI,0);ctx.fill();
+    if(heatPower>0.01){
+        const flameGrad=ctx.createLinearGradient(srcX,srcY-5,srcX,srcY-35);
+        flameGrad.addColorStop(0,'rgba(255,200,50,0.9)');
+        flameGrad.addColorStop(0.5,'rgba(255,120,20,0.7)');
+        flameGrad.addColorStop(1,'rgba(255,40,5,0.3)');
+        ctx.fillStyle=flameGrad;
+        ctx.beginPath();
+        ctx.moveTo(srcX-5,srcY-5);
+        ctx.quadraticCurveTo(srcX-8+Math.sin(time*10)*3,srcY-25,srcX,srcY-35+Math.sin(time*7)*2);
+        ctx.quadraticCurveTo(srcX+8+Math.cos(time*10)*3,srcY-25,srcX+5,srcY-5);
+        ctx.fill();
+    }
+    ctx.fillStyle='#c0b090';
+    ctx.font='12px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('Источник тепла',srcX,srcY+45);
+    
+    // Обновление частиц
+    for(const p of particles){
+        if(paused) continue;
+        
+        // Расстояние до источника тепла
+        const dx=p.x-srcX;
+        const dy=p.y-srcY;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        
+        // Нагрев от источника (чем ближе, тем горячее)
+        const heatInfluence=heatPower*Math.exp(-dist/(srcRadius*2));
+        
+        // Теплообмен с окружающей средой (стремится к Ts)
+        const envInfluence=(ts-p.temp)*0.02;
+        
+        // Случайные флуктуации (растут с Ts)
+        const fluctuation=(Math.random()-0.5)*ts*0.3;
+        
+        p.temp+=heatInfluence*0.5+envInfluence+fluctuation;
+        p.temp=Math.max(0.5,Math.min(9.5,p.temp));
+        
+        // Скорость зависит от температуры (горячее — быстрее вверх)
+        // Скорость зависит от температуры (горячее — быстрее вверх)
+const tempNorm=(p.temp-0.5)/9;
+const buoyancy=-0.8*tempNorm; // отрицательная = вверх
+p.vy+=buoyancy*0.1;
+
+// ГРАВИТАЦИЯ: холодные частицы падают вниз
+if(p.temp<4.5) p.vy+=0.06*(4.5-p.temp)/4;
+
+p.vy*=0.98; // трение
+p.vx*=0.98;
+        
+        // Случайные горизонтальные движения (конвективные ячейки)
+        const cellX=Math.sin(p.y*0.02+time)*0.5;
+        p.vx+=cellX*0.01*tempNorm;
+        
+        // Движение
+        p.x+=p.vx;
+        p.y+=p.vy;
+        
+        // Границы: естественная конвекция с холодными стенами
+const margin=20;
+const w2=w/2;
+
+// Охлаждение у верхней границы (потолок холодный) — ЗАМЕДЛЕНО
+if(p.y<margin){
+    p.temp-=0.05;
+    p.vy=Math.abs(p.vy)*0.3;
+    p.vx+=(p.x<w2?-0.1:0.1);
+}
+
+// Охлаждение у боковых стен (стены холодные) — УСИЛЕНО ПАДЕНИЕ
+if(p.x<margin){
+    p.temp-=0.05;
+    p.vx=Math.abs(p.vx)*0.3;
+    p.vy+=0.15;
+}
+if(p.x>w-margin){
+    p.temp-=0.05;
+    p.vx=-Math.abs(p.vx)*0.3;
+    p.vy+=0.15;
+}
+
+// Нагрев у нижней границы в центре (источник тепла)
+if(p.y>h-margin&&Math.abs(p.x-w2)<w*0.3){
+    p.temp+=0.08;
+    p.vy=-Math.abs(p.vy)*0.4;
+}
+
+// Нижняя граница (пол) — мягкое отражение
+if(p.y>h-margin){
+    p.y=h-margin;
+    p.vy=-Math.abs(p.vy)*0.2;
+}
+
+// Абсолютные границы
+if(p.y<0) p.y=0;
+if(p.y>h) p.y=h;
+if(p.x<0) p.x=0;
+if(p.x>w) p.x=w;
+
+// Принудительный дрейф к центру для холодных частиц — НИЖЕ И ПЛАВНЕЕ
+if(p.temp<3.5&&p.y<h*0.8&&p.y>h*0.2&&Math.abs(p.x-w2)>w*0.1){
+    const dir=p.x<w2?1:-1;
+    p.vx+=dir*0.06;
+    p.vy+=0.02;
+}
+        
+    }
+    
+    // Рисуем частицы
+    for(const p of particles){
+        const alpha=0.4+0.3*(p.temp/10);
+        const size=1.5+2*(p.temp/10);
+        ctx.fillStyle=getParticleColor(p.temp,alpha);
+        ctx.beginPath();ctx.arc(p.x,p.y,size,0,Math.PI*2);ctx.fill();
+    }
+    
+    // Стрелки конвекции
+    const arrowAlpha=0.3;
+    ctx.fillStyle=`rgba(255,255,255,${arrowAlpha})`;
+    ctx.font='20px Georgia,serif';
+    ctx.textAlign='center';
+    // Восходящий поток в центре
+    if(heatPower>0.1){
+        const arrowY=h*0.5+Math.sin(time)*10;
+        ctx.fillText('⬆️',srcX,arrowY);
+        ctx.fillText('⬆️',srcX,arrowY-50);
+    }
+    // Нисходящий поток по бокам
+    if(ts<7){
+        ctx.fillText('⬇️',srcX-w*0.3,h*0.5);
+        ctx.fillText('⬇️',srcX+w*0.3,h*0.5);
+    }
+    
+    // Подписи
+    ctx.fillStyle='#ff9800';
+    ctx.font='bold 14px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('Тёплый Qₛ ↑',srcX,60);
+    
+    ctx.fillStyle='#42a5f5';
+    ctx.fillText('Холодный Qₛ ↓',srcX-w*0.3,h-40);
+    ctx.fillText('Холодный Qₛ ↓',srcX+w*0.3,h-40);
+    
+    // Шкала температуры
+    const scaleX=w-80,scaleY=30,scaleW=40,scaleH=h-80;
+    const grad=ctx.createLinearGradient(scaleX,scaleY+scaleH,scaleX,scaleY);
+    grad.addColorStop(0,'#2196f3');
+    grad.addColorStop(0.3,'#4fc3f7');
+    grad.addColorStop(0.5,'#81c784');
+    grad.addColorStop(0.7,'#ff9800');
+    grad.addColorStop(1,'#f44336');
+    ctx.fillStyle=grad;
+    ctx.fillRect(scaleX,scaleY,scaleW,scaleH);
+    ctx.strokeStyle='rgba(255,255,255,0.3)';
+    ctx.strokeRect(scaleX,scaleY,scaleW,scaleH);
+    ctx.fillStyle='white';
+    ctx.font='10px Georgia,serif';
+    ctx.textAlign='left';
+    ctx.fillText('9.5',scaleX+scaleW+5,scaleY+5);
+    ctx.fillText('Tₛ',scaleX+scaleW+5,scaleY+scaleH/2+4);
+    ctx.fillText('0.5',scaleX+scaleW+5,scaleY+scaleH-5);
+    
+    // Текущая Tₛ на шкале
+    const tsY=scaleY+scaleH-(ts/10)*scaleH;
+    ctx.fillStyle='white';
+    ctx.beginPath();ctx.arc(scaleX+scaleW/2,tsY,5,0,Math.PI*2);ctx.fill();
+    
+    animId=requestAnimationFrame(drawFrame);
+}
+
+drawFrame();
+window.addEventListener('beforeunload',()=>{if(animId)cancelAnimationFrame(animId);});
+</script>
+
+</body>
+</html>

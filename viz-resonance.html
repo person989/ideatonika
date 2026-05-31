@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Резонанс Шумана • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1rem; overflow-x: hidden;
+        }
+        .stars-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; animation-delay: var(--delay); opacity: 0; }
+        @keyframes twinkle { 0%,100% { opacity:0.2; transform:scale(1); } 50% { opacity:1; transform:scale(1.8); } }
+        .main-container {
+            position: relative; z-index: 1; width: 100%; max-width: 1100px;
+            background: rgba(22,27,34,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 32px;
+            padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .header h1 { font-size: 2.5rem; font-weight: 400; letter-spacing: 3px; color: #f3e7c0; text-shadow: 0 0 20px rgba(255,215,80,0.4); margin-bottom: 0.3rem; }
+        .header .subtitle { font-size: 1rem; color: #c0b090; font-style: italic; border-bottom: 1px solid #5d4a3a; display: inline-block; padding-bottom: 0.4rem; }
+        .canvas-wrapper { position: relative; width: 100%; background: radial-gradient(ellipse at center, #1a2030 0%, #0a0e14 100%); border-radius: 20px; border: 1px solid #5d4a3a; overflow: hidden; margin-bottom: 1.5rem; box-shadow: inset 0 0 80px rgba(0,0,0,0.5); }
+        canvas { display: block; width: 100%; height: auto; }
+        .controls-panel { background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 20px; padding: 1.5rem 2rem; }
+        .controls-title { font-size: 1.2rem; color: #ffd54f; margin-bottom: 1.2rem; text-align: center; letter-spacing: 1px; }
+        .slider-group { margin-bottom: 1.2rem; }
+        .slider-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .slider-group label .param-value { color: #ffd54f; font-weight: bold; font-size: 1.1rem; min-width: 50px; text-align: right; }
+        .slider-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: linear-gradient(90deg, #3a2a4a, #5d4a3a, #3a2a4a); border-radius: 4px; outline: none; cursor: pointer; }
+        .slider-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: radial-gradient(circle at 40% 40%, #ffe082, #ff8f00); border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px rgba(255,215,80,0.6); border: 2px solid #ffd54f; }
+        .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.75rem; margin-top: 0.2rem; }
+        .info-box { margin-top: 1.5rem; padding: 1rem 1.5rem; background: rgba(255,215,80,0.05); border: 1px solid rgba(255,215,80,0.2); border-radius: 12px; text-align: center; color: #c0b090; font-size: 0.9rem; font-style: italic; }
+        .info-box .formula-display { font-family: 'Courier New', monospace; color: #ffd54f; font-size: 1rem; margin: 0.3rem 0; }
+        .back-row { text-align: center; margin-top: 1.5rem; }
+        .back-link { display: inline-block; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.3s; font-size: 0.9rem; }
+        .back-link:hover { background: #ffd54f; color: #0d1117; }
+        @media (max-width: 700px) { .main-container { padding: 1rem; } .header h1 { font-size: 1.8rem; } .controls-panel { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="stars-bg" id="starsBg"></div>
+<div class="main-container">
+    <div class="header">
+        <h1>🎵 Резонанс Шумана</h1>
+        <div class="subtitle">Визуализация §96: амплитуда Qₛ на частоте 7.83 Гц</div>
+    </div>
+    <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="resonanceCanvas"></canvas>
+    </div>
+    <div class="controls-panel">
+        <div class="controls-title">🎛️ Параметры</div>
+        <div class="slider-group">
+            <label><span>🎛️ Частота генератора (f)</span><span class="param-value" id="freqValue">7.83 Гц</span></label>
+            <input type="range" id="freqSlider" min="0.5" max="20" value="7.83" step="0.01">
+            <div class="range-labels"><span>0.5 Гц</span><span>7.83 Гц (Шуман!)</span><span>20 Гц</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>🎯 Добротность резонатора (Q_factor)</span><span class="param-value" id="qValue">20</span></label>
+            <input type="range" id="qSlider" min="2" max="100" value="20" step="1">
+            <div class="range-labels"><span>2 (размытый)</span><span>20</span><span>100 (острый пик)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>☀️ Семантический заряд Qₛ</span><span class="param-value" id="qsValue">+5</span></label>
+            <input type="range" id="qsSlider" min="-10" max="10" value="5" step="1">
+            <div class="range-labels"><span>-10</span><span>0</span><span>+10</span></div>
+        </div>
+        <div class="info-box">
+            <span id="statusText" style="color:#ffd54f;font-weight:bold;">🎯 ТОЧНЫЙ РЕЗОНАНС!</span>
+            <div class="formula-display" id="formulaDisplay"></div>
+        </div>
+    </div>
+    <div class="back-row">
+        <a href="visualizations.html" class="back-link">← К списку визуализаций</a>
+    </div>
+</div>
+
+<script>
+(function(){
+    const starsBg=document.getElementById('starsBg');
+    for(let i=0;i<100;i++){
+        const d=document.createElement('div');d.className='star';
+        d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';
+        const s=Math.random()*2.5+0.5;d.style.width=s+'px';d.style.height=s+'px';
+        d.style.setProperty('--duration',(Math.random()*4+2)+'s');
+        d.style.setProperty('--delay',(Math.random()*5)+'s');
+        starsBg.appendChild(d);
+    }
+})();
+
+const canvas=document.getElementById('resonanceCanvas');
+const ctx=canvas.getContext('2d');
+const wrapper=document.getElementById('canvasWrapper');
+let time=0,animId;
+
+const RESONANCE_FREQ=7.83;
+
+function resize(){
+    const r=wrapper.getBoundingClientRect();
+    canvas.width=r.width;
+    canvas.height=Math.max(500,Math.min(650,r.width*0.7));
+    wrapper.style.height=canvas.height+'px';
+}
+resize();window.addEventListener('resize',resize);
+
+const freqSlider=document.getElementById('freqSlider');
+const qSlider=document.getElementById('qSlider');
+const qsSlider=document.getElementById('qsSlider');
+const freqValue=document.getElementById('freqValue');
+const qValue=document.getElementById('qValue');
+const qsValue=document.getElementById('qsValue');
+const statusText=document.getElementById('statusText');
+const formulaDisplay=document.getElementById('formulaDisplay');
+
+freqSlider.oninput=function(){freqValue.textContent=parseFloat(this.value).toFixed(2)+' Гц';updateInfo();};
+qSlider.oninput=function(){qValue.textContent=parseInt(this.value);updateInfo();};
+qsSlider.oninput=function(){qsValue.textContent=(parseInt(this.value)>=0?'+':'')+parseInt(this.value);};
+
+function updateInfo(){
+    const f=parseFloat(freqSlider.value);
+    const Q=parseInt(qSlider.value);
+    const detuning=Math.abs(f-RESONANCE_FREQ);
+    const bandwidth=RESONANCE_FREQ/Q;
+    
+    if(detuning<bandwidth*0.2) statusText.textContent='🎯 ТОЧНЫЙ РЕЗОНАНС — амплитуда максимальна!';
+    else if(detuning<bandwidth*0.5) statusText.textContent='🔊 Сильный отклик — частота близка к резонансной';
+    else if(detuning<bandwidth) statusText.textContent='📶 Умеренный отклик';
+    else if(detuning<bandwidth*2) statusText.textContent='📡 Слабый отклик — частота далека от резонанса';
+    else statusText.textContent='🔇 Почти нет отклика — частота вне полосы пропускания';
+    
+    const gain=1/Math.sqrt(1+Math.pow(2*Q*detuning/RESONANCE_FREQ,2));
+    formulaDisplay.textContent='Δf='+bandwidth.toFixed(2)+' Гц | Усиление='+gain.toFixed(2)+' | Q='+Q;
+}
+updateInfo();
+
+function getQSColor(qs,alpha){
+    const absQ=Math.abs(qs);
+    const norm=absQ/10;
+    if(absQ<0.5){const gray=Math.floor(100*norm+30);return `rgba(${gray},${gray},${gray},${alpha*0.4})`;}
+    if(qs>=0){const r=Math.floor(30+norm*225);const g=Math.floor(5+norm*235);const b=Math.floor(80*(1-norm)+255*norm);return `rgba(${r},${g},${b},${alpha})`;}
+    else{const r=Math.floor(80*(1-norm)+30*norm);const g=Math.floor(40*(1-norm)+5*norm);const b=Math.floor(30+norm*200);return `rgba(${r},${g},${b},${alpha})`;}
+}
+
+function drawFrame(){
+    const f=parseFloat(freqSlider.value);
+    const Q=parseInt(qSlider.value);
+    const qs=parseInt(qsSlider.value);
+    const w=canvas.width,h=canvas.height;
+    time+=0.016;
+    
+    const detuning=Math.abs(f-RESONANCE_FREQ);
+    const bandwidth=RESONANCE_FREQ/Q;
+    const gain=1/Math.sqrt(1+Math.pow(2*Q*detuning/RESONANCE_FREQ,2));
+    
+    ctx.fillStyle='#060a10';
+    ctx.fillRect(0,0,w,h);
+    
+    // === ГЕНЕРАТОР (слева) ===
+    const genX=w*0.15,genY=h*0.5,genR=30;
+    
+    // Свечение генератора
+    const genGlow=ctx.createRadialGradient(genX,genY,0,genX,genY,genR*2);
+    genGlow.addColorStop(0,'rgba(255,255,255,0.9)');
+    genGlow.addColorStop(0.4,getQSColor(qs,0.7));
+    genGlow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=genGlow;
+    ctx.beginPath();ctx.arc(genX,genY,genR*2,0,Math.PI*2);ctx.fill();
+    
+    // Пульсация генератора на его частоте
+    const genPulse=Math.sin(time*f*2*Math.PI)*0.5+0.5;
+    const genR2=genR*(0.8+0.4*genPulse);
+    ctx.fillStyle='white';
+    ctx.beginPath();ctx.arc(genX,genY,genR2,0,Math.PI*2);ctx.fill();
+    
+    ctx.fillStyle='rgba(255,255,255,0.7)';
+    ctx.font='bold 16px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('ГЕНЕРАТОР',genX,genY-50);
+    ctx.fillText('f='+f.toFixed(2)+' Гц',genX,genY-28);
+    
+    // === ВОЛНЫ ОТ ГЕНЕРАТОРА К РЕЗОНАТОРУ ===
+    const resX=w*0.85,resY=h*0.5;
+    const numWaves=15;
+    for(let i=0;i<numWaves;i++){
+        const t=(i/numWaves+time*f*0.3)%1;
+        const wx=genX+t*(resX-genX-80);
+        const wy=genY+Math.sin(t*Math.PI*3+time*2)*15;
+        const alpha=0.5*(1-Math.abs(t-0.5)*1.8)*gain;
+        if(alpha<0.03) continue;
+        ctx.fillStyle=getQSColor(qs,alpha);
+        ctx.beginPath();ctx.arc(wx,wy,2.5,0,Math.PI*2);ctx.fill();
+    }
+    
+    // === РЕЗОНАТОР (справа) ===
+    const resR=35+gain*50;
+    
+    // Свечение резонатора (яркость зависит от усиления)
+    const resGlow=ctx.createRadialGradient(resX,resY,0,resX,resY,resR*2.5);
+    resGlow.addColorStop(0,'rgba(255,255,255,'+(0.5+gain*0.5)+')');
+    resGlow.addColorStop(0.3,getQSColor(qs,0.3+gain*0.7));
+    resGlow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=resGlow;
+    ctx.beginPath();ctx.arc(resX,resY,resR*2.5,0,Math.PI*2);ctx.fill();
+    
+    // Кольца резонатора
+    for(let r=1;r<=4;r++){
+        const ringR=resR*(0.5+r*0.3);
+        const alpha=0.3*gain*(1-r/5);
+        if(alpha<0.02) continue;
+        ctx.strokeStyle=getQSColor(qs,alpha);
+        ctx.lineWidth=2*gain;
+        ctx.beginPath();ctx.arc(resX,resY,ringR,0,Math.PI*2);ctx.stroke();
+    }
+    
+    // Ядро резонатора
+    const corePulse=Math.sin(time*RESONANCE_FREQ*2*Math.PI)*0.5+0.5;
+    const coreR=15+gain*10*corePulse;
+    ctx.fillStyle='white';
+    ctx.beginPath();ctx.arc(resX,resY,coreR,0,Math.PI*2);ctx.fill();
+    
+    ctx.fillStyle='rgba(255,255,255,0.7)';
+    ctx.fillText('РЕЗОНАТОР',resX,resY-55);
+    ctx.fillText('ω₀=7.83 Гц',resX,resY-33);
+    ctx.fillText('Усиление: ×'+(gain*Q).toFixed(1),resX,resY+55);
+    
+    // === ГРАФИК АЧХ (внизу) ===
+    const graphX=w*0.1,graphY=h*0.75,graphW=w*0.8,graphH=h*0.15;
+    
+    // Оси
+    ctx.strokeStyle='rgba(255,255,255,0.2)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(graphX,graphY);ctx.lineTo(graphX+graphW,graphY);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(graphX,graphY);ctx.lineTo(graphX,graphY-graphH);ctx.stroke();
+    
+    // Кривая АЧХ
+    ctx.strokeStyle='#ffd54f';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    for(let i=0;i<=graphW;i+=2){
+        const t=i/graphW;
+        const fPoint=0.5+t*19.5;
+        const det=Math.abs(fPoint-RESONANCE_FREQ);
+        const g=1/Math.sqrt(1+Math.pow(2*Q*det/RESONANCE_FREQ,2));
+        const x=graphX+i;
+        const y=graphY-g*graphH;
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    
+    // Текущая частота на графике
+    const currX=graphX+((f-0.5)/19.5)*graphW;
+    const currY=graphY-gain*graphH;
+    ctx.fillStyle='white';
+    ctx.beginPath();ctx.arc(currX,currY,6,0,Math.PI*2);ctx.fill();
+    
+    // Метка 7.83
+    const resGraphX=graphX+((7.83-0.5)/19.5)*graphW;
+    ctx.strokeStyle='rgba(255,255,255,0.3)';
+    ctx.setLineDash([3,5]);
+    ctx.beginPath();ctx.moveTo(resGraphX,graphY);ctx.lineTo(resGraphX,graphY-graphH-10);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='rgba(255,255,255,0.5)';
+    ctx.font='12px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('7.83 Гц',resGraphX,graphY-graphH-15);
+    
+    ctx.fillText('f, Гц',graphX+graphW/2,graphY+20);
+    
+    // Подпись графика
+    ctx.fillText('Амплитуда Qₛ в резонаторе',graphX+graphW/2,graphY-graphH-35);
+    
+    animId=requestAnimationFrame(drawFrame);
+}
+
+drawFrame();
+window.addEventListener('beforeunload',()=>{if(animId)cancelAnimationFrame(animId);});
+</script>
+
+</body>
+</html>

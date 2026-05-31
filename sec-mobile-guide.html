@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Подробная сборка SEC-MOBILE • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #78909c; margin: 2.5rem 0 1rem; border-left: 4px solid #78909c; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #90a4ae; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #90a4ae; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #78909c; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(120,144,156,0.1); border-left: 4px solid #78909c; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #90a4ae; margin: 0; }
+        .tip-box strong { color: #78909c; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #78909c; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #78909c; text-decoration: none; border: 1px solid #78909c; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #78909c; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>📱 SEC-MOBILE: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Носимый детектор Смысла</div>
+
+    <h2>📖 Что такое SEC-MOBILE и зачем его собирать?</h2>
+    <p>Все предыдущие установки (SEC-1, SEC-2) были стационарными. Они стояли на столе и требовали осциллографа. <strong>SEC-MOBILE — это браслет</strong>. Вы надеваете его на руку, и он в реальном времени улавливает семантическое поле вашего тела через запястье. Данные передаются на смартфон по Bluetooth.</p>
+    <p><strong>Главное отличие:</strong> Мы не пытаемся получить абсолютные значения Qₛ. Наша цель — увидеть <strong>профиль семантической активности за день</strong>: когда Cₛ высок (медитация), когда низок (стресс), когда поле «молчит» (сон).</p>
+    <p>Это самый сложный проект в Практикуме. Если вы собрали SEC-1 и SEC-2 — вы готовы к SEC-MOBILE. Если нет — начните с них, чтобы набить руку.</p>
+
+    <h2>🛒 Что нужно купить (список материалов)</h2>
+    <table class="materials-table">
+        <thead><tr><th>Материал</th><th>Где взять</th><th>Примерная стоимость</th><th>Назначение</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Микроконтроллер ESP32-C3</strong> (с BLE)</td><td>AliExpress, радиомагазин</td><td>300-600 ₽</td><td>Мозг устройства: АЦП + Bluetooth</td></tr>
+            <tr><td><strong>Кварцевый резонатор</strong> (часовой, 32 768 Гц)</td><td>Старые часы, радиомагазин</td><td>20-50 ₽</td><td>Семантическая антенна (пьезодатчик)</td></tr>
+            <tr><td><strong>Усилитель OPA333</strong> (микросхема)</td><td>AliExpress, радиомагазин</td><td>50-100 ₽</td><td>Усиление слабого сигнала с кварца в 100-500 раз</td></tr>
+            <tr><td><strong>Аккумулятор Li-Pol 3.7V</strong> (100-200 мАч)</td><td>Старый MP3-плеер, AliExpress</td><td>200-400 ₽</td><td>Питание браслета на 1-2 дня</td></tr>
+            <tr><td><strong>Резисторы 10 кОм, 100 кОм</strong> (по 2 шт.)</td><td>Радиомагазин</td><td>10 ₽</td><td>Обвязка усилителя</td></tr>
+            <tr><td><strong>Конденсатор 100 нФ</strong> (керамический)</td><td>Радиомагазин</td><td>5 ₽</td><td>Фильтрация помех</td></tr>
+            <tr><td><strong>Макетная плата</strong> (мини, 3x4 см)</td><td>Радиомагазин</td><td>50 ₽</td><td>Для временной сборки (до переноса в корпус)</td></tr>
+            <tr><td><strong>Корпус для браслета</strong></td><td>Старый фитнес-браслет, 3D-печать, деревянная заготовка</td><td>—</td><td>Корпус</td></tr>
+            <tr><td><strong>Алюминиевая фольга</strong></td><td>Кухня</td><td>0 ₽</td><td>Экранировка</td></tr>
+        </tbody>
+    </table>
+
+    <h2>🔨 Этап 1: Сборка схемы на макетной плате</h2>
+    <p><strong>Важно:</strong> Прежде чем запихивать всё в браслет, мы должны убедиться, что схема работает, на макетной плате. Это как черновик перед чистовиком.</p>
+    
+    <h3><span class="step-number">1</span> Подключаем усилитель OPA333</h3>
+    <p>Микросхема OPA333 — это крошечный «чёрный жучок» с 5 ножками. Она усиливает слабый сигнал с кварца в 100-500 раз. Наша задача — правильно её «обвязать» резисторами.</p>
+    <p><strong>Распиновка OPA333 (держите микросхему маркировкой вверх, ножками вниз):</strong></p>
+    <ul>
+        <li><strong>Ножка 1 (OUT):</strong> Выход усиленного сигнала. Пойдёт на вход АЦП ESP32.</li>
+        <li><strong>Ножка 2 (V-):</strong> Земля (GND). Подключить к минусу аккумулятора и GND ESP32.</li>
+        <li><strong>Ножка 3 (IN+):</strong> Вход с кварца (сигнальный). Подключить к центральному проводу кварца.</li>
+        <li><strong>Ножка 4 (IN-):</strong> Инвертирующий вход. Подключить к земле через резистор 10 кОм.</li>
+        <li><strong>Ножка 5 (V+):</strong> Питание. Подключить к плюсу аккумулятора (3.7V).</li>
+    </ul>
+    <p><strong>Схема обвязки:</strong></p>
+    <ul>
+        <li>Между ножкой 1 (OUT) и ножкой 4 (IN-) поставьте резистор <strong>100 кОм</strong>. Это задаёт коэффициент усиления (~100 раз).</li>
+        <li>Между ножкой 4 (IN-) и землёй поставьте резистор <strong>10 кОм</strong>.</li>
+        <li>Между ножкой 1 (OUT) и землёй поставьте конденсатор <strong>100 нФ</strong> (для фильтрации высокочастотных помех).</li>
+    </ul>
+    <div class="tip-box"><p><strong>💡 Совет:</strong> Если вы никогда не работали с микросхемами — купите OPA333 в DIP-корпусе (с длинными ножками, для вставки в макетную плату). SMD-версия (крошечная) требует пайки под микроскопом. Для первого раза берите DIP!</p></div>
+
+    <h3><span class="step-number">2</span> Подключаем кварц к усилителю</h3>
+    <p>Часовой кварц (32 768 Гц) — это крошечный металлический цилиндрик с двумя проволочками. Он будет нашей «антенной» для Qₛ.</p>
+    <ol>
+        <li>Один провод от кварца подключите к <strong>ножке 3 (IN+)</strong> OPA333. Это сигнальный вход.</li>
+        <li>Второй провод от кварца подключите к <strong>земле (GND)</strong>. Это опорный потенциал.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Важно:</strong> Часовой кварц очень хрупкий. Не сгибайте его выводы слишком сильно — они могут отломиться прямо у корпуса. Используйте пинцет и аккуратность.</p></div>
+
+    <h3><span class="step-number">3</span> Подключаем ESP32</h3>
+    <p>ESP32-C3 — это мини-компьютер размером с ноготь. У него есть встроенный АЦП (аналого-цифровой преобразователь) и Bluetooth (BLE).</p>
+    <ol>
+        <li>Пин <strong>GPIO0</strong> (или любой другой ADC-пин, например GPIO1) подключите к <strong>ножке 1 (OUT)</strong> OPA333. Это вход для оцифровки сигнала.</li>
+        <li>Пин <strong>3.3V</strong> ESP32 подключите к <strong>плюсу аккумулятора</strong> (через стабилизатор, если аккумулятор 3.7V — можно напрямую, но осторожно). Лучше использовать повышающий стабилизатор до 5V и подать на пин 5V ESP32.</li>
+        <li>Пин <strong>GND</strong> ESP32 подключите к <strong>минусу аккумулятора</strong> и к общей земле схемы.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Совет по питанию:</strong> ESP32-C3 может работать от 3.3V, но аккумулятор 3.7V (полностью заряженный — 4.2V) может его сжечь. Чтобы не рисковать, используйте крошечный стабилизатор AMS1117-3.3 (стоит 20 рублей). Подключите аккумулятор к входу стабилизатора, а выход стабилизатора — к пину 3.3V ESP32.</p></div>
+
+    <h2>⚡ Этап 2: Прошивка ESP32</h2>
+    <p>Теперь нужно «научить» ESP32 отправлять данные на смартфон. Это делается с помощью программы Arduino IDE (бесплатно).</p>
+    <ol>
+        <li>Установите <strong>Arduino IDE</strong> на компьютер.</li>
+        <li>В настройках добавьте плату <strong>ESP32-C3</strong> (через менеджер плат).</li>
+        <li>Подключите ESP32 к компьютеру через USB-кабель.</li>
+        <li>Скопируйте и загрузите этот код:</li>
+    </ol>
+    <div class="scheme-box"><pre>
+#include &lt;BLEDevice.h&gt;
+#include &lt;BLEUtils.h&gt;
+#include &lt;BLEServer.h&gt;
+
+#define ADC_PIN 0 // GPIO0 — вход с усилителя
+BLECharacteristic *pCharacteristic;
+
+void setup() {
+  Serial.begin(115200);
+  BLEDevice::init("SEC-MOBILE");
+  BLEServer *pServer = BLEDevice::createServer();
+  BLEService *pService = pServer->createService("4fafc201-1fb5-459e-8fcc-c5c9c331914b");
+  pCharacteristic = pService->createCharacteristic(
+    "beb5483e-36e1-4688-b7f5-ea07361b26a8",
+    BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY
+  );
+  pService->start();
+  pServer->getAdvertising()->start();
+  analogReadResolution(12); // 12 бит = значения от 0 до 4095
+}
+
+void loop() {
+  int raw = analogRead(ADC_PIN);
+  char buffer[20];
+  sprintf(buffer, "%d", raw);
+  pCharacteristic->setValue(buffer);
+  pCharacteristic->notify();
+  delay(100); // Отправка 10 раз в секунду
+}
+    </pre></div>
+    <p>Этот код создаёт Bluetooth-устройство с именем «SEC-MOBILE», к которому можно подключиться со смартфона.</p>
+
+    <h2>🏠 Этап 3: Сборка корпуса</h2>
+    <p>Когда схема проверена на макетной плате, пора перенести её в браслет.</p>
+    <ol>
+        <li><strong>Найдите старый фитнес-браслет</strong> (сломанный, ненужный). Извлеките из него всю «начинку». Оставьте только ремешок и пустой корпус.</li>
+        <li><strong>Разместите компоненты внутри.</strong> ESP32-C3, OPA333, аккумулятор, кварц — всё должно поместиться в корпус. Если не помещается — используйте более миниатюрные версии (SMD) или напечатайте корпус на 3D-принтере.</li>
+        <li><strong>Кварц приклейте к внутренней стороне корпуса</strong>, которая будет прилегать к запястью. Он должен касаться кожи (через тонкий слой изоляции — например, термоусадочную трубку).</li>
+        <li><strong>Экранируйте внешнюю сторону</strong> браслета алюминиевой фольгой. Внутренняя сторона (с кварцем) должна быть открыта к запястью.</li>
+        <li><strong>Заземлите фольгу</strong> на минус аккумулятора.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Идея:</strong> Если вы не хотите возиться с корпусом — просто примотайте всю схему скотчем к широкому браслету от часов. Это не очень красиво, но работает! В 2100 году подпольщики именно так и делали.</p></div>
+
+    <h2>📱 Этап 4: Подключение к смартфону</h2>
+    <ol>
+        <li>Установите на смартфон приложение <strong>«nRF Connect»</strong> (бесплатно, Android/iOS). Оно умеет сканировать BLE-устройства.</li>
+        <li>Включите браслет (подключите аккумулятор).</li>
+        <li>В nRF Connect найдите устройство «SEC-MOBILE» и подключитесь к нему.</li>
+        <li>Вы увидите поток чисел (значения АЦП от 0 до 4095). Это и есть ваш «сырой» сигнал Qₛ.</li>
+    </ol>
+
+    <h2>📊 Что вы должны увидеть</h2>
+    <p>В спокойном состоянии (сидя, без эмоций) значения будут колебаться вокруг некоторого среднего (например, 500-600). При резкой эмоции (испуг, смех) — короткий всплеск до 800-1000. Во время медитации — значения стабилизируются (вариабельность падает).</p>
+    <p>Это и есть <strong>профиль семантической активности</strong>. Вы только что создали первый в мире носимый детектор Смысла.</p>
+
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=51" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция SEC-MOBILE v1.0</p>
+        <p>✧ «Первый шаг к семантическому айфону сделан» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

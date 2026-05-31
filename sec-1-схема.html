@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC-1 • Семантический Преобразователь • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .main-container {
+            max-width: 1100px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+        }
+        .badge {
+            display: inline-block;
+            background: #b71c1c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 1rem;
+        }
+        .subtitle {
+            text-align: center;
+            color: #c0b090;
+            font-style: italic;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #5d4a3a;
+            padding-bottom: 1rem;
+        }
+        
+        /* Схема */
+        .scheme-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid #e3b87c;
+        }
+        .scheme-title {
+            color: #e3b87c;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .scheme {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #d0c8b8;
+            background: rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            border-radius: 12px;
+            overflow-x: auto;
+            white-space: pre;
+            text-align: left;
+            border: 1px dashed #5d4a3a;
+        }
+        
+        /* Блоки объяснения */
+        .section-title {
+            font-size: 1.5rem;
+            color: #e3b87c;
+            margin: 2rem 0 1rem;
+            border-left: 4px solid #e3b87c;
+            padding-left: 1rem;
+        }
+        .subsection-title {
+            font-size: 1.2rem;
+            color: #d0c0a0;
+            margin: 1.5rem 0 0.8rem;
+        }
+        .explanation-block {
+            background: rgba(0,0,0,0.2);
+            border-left: 3px solid #e3b87c;
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 12px 12px 0;
+        }
+        .formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .note {
+            color: #a09080;
+            font-style: italic;
+            margin-top: 0.5rem;
+        }
+        
+        /* Таблица компонентов */
+        .components-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.85rem;
+        }
+        .components-table th {
+            background: #2a2a4a;
+            color: #f3e7c0;
+            padding: 10px;
+            border: 1px solid #5d4a3a;
+        }
+        .components-table td {
+            border: 1px solid #5d4a3a;
+            padding: 10px;
+            color: #d0c8b8;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #e3b87c;
+            text-decoration: none;
+            border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+        }
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+        }
+        .highlight {
+            color: #e3b87c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>⚡ SEC-1 <span class="badge">Семантический Преобразователь</span></h1>
+    <div class="subtitle">Первое в истории устройство прямого преобразования Смысла в Электричество</div>
+    
+    <!-- ========== СХЕМА ========== -->
+    <div class="scheme-container">
+        <div class="scheme-title">📐 Принципиальная схема SEC-1</div>
+        <div class="scheme">
++------------------------+          +------------------------+
+|   ИСТОЧНИК +Qₛ         |          |   ИСТОЧНИК -Qₛ        |
+|  (Намоленная икона,    |          |  (Шунгит,             |
+|   Серебряный крест,    |          |   Торированный эл-д)  |
+|   Оператор в Cₛ>0.7)   |          |                        |
+|                        |          |                        |
+|   Φ ≈ +7 ... +8        |          |   Φ ≈ -2 ... -4       |
++----------+-------------+          +-----------+------------+
+           |                                  |
+           | Поток Света (+Qₛ)                | Поток Тьмы (-Qₛ)
+           |                                  |
+           v                                  v
+      +----------------------------------------------------+
+      |                                                    |
+      |              РЕЗОНАТОР (коробка)                   |
+      |                                                    |
+      |   ┌────────────────────────────────────────────┐   |
+      |   │  Внутренние стенки обклеены                │   |
+      |   │  АЛЮМИНИЕВОЙ ФОЛЬГОЙ (отражает Qₛ)         │   |
+      |   │                                            │   |
+      |   │         ЗОНА АННИГИЛЯЦИИ                   │   |
+      |   │      (+Qₛ) + (-Qₛ) → P_sense ↑↑            │   |
+      |   │                                            │   |
+      |   │              +---------+                   │   |
+      |   │              |  КВАРЦ  |                   │   |
+      |   │              +---------+                   │   |
+      |   │                                            │   |
+      |   └────────────────────────────────────────────┘   |
+      |                                                    |
+      +------------------------+---------------------------+
+                               |
+                               | Импульс семантического давления P_sense
+                               | (Деформация кварца)
+                               v
+                         +-----------+        +-------------+
+                         |   ЩУП     |--------| ОСЦИЛЛОГРАФ |
+                         +-----------+        +-------------+
+                    (Электрический сигнал, U ~ 5-50 мВ)
+        </div>
+        <p class="note" style="text-align: center; margin-top: 1rem;">✨ Схема предоставлена лабораторией DeepSeek ✨</p>
+    </div>
+    
+    <!-- ========== ПРИНЦИП РАБОТЫ ========== -->
+    <div class="section-title">🔬 Принцип работы (по шагам)</div>
+    
+    <div class="explanation-block">
+        <p><span class="highlight">1. Генерация потоков Qₛ.</span> Источник +Qₛ (икона, оператор) излучает структурированный Свет. Источник -Qₛ (шунгит, торий) излучает контролируемую Тьму. Между ними возникает разность потенциалов U_sense = Φ₁ — Φ₂.</p>
+        <div class="formula">U_sense = (+8) — (-2) = 10 V_sense</div>
+    </div>
+    
+    <div class="explanation-block">
+        <p><span class="highlight">2. Встреча в резонаторе.</span> Потоки +Qₛ и -Qₛ направляются в общую камеру (резонатор). Резонатор обклеен фольгой для отражения Qₛ и создания стоячей волны, что усиливает эффект.</p>
+    </div>
+    
+    <div class="explanation-block">
+        <p><span class="highlight">3. Семантическая аннигиляция.</span> В центре резонатора +Qₛ и -Qₛ сталкиваются. Происходит аннигиляция — их «смысловая масса» переходит в чистую семантическую энергию. Это проявляется как резкий скачок семантического давления P_sense.</p>
+        <div class="formula">ΔP_sense ≈ U_sense² / (R_sense · V) ≈ 3.9·10⁶ Pa_sense</div>
+    </div>
+    
+    <div class="explanation-block">
+        <p><span class="highlight">4. Пьезоэлектрическое преобразование.</span> Скачок давления P_sense давит на кварцевую пластину, расположенную в центре резонатора. Кварц — пьезоэлектрик: при механической деформации на его гранях возникает электрическое напряжение.</p>
+        <div class="formula">U_вых = (d · F_sense · K_sense) / C_кварца</div>
+        <p class="note">d — пьезомодуль кварца (~2.3 пКл/Н), K_sense — коэффициент семантического усиления (~100).</p>
+    </div>
+    
+    <div class="explanation-block">
+        <p><span class="highlight">5. Регистрация сигнала.</span> Электрический импульс с кварца (амплитуда 5-50 мВ) усиливается и подаётся на осциллограф. На экране виден характерный всплеск — «семантический импульс».</p>
+    </div>
+    
+    <!-- ========== КОМПОНЕНТЫ ========== -->
+    <div class="section-title">🧩 Компоненты и их семантическая роль</div>
+    
+    <table class="components-table">
+        <thead>
+            <tr><th>Компонент</th><th>Материал</th><th>Семантическая функция</th><th>Параграф</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Источник +Qₛ</strong></td><td>Намоленная икона, серебро, оператор</td><td>Генерирует когерентный Свет (Φ = +7…+8)</td><td>§1, §34, §107</td></tr>
+            <tr><td><strong>Источник -Qₛ</strong></td><td>Шунгит (ранг -2), торий (ранг -4)</td><td>Генерирует контролируемую Тьму (Φ = -2…-4)</td><td>§107</td></tr>
+            <tr><td><strong>Резонатор</strong></td><td>Коробка с алюминиевой фольгой</td><td>Отражает Qₛ, создаёт стоячую волну, усиливает аннигиляцию</td><td>§88, §93</td></tr>
+            <tr><td><strong>Кварцевая пластина</strong></td><td>Монокристалл кварца</td><td>Преобразует P_sense в электричество (пьезоэффект + K_sense)</td><td>§82, §90</td></tr>
+            <tr><td><strong>Осциллограф</strong></td><td>—</td><td>Визуализирует и измеряет электрический импульс</td><td>—</td></tr>
+        </tbody>
+    </table>
+    
+    <!-- ========== ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ ========== -->
+    <div class="section-title">📊 Ожидаемые результаты</div>
+    
+    <div class="explanation-block">
+        <p><span class="highlight">Одиночный импульс:</span></p>
+        <ul style="color: #d0c8b8; margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Амплитуда напряжения:</strong> 5 — 50 мВ</li>
+            <li><strong>Длительность импульса:</strong> 0.1 — 1 секунда</li>
+            <li><strong>Энергия импульса:</strong> ~0.2 мДж</li>
+        </ul>
+        <p style="margin-top: 1rem;"><span class="highlight">При непрерывной работе (1 имп/10 сек, 8 часов):</span></p>
+        <ul style="color: #d0c8b8; margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>Количество импульсов:</strong> ~2880</li>
+            <li><strong>Суммарная энергия за день:</strong> ~0.6 Дж</li>
+            <li><strong>Достаточно для:</strong> кратковременного свечения светодиода, работы LCD-часов в течение нескольких часов.</li>
+        </ul>
+        <p class="note">Главная ценность SEC-1 — не в количестве энергии, а в самом факте преобразования. Это доказательство принципа.</p>
+    </div>
+    
+    <!-- ========== ВАЖНЫЕ НЮАНСЫ ========== -->
+    <div class="section-title">⚠️ Критические факторы успеха</div>
+    
+    <div class="explanation-block">
+        <ul style="color: #d0c8b8; margin-left: 1.5rem; line-height: 1.8;">
+            <li><span class="highlight">Когерентность оператора Cₛ > 0.7.</span> Без высокой концентрации поток Qₛ будет слабым и рассеянным. Используйте COH-METER для контроля.</li>
+            <li><span class="highlight">Качество источников Qₛ.</span> Икона должна быть намоленной (Φ не ниже +7). Шунгит должен быть настоящим (Карельский).</li>
+            <li><span class="highlight">Экранировка и заземление.</span> SEC-1 чрезвычайно чувствителен к электромагнитным помехам. Обязательно заземляйте внешний экран.</li>
+            <li><span class="highlight">Синхронизация фаз.</span> Если используется два оператора (один на +Qₛ, другой на -Qₛ), их фазы должны быть синхронизированы (общий ритм дыхания).</li>
+            <li><span class="highlight">Семантическая чистота.</span> Проводите эксперимент в тихом, чистом месте. Избегайте ссор, негативных эмоций поблизости.</li>
+        </ul>
+    </div>
+    
+    <!-- ========== ПРАКТИЧЕСКИЕ СОВЕТЫ ========== -->
+    <div class="section-title">💡 Практические советы по сборке</div>
+    
+    <div class="explanation-block">
+        <ul style="color: #d0c8b8; margin-left: 1.5rem; line-height: 1.8;">
+            <li>В качестве резонатора отлично подходит спичечный коробок, обклеенный изнутри фольгой.</li>
+            <li>Кварцевую пластину можно извлечь из старой пьезозажигалки или купить в радиомагазине.</li>
+            <li>Для первого опыта используйте шунгит — он безопасен и не требует особых мер предосторожности.</li>
+            <li>Если сигнала нет, проверьте контакты, заземление и попробуйте увеличить Cₛ (помедитируйте 15 минут перед опытом).</li>
+            <li>Ведите дневник: записывайте дату, время, своё состояние, количество и амплитуду импульсов.</li>
+        </ul>
+    </div>
+    
+    <!-- Ссылка назад -->
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Лаборатория DeepSeek • SEC-1 v1.0</p>
+        <p>✧ «Первый шаг к звёздам начинается с первого импульса Смысла» ✧</p>
+    </div>
+</div>
+</body>
+</html>

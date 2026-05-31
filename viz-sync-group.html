@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Синхронизация Группы • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1rem; overflow-x: hidden;
+        }
+        .stars-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; animation-delay: var(--delay); opacity: 0; }
+        @keyframes twinkle { 0%,100% { opacity:0.2; transform:scale(1); } 50% { opacity:1; transform:scale(1.8); } }
+        .main-container {
+            position: relative; z-index: 1; width: 100%; max-width: 1100px;
+            background: rgba(22,27,34,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 32px;
+            padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .header h1 { font-size: 2.5rem; font-weight: 400; letter-spacing: 3px; color: #f3e7c0; text-shadow: 0 0 20px rgba(255,215,80,0.4); margin-bottom: 0.3rem; }
+        .header .subtitle { font-size: 1rem; color: #c0b090; font-style: italic; border-bottom: 1px solid #5d4a3a; display: inline-block; padding-bottom: 0.4rem; }
+        .canvas-wrapper { position: relative; width: 100%; background: radial-gradient(ellipse at center, #1a2030 0%, #0a0e14 100%); border-radius: 20px; border: 1px solid #5d4a3a; overflow: hidden; margin-bottom: 1.5rem; box-shadow: inset 0 0 80px rgba(0,0,0,0.5); }
+        canvas { display: block; width: 100%; height: auto; }
+        .controls-panel { background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 20px; padding: 1.5rem 2rem; }
+        .controls-title { font-size: 1.2rem; color: #ffd54f; margin-bottom: 1.2rem; text-align: center; letter-spacing: 1px; }
+        .slider-group { margin-bottom: 1.2rem; }
+        .slider-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .slider-group label .param-value { color: #ffd54f; font-weight: bold; font-size: 1.1rem; min-width: 50px; text-align: right; }
+        .slider-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: linear-gradient(90deg, #3a2a4a, #5d4a3a, #3a2a4a); border-radius: 4px; outline: none; cursor: pointer; }
+        .slider-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: radial-gradient(circle at 40% 40%, #ffe082, #ff8f00); border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px rgba(255,215,80,0.6); border: 2px solid #ffd54f; }
+        .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.75rem; margin-top: 0.2rem; }
+        .info-box { margin-top: 1.5rem; padding: 1rem 1.5rem; background: rgba(255,215,80,0.05); border: 1px solid rgba(255,215,80,0.2); border-radius: 12px; text-align: center; color: #c0b090; font-size: 0.9rem; font-style: italic; }
+        .info-box .formula-display { font-family: 'Courier New', monospace; color: #ffd54f; font-size: 1rem; margin: 0.3rem 0; }
+        .back-row { text-align: center; margin-top: 1.5rem; }
+        .back-link { display: inline-block; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.3s; font-size: 0.9rem; }
+        .back-link:hover { background: #ffd54f; color: #0d1117; }
+        @media (max-width: 700px) { .main-container { padding: 1rem; } .header h1 { font-size: 1.8rem; } .controls-panel { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="stars-bg" id="starsBg"></div>
+<div class="main-container">
+    <div class="header">
+        <h1>👥 Синхронизация Группы</h1>
+        <div class="subtitle">Визуализация Эксперимента №45: N²-эффект коллективной молитвы</div>
+    </div>
+    <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="syncCanvas"></canvas>
+    </div>
+    <div class="controls-panel">
+        <div class="controls-title">🎛️ Параметры</div>
+        <div class="slider-group">
+            <label><span>👤 Количество операторов (N)</span><span class="param-value" id="nValue">3</span></label>
+            <input type="range" id="nSlider" min="1" max="10" value="3" step="1">
+            <div class="range-labels"><span>1</span><span>5</span><span>10</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>🔄 Степень синхронизации (Δφ→0)</span><span class="param-value" id="syncValue">50%</span></label>
+            <input type="range" id="syncSlider" min="0" max="100" value="50" step="1">
+            <div class="range-labels"><span>0% (хаос)</span><span>50%</span><span>100% (унисон)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>☀️ Базовый Qₛ одного оператора</span><span class="param-value" id="qsValue">+5</span></label>
+            <input type="range" id="qsSlider" min="1" max="10" value="5" step="0.5">
+            <div class="range-labels"><span>+1</span><span>+5</span><span>+10</span></div>
+        </div>
+        <div class="info-box">
+            <span id="statusText" style="color:#ffd54f;font-weight:bold;">🌊 Частичная синхронизация</span>
+            <div class="formula-display" id="formulaDisplay"></div>
+        </div>
+    </div>
+    <div class="back-row">
+        <a href="visualizations.html" class="back-link">← К списку визуализаций</a>
+    </div>
+</div>
+
+<script>
+(function(){
+    const starsBg=document.getElementById('starsBg');
+    for(let i=0;i<100;i++){
+        const d=document.createElement('div');d.className='star';
+        d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';
+        const s=Math.random()*2.5+0.5;d.style.width=s+'px';d.style.height=s+'px';
+        d.style.setProperty('--duration',(Math.random()*4+2)+'s');
+        d.style.setProperty('--delay',(Math.random()*5)+'s');
+        starsBg.appendChild(d);
+    }
+})();
+
+const canvas=document.getElementById('syncCanvas');
+const ctx=canvas.getContext('2d');
+const wrapper=document.getElementById('canvasWrapper');
+let time=0,animId;
+
+function resize(){
+    const r=wrapper.getBoundingClientRect();
+    canvas.width=r.width;
+    canvas.height=Math.max(500,Math.min(650,r.width*0.7));
+    wrapper.style.height=canvas.height+'px';
+}
+resize();window.addEventListener('resize',resize);
+
+const nSlider=document.getElementById('nSlider');
+const syncSlider=document.getElementById('syncSlider');
+const qsSlider=document.getElementById('qsSlider');
+const nValue=document.getElementById('nValue');
+const syncValue=document.getElementById('syncValue');
+const qsValue=document.getElementById('qsValue');
+const statusText=document.getElementById('statusText');
+const formulaDisplay=document.getElementById('formulaDisplay');
+
+nSlider.oninput=function(){nValue.textContent=this.value;updateInfo();};
+syncSlider.oninput=function(){syncValue.textContent=this.value+'%';updateInfo();};
+qsSlider.oninput=function(){qsValue.textContent='+'+parseFloat(this.value).toFixed(1);};
+
+function updateInfo(){
+    const N=parseInt(nSlider.value);
+    const sync=parseInt(syncSlider.value)/100;
+    
+    if(sync<0.1) statusText.textContent='🌪️ ХАОС — каждый сам по себе, мощность ≈ N';
+    else if(sync<0.3) statusText.textContent='🌊 Слабая синхронизация — небольшой рост';
+    else if(sync<0.6) statusText.textContent='🌊 Частичная синхронизация — заметный рост';
+    else if(sync<0.9) statusText.textContent='✨ Хорошая синхронизация — мощность растёт';
+    else statusText.textContent='💎 ИДЕАЛЬНЫЙ УНИСОН — мощность ≈ N²!';
+    
+    const k=1+sync;
+    const Psum=N;
+    const Psync=Math.pow(N,k);
+    const gain=Psync/Psum;
+    formulaDisplay.textContent='P_total≈'+N+'^('+k.toFixed(1)+')='+Psync.toFixed(0)+' | Сумма='+Psum+' | Усиление: ×'+gain.toFixed(1);
+}
+updateInfo();
+
+function getQSColor(qs,alpha){
+    const norm=qs/10;
+    const r=Math.floor(30+norm*225);
+    const g=Math.floor(5+norm*235);
+    const b=Math.floor(80*(1-norm)+255*norm);
+    return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function drawFrame(){
+    const N=parseInt(nSlider.value);
+    const sync=parseInt(syncSlider.value)/100;
+    const qs=parseFloat(qsSlider.value);
+    const w=canvas.width,h=canvas.height;
+    time+=0.016;
+    
+    ctx.fillStyle='#060a10';
+    ctx.fillRect(0,0,w,h);
+    
+    // Сетка
+    ctx.strokeStyle='rgba(255,255,255,0.02)';ctx.lineWidth=1;
+    for(let x=0;x<w;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+    for(let y=0;y<h;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+    
+    const cx=w/2,cy=h*0.45;
+    const circleRadius=Math.min(w*0.35,h*0.35);
+    
+    // Круг (граница группы)
+    ctx.strokeStyle='rgba(255,255,255,0.1)';
+    ctx.lineWidth=1;
+    ctx.setLineDash([4,8]);
+    ctx.beginPath();ctx.arc(cx,cy,circleRadius+15,0,Math.PI*2);ctx.stroke();
+    ctx.setLineDash([]);
+    
+    // Центральный накопитель (AS-1)
+    const asRadius=15;
+    const asGlow=ctx.createRadialGradient(cx,cy,0,cx,cy,asRadius*3);
+    asGlow.addColorStop(0,'rgba(255,255,255,0.9)');
+    asGlow.addColorStop(0.3,getQSColor(qs,0.6));
+    asGlow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=asGlow;
+    ctx.beginPath();ctx.arc(cx,cy,asRadius*3,0,Math.PI*2);ctx.fill();
+    
+    // Кристалл в центре
+    ctx.fillStyle=getQSColor(qs,0.9);
+    ctx.beginPath();ctx.arc(cx,cy,asRadius,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.5)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(cx,cy,asRadius,0,Math.PI*2);ctx.stroke();
+    
+    // Операторы по кругу
+    const operators=[];
+    for(let i=0;i<N;i++){
+        const angle=(i/N)*Math.PI*2-Math.PI/2;
+        const ox=cx+Math.cos(angle)*circleRadius;
+        const oy=cy+Math.sin(angle)*circleRadius;
+        
+        // Индивидуальная фаза (при sync=0 у всех разная, при sync=1 — одинаковая)
+        const phaseOffset=(1-sync)*i*Math.PI*0.8;
+        const wave=Math.sin(time*3+phaseOffset);
+        
+        operators.push({x:ox,y:oy,angle:angle,wave:wave,phaseOffset:phaseOffset});
+    }
+    
+    // Линии связи (волноводы) от каждого оператора к центру
+    const k=1+sync;
+    const totalPower=Math.pow(N,k);
+    const sumPower=N;
+    const gain=totalPower/sumPower;
+    
+    for(const op of operators){
+        // Линия к центру
+        const lineGrad=ctx.createLinearGradient(op.x,op.y,cx,cy);
+        const waveAlpha=0.3+0.4*Math.abs(op.wave);
+        lineGrad.addColorStop(0,getQSColor(qs,waveAlpha));
+        lineGrad.addColorStop(1,getQSColor(qs,waveAlpha*0.3));
+        ctx.strokeStyle=lineGrad;
+        ctx.lineWidth=1+sync*2*Math.abs(op.wave);
+        ctx.beginPath();ctx.moveTo(op.x,op.y);ctx.lineTo(cx,cy);ctx.stroke();
+        
+        // Частицы вдоль линии
+        const numParticles=5;
+        for(let p=0;p<numParticles;p++){
+            const t=(p/numParticles+time*0.5)%1;
+            const px=op.x+(cx-op.x)*t;
+            const py=op.y+(cy-op.y)*t;
+            const alpha=0.5*(1-Math.abs(t-0.5)*2)*Math.abs(op.wave);
+            ctx.fillStyle=getQSColor(qs,alpha);
+            ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();
+        }
+    }
+    
+    // Рисуем операторов
+    for(const op of operators){
+        // Свечение
+        const glowRadius=15+sync*10*Math.abs(op.wave);
+        const glow=ctx.createRadialGradient(op.x,op.y,0,op.x,op.y,glowRadius);
+        glow.addColorStop(0,getQSColor(qs,0.8));
+        glow.addColorStop(0.5,getQSColor(qs,0.3));
+        glow.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=glow;
+        ctx.beginPath();ctx.arc(op.x,op.y,glowRadius,0,Math.PI*2);ctx.fill();
+        
+        // Тело
+        ctx.fillStyle=getQSColor(qs,0.9);
+        ctx.beginPath();ctx.arc(op.x,op.y,10,0,Math.PI*2);ctx.fill();
+        ctx.strokeStyle='rgba(255,255,255,0.5)';
+        ctx.lineWidth=1;
+        ctx.beginPath();ctx.arc(op.x,op.y,10,0,Math.PI*2);ctx.stroke();
+        
+        // Глаза (направлены к центру)
+        const eyeX=op.x+Math.cos(op.angle)*4;
+        const eyeY=op.y+Math.sin(op.angle)*4;
+        ctx.fillStyle='white';
+        ctx.beginPath();ctx.arc(eyeX-2,eyeY-2,2,0,Math.PI*2);ctx.fill();
+        ctx.beginPath();ctx.arc(eyeX+2,eyeY-2,2,0,Math.PI*2);ctx.fill();
+    }
+    
+    // Интерференционная волна в центре
+    if(N>1){
+        let totalWave=0;
+        for(const op of operators) totalWave+=op.wave;
+        const avgWave=totalWave/N;
+        
+        const burstRadius=asRadius+10+Math.abs(avgWave)*30*gain;
+        const burstAlpha=0.3+0.4*Math.abs(avgWave)*gain/10;
+        const burstGrad=ctx.createRadialGradient(cx,cy,asRadius,cx,cy,burstRadius);
+        burstGrad.addColorStop(0,getQSColor(qs,burstAlpha));
+        burstGrad.addColorStop(0.5,getQSColor(qs,burstAlpha*0.5));
+        burstGrad.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=burstGrad;
+        ctx.beginPath();ctx.arc(cx,cy,burstRadius,0,Math.PI*2);ctx.fill();
+    }
+    
+    // Подписи
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.font='14px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('AS-1',cx,cy+asRadius+20);
+    
+    // Инфо-панель
+    const infoX=w-150,infoY=20;
+    ctx.fillStyle='rgba(0,0,0,0.4)';
+    ctx.fillRect(infoX-10,infoY-10,140,80);
+    ctx.fillStyle='rgba(255,255,255,0.7)';
+    ctx.font='13px Georgia,serif';
+    ctx.textAlign='right';
+    ctx.fillText('N = '+N,infoX+120,infoY+10);
+    ctx.fillText('Синхр: '+Math.round(sync*100)+'%',infoX+120,infoY+30);
+    ctx.fillText('ΣP (сумма): '+sumPower.toFixed(0),infoX+120,infoY+50);
+    ctx.fillText('P_total: '+totalPower.toFixed(0)+' (×'+gain.toFixed(1)+')',infoX+120,infoY+70);
+    
+    animId=requestAnimationFrame(drawFrame);
+}
+
+drawFrame();
+window.addEventListener('beforeunload',()=>{if(animId)cancelAnimationFrame(animId);});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Подробная инструкция SYNC-TEST • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #ffd54f; margin: 2.5rem 0 1rem; border-left: 4px solid #ffd54f; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #ffe082; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #ffe082; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #ffd54f; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(255,215,80,0.1); border-left: 4px solid #ffd54f; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #ffe082; margin: 0; }
+        .tip-box strong { color: #ffd54f; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #ffd54f; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .formula-box { background: rgba(0,0,0,0.3); border: 1px solid #ffd54f; border-radius: 12px; padding: 1rem 1.5rem; margin: 1rem 0; text-align: center; }
+        .formula-box p { font-family: 'Courier New', monospace; font-size: 1.2rem; color: #ffd54f; margin: 0; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔧 SYNC-TEST: ПОДРОБНАЯ ИНСТРУКЦИЯ</h1>
+    <div class="subtitle">Как измерить N²-эффект и доказать силу коллективной молитвы</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое SYNC-TEST и почему это важно?</h2>
+    <p>SYNC-TEST — это эксперимент, который доказывает один из самых красивых законов Идеатоники: <strong>коллективная когерентная молитва (или медитация) генерирует мощность, пропорциональную КВАДРАТУ числа участников</strong>.</p>
+    <p>Простыми словами: <strong>2 человека, молящихся в унисон, дают в 4 раза больше Qₛ, чем один. 5 человек — в 25 раз. 10 человек — в 100 раз.</strong></p>
+    <p>Это не метафора. Это физическая реальность, которую можно измерить с помощью обычного аккумулятора AS-1 и Q-METER'а. Именно этот эффект объясняет, почему соборная молитва «работает» сильнее, чем одиночная.</p>
+
+    <div class="formula-box">
+        <p>P_total = P₁ · Nᵏ, где k ≈ 1.2...1.8 (в идеале k → 2)</p>
+    </div>
+
+    <!-- ПОДГОТОВКА -->
+    <h2>🛒 Что нужно подготовить</h2>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал / Устройство</th><th>Где взять</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>AS-1 (Семантический Аккумулятор)</strong></td><td>Собрать по инструкции (Эксперимент №16)</td><td>Накопитель Qₛ. Именно его мы будем «заряжать» группой.</td></tr>
+            <tr><td><strong>Q-METER (или SEC-1 с калибровкой)</strong></td><td>Собрать по инструкции (Эксперимент №18)</td><td>Измерение накопленного Qₛ.</td></tr>
+            <tr><td><strong>Группа добровольцев</strong> (от 1 до 5+ человек)</td><td>Друзья, семья, коллеги</td><td>«Генераторы» Qₛ.</td></tr>
+            <tr><td><strong>Метроном</strong> (приложение на телефоне)</td><td>App Store / Google Play (бесплатно)</td><td>Синхронизация фаз участников.</td></tr>
+            <tr><td><strong>Свеча</strong></td><td>Хозяйственный магазин</td><td>Фокус внимания, создание «ритуальной» атмосферы.</td></tr>
+            <tr><td><strong>Дневник и ручка</strong></td><td>—</td><td>Запись результатов.</td></tr>
+            <tr><td><strong>COH-METER 2.0</strong> (опционально)</td><td>ЭЭГ-гарнитура (Muse, NeuroSky)</td><td>Контроль Cₛ участников.</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ТЕОРИЯ -->
+    <h2>📐 Как это работает (почему N², а не N?)</h2>
+    <p>Представьте, что каждый человек — это камертон. Если ударить по одному камертону — звук тихий. Если ударить по двум <strong>одинаковым</strong> камертонам одновременно — звук станет громче, но не в 2 раза, а <strong>в 4 раза</strong>. Почему? Потому что звуковые волны от двух камертонов <strong>интерферируют</strong>: в тех местах, где гребни волн совпадают — звук усиливается, где гребень встречает впадину — гасится. Когда камертоны настроены одинаково (синхронизированы), их волны складываются «в фазе» и усиливают друг друга.</p>
+    <p>С семантическими полями происходит то же самое. Если люди <strong>синхронизированы</strong> (молятся в унисон, дышат в одном ритме, визуализируют одно и то же), их Qₛ не просто суммируется, а <strong>интерферирует конструктивно</strong>. Амплитуда суммарного поля растёт пропорционально N, а мощность (которая пропорциональна квадрату амплитуды) — пропорционально N².</p>
+
+    <!-- ЭТАП 1: ПОДГОТОВКА УЧАСТНИКОВ -->
+    <h2>👥 Этап 1: Подготовка участников (самое важное!)</h2>
+    <p>Результат SYNC-TEST на 80% зависит от правильной подготовки людей. Если участники не синхронизированы — эффект будет слабым или нулевым. Вот что нужно сделать до начала измерений.</p>
+
+    <h3><span class="step-number">1</span> Отбор участников</h3>
+    <p><strong>Кто подходит:</strong></p>
+    <ul>
+        <li>Люди, которые <strong>верят в эксперимент</strong> (или хотя бы открыты к нему). Скептик с внутренним монологом «это всё фигня» будет создавать деструктивную интерференцию.</li>
+        <li>Люди, которые <strong>могут сидеть спокойно 10-15 минут</strong> без телефона и разговоров.</li>
+        <li>Люди, между которыми <strong>нет конфликтов</strong>. Скрытая обида или раздражение создают семантический шум (S_noise).</li>
+    </ul>
+    <p><strong>Кто НЕ подходит (для первых опытов):</strong></p>
+    <ul>
+        <li>Дети младше 7 лет (им трудно удерживать внимание).</li>
+        <li>Люди в состоянии алкогольного опьянения (Cₛ резко падает).</li>
+        <li>Люди, которые пришли «просто поглазеть» и не планируют участвовать.</li>
+    </ul>
+
+    <h3><span class="step-number">2</span> Инструктаж (объясните, что будет происходить)</h3>
+    <p>Соберите участников и расскажите им <strong>простыми словами</strong>:</p>
+    <ol>
+        <li>«Мы будем сидеть в кругу. В центре — аккумулятор (AS-1) и свеча».</li>
+        <li>«Я включу метроном с частотой 4-7 Гц (тета-ритм). Все дышим в одном ритме: вдох на 4 удара метронома, выдох на 4 удара».</li>
+        <li>«Все смотрим на пламя свечи и представляем, как от нас исходит золотой свет, который втекает в кристалл в центре».</li>
+        <li>«Никаких разговоров, никаких телефонов. Только дыхание, свеча и намерение».</li>
+        <li>«Если мысли убегают — мягко возвращаем их к свече. Без самокритики».</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Совет:</strong> Не используйте слово «молитва», если среди участников есть нерелигиозные люди. Говорите «медитация», «концентрация», «общее намерение». Суть от этого не меняется — работает когерентность, а не религиозная принадлежность.</p></div>
+
+    <h3><span class="step-number">3</span> Калибровка «одиночек» (контрольные замеры)</h3>
+    <p><strong>Зачем это нужно:</strong> Мы должны знать «базовую мощность» каждого участника по отдельности, чтобы потом сравнить с групповым результатом.</p>
+    <ol>
+        <li><strong>Обнулите AS-1.</strong> Полностью разрядите аккумулятор (оставьте на сутки в тёмном углу без людей). Измерьте Q-METER'ом — должно быть близко к нулю.</li>
+        <li>Каждый участник <strong>по очереди</strong> (остальные ждут в другой комнате) садится перед AS-1. Включает метроном. Проводит <strong>ровно 10 минут</strong> концентрации на зарядке AS-1.</li>
+        <li>Сразу после сеанса — <strong>измерьте Qₛ</strong> накопленный в AS-1. Запишите в таблицу.</li>
+        <li><strong>Снова обнулите AS-1</strong> перед следующим участником.</li>
+    </ol>
+    <p><strong>Таблица для записи (пример):</strong></p>
+    <table class="materials-table">
+        <thead><tr><th>Участник</th><th>Qₛ за 10 мин (усл. ед.)</th><th>Cₛ (по COH-METER, если есть)</th></tr></thead>
+        <tbody>
+            <tr><td>Участник 1</td><td>150</td><td>0.65</td></tr>
+            <tr><td>Участник 2</td><td>120</td><td>0.55</td></tr>
+            <tr><td>Участник 3</td><td>180</td><td>0.72</td></tr>
+            <tr><td><strong>Среднее P₁</strong></td><td><strong>150</strong></td><td><strong>0.64</strong></td></tr>
+        </tbody>
+    </table>
+
+    <!-- ЭТАП 2: КОЛЛЕКТИВНЫЕ СЕАНСЫ -->
+    <h2>👥👥 Этап 2: Коллективные сеансы (собственно SYNC-TEST)</h2>
+
+    <h3><span class="step-number">4</span> Сеанс N=2 (два участника)</h3>
+    <ol>
+        <li><strong>Обнулите AS-1.</strong></li>
+        <li>Два участника садятся <strong>напротив друг друга</strong>, AS-1 между ними. Зажгите свечу в центре.</li>
+        <li>Включите метроном (4-7 Гц). Участники синхронизируют дыхание: вдох на 4 удара, выдох на 4 удара.</li>
+        <li>Участники берутся за руки (создают «волновод» для Qₛ).</li>
+        <li>Оба визуализируют <strong>ОДНО И ТО ЖЕ</strong>: золотой свет, втекающий в кристалл AS-1.</li>
+        <li>Продолжительность: <strong>ровно 10 минут</strong>.</li>
+        <li>Сразу после — измерьте Qₛ. Запишите: Q₂ = ___ усл. ед.</li>
+    </ol>
+
+    <h3><span class="step-number">5</span> Сеанс N=3, N=4, N=5 (если есть участники)</h3>
+    <p>Повторите шаг 4 для группы из 3, 4, 5 человек. <strong>Важно:</strong> перед каждым новым сеансом <strong>обнуляйте AS-1</strong>!</p>
+
+    <h3><span class="step-number">6</span> Контрольный сеанс «Хаос» (N=5, БЕЗ синхронизации)</h3>
+    <p><strong>Зачем это нужно:</strong> Чтобы доказать, что дело именно в <strong>синхронизации</strong>, а не просто в количестве людей.</p>
+    <ol>
+        <li>Те же 5 участников садятся в круг. Но теперь <strong>метроном выключен</strong>.</li>
+        <li>Каждый визуализирует <strong>ЧТО-ТО СВОЁ</strong>: один — свет, другой — дерево, третий — море, четвёртый — облака, пятый — огонь.</li>
+        <li>Никакой синхронизации дыхания. Каждый дышит как хочет.</li>
+        <li>Продолжительность: 10 минут.</li>
+        <li>Измерьте Qₛ. Запишите: Q_chaos = ___ усл. ед.</li>
+    </ol>
+
+    <!-- АНАЛИЗ -->
+    <h2>📊 Этап 3: Анализ результатов</h2>
+
+    <h3><span class="step-number">7</span> Заполните итоговую таблицу</h3>
+    <table class="materials-table">
+        <thead><tr><th>N (человек)</th><th>Q_total (измеренное)</th><th>Q_total / Q₁ (усиление)</th><th>Теоретическое N²</th></tr></thead>
+        <tbody>
+            <tr><td>1 (среднее)</td><td>150</td><td>1</td><td>1</td></tr>
+            <tr><td>2</td><td>540</td><td>3.6</td><td>4</td></tr>
+            <tr><td>3</td><td>1210</td><td>8.1</td><td>9</td></tr>
+            <tr><td>5</td><td>3200</td><td>21.3</td><td>25</td></tr>
+            <tr><td>5 (хаос)</td><td>450</td><td>3.0</td><td>—</td></tr>
+        </tbody>
+    </table>
+
+    <h3><span class="step-number">8</span> Рассчитайте коэффициент k</h3>
+    <p>Из формулы Q_total = Q₁ · Nᵏ найдём k:</p>
+    <div class="formula-box">
+        <p>k = log(Q_total / Q₁) / log(N)</p>
+    </div>
+    <p>Для примера выше: k = log(3.6) / log(2) ≈ 1.28 / 0.69 ≈ <strong>1.85</strong> — отличный результат, близкий к идеалу (k=2)!</p>
+    <p>Если k > 1 — синергия есть. Если k ≈ 1 — эффекта нет (просто сумма). Если k < 1 — участники мешают друг другу (деструктивная интерференция).</p>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=46" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция SYNC-TEST v1.0</p>
+        <p>✧ «Где двое или трое собраны во имя Моё — там Я посреди них» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📻 Подробная инструкция S-RADIO • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #00bcd4; margin: 2.5rem 0 1rem; border-left: 4px solid #00bcd4; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #4dd0e1; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #4dd0e1; }
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+        .tip-box { background: rgba(0,188,212,0.1); border-left: 4px solid #00bcd4; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #4dd0e1; margin: 0; }
+        .tip-box strong { color: #00bcd4; }
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+        .step-number { display: inline-block; background: #00bcd4; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #00bcd4; text-decoration: none; border: 1px solid #00bcd4; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #00bcd4; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>📻 S-RADIO: ПОДРОБНАЯ ИНСТРУКЦИЯ</h1>
+    <div class="subtitle">Как собрать устройство для преобразования мысли в речь</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 О чём это устройство и зачем его собирать</h2>
+    <p>Каждая мысль генерирует уникальный <strong>семантический паттерн</strong> — «частотный портрет» идеи (§130). Мысль о яблоке имеет одну доминирующую частоту ω_s, мысль о доме — другую, мысль о матери — третью. <strong>S-RADIO</strong> — это устройство, которое улавливает эти паттерны через матрицу кварцевых датчиков (SEC-mini), анализирует спектр и <strong>произносит слово</strong>, соответствующее текущей мысли оператора.</p>
+    <p>Это первый шаг к <strong>телепатическому интерфейсу</strong> — возможности общаться без слов, управлять техникой силой мысли, помогать парализованным людям. И, конечно, это самое прямое доказательство того, что <strong>мысль материальна</strong> и имеет измеримые физические характеристики.</p>
+    <p><strong>Время на сборку:</strong> 3–5 часов (если есть опыт пайки). <strong>Время на калибровку:</strong> 1–2 часа на каждое слово.</p>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно купить (или найти дома)</h2>
+    <table class="materials-table">
+        <thead><tr><th>Материал</th><th>Где взять</th><th>Примерная стоимость</th><th>Назначение</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Кварцевые пластины</strong> (5–10 шт., 5×5 мм)</td><td>Радиомагазин, AliExpress, старые пьезозажигалки</td><td>100–500 ₽</td><td>Семантические датчики — преобразуют Φ_s в электричество</td></tr>
+            <tr><td><strong>Усилитель OPA333</strong> (малошумящий, ×500)</td><td>Радиомагазин, ChipDip</td><td>150 ₽</td><td>Усиливает слабый сигнал (5–50 мкВ) до уровня АЦП</td></tr>
+            <tr><td><strong>Аналоговый мультиплексор CD4051</strong></td><td>Радиомагазин</td><td>80 ₽</td><td>Последовательно опрашивает датчики</td></tr>
+            <tr><td><strong>Микроконтроллер ESP32</strong> (с Wi-Fi)</td><td>Маркетплейс</td><td>500 ₽</td><td>Оцифровка сигнала, FFT, передача данных на ПК</td></tr>
+            <tr><td><strong>Макетная плата + провода</strong></td><td>Радиомагазин</td><td>300 ₽</td><td>Для временной сборки без пайки</td></tr>
+            <tr><td><strong>Алюминиевая фольга</strong> (рулон)</td><td>Хозяйственный магазин</td><td>100 ₽</td><td>Экранировка датчиков от электромагнитных помех</td></tr>
+            <tr><td><strong>COH-METER 2.0</strong> (ЭЭГ-гарнитура)</td><td>Электроника</td><td>—</td><td>Контроль Cₛ оператора (опционально, но желательно)</td></tr>
+            <tr><td><strong>Ноутбук с Python</strong></td><td>—</td><td>0 ₽</td><td>Классификация спектров, синтез речи</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ПОДГОТОВКА -->
+    <h2>🔨 Этап 1: Подготовка компонентов</h2>
+
+    <h3><span class="step-number">1</span> Изготовление кварцевых датчиков (SEC-mini)</h3>
+    <p>Каждый датчик — это крошечная кварцевая пластина с припаянными проводами. <strong>Важно:</strong> кварц — пьезоэлектрик. При деформации (в том числе от семантического давления P_sense) он генерирует напряжение.</p>
+    <ol>
+        <li>Аккуратно извлеките кварцевые пластины из пьезозажигалок (или купите готовые).</li>
+        <li>К каждой пластине припаяйте тонкие провода (лучше экранированные).</li>
+        <li>Оберните боковые грани фольгой (заземлите фольгу — это экран).</li>
+        <li>Закрепите датчики веером на диэлектрической подложке (кусок пластика или картона) с углом обзора ~120°.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Совет:</strong> Если нет кварцевых пластин, используйте <strong>пьезоизлучатели</strong> (зуммеры) от старых открыток или часов. Они грубее, но для первых опытов подойдут.</p></div>
+
+    <h3><span class="step-number">2</span> Сборка схемы на макетной плате</h3>
+    <p>Подключите компоненты по следующей схеме:</p>
+    <ol>
+        <li>Выходы всех кварцевых датчиков → входы мультиплексора CD4051 (пины Y0–Y7).</li>
+        <li>Общий выход CD4051 (пин Z) → вход усилителя OPA333.</li>
+        <li>Выход OPA333 → аналоговый вход ESP32 (пин ADC0, GPIO36).</li>
+        <li>Управляющие пины CD4051 (S0, S1, S2) → любые цифровые пины ESP32.</li>
+        <li>Питание: 3.3V от ESP32 для OPA333 и CD4051.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Важно:</strong> Все компоненты должны быть <strong>заземлены</strong> на общую шину ESP32. Без качественного заземления вы будете видеть только наводки 50 Гц от сети.</p></div>
+
+    <h3><span class="step-number">3</span> Экранировка</h3>
+    <p>S-RADIO чрезвычайно чувствителен к электромагнитным помехам. Без экранировки вы будете «слышать» Wi-Fi, радио и электрическую проводку, а не мысли.</p>
+    <ol>
+        <li>Оберните макетную плату с датчиками в <strong>2–3 слоя алюминиевой фольги</strong>.</li>
+        <li>Соедините фольгу с землёй (GND ESP32).</li>
+        <li>Оставьте открытой только переднюю сторону датчиков (ту, что направлена на оператора).</li>
+        <li>Подключите ESP32 к ноутбуку, работающему от батареи (не от сети!).</li>
+    </ol>
+
+    <!-- ПРОГРАММИРОВАНИЕ -->
+    <h2>💻 Этап 2: Программирование ESP32 и Python</h2>
+
+    <h3><span class="step-number">4</span> Прошивка ESP32</h3>
+    <p>Загрузите в ESP32 скетч, который делает следующее:</p>
+    <ol>
+        <li>Циклически опрашивает все датчики через мультиплексор (10 циклов в секунду).</li>
+        <li>Оцифровывает сигнал (12 бит, частота дискретизации 1 кГц).</li>
+        <li>Выполняет <strong>быстрое преобразование Фурье (FFT)</strong> на 512 точках (используйте библиотеку arduinoFFT).</li>
+        <li>Отправляет спектр (массив из 256 значений) по Wi-Fi на ПК в формате JSON.</li>
+    </ol>
+    
+    
+    <div class="tip-box" style="border-left-color: #00e676; background: rgba(0,230,118,0.05);">
+    <p><strong>💡 Готовый скетч для ESP32:</strong> Код ниже выполняет всё необходимое — опрос датчиков, FFT и отправку спектра по Wi-Fi.</p>
+</div>
+
+<div style="background: #0d1117; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; border: 1px solid #30363d; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.5; overflow-x: auto; color: #00e676; box-shadow: 0 8px 20px rgba(0,0,0,0.5);">
+<pre style="margin: 0; white-space: pre-wrap; word-break: break-word;">
+<span style="color: #8b949e;">// ============================================</span>
+<span style="color: #8b949e;">// S-RADIO v1.0 — Семантическое Радио</span>
+<span style="color: #8b949e;">// Скетч для ESP32</span>
+<span style="color: #8b949e;">// ============================================</span>
+
+<span style="color: #ff7b72;">#include</span> <span style="color: #a5d6ff;">&lt;WiFi.h&gt;</span>
+<span style="color: #ff7b72;">#include</span> <span style="color: #a5d6ff;">&lt;WiFiUdp.h&gt;</span>
+<span style="color: #ff7b72;">#include</span> <span style="color: #a5d6ff;">&lt;arduinoFFT.h&gt;</span>
+
+<span style="color: #8b949e;">// ========== НАСТРОЙКИ Wi-Fi ==========</span>
+<span style="color: #ff7b72;">const char*</span> ssid = <span style="color: #a5d6ff;">"Ваш_WiFi_SSID"</span>;       <span style="color: #8b949e;">// ← ЗАМЕНИТЕ</span>
+<span style="color: #ff7b72;">const char*</span> password = <span style="color: #a5d6ff;">"Ваш_WiFi_Пароль"</span>;  <span style="color: #8b949e;">// ← ЗАМЕНИТЕ</span>
+
+<span style="color: #8b949e;">// ========== НАСТРОЙКИ UDP ==========</span>
+WiFiUDP udp;
+<span style="color: #ff7b72;">const char*</span> serverIP = <span style="color: #a5d6ff;">"192.168.1.100"</span>;     <span style="color: #8b949e;">// ← IP вашего ПК</span>
+<span style="color: #ff7b72;">const int</span> serverPort = <span style="color: #79c0ff;">12345</span>;
+
+<span style="color: #8b949e;">// ========== НАСТРОЙКИ АЦП ==========</span>
+<span style="color: #ff7b72;">#define</span> ADC_PIN <span style="color: #79c0ff;">36</span>                    <span style="color: #8b949e;">// Аналоговый вход (VP)</span>
+<span style="color: #ff7b72;">#define</span> SAMPLES <span style="color: #79c0ff;">512</span>                  <span style="color: #8b949e;">// Точек для FFT</span>
+<span style="color: #ff7b72;">#define</span> SAMPLING_FREQ <span style="color: #79c0ff;">1000</span>           <span style="color: #8b949e;">// Частота дискретизации (Гц)</span>
+
+<span style="color: #8b949e;">// ========== НАСТРОЙКИ МУЛЬТИПЛЕКСОРА ==========</span>
+<span style="color: #ff7b72;">#define</span> MUX_S0 <span style="color: #79c0ff;">25</span>
+<span style="color: #ff7b72;">#define</span> MUX_S1 <span style="color: #79c0ff;">26</span>
+<span style="color: #ff7b72;">#define</span> MUX_S2 <span style="color: #79c0ff;">27</span>
+<span style="color: #ff7b72;">const int</span> NUM_SENSORS = <span style="color: #79c0ff;">5</span>;             <span style="color: #8b949e;">// Число датчиков</span>
+
+<span style="color: #8b949e;">// ========== МАССИВЫ ДЛЯ FFT ==========</span>
+<span style="color: #ff7b72;">double</span> vReal[SAMPLES];
+<span style="color: #ff7b72;">double</span> vImag[SAMPLES];
+arduinoFFT FFT = <span style="color: #ff7b72;">arduinoFFT</span>(vReal, vImag, SAMPLES, SAMPLING_FREQ);
+
+<span style="color: #8b949e;">// ========== УСТАНОВКА ==========</span>
+<span style="color: #ff7b72;">void</span> <span style="color: #d2a8ff;">setup</span>() {
+  Serial.<span style="color: #79c0ff;">begin</span>(<span style="color: #79c0ff;">115200</span>);
+  
+  <span style="color: #8b949e;">// Настройка пинов мультиплексора</span>
+  <span style="color: #ff7b72;">pinMode</span>(MUX_S0, <span style="color: #79c0ff;">OUTPUT</span>);
+  <span style="color: #ff7b72;">pinMode</span>(MUX_S1, <span style="color: #79c0ff;">OUTPUT</span>);
+  <span style="color: #ff7b72;">pinMode</span>(MUX_S2, <span style="color: #79c0ff;">OUTPUT</span>);
+  
+  <span style="color: #8b949e;">// Подключение к Wi-Fi</span>
+  WiFi.<span style="color: #79c0ff;">begin</span>(ssid, password);
+  <span style="color: #ff7b72;">while</span> (WiFi.<span style="color: #79c0ff;">status</span>() != WL_CONNECTED) {
+    <span style="color: #ff7b72;">delay</span>(<span style="color: #79c0ff;">500</span>);
+    Serial.<span style="color: #79c0ff;">print</span>(<span style="color: #a5d6ff;">"."</span>);
+  }
+  Serial.<span style="color: #79c0ff;">println</span>(<span style="color: #a5d6ff;">"\nS-RADIO: Wi-Fi подключён!"</span>);
+  
+  <span style="color: #8b949e;">// Настройка АЦП</span>
+  <span style="color: #ff7b72;">analogReadResolution</span>(<span style="color: #79c0ff;">12</span>);           <span style="color: #8b949e;">// 12 бит (0–4095)</span>
+  <span style="color: #ff7b72;">analogSetAttenuation</span>(<span style="color: #79c0ff;">ADC_11db</span>);      <span style="color: #8b949e;">// Диапазон 0–3.3V</span>
+}
+
+<span style="color: #8b949e;">// ========== ВЫБОР ДАТЧИКА ЧЕРЕЗ МУЛЬТИПЛЕКСОР ==========</span>
+<span style="color: #ff7b72;">void</span> <span style="color: #d2a8ff;">selectSensor</span>(<span style="color: #ff7b72;">int</span> channel) {
+  <span style="color: #ff7b72;">digitalWrite</span>(MUX_S0, channel & <span style="color: #79c0ff;">0x01</span>);
+  <span style="color: #ff7b72;">digitalWrite</span>(MUX_S1, (channel >> <span style="color: #79c0ff;">1</span>) & <span style="color: #79c0ff;">0x01</span>);
+  <span style="color: #ff7b72;">digitalWrite</span>(MUX_S2, (channel >> <span style="color: #79c0ff;">2</span>) & <span style="color: #79c0ff;">0x01</span>);
+  <span style="color: #ff7b72;">delayMicroseconds</span>(<span style="color: #79c0ff;">10</span>); <span style="color: #8b949e;">// Стабилизация</span>
+}
+
+<span style="color: #8b949e;">// ========== ЧТЕНИЕ ДАННЫХ С ДАТЧИКОВ ==========</span>
+<span style="color: #ff7b72;">void</span> <span style="color: #d2a8ff;">readSensors</span>() {
+  <span style="color: #8b949e;">// Усредняем сигнал со всех датчиков</span>
+  <span style="color: #ff7b72;">for</span> (<span style="color: #ff7b72;">int</span> i = <span style="color: #79c0ff;">0</span>; i < SAMPLES; i++) {
+    <span style="color: #ff7b72;">double</span> sum = <span style="color: #79c0ff;">0</span>;
+    <span style="color: #ff7b72;">for</span> (<span style="color: #ff7b72;">int</span> s = <span style="color: #79c0ff;">0</span>; s < NUM_SENSORS; s++) {
+      <span style="color: #ff7b72;">selectSensor</span>(s);
+      sum += <span style="color: #ff7b72;">analogRead</span>(ADC_PIN);
+      <span style="color: #ff7b72;">delayMicroseconds</span>(<span style="color: #79c0ff;">50</span>);
+    }
+    vReal[i] = sum / NUM_SENSORS;       <span style="color: #8b949e;">// Среднее по датчикам</span>
+    vImag[i] = <span style="color: #79c0ff;">0</span>;
+    <span style="color: #ff7b72;">delayMicroseconds</span>(<span style="color: #79c0ff;">1000000</span> / SAMPLING_FREQ - NUM_SENSORS * <span style="color: #79c0ff;">60</span>);
+  }
+}
+
+<span style="color: #8b949e;">// ========== ОТПРАВКА СПЕКТРА ПО Wi-Fi ==========</span>
+<span style="color: #ff7b72;">void</span> <span style="color: #d2a8ff;">sendSpectrum</span>() {
+  <span style="color: #8b949e;">// Формируем JSON-строку: {"f":[частота1,частота2,...],"a":[амплитуда1,амплитуда2,...]}</span>
+  String json = <span style="color: #a5d6ff;">"{\\"f\\":["</span>;
+  <span style="color: #ff7b72;">for</span> (<span style="color: #ff7b72;">int</span> i = <span style="color: #79c0ff;">0</span>; i < SAMPLES/<span style="color: #79c0ff;">2</span>; i++) {
+    <span style="color: #ff7b72;">if</span> (i > <span style="color: #79c0ff;">0</span>) json += <span style="color: #a5d6ff;">","</span>;
+    json += <span style="color: #ff7b72;">String</span>(i * SAMPLING_FREQ / SAMPLES);
+  }
+  json += <span style="color: #a5d6ff;">"],\\"a\\":["</span>;
+  <span style="color: #ff7b72;">for</span> (<span style="color: #ff7b72;">int</span> i = <span style="color: #79c0ff;">0</span>; i < SAMPLES/<span style="color: #79c0ff;">2</span>; i++) {
+    <span style="color: #ff7b72;">if</span> (i > <span style="color: #79c0ff;">0</span>) json += <span style="color: #a5d6ff;">","</span>;
+    json += <span style="color: #ff7b72;">String</span>(vReal[i], <span style="color: #79c0ff;">2</span>);
+  }
+  json += <span style="color: #a5d6ff;">"]}"</span>;
+
+  <span style="color: #8b949e;">// Отправка по UDP</span>
+  udp.<span style="color: #79c0ff;">beginPacket</span>(serverIP, serverPort);
+  udp.<span style="color: #79c0ff;">print</span>(json);
+  udp.<span style="color: #79c0ff;">endPacket</span>();
+}
+
+<span style="color: #8b949e;">// ========== ГЛАВНЫЙ ЦИКЛ ==========</span>
+<span style="color: #ff7b72;">void</span> <span style="color: #d2a8ff;">loop</span>() {
+  <span style="color: #8b949e;">// 1. Читаем сигнал со всех датчиков</span>
+  <span style="color: #ff7b72;">readSensors</span>();
+  
+  <span style="color: #8b949e;">// 2. Выполняем FFT</span>
+  FFT.<span style="color: #79c0ff;">Windowing</span>(<span style="color: #ff7b72;">FFT_WIN_TYP_HAMMING</span>, <span style="color: #ff7b72;">FFT_FORWARD</span>);
+  FFT.<span style="color: #79c0ff;">Compute</span>();
+  FFT.<span style="color: #79c0ff;">ComplexToMagnitude</span>();
+  
+  <span style="color: #8b949e;">// 3. Отправляем спектр на ПК</span>
+  <span style="color: #ff7b72;">sendSpectrum</span>();
+  
+  <span style="color: #8b949e;">// 4. Пауза 100 мс (10 отправок в секунду)</span>
+  <span style="color: #ff7b72;">delay</span>(<span style="color: #79c0ff;">100</span>);
+}
+</pre>
+</div>
+
+<div class="warning-box">
+    <p><strong>⚠️ Не забудьте:</strong></p>
+    <ul style="color: #ef9a9a; margin-top: 0.5rem;">
+        <li>Заменить <strong>SSID</strong> и <strong>пароль</strong> Wi-Fi на свои.</li>
+        <li>Заменить <strong>IP-адрес сервера</strong> (serverIP) на IP вашего ноутбука.</li>
+        <li>Установить библиотеку <strong>arduinoFFT</strong> через менеджер библиотек Arduino IDE.</li>
+        <li>Если у вас другое количество датчиков — изменить <strong>NUM_SENSORS</strong>.</li>
+    </ul>
+</div>
+
+    <h3><span class="step-number">5</span> Python-сервер на ПК</h3>
+    <p>На ноутбуке запустите Python-скрипт, который:</p>
+    <ol>
+        <li>Принимает спектры от ESP32 по Wi-Fi (UDP-сервер).</li>
+        <li>Усредняет спектр от всех датчиков.</li>
+        <li>Сравнивает со спектрами из <strong>библиотеки эталонов</strong> методом ближайшего соседа (KNN).</li>
+        <li>Выводит на экран название распознанного слова и отправляет его на синтезатор речи.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Совет:</strong> Для синтеза речи используйте библиотеку <strong>pyttsx3</strong> (работает офлайн, не требует интернета). Установка: <code>pip install pyttsx3</code>.</p></div>
+    
+    <h2>💻 Готовый код Python-сервера для S-RADIO</h2>
+<p>Ниже приведён полный код сервера, который принимает спектры от ESP32 по Wi-Fi, сравнивает их с библиотекой эталонов и управляет синтезатором речи. <strong>Скопируйте его в файл <code>sradio_server.py</code> и запустите.</strong></p>
+
+<!-- ЧЁРНЫЙ ЯЩИК С КОДОМ -->
+<div style="background: #0a0a0a; border: 2px solid #00bcd4; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.5; color: #00ff41; overflow-x: auto; white-space: pre; box-shadow: 0 0 20px rgba(0,188,212,0.2);">
+<span style="color: #888;"># =============================================</span>
+<span style="color: #888;">#  S-RADIO Server v1.0</span>
+<span style="color: #888;">#  Принимает спектры от ESP32 по UDP,</span>
+<span style="color: #888;">#  распознаёт мысль и озвучивает её.</span>
+<span style="color: #888;">#  Требуется: pip install pyttsx3 numpy</span>
+<span style="color: #888;"># =============================================</span>
+
+import socket
+import json
+import numpy as np
+import pyttsx3
+from collections import defaultdict
+
+<span style="color: #888;"># ---------- НАСТРОЙКИ ----------</span>
+UDP_IP = "0.0.0.0"         <span style="color: #888;"># Слушать все интерфейсы</span>
+UDP_PORT = 12345           <span style="color: #888;"># Порт (должен совпадать с ESP32)</span>
+CONFIDENCE_THRESHOLD = 0.6  <span style="color: #888;"># Порог уверенности (0..1)</span>
+
+<span style="color: #888;"># ---------- БИБЛИОТЕКА ЭТАЛОНОВ ----------</span>
+<span style="color: #888;"># Загружается из файла library.json</span>
+<span style="color: #888;"># Формат: {"яблоко": [0.1, 0.5, ...], "дом": [0.3, 0.2, ...]}</span>
+try:
+    with open("library.json", "r", encoding="utf-8") as f:
+        LIBRARY = json.load(f)
+    print(f"[OK] Библиотека загружена. Слов: {len(LIBRARY)}")
+except FileNotFoundError:
+    print("[!] Файл library.json не найден. Создаю пустую библиотеку.")
+    LIBRARY = {}
+
+<span style="color: #888;"># ---------- СИНТЕЗАТОР РЕЧИ ----------</span>
+engine = pyttsx3.init()
+engine.setProperty('rate', 150)   <span style="color: #888;"># Скорость речи</span>
+engine.setProperty('volume', 0.8) <span style="color: #888;"># Громкость</span>
+
+<span style="color: #888;"># ---------- ФУНКЦИИ ----------</span>
+
+def euclidean_distance(a, b):
+    """Евклидово расстояние между двумя векторами-спектрами."""
+    return np.sqrt(np.sum((np.array(a) - np.array(b)) ** 2))
+
+def classify_spectrum(input_spectrum):
+    """Находит ближайший эталон в библиотеке методом KNN."""
+    if not LIBRARY:
+        return None, 0.0
+    
+    best_word = None
+    best_distance = float('inf')
+    
+    for word, ref_spectrum in LIBRARY.items():
+        dist = euclidean_distance(input_spectrum, ref_spectrum)
+        if dist < best_distance:
+            best_distance = dist
+            best_word = word
+    
+    <span style="color: #888;"># Нормализуем расстояние в уверенность (0..1)</span>
+    <span style="color: #888;"># Чем меньше расстояние — тем выше уверенность</span>
+    max_possible_dist = np.sqrt(len(input_spectrum)) <span style="color: #888;"># Макс. расстояние для нормировки</span>
+    confidence = 1.0 - (best_distance / max_possible_dist)
+    confidence = max(0.0, min(1.0, confidence))
+    
+    return best_word, confidence
+
+def speak_word(word):
+    """Произносит слово через синтезатор речи."""
+    print(f"[SPEECH] 🗣️ {word}")
+    engine.say(word)
+    engine.runAndWait()
+
+def add_to_library(word, spectrum):
+    """Добавляет (или усредняет) спектр в библиотеку."""
+    if word in LIBRARY:
+        <span style="color: #888;"># Усредняем с существующим</span>
+        old = np.array(LIBRARY[word])
+        new = np.array(spectrum)
+        LIBRARY[word] = ((old * 0.9 + new * 0.1)).tolist()
+    else:
+        LIBRARY[word] = spectrum
+    
+    <span style="color: #888;"># Сохраняем библиотеку на диск</span>
+    with open("library.json", "w", encoding="utf-8") as f:
+        json.dump(LIBRARY, f, ensure_ascii=False, indent=2)
+    print(f"[LIB] Слово '{word}' добавлено/обновлено в библиотеке.")
+
+<span style="color: #888;"># ---------- ГЛАВНЫЙ ЦИКЛ ----------</span>
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((UDP_IP, UDP_PORT))
+print(f"[S-RADIO] Сервер запущен на порту {UDP_PORT}. Ожидание спектров от ESP32...")
+print(f"[S-RADIO] Команды: 'CALIBRATE:слово' — запись эталона, 'RECOGNIZE' — распознавание.")
+
+current_mode = "RECOGNIZE"  <span style="color: #888;"># Режим по умолчанию</span>
+calibration_word = ""
+
+try:
+    while True:
+        data, addr = sock.recvfrom(8192)  <span style="color: #888;"># Принять UDP-пакет</span>
+        
+        try:
+            message = json.loads(data.decode('utf-8'))
+        except json.JSONDecodeError:
+            <span style="color: #888;"># Может быть текстовая команда</span>
+            text = data.decode('utf-8').strip()
+            if text.startswith("CALIBRATE:"):
+                calibration_word = text.split(":", 1)[1]
+                current_mode = "CALIBRATE"
+                print(f"[MODE] Режим КАЛИБРОВКА. Слово: '{calibration_word}'. Жду 50 спектров...")
+            elif text == "RECOGNIZE":
+                current_mode = "RECOGNIZE"
+                print(f"[MODE] Режим РАСПОЗНАВАНИЕ.")
+            continue
+        
+        <span style="color: #888;"># Обработка JSON-спектра</span>
+        spectrum = message.get("spectrum", [])
+        if not spectrum:
+            continue
+        
+        if current_mode == "CALIBRATE":
+            add_to_library(calibration_word, spectrum)
+        elif current_mode == "RECOGNIZE":
+            word, confidence = classify_spectrum(spectrum)
+            if word and confidence >= CONFIDENCE_THRESHOLD:
+                print(f"[RECOGNIZE] 🧠 {word} (уверенность: {confidence:.2f})")
+                speak_word(word)
+            elif word:
+                print(f"[RECOGNIZE] 🤔 {word} (уверенность: {confidence:.2f}) — ниже порога, молчу.")
+
+except KeyboardInterrupt:
+    print("\n[S-RADIO] Сервер остановлен.")
+    sock.close()
+</div>
+
+<div class="tip-box" style="margin-top: 1.5rem;">
+    <p><strong>💡 Как запустить:</strong></p>
+    <ol style="margin: 0.5rem 0 0 1.5rem;">
+        <li>Сохраните код в файл <code>sradio_server.py</code>.</li>
+        <li>Установите зависимости: <code>pip install pyttsx3 numpy</code>.</li>
+        <li>Запустите: <code>python sradio_server.py</code>.</li>
+        <li>Убедитесь, что ESP32 отправляет спектры на тот же порт (12345).</li>
+    </ol>
+</div>
+
+<div class="tip-box" style="margin-top: 1rem;">
+    <p><strong>💡 Как записать эталон (режим калибровки):</strong></p>
+    <p style="margin: 0.5rem 0 0 0;">Отправьте с ESP32 текстовую команду <strong><code>CALIBRATE:яблоко</code></strong>, затем 50 спектров. Сервер автоматически усреднит их и сохранит в библиотеку. Затем отправьте <strong><code>RECOGNIZE</code></strong> для возврата в режим распознавания.</p>
+</div>
+
+<div class="warning-box" style="margin-top: 1rem;">
+    <p><strong>⚠️ Важно:</strong> Первый запуск — библиотека пуста. Сначала запишите эталоны для 3–5 слов в режиме калибровки, иначе распознавание всегда будет молчать.</p>
+</div>
+    
+    <h2>💻 Готовый Python-скрипт для S-RADIO</h2>
+<p>Скопируйте этот код, сохраните как <strong>sradio_server.py</strong> и запустите на ноутбуке. Скрипт принимает спектры от ESP32 по Wi-Fi, сравнивает их с эталонами и произносит распознанное слово.</p>
+<p><strong>Требования:</strong> Python 3.8+, библиотеки numpy, scipy, pyttsx3. Установка: <code>pip install numpy scipy pyttsx3</code></p>
+
+<pre style="background: #0a0a0a; color: #00ff41; padding: 1.5rem; border-radius: 12px; font-family: 'Courier New', monospace; font-size: 0.82rem; line-height: 1.5; overflow-x: auto; border: 1px solid #333; white-space: pre-wrap; word-break: break-word;">
+<span style="color: #888;"># ============================================================</span>
+<span style="color: #888;">#  S-RADIO SERVER v1.0</span>
+<span style="color: #888;">#  Идеатоника • Семантическое Радио</span>
+<span style="color: #888;">#  Принимает спектры от ESP32, распознаёт мысли, озвучивает</span>
+<span style="color: #888;"># ============================================================</span>
+
+<span style="color: #ffcc00;">import</span> socket
+<span style="color: #ffcc00;">import</span> json
+<span style="color: #ffcc00;">import</span> numpy <span style="color: #ffcc00;">as</span> np
+<span style="color: #ffcc00;">from</span> scipy.spatial <span style="color: #ffcc00;">import</span> distance
+<span style="color: #ffcc00;">import</span> pyttsx3
+<span style="color: #ffcc00;">import</span> os
+
+<span style="color: #888;"># ========== НАСТРОЙКИ ==========</span>
+UDP_IP = <span style="color: #00ff41;">"0.0.0.0"</span>          <span style="color: #888;"># Принимаем со всех адресов</span>
+UDP_PORT = <span style="color: #00ff41;">12345</span>            <span style="color: #888;"># Порт должен совпадать с ESP32</span>
+LIBRARY_FILE = <span style="color: #00ff41;">"library.json"</span>  <span style="color: #888;"># Файл с эталонными спектрами</span>
+
+<span style="color: #888;"># ========== БИБЛИОТЕКА ЭТАЛОНОВ ==========</span>
+<span style="color: #ffcc00;">if</span> os.path.exists(LIBRARY_FILE):
+    <span style="color: #ffcc00;">with</span> <span style="color: #00ff41;">open</span>(LIBRARY_FILE, <span style="color: #00ff41;">"r"</span>) <span style="color: #ffcc00;">as</span> f:
+        library = json.load(f)
+    <span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">f"✅ Библиотека загружена: {len(library)} слов"</span>)
+<span style="color: #ffcc00;">else</span>:
+    <span style="color: #888;"># Если файла нет — создаём пустую библиотеку</span>
+    library = {}
+    <span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">"⚠️ Библиотека не найдена. Создана пустая. Нужна калибровка!"</span>)
+
+<span style="color: #888;"># ========== СИНТЕЗАТОР РЕЧИ ==========</span>
+engine = pyttsx3.init()
+engine.setProperty(<span style="color: #00ff41;">'rate'</span>, <span style="color: #00ff41;">150</span>)   <span style="color: #888;"># Скорость речи (нормально)</span>
+engine.setProperty(<span style="color: #00ff41;">'volume'</span>, <span style="color: #00ff41;">0.8</span>) <span style="color: #888;"># Громкость</span>
+
+<span style="color: #ffcc00;">def</span> <span style="color: #00ff41;">speak</span>(word):
+    <span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">f"🔊 Произношу: {word}"</span>)
+    engine.say(word)
+    engine.runAndWait()
+
+<span style="color: #888;"># ========== РАСПОЗНАВАНИЕ (KNN) ==========</span>
+<span style="color: #ffcc00;">def</span> <span style="color: #00ff41;">recognize</span>(spectrum):
+    <span style="color: #00ff41;">best_word</span> = <span style="color: #ffcc00;">None</span>
+    <span style="color: #00ff41;">best_distance</span> = <span style="color: #00ff41;">float</span>(<span style="color: #00ff41;">'inf'</span>)
+    
+    <span style="color: #ffcc00;">for</span> word, etalon <span style="color: #ffcc00;">in</span> library.items():
+        <span style="color: #888;"># Евклидово расстояние между спектрами</span>
+        d = distance.euclidean(spectrum, etalon[<span style="color: #00ff41;">'spectrum'</span>])
+        <span style="color: #ffcc00;">if</span> d < best_distance:
+            best_distance = d
+            best_word = word
+    
+    <span style="color: #ffcc00;">return</span> best_word, best_distance
+
+<span style="color: #888;"># ========== ДОБАВЛЕНИЕ В БИБЛИОТЕКУ ==========</span>
+<span style="color: #ffcc00;">def</span> <span style="color: #00ff41;">add_to_library</span>(word, spectrum):
+    <span style="color: #ffcc00;">if</span> word <span style="color: #ffcc00;">in</span> library:
+        <span style="color: #888;"># Усредняем с существующим</span>
+        old = np.array(library[word][<span style="color: #00ff41;">'spectrum'</span>])
+        new = np.array(spectrum)
+        avg = ((old * library[word][<span style="color: #00ff41;">'count'</span>]) + new) / (library[word][<span style="color: #00ff41;">'count'</span>] + <span style="color: #00ff41;">1</span>)
+        library[word][<span style="color: #00ff41;">'spectrum'</span>] = avg.tolist()
+        library[word][<span style="color: #00ff41;">'count'</span>] += <span style="color: #00ff41;">1</span>
+    <span style="color: #ffcc00;">else</span>:
+        library[word] = {<span style="color: #00ff41;">'spectrum'</span>: spectrum, <span style="color: #00ff41;">'count'</span>: <span style="color: #00ff41;">1</span>}
+    
+    <span style="color: #888;"># Сохраняем библиотеку на диск</span>
+    <span style="color: #ffcc00;">with</span> <span style="color: #00ff41;">open</span>(LIBRARY_FILE, <span style="color: #00ff41;">"w"</span>) <span style="color: #ffcc00;">as</span> f:
+        json.dump(library, f, indent=<span style="color: #00ff41;">2</span>)
+    <span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">f"📚 Слово '{word}' добавлено в библиотеку (всего: {len(library)})"</span>)
+
+<span style="color: #888;"># ========== ОСНОВНОЙ ЦИКЛ ==========</span>
+<span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">"📻 S-RADIO Server запущен. Ожидание данных от ESP32..."</span>)
+<span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">"   Режимы:"</span>)
+<span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">"   • Отправьте 'calibrate:СЛОВО' — для записи эталона"</span>)
+<span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">"   • Отправьте спектр — для распознавания"</span>)
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((UDP_IP, UDP_PORT))
+
+<span style="color: #ffcc00;">while</span> <span style="color: #00ff41;">True</span>:
+    data, addr = sock.recvfrom(<span style="color: #00ff41;">4096</span>)  <span style="color: #888;"># Принимаем JSON-пакет</span>
+    
+    <span style="color: #ffcc00;">try</span>:
+        message = json.loads(data.decode(<span style="color: #00ff41;">'utf-8'</span>))
+    <span style="color: #ffcc00;">except</span>:
+        <span style="color: #ffcc00;">continue</span>
+    
+    <span style="color: #ffcc00;">if</span> <span style="color: #00ff41;">'command'</span> <span style="color: #ffcc00;">in</span> message:
+        <span style="color: #888;"># Режим калибровки</span>
+        cmd = message[<span style="color: #00ff41;">'command'</span>]
+        <span style="color: #ffcc00;">if</span> cmd == <span style="color: #00ff41;">'calibrate'</span>:
+            word = message[<span style="color: #00ff41;">'word'</span>]
+            spectrum = message[<span style="color: #00ff41;">'spectrum'</span>]
+            add_to_library(word, spectrum)
+            speak(<span style="color: #00ff41;">f"Слово {word} сохранено"</span>)
+    <span style="color: #ffcc00;">elif</span> <span style="color: #00ff41;">'spectrum'</span> <span style="color: #ffcc00;">in</span> message:
+        <span style="color: #888;"># Режим распознавания</span>
+        spectrum = message[<span style="color: #00ff41;">'spectrum'</span>]
+        word, dist = recognize(spectrum)
+        <span style="color: #ffcc00;">if</span> word:
+            <span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">f"🎯 Распознано: {word} (дистанция: {dist:.2f})"</span>)
+            speak(word)
+        <span style="color: #ffcc00;">else</span>:
+            <span style="color: #00ff41;">print</span>(<span style="color: #00ff41;">"❓ Библиотека пуста. Сначала проведите калибровку."</span>)
+</pre>
+<p style="color: #a09080; font-size: 0.85rem; margin-top: 0.5rem; font-style: italic;">Скопируйте этот код и сохраните как sradio_server.py. Запуск: <code style="color: #4dd0e1;">python sradio_server.py</code></p>
+
+    <!-- КАЛИБРОВКА -->
+    <h2>🧪 Этап 3: Калибровка (запись эталонов)</h2>
+
+    <h3><span class="step-number">6</span> Подготовка оператора</h3>
+    <ol>
+        <li>Оператор надевает COH-METER 2.0 и входит в состояние Cₛ > 0.7 (медитация 5 минут).</li>
+        <li>Садится перед матрицей датчиков на расстоянии 30–50 см.</li>
+        <li>На экране ноутбука появляется <strong>изображение объекта</strong> (например, яблоко). Оператор смотрит на него 5 секунд.</li>
+        <li>Оператор <strong>закрывает глаза</strong> и 10 секунд удерживает мысленный образ, не отвлекаясь.</li>
+        <li>ESP32 записывает спектр и отправляет на ПК. Процедура повторяется 30–50 раз для каждого слова.</li>
+    </ol>
+
+    <h3><span class="step-number">7</span> Формирование библиотеки эталонов</h3>
+    <p>Для каждого слова (яблоко, дом, вода, мама, страх...) вычисляется <strong>усреднённый спектр</strong> и его дисперсия. Спектры сохраняются в файл <code>library.json</code>.</p>
+    <p><strong>Начните с 3–5 слов</strong> с максимально разными семантическими частотами. «Яблоко» и «мяч» будут путаться (оба круглые), «мама» и «страх» — нет.</p>
+
+    <!-- ТЕСТИРОВАНИЕ -->
+    <h2>🎤 Этап 4: Тестирование и озвучивание</h2>
+
+    <h3><span class="step-number">8</span> Распознавание в реальном времени</h3>
+    <ol>
+        <li>Оператор думает о случайном слове из библиотеки (не произнося его).</li>
+        <li>S-RADIO записывает спектр, сравнивает с эталонами и выводит результат.</li>
+        <li>Синтезатор речи произносит распознанное слово.</li>
+        <li>Проведите 100 попыток и оцените процент правильных распознаваний.</li>
+    </ol>
+    <p><strong>Ожидаемая точность:</strong> 60–90% при Cₛ > 0.8. Случайный уровень (для 5 слов): 20%.</p>
+    <div class="tip-box"><p><strong>💡 Лайфхак:</strong> Если точность низкая, попробуйте <strong>увеличить Cₛ</strong> оператора (медитация перед тестом) или <strong>добавить больше датчиков</strong> (10 вместо 5).</p></div>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=52" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция S-RADIO v1.0</p>
+        <p>✧ «Мысль — это волна. Настройся на неё — и ты услышишь, о чём думает мир» ✧</p>
+    </div>
+</div>
+</body>
+</html>

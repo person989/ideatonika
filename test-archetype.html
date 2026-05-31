@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест: Ваш Дар • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+            transition: background 0.5s ease;
+        }
+        .cosmic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .test-container {
+            max-width: 700px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+        .test-header { text-align: center; margin-bottom: 2rem; }
+        .test-header h1 {
+            font-size: 2.2rem; color: #f3e7c0; margin-bottom: 0.5rem;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1.5rem 0; }
+        .progress-fill { height: 100%; background: #ffb74d; border-radius: 3px; width: 0%; transition: width 0.3s ease; }
+        .progress-text { text-align: right; color: #a09080; font-size: 0.8rem; margin-top: 0.3rem; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.3rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option {
+            background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1rem 1.5rem; cursor: pointer; transition: all 0.2s ease; color: #d0c8b8;
+            display: flex; align-items: center; gap: 15px;
+        }
+        .option:hover { background: rgba(255, 183, 77, 0.15); border-color: #ffb74d; }
+        .option.selected { background: rgba(255, 183, 77, 0.25); border-color: #ffb74d; color: #f3e7c0; }
+        .option-marker {
+            width: 24px; height: 24px; border-radius: 50%; border: 2px solid #5d4a3a;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .option.selected .option-marker { border-color: #ffb74d; background: #ffb74d; }
+        .option.selected .option-marker::after { content: "✓"; color: #1a1a2e; font-weight: bold; }
+        .option-text { flex: 1; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 15px; }
+        .btn {
+            background: transparent; border: 1.5px solid #ffb74d; color: #ffb74d;
+            padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit;
+        }
+        .btn:hover { background: #ffb74d; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-secondary { border-color: #5d4a3a; color: #a09080; }
+        .btn-secondary:hover { background: #5d4a3a; color: #d0c8b8; }
+        .result-container { text-align: center; }
+        .result-icon { font-size: 5rem; margin: 1rem 0; }
+        .result-title { font-size: 2.5rem; font-weight: bold; margin: 0.5rem 0; }
+        .result-subtitle { font-size: 1.2rem; margin-bottom: 1rem; }
+        .result-comment { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 1.5rem; margin: 1.5rem 0; line-height: 1.6; color: #d0c8b8; }
+        .result-advice {
+            background: rgba(255, 183, 77, 0.1); border-left: 4px solid #ffb74d;
+            padding: 1.2rem 1.5rem; border-radius: 0 12px 12px 0; text-align: left; color: #d0c8b8;
+        }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffb74d; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body id="mainBody">
+<div class="cosmic-bg"></div>
+<div class="test-container" id="testContainer">
+    <div class="test-header">
+        <h1><span>🎭</span><span id="testTitle">Ваш Дар: Что вы несёте миру?</span><span>💎</span></h1>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Вопрос 1 из 7</div>
+    </div>
+    <div id="questionContainer"></div>
+    <div class="nav-buttons">
+        <button class="btn btn-secondary" id="prevBtn" disabled>← Назад</button>
+        <button class="btn btn-secondary" id="exitBtn">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+    <div style="text-align: center;"><a href="diagnostics-hub.html" class="back-link">← Вернуться в Хаб Диагностики</a></div>
+</div>
+
+<script>
+(function() {
+    const questions = [
+        {
+            text: "Что приносит вам наибольшее удовлетворение?",
+            options: [
+                { text: "Создавать что-то новое своими руками или умом", value: "creator" },
+                { text: "Учить, объяснять, передавать знания", value: "sage" },
+                { text: "Защищать, отстаивать, бороться за справедливость", value: "warrior" },
+                { text: "Заботиться, утешать, создавать уют и безопасность", value: "caregiver" },
+                { text: "Любить, вдохновлять, строить глубокие отношения", value: "lover" },
+                { text: "Исследовать, искать истину, задавать вопросы", value: "seeker" },
+                { text: "Вести за собой, организовывать, управлять", value: "ruler" }
+            ]
+        },
+        {
+            text: "В трудной ситуации вы скорее...",
+            options: [
+                { text: "Найдёте нестандартное, творческое решение", value: "creator" },
+                { text: "Обратитесь к опыту и мудрости (своей или чужой)", value: "sage" },
+                { text: "Встанете и будете действовать, преодолевая препятствия", value: "warrior" },
+                { text: "Позаботитесь о тех, кому хуже, чем вам", value: "caregiver" },
+                { text: "Будете искать гармонию и компромисс", value: "lover" },
+                { text: "Начнёте исследовать причины и искать скрытый смысл", value: "seeker" },
+                { text: "Возьмёте ответственность и организуете других", value: "ruler" }
+            ]
+        },
+        {
+            text: "Какую роль вы чаще всего играете в компании друзей?",
+            options: [
+                { text: "Генератор идей, душа компании, затейник", value: "creator" },
+                { text: "Советчик, к кому приходят за мудрым словом", value: "sage" },
+                { text: "Защитник, тот, кто не даст в обиду", value: "warrior" },
+                { text: "«Мама» или «папа» компании, кто всех накормит и утешит", value: "caregiver" },
+                { text: "Миротворец, кто сглаживает конфликты и создаёт тёплую атмосферу", value: "lover" },
+                { text: "Наблюдатель, кто задаёт глубокие вопросы", value: "seeker" },
+                { text: "Организатор, кто решает, куда и когда все идут", value: "ruler" }
+            ]
+        },
+        {
+            text: "Что вас больше всего ранит?",
+            options: [
+                { text: "Когда мой труд или идею не оценили, отвергли", value: "creator" },
+                { text: "Когда мои советы игнорируют, а потом совершают ошибки", value: "sage" },
+                { text: "Несправедливость, когда обижают слабых", value: "warrior" },
+                { text: "Когда я не могу помочь или защитить близких", value: "caregiver" },
+                { text: "Одиночество, разрыв отношений, холодность", value: "lover" },
+                { text: "Ложь, поверхностность, отсутствие смысла", value: "seeker" },
+                { text: "Хаос, безответственность, когда всё идёт не по плану", value: "ruler" }
+            ]
+        },
+        {
+            text: "Какую книгу/фильм вы бы выбрали?",
+            options: [
+                { text: "О великом художнике, изобретателе или музыканте", value: "creator" },
+                { text: "Философскую притчу или биографию мудреца", value: "sage" },
+                { text: "Героический эпос о битвах и победах", value: "warrior" },
+                { text: "Тёплую семейную историю о любви и заботе", value: "caregiver" },
+                { text: "Романтическую драму или историю о великой любви", value: "lover" },
+                { text: "Детектив или научную фантастику о тайнах мироздания", value: "seeker" },
+                { text: "Исторический эпос о великих правителях и империях", value: "ruler" }
+            ]
+        },
+        {
+            text: "Что вы чувствуете, когда остаётесь в полной тишине?",
+            options: [
+                { text: "В голове рождаются новые идеи и образы", value: "creator" },
+                { text: "Приходят глубокие мысли и озарения", value: "sage" },
+                { text: "Чувствую прилив сил, готовность действовать", value: "warrior" },
+                { text: "Думаю о близких, всё ли у них хорошо", value: "caregiver" },
+                { text: "Чувствую связь со всем миром, умиротворение", value: "lover" },
+                { text: "Задаюсь вопросами о смысле бытия", value: "seeker" },
+                { text: "Планирую, структурирую, привожу мысли в порядок", value: "ruler" }
+            ]
+        },
+        {
+            text: "Какое слово лучше всего описывает вашу суть?",
+            options: [
+                { text: "Творчество", value: "creator" },
+                { text: "Мудрость", value: "sage" },
+                { text: "Сила", value: "warrior" },
+                { text: "Забота", value: "caregiver" },
+                { text: "Любовь", value: "lover" },
+                { text: "Поиск", value: "seeker" },
+                { text: "Порядок", value: "ruler" }
+            ]
+        }
+    ];
+
+    const archetypes = {
+        creator: { name: "Творец", icon: "🎨", rank: "+4…+8", desc: "Вы — ТВОРЕЦ. Ваш дар — создавать новое. Вы видите мир как чистый холст и наполняете его красотой, смыслами, изобретениями. Ваша стихия — Огонь, ваша масть Таро — Жезлы. Вы пришли в этот мир, чтобы оставить после себя что-то, чего не было до вас.", advice: "💡 Совет: Не давайте рутине погасить ваш огонь. Регулярно выделяйте время для творчества, даже если это «просто хобби». Окружите себя материалами с высокой C_sense (дерево, камень, натуральные ткани)." },
+        sage: { name: "Мудрец", icon: "🦉", rank: "+5…+9", desc: "Вы — МУДРЕЦ. Ваш дар — видеть суть вещей и делиться знанием. Вы — тот, к кому приходят за советом. Ваша стихия — Воздух, ваша масть Таро — Мечи. Вы пришли в этот мир, чтобы нести истину и помогать другим ориентироваться в хаосе.", advice: "💡 Совет: Делитесь знаниями, но не навязывайте. Лучшая мудрость — та, о которой попросили. Практикуйте медитацию для поддержания Cₛ > 0.8." },
+        warrior: { name: "Воин", icon: "⚔️", rank: "+3…+7", desc: "Вы — ВОИН. Ваш дар — сила, решимость и способность защищать. Вы не боитесь трудностей и готовы стоять до конца. Ваша стихия — Огонь, ваша масть Таро — Жезлы (Рыцарь). Вы пришли в этот мир, чтобы бороться со злом и несправедливостью.", advice: "💡 Совет: Направляйте свою силу на созидание, а не на разрушение. Учитесь «вкладывать меч в ножны». Спорт и физическая активность — ваш лучший способ сброса негативного Qₛ." },
+        caregiver: { name: "Хранитель", icon: "🏡", rank: "+4…+8", desc: "Вы — ХРАНИТЕЛЬ. Ваш дар — забота и создание безопасного пространства. Вы — сердце семьи или коллектива. Ваша стихия — Земля, ваша масть Таро — Пентакли. Вы пришли в этот мир, чтобы оберегать, кормить и утешать.", advice: "💡 Совет: Не забывайте заботиться и о себе. Ваш ресурс не бесконечен. Используйте шунгит и соль для «заземления» и очистки от чужого негатива." },
+        lover: { name: "Любовник", icon: "💖", rank: "+4…+8", desc: "Вы — ЛЮБОВНИК (в архетипическом смысле). Ваш дар — любить, вдохновлять и создавать гармонию. Вы цените красоту и глубокие связи. Ваша стихия — Вода, ваша масть Таро — Кубки. Вы пришли в этот мир, чтобы наполнять его любовью.", advice: "💡 Совет: Учитесь различать истинную любовь и зависимость. Ваша высокая эмпатия (χ) делает вас уязвимым для вампиров. Практикуйте «семантический щит»." },
+        seeker: { name: "Искатель", icon: "🔍", rank: "+3…+6", desc: "Вы — ИСКАТЕЛЬ. Ваш дар — любопытство и жажда истины. Вы вечно в пути, вечно задаёте вопросы. Ваша стихия — Воздух, ваша масть Таро — Мечи (или Отшельник). Вы пришли в этот мир, чтобы исследовать его тайны.", advice: "💡 Совет: Не забывайте «заземляться». Бесконечный поиск может увести в астрал. Регулярно возвращайтесь в тело через спорт, еду, природу." },
+        ruler: { name: "Правитель", icon: "👑", rank: "+3…+7", desc: "Вы — ПРАВИТЕЛЬ. Ваш дар — организовывать, вести за собой и создавать порядок из хаоса. Вы прирождённый лидер. Ваша стихия — Земля, ваша масть Таро — Пентакли (Король) или Жезлы (Король). Вы пришли в этот мир, чтобы строить структуры.", advice: "💡 Совет: Помните, что власть — это ответственность, а не привилегия. Слушайте Мудреца и Любовника внутри себя. Не становитесь Тираном (§78)." }
+    };
+
+    const totalQuestions = questions.length;
+    let currentIndex = 0;
+    let answers = new Array(totalQuestions).fill(null);
+    const questionContainer = document.getElementById('questionContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const exitBtn = document.getElementById('exitBtn');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const testContainer = document.getElementById('testContainer');
+    const mainBody = document.getElementById('mainBody');
+    const testTitle = document.getElementById('testTitle');
+    let isResultMode = false;
+
+    function renderQuestion(index) {
+        const q = questions[index];
+        let html = `<div class="question-box"><div class="question-text">${index+1}. ${q.text}</div><div class="options">`;
+        q.options.forEach(opt => {
+            const isSelected = answers[index] === opt.value;
+            html += `<div class="option ${isSelected?'selected':''}" data-value="${opt.value}"><div class="option-marker"></div><div class="option-text">${opt.text}</div></div>`;
+        });
+        html += `</div></div>`;
+        questionContainer.innerHTML = html;
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.addEventListener('click', () => { answers[index] = opt.dataset.value; renderQuestion(index); });
+        });
+        progressFill.style.width = ((index+1)/totalQuestions*100) + '%';
+        progressText.textContent = `Вопрос ${index+1} из ${totalQuestions}`;
+        prevBtn.disabled = index === 0;
+        nextBtn.textContent = index === totalQuestions-1 ? '🎉 Завершить' : 'Далее →';
+    }
+
+    function calculateResult() {
+        const counts = {};
+        answers.forEach(v => { counts[v] = (counts[v]||0) + 1; });
+        let max = 0, dominant = 'creator';
+        for (const [key, val] of Object.entries(counts)) { if (val > max) { max = val; dominant = key; } }
+        return dominant;
+    }
+
+    function showResult() {
+        isResultMode = true;
+        const dominant = calculateResult();
+        const arch = archetypes[dominant];
+        mainBody.style.background = `linear-gradient(145deg, rgba(255,183,77,0.2) 0%, #16213e 100%)`;
+        testContainer.style.borderColor = '#ffb74d';
+        let html = `<div class="result-container">`;
+        html += `<div class="result-icon">${arch.icon}</div>`;
+        html += `<div class="result-title" style="color:#ffb74d;">${arch.name}</div>`;
+        html += `<div class="result-subtitle" style="color:#d0c8b8;">Ранг: ${arch.rank}</div>`;
+        html += `<div class="result-comment">${arch.desc}</div>`;
+        html += `<div class="result-advice">${arch.advice}</div>`;
+        html += `<p style="margin-top:1.5rem;color:#a09080;font-style:italic;">Это ваш доминирующий архетип. У большинства людей их 2-3. Пройдите тест ещё раз, отвечая «от противного», чтобы узнать второй.</p>`;
+        html += `</div>`;
+        questionContainer.innerHTML = html;
+        prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden');
+        exitBtn.textContent = '🔄 Пройти заново'; exitBtn.classList.remove('btn-secondary'); exitBtn.classList.add('btn');
+        testTitle.textContent = `Ваш Дар: ${arch.name}`;
+        progressText.textContent = `Тест завершён`;
+        
+        setTimeout(function() {
+    const passportBtn = document.createElement('button');
+    passportBtn.textContent = '💾 Сохранить результат в Семантический Паспорт';
+    passportBtn.style.cssText = 'display: block; margin: 2rem auto; padding: 1rem 2rem; background: #b39ddb; color: #1a1a2e; border: none; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s;';
+    passportBtn.onmouseover = () => passportBtn.style.background = '#9575cd';
+    passportBtn.onmouseout = () => passportBtn.style.background = '#b39ddb';
+
+    passportBtn.addEventListener('click', function() {
+        // Берём имя архетипа прямо из переменной arch (она видна здесь!)
+        const result = arch.name;
+        
+        if (result) {
+            localStorage.setItem('ideatonika_test_archetype', result);
+            passportBtn.textContent = '✅ Сохранено в Паспорт!';
+            passportBtn.style.background = '#512da8';
+            passportBtn.style.color = 'white';
+            passportBtn.disabled = true;
+        }
+    });
+
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(passportBtn);
+    }
+}, 100);
+
+// ========== КНОПКА "ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ" ==========
+setTimeout(function() {
+    const shareContainer = document.createElement('div');
+    shareContainer.style.cssText = 'text-align: center; margin-top: 1.5rem;';
+
+    const shareBtn = document.createElement('button');
+    shareBtn.textContent = '📤 Поделиться результатом';
+    shareBtn.style.cssText = 'display: block; margin: 0 auto 0.8rem auto; padding: 0.8rem 2rem; background: transparent; color: #81c784; border: 1.5px solid #81c784; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: Georgia, serif;';
+    shareBtn.onmouseover = () => shareBtn.style.background = '#81c784';
+    shareBtn.onmouseout = () => shareBtn.style.background = 'transparent';
+    shareBtn.onmouseover = () => shareBtn.style.color = '#1a1a2e';
+    shareBtn.onmouseout = () => shareBtn.style.color = '#81c784';
+
+    shareBtn.addEventListener('click', function() {
+        // Получаем название теста из заголовка страницы
+        const testName = document.title.replace(' • Идеатоника', '').trim();
+        
+        // Получаем результат из элемента .result-score
+        const scoreElement = document.querySelector('.result-score');
+        let resultText = '';
+        if (scoreElement) {
+            resultText = scoreElement.textContent.trim();
+        }
+        
+        // Получаем комментарий из элемента .result-comment или .result-interpretation
+        const commentElement = document.querySelector('.result-comment') || document.querySelector('.result-interpretation');
+        let commentText = '';
+        if (commentElement) {
+            commentText = commentElement.textContent.trim();
+        }
+        
+        // Формируем текст для отправки
+        const shareText = `🧪 Я прошёл тест «${testName}» на портале Идеатоника!\n\n` +
+            `📊 Мой результат: ${resultText}\n` +
+            `💬 ${commentText}\n\n` +
+            `🎯 А какой результат у тебя?\n` +
+            `👉 Пройти тест: ${window.location.href}\n\n` +
+            `🌌 Идеатоника — физика смысла.`;
+        
+        // Пытаемся использовать Web Share API (мобильные устройства)
+        if (navigator.share) {
+            navigator.share({
+                title: `Мой результат теста «${testName}»`,
+                text: shareText,
+                url: window.location.href
+            }).catch(() => {
+                // Если не получилось — копируем в буфер
+                copyToClipboard(shareText);
+            });
+        } else {
+            // Если Web Share API не поддерживается — копируем в буфер
+            copyToClipboard(shareText);
+        }
+    });
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = shareBtn.textContent;
+                shareBtn.textContent = '✅ Скопировано! Отправь другу';
+                shareBtn.style.borderColor = '#ffd54f';
+                shareBtn.style.color = '#ffd54f';
+                setTimeout(() => {
+                    shareBtn.textContent = originalText;
+                    shareBtn.style.borderColor = '#81c784';
+                    shareBtn.style.color = '#81c784';
+                }, 2500);
+            }).catch(() => {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = '✅ Скопировано! Отправь другу';
+            shareBtn.style.borderColor = '#ffd54f';
+            shareBtn.style.color = '#ffd54f';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+                shareBtn.style.borderColor = '#81c784';
+                shareBtn.style.color = '#81c784';
+            }, 2500);
+        } catch(e) {
+            shareBtn.textContent = '❌ Не удалось скопировать';
+            shareBtn.style.borderColor = '#ef5350';
+            shareBtn.style.color = '#ef5350';
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Добавляем подсказку
+    const hint = document.createElement('div');
+    hint.style.cssText = 'color: #a09080; font-size: 0.8rem; font-style: italic;';
+    hint.textContent = 'Нажмите, чтобы скопировать результат и отправить другу';
+    shareContainer.appendChild(shareBtn);
+    shareContainer.appendChild(hint);
+
+    // Ищем контейнер с результатом
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(shareContainer);
+    }
+}, 100);
+
+    }
+
+    function resetTest() {
+        isResultMode = false; currentIndex = 0; answers = new Array(totalQuestions).fill(null);
+        mainBody.style.background = ''; testContainer.style.borderColor = '';
+        testTitle.textContent = 'Ваш Дар: Что вы несёте миру?';
+        prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden');
+        exitBtn.textContent = '🚪 Выйти'; exitBtn.classList.add('btn-secondary');
+        renderQuestion(0);
+    }
+
+    prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderQuestion(currentIndex); } });
+    nextBtn.addEventListener('click', () => {
+        if (answers[currentIndex] === null) { alert('Пожалуйста, выберите один из вариантов ответа.'); return; }
+        if (currentIndex < totalQuestions-1) { currentIndex++; renderQuestion(currentIndex); }
+        else { if (answers.includes(null)) { alert('Пожалуйста, ответьте на все вопросы.'); return; } showResult(); }
+    });
+    exitBtn.addEventListener('click', () => { if (isResultMode) resetTest(); else { if (confirm('Вы уверены, что хотите выйти? Прогресс будет потерян.')) window.location.href = 'diagnostics-hub.html'; } });
+    renderQuestion(0);
+})();
+</script>
+</body>
+</html>

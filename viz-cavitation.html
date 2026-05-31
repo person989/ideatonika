@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кавитация Qₛ • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1rem; overflow-x: hidden;
+        }
+        .stars-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; animation-delay: var(--delay); opacity: 0; }
+        @keyframes twinkle { 0%,100% { opacity:0.2; transform:scale(1); } 50% { opacity:1; transform:scale(1.8); } }
+        .main-container {
+            position: relative; z-index: 1; width: 100%; max-width: 1100px;
+            background: rgba(22,27,34,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 32px;
+            padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .header h1 { font-size: 2.5rem; font-weight: 400; letter-spacing: 3px; color: #f3e7c0; text-shadow: 0 0 20px rgba(255,215,80,0.4); margin-bottom: 0.3rem; }
+        .header .subtitle { font-size: 1rem; color: #c0b090; font-style: italic; border-bottom: 1px solid #5d4a3a; display: inline-block; padding-bottom: 0.4rem; }
+        .canvas-wrapper { position: relative; width: 100%; background: radial-gradient(ellipse at center, #1a2030 0%, #0a0e14 100%); border-radius: 20px; border: 1px solid #5d4a3a; overflow: hidden; margin-bottom: 1.5rem; box-shadow: inset 0 0 80px rgba(0,0,0,0.5); }
+        canvas { display: block; width: 100%; height: auto; }
+        .controls-panel { background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 20px; padding: 1.5rem 2rem; }
+        .controls-title { font-size: 1.2rem; color: #ffd54f; margin-bottom: 1.2rem; text-align: center; letter-spacing: 1px; }
+        .slider-group { margin-bottom: 1.2rem; }
+        .slider-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .slider-group label .param-value { color: #ffd54f; font-weight: bold; font-size: 1.1rem; min-width: 50px; text-align: right; }
+        .slider-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: linear-gradient(90deg, #3a2a4a, #5d4a3a, #3a2a4a); border-radius: 4px; outline: none; cursor: pointer; }
+        .slider-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: radial-gradient(circle at 40% 40%, #ffe082, #ff8f00); border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px rgba(255,215,80,0.6); border: 2px solid #ffd54f; }
+        .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.75rem; margin-top: 0.2rem; }
+        .info-box { margin-top: 1.5rem; padding: 1rem 1.5rem; background: rgba(255,215,80,0.05); border: 1px solid rgba(255,215,80,0.2); border-radius: 12px; text-align: center; color: #c0b090; font-size: 0.9rem; font-style: italic; }
+        .info-box .formula-display { font-family: 'Courier New', monospace; color: #ffd54f; font-size: 1rem; margin: 0.3rem 0; }
+        .back-row { text-align: center; margin-top: 1.5rem; }
+        .back-link { display: inline-block; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.3s; font-size: 0.9rem; }
+        .back-link:hover { background: #ffd54f; color: #0d1117; }
+        @media (max-width: 700px) { .main-container { padding: 1rem; } .header h1 { font-size: 1.8rem; } .controls-panel { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="stars-bg" id="starsBg"></div>
+<div class="main-container">
+    <div class="header">
+        <h1>🫧 Кавитация Qₛ</h1>
+        <div class="subtitle">Визуализация §116: пузырьки вакуума и их разрушительное схлопывание</div>
+    </div>
+    <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="cavitationCanvas"></canvas>
+    </div>
+    <div class="controls-panel">
+        <div class="controls-title">🎛️ Параметры</div>
+        <div class="slider-group">
+            <label><span>⚡ Давление в узкой зоне (P_sense)</span><span class="param-value" id="pressureValue">0.8 (выше критического)</span></label>
+            <input type="range" id="pressureSlider" min="0.05" max="2" value="0.8" step="0.01">
+            <div class="range-labels"><span>0.05 (глубокий вакуум)</span><span>0.5 (крит.)</span><span>2 (безопасно)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>☀️ Семантический заряд Qₛ</span><span class="param-value" id="qsValue">+5</span></label>
+            <input type="range" id="qsSlider" min="-10" max="10" value="5" step="1">
+            <div class="range-labels"><span>-10</span><span>0</span><span>+10</span></div>
+        </div>
+        <div class="slider-group" style="text-align:center;">
+            <button id="pauseBtn" style="padding:0.6rem 2rem;background:rgba(255,215,80,0.1);border:1px solid #ffd54f;color:#ffd54f;border-radius:30px;font-family:Georgia,serif;font-size:1rem;cursor:pointer;">⏯️ Пауза</button>
+        </div>
+        <div class="info-box">
+            <span id="statusText" style="color:#ffd54f;font-weight:bold;">✅ Давление в норме — кавитации нет</span>
+            <div class="formula-display" id="formulaDisplay"></div>
+        </div>
+    </div>
+    <div class="back-row">
+        <a href="visualizations.html" class="back-link">← К списку визуализаций</a>
+    </div>
+</div>
+
+<script>
+(function(){
+    const starsBg=document.getElementById('starsBg');
+    for(let i=0;i<100;i++){
+        const d=document.createElement('div');d.className='star';
+        d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';
+        const s=Math.random()*2.5+0.5;d.style.width=s+'px';d.style.height=s+'px';
+        d.style.setProperty('--duration',(Math.random()*4+2)+'s');
+        d.style.setProperty('--delay',(Math.random()*5)+'s');
+        starsBg.appendChild(d);
+    }
+})();
+
+const canvas=document.getElementById('cavitationCanvas');
+const ctx=canvas.getContext('2d');
+const wrapper=document.getElementById('canvasWrapper');
+let time=0,paused=false,animId;
+
+// Пузырьки
+let bubbles=[];
+
+function resize(){
+    const r=wrapper.getBoundingClientRect();
+    canvas.width=r.width;
+    canvas.height=Math.max(500,Math.min(650,r.width*0.7));
+    wrapper.style.height=canvas.height+'px';
+    bubbles=[];
+}
+resize();window.addEventListener('resize',resize);
+
+const pressureSlider=document.getElementById('pressureSlider');
+const qsSlider=document.getElementById('qsSlider');
+const pressureValue=document.getElementById('pressureValue');
+const qsValue=document.getElementById('qsValue');
+const pauseBtn=document.getElementById('pauseBtn');
+const statusText=document.getElementById('statusText');
+const formulaDisplay=document.getElementById('formulaDisplay');
+
+const P_CRIT=0.5;
+
+pressureSlider.oninput=function(){
+    const p=parseFloat(this.value);
+    if(p<P_CRIT*0.3) pressureValue.textContent=p.toFixed(2)+' (экстремальный вакуум!)';
+    else if(p<P_CRIT*0.7) pressureValue.textContent=p.toFixed(2)+' (глубокий вакуум)';
+    else if(p<P_CRIT) pressureValue.textContent=p.toFixed(2)+' (ниже критического)';
+    else if(p<P_CRIT*1.5) pressureValue.textContent=p.toFixed(2)+' (выше критического)';
+    else pressureValue.textContent=p.toFixed(2)+' (безопасно)';
+    updateInfo();
+};
+qsSlider.oninput=function(){qsValue.textContent=(parseInt(this.value)>=0?'+':'')+parseInt(this.value);};
+
+pauseBtn.onclick=function(){
+    paused=!paused;
+    this.textContent=paused?'▶️ Продолжить':'⏯️ Пауза';
+};
+
+function updateInfo(){
+    const p=parseFloat(pressureSlider.value);
+    if(p<P_CRIT*0.3) statusText.textContent='💀 Массовая кавитация — пузырьки схлопываются с огромной силой!';
+    else if(p<P_CRIT*0.7) statusText.textContent='🫧 Активная кавитация — много пузырьков';
+    else if(p<P_CRIT) statusText.textContent='🫧 Слабая кавитация — появляются первые пузырьки';
+    else statusText.textContent='✅ Давление в норме — кавитации нет';
+    
+    const caNumber=(p-P_CRIT)/(1.0);
+    formulaDisplay.textContent='Ca='+caNumber.toFixed(2)+' | P_crit='+P_CRIT.toFixed(1)+' | §116';
+}
+updateInfo();
+
+function getQSColor(qs,alpha){
+    const absQ=Math.abs(qs);
+    const norm=absQ/10;
+    if(absQ<0.5){const gray=Math.floor(100*norm+30);return `rgba(${gray},${gray},${gray},${alpha*0.4})`;}
+    if(qs>=0){const r=Math.floor(30+norm*225);const g=Math.floor(5+norm*235);const b=Math.floor(80*(1-norm)+255*norm);return `rgba(${r},${g},${b},${alpha})`;}
+    else{const r=Math.floor(80*(1-norm)+30*norm);const g=Math.floor(40*(1-norm)+5*norm);const b=Math.floor(30+norm*200);return `rgba(${r},${g},${b},${alpha})`;}
+}
+
+function drawFrame(){
+    const p=parseFloat(pressureSlider.value);
+    const qs=parseInt(qsSlider.value);
+    const w=canvas.width,h=canvas.height;
+    
+    if(!paused) time+=0.016;
+    
+    ctx.fillStyle='#060a10';
+    ctx.fillRect(0,0,w,h);
+    
+    // === ПОТОК Qₛ (фон) ===
+    const numLines=30;
+    for(let i=0;i<numLines;i++){
+        const y=(i+0.5)*h/numLines;
+        const phase=time*1.5+y*0.01;
+        const amplitude=8;
+        const dy=Math.sin(phase)*amplitude;
+        const alpha=0.15;
+        ctx.strokeStyle=getQSColor(qs,alpha);
+        ctx.lineWidth=1;
+        ctx.beginPath();
+        ctx.moveTo(0,y+dy);
+        for(let x=0;x<w;x+=6){
+            ctx.lineTo(x,y+Math.sin(phase+x*0.01)*amplitude);
+        }
+        ctx.stroke();
+    }
+    
+    // === ЗОНА НИЗКОГО ДАВЛЕНИЯ ===
+    const zoneX=w*0.4,zoneW=w*0.2,zoneY=h*0.2,zoneH=h*0.6;
+    
+    // Визуализация зоны
+    const zoneAlpha=0.2+(1-Math.min(p,P_CRIT)/P_CRIT)*0.3;
+    ctx.fillStyle=`rgba(20,0,40,${zoneAlpha})`;
+    ctx.strokeStyle='rgba(255,100,100,0.4)';
+    ctx.lineWidth=2;
+    ctx.setLineDash([6,4]);
+    ctx.beginPath();
+    ctx.roundRect(zoneX,zoneY,zoneW,zoneH,12);
+    ctx.fill();
+    ctx.stroke();
+    ctx.setLineDash([]);
+    
+    // Подпись
+    ctx.fillStyle='rgba(255,150,150,0.7)';
+    ctx.font='14px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('ЗОНА НИЗКОГО',zoneX+zoneW/2,zoneY-15);
+    ctx.fillText('ДАВЛЕНИЯ',zoneX+zoneW/2,zoneY+5);
+    ctx.fillText('P='+p.toFixed(2),zoneX+zoneW/2,zoneY+zoneH+25);
+    
+    // === ПУЗЫРЬКИ ===
+    // Создание новых пузырьков
+    if(!paused&&p<P_CRIT){
+        const spawnRate=(P_CRIT-p)*15; // чем ниже давление, тем больше пузырьков
+        if(Math.random()<spawnRate*0.05){
+            bubbles.push({
+                x:zoneX+Math.random()*zoneW,
+                y:zoneY+Math.random()*zoneH,
+                radius:2+Math.random()*5,
+                birthTime:time,
+                lifetime:1.5+Math.random()*3,
+                phase:Math.random()*Math.PI*2
+            });
+        }
+    }
+    
+    // Обновление и отрисовка пузырьков
+    for(let i=bubbles.length-1;i>=0;i--){
+        const b=bubbles[i];
+        const age=time-b.birthTime;
+        const t=age/b.lifetime;
+        
+        if(t>=1||(p>=P_CRIT&&b.radius>0)){
+            // Схлопывание! Микро-вспышка
+            if(b.radius>0&&p<P_CRIT*1.5){
+                const flashAlpha=0.6*(1-t);
+                const flashGrad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.radius*3);
+                flashGrad.addColorStop(0,'rgba(255,200,100,0.8)');
+                flashGrad.addColorStop(0.3,'rgba(255,100,30,0.4)');
+                flashGrad.addColorStop(1,'rgba(0,0,0,0)');
+                ctx.fillStyle=flashGrad;
+                ctx.beginPath();ctx.arc(b.x,b.y,b.radius*3,0,Math.PI*2);ctx.fill();
+                
+                // Ударная микро-волна
+                ctx.strokeStyle='rgba(255,255,255,0.5)';
+                ctx.lineWidth=1;
+                ctx.beginPath();ctx.arc(b.x,b.y,b.radius*4,0,Math.PI*2);ctx.stroke();
+            }
+            bubbles.splice(i,1);
+            continue;
+        }
+        
+        // Рост и пульсация
+        const growPhase=Math.min(1,t*3); // быстрый рост в начале
+        const maxRadius=8+(P_CRIT-p)*30;
+        const pulse=1+0.3*Math.sin(time*8+b.phase);
+        b.radius=maxRadius*growPhase*pulse;
+        
+        // Тёмное ядро (вакуум)
+        const coreGrad=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.radius);
+        coreGrad.addColorStop(0,'rgba(5,0,15,0.9)');
+        coreGrad.addColorStop(0.5,'rgba(30,5,50,0.5)');
+        coreGrad.addColorStop(1,'rgba(80,30,100,0.1)');
+        ctx.fillStyle=coreGrad;
+        ctx.beginPath();ctx.arc(b.x,b.y,b.radius,0,Math.PI*2);ctx.fill();
+        
+        // Оболочка
+        ctx.strokeStyle='rgba(150,100,200,0.4)';
+        ctx.lineWidth=1;
+        ctx.beginPath();ctx.arc(b.x,b.y,b.radius,0,Math.PI*2);ctx.stroke();
+    }
+    
+    // === ЧАСТИЦЫ ПОТОКА (взаимодействуют с пузырьками) ===
+    const numParticles=80;
+    for(let i=0;i<numParticles;i++){
+        const seed=i*123.456;
+        let px=(seed*76.543+time*50)%w;
+        let py=(seed*98.765+Math.sin(time+i)*20)%h;
+        
+        // Проверка: не попала ли частица в пузырёк
+        let inBubble=false;
+        for(const b of bubbles){
+            const dx=px-b.x;
+            const dy=py-b.y;
+            if(Math.sqrt(dx*dx+dy*dy)<b.radius*1.2){
+                inBubble=true;
+                break;
+            }
+        }
+        
+        if(!inBubble){
+            const alpha=0.4;
+            ctx.fillStyle=getQSColor(qs,alpha);
+            ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();
+        }
+    }
+    
+    // === СТРЕЛКИ ДАВЛЕНИЯ ===
+    const arrowColor='rgba(255,200,100,0.5)';
+    ctx.fillStyle=arrowColor;
+    ctx.font='20px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('→ Поток Qₛ →',w*0.5,25);
+    
+    if(p<P_CRIT){
+        ctx.fillText('⚠️ ДАВЛЕНИЕ НИЖЕ КРИТИЧЕСКОГО ⚠️',w*0.5,h-20);
+        ctx.fillText('Пузырьки семантического вакуума',w*0.5,h-40);
+    }
+    
+    // Счётчик пузырьков
+    ctx.fillStyle='rgba(255,255,255,0.4)';
+    ctx.font='12px Georgia,serif';
+    ctx.textAlign='left';
+    ctx.fillText('Активных пузырьков: '+bubbles.length,10,h-60);
+    ctx.fillText('P_crit = '+P_CRIT.toFixed(1),10,h-40);
+    ctx.fillText('Ca = '+((p-P_CRIT)/(1.0)).toFixed(2),10,h-20);
+    
+    animId=requestAnimationFrame(drawFrame);
+}
+
+drawFrame();
+window.addEventListener('beforeunload',()=>{if(animId)cancelAnimationFrame(animId);});
+</script>
+
+</body>
+</html>

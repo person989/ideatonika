@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 Спектр Частот Таро • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 1200px; width: 100%; position: relative; z-index: 1; }
+        .hero { text-align: center; margin-bottom: 2rem; }
+        .hero h1 { font-size: 3rem; font-weight: 400; letter-spacing: 4px; color: #f3e7c0; text-shadow: 0 0 20px rgba(255,215,150,0.5); margin-bottom: 0.5rem; }
+        .hero .subtitle { font-size: 1.2rem; color: #c0b090; font-style: italic; }
+
+        /* Радужная полоса-градиент */
+        .rainbow-bar {
+            height: 20px;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            background: linear-gradient(to right,
+                #ff0000, #ff3300, #ff6600, #ff9900, #ffcc00,
+                #ffff00, #ccff00, #99ff00, #66ff00, #33ff00,
+                #00ff00, #00ff33, #00ff66, #00ff99, #00ffcc,
+                #00ffff, #00ccff, #0099ff, #0066ff, #0033ff,
+                #0000ff, #3300ff, #6600ff, #9900ff, #cc00ff,
+                #ff00ff, #ff00cc, #ff0099, #ff0066, #ff0033
+            );
+        }
+        .rainbow-labels {
+            display: flex; justify-content: space-between;
+            color: #a09080; font-size: 0.8rem; margin-bottom: 2rem;
+        }
+
+        /* Таблица */
+        .spectrum-table {
+            width: 100%; border-collapse: collapse; margin: 1rem 0 2rem;
+            background: rgba(0,0,0,0.2); border-radius: 16px; overflow: hidden;
+        }
+        .spectrum-table th {
+            background: #2a2a4a; color: #f3e7c0; padding: 12px 8px;
+            text-align: center; border: 1px solid #5d4a3a; font-size: 0.9rem;
+        }
+        .spectrum-table td {
+            padding: 8px; border: 1px solid #5d4a3a; color: #d0c8b8;
+            text-align: center; font-size: 0.85rem;
+        }
+        .spectrum-table tr { transition: background 0.2s; }
+        .spectrum-table tr:hover { background: rgba(255,215,80,0.1); }
+        .freq-dot {
+            display: inline-block; width: 16px; height: 16px; border-radius: 50%;
+            margin-right: 6px; vertical-align: middle; box-shadow: 0 0 6px currentColor;
+        }
+
+        .back-link { display: inline-block; margin-top: 1rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>🌈 Спектр Частот Таро</h1>
+        <div class="subtitle">78 карт от низких вибраций (Дельта) до высоких (Гамма)</div>
+    </div>
+
+    <!-- Радужная полоса -->
+    <div class="rainbow-bar"></div>
+    <div class="rainbow-labels">
+        <span>0.5 Гц<br>Дельта</span><span>4 Гц<br>Тета</span><span>8 Гц<br>Альфа</span><span>14 Гц<br>Бета</span><span>30 Гц<br>Гамма</span><span>100+ Гц<br>Гипер</span>
+    </div>
+
+    <!-- Таблица -->
+    <table class="spectrum-table" id="spectrumTable">
+        <thead>
+            <tr>
+                <th>Цвет</th>
+                <th>Частота (Гц)</th>
+                <th>Диапазон</th>
+                <th>Название карты</th>
+                <th>Qₛ</th>
+                <th>Архетип / Состояние</th>
+            </tr>
+        </thead>
+        <tbody id="spectrumBody"></tbody>
+    </table>
+
+    <div style="text-align: center;">
+        <a href="tarot.html" class="back-link">← Вернуться к Таро</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Спектр Частот Таро (§60, §78, §96)</p>
+        <p>✧ «Каждая карта — это нота в симфонии смысла.» ✧</p>
+    </div>
+
+</div>
+
+<script>
+(function() {
+    // ========== ВСЕ 78 КАРТ С ЧАСТОТАМИ ==========
+    const allCards = [
+        // СТАРШИЕ АРКАНЫ
+        { name: "Дурак (Шут)", freq: 8.0, range: "Альфа", Q: 0, archetype: "Странник / Искатель", color: "#00ff00" },
+        { name: "Маг", freq: 14.0, range: "Бета", Q: 4, archetype: "Творец", color: "#ffcc00" },
+        { name: "Верховная Жрица", freq: 7.0, range: "Тета", Q: 5, archetype: "Интуиция / Анима", color: "#0066ff" },
+        { name: "Императрица", freq: 6.5, range: "Тета", Q: 8, archetype: "Мать / Плодородие", color: "#0099ff" },
+        { name: "Император", freq: 12.0, range: "Альфа", Q: 6, archetype: "Правитель / Отец", color: "#ff9900" },
+        { name: "Иерофант (Жрец)", freq: 10.0, range: "Альфа", Q: 7, archetype: "Мудрец / Учитель", color: "#33ff00" },
+        { name: "Влюблённые", freq: 11.0, range: "Альфа", Q: 5, archetype: "Любовник / Выбор", color: "#ff33cc" },
+        { name: "Колесница", freq: 16.0, range: "Бета", Q: 3, archetype: "Воин / Победа", color: "#ff6600" },
+        { name: "Сила", freq: 9.0, range: "Альфа", Q: 5, archetype: "Укрощение / Воля", color: "#ffcc00" },
+        { name: "Отшельник", freq: 6.0, range: "Тета", Q: 9, archetype: "Мудрец / Уединение", color: "#0033ff" },
+        { name: "Колесо Фортуны", freq: 13.0, range: "Альфа", Q: 3, archetype: "Судьба / Цикл", color: "#66ff00" },
+        { name: "Справедливость", freq: 15.0, range: "Бета", Q: 6, archetype: "Закон / Баланс", color: "#00ccff" },
+        { name: "Повешенный", freq: 3.0, range: "Дельта", Q: -6, archetype: "Жертва / Пауза", color: "#9900ff" },
+        { name: "Смерть", freq: 4.0, range: "Дельта", Q: 0, archetype: "Трансформация", color: "#6600ff" },
+        { name: "Умеренность", freq: 10.5, range: "Альфа", Q: 5, archetype: "Баланс / Алхимия", color: "#00ff99" },
+        { name: "Дьявол", freq: 2.5, range: "Дельта", Q: -8, archetype: "Тень / Искушение", color: "#ff0000" },
+        { name: "Башня", freq: 18.0, range: "Бета", Q: -7, archetype: "Разрушитель / Кризис", color: "#ff3300" },
+        { name: "Звезда", freq: 12.5, range: "Альфа", Q: 8, archetype: "Надежда / Вдохновение", color: "#00ffcc" },
+        { name: "Луна", freq: 4.5, range: "Тета", Q: -2, archetype: "Подсознание / Иллюзия", color: "#3300ff" },
+        { name: "Солнце", freq: 15.5, range: "Бета", Q: 9, archetype: "Радость / Жизнь", color: "#ffff00" },
+        { name: "Суд", freq: 20.0, range: "Бета", Q: 7, archetype: "Возрождение / Призыв", color: "#ff9900" },
+        { name: "Мир", freq: 40.0, range: "Гамма", Q: 10, archetype: "Самость / Завершение", color: "#ff00ff" },
+
+        // ЖЕЗЛЫ (Огонь)
+        { name: "Туз Жезлов", freq: 14.0, range: "Бета", Q: 4, archetype: "Творческий импульс", color: "#ff6600" },
+        { name: "Двойка Жезлов", freq: 13.0, range: "Альфа", Q: 3, archetype: "Планирование", color: "#ff9900" },
+        { name: "Тройка Жезлов", freq: 14.5, range: "Бета", Q: 4, archetype: "Расширение", color: "#ffcc00" },
+        { name: "Четвёрка Жезлов", freq: 12.0, range: "Альфа", Q: 5, archetype: "Праздник / Гармония", color: "#ffff00" },
+        { name: "Пятёрка Жезлов", freq: 17.0, range: "Бета", Q: 2, archetype: "Конфликт / Соревнование", color: "#ff3300" },
+        { name: "Шестёрка Жезлов", freq: 15.0, range: "Бета", Q: 6, archetype: "Победа / Признание", color: "#ffcc00" },
+        { name: "Семёрка Жезлов", freq: 18.0, range: "Бета", Q: 3, archetype: "Защита / Стойкость", color: "#ff6600" },
+        { name: "Восьмёрка Жезлов", freq: 22.0, range: "Бета", Q: 4, archetype: "Скорость / Движение", color: "#ff9900" },
+        { name: "Девятка Жезлов", freq: 16.0, range: "Бета", Q: 2, archetype: "Выносливость / Оборона", color: "#ff3300" },
+        { name: "Десятка Жезлов", freq: 15.0, range: "Бета", Q: -1, archetype: "Бремя / Перегрузка", color: "#ff0000" },
+        { name: "Паж Жезлов", freq: 13.0, range: "Альфа", Q: 3, archetype: "Энтузиазм / Исследование", color: "#ffcc00" },
+        { name: "Рыцарь Жезлов", freq: 17.0, range: "Бета", Q: 4, archetype: "Действие / Страсть", color: "#ff6600" },
+        { name: "Королева Жезлов", freq: 12.0, range: "Альфа", Q: 5, archetype: "Уверенность / Харизма", color: "#ffff00" },
+        { name: "Король Жезлов", freq: 16.0, range: "Бета", Q: 5, archetype: "Лидерство / Видение", color: "#ff9900" },
+
+        // КУБКИ (Вода)
+        { name: "Туз Кубков", freq: 8.0, range: "Альфа", Q: 5, archetype: "Любовь / Эмоции", color: "#0066ff" },
+        { name: "Двойка Кубков", freq: 9.0, range: "Альфа", Q: 6, archetype: "Партнёрство / Единение", color: "#0099ff" },
+        { name: "Тройка Кубков", freq: 10.0, range: "Альфа", Q: 6, archetype: "Дружба / Радость", color: "#00ccff" },
+        { name: "Четвёрка Кубков", freq: 7.0, range: "Тета", Q: -1, archetype: "Апатия / Недовольство", color: "#3300ff" },
+        { name: "Пятёрка Кубков", freq: 5.0, range: "Тета", Q: -4, archetype: "Потеря / Скорбь", color: "#0000ff" },
+        { name: "Шестёрка Кубков", freq: 7.5, range: "Тета", Q: 3, archetype: "Ностальгия / Прошлое", color: "#0033ff" },
+        { name: "Семёрка Кубков", freq: 8.5, range: "Альфа", Q: -1, archetype: "Иллюзии / Выбор", color: "#6600ff" },
+        { name: "Восьмёрка Кубков", freq: 6.5, range: "Тета", Q: 1, archetype: "Уход / Поиск", color: "#3300ff" },
+        { name: "Девятка Кубков", freq: 10.0, range: "Альфа", Q: 7, archetype: "Исполнение желаний", color: "#00ffcc" },
+        { name: "Десятка Кубков", freq: 11.0, range: "Альфа", Q: 8, archetype: "Семейное счастье", color: "#00ffff" },
+        { name: "Паж Кубков", freq: 8.0, range: "Альфа", Q: 3, archetype: "Мечтательность", color: "#0099ff" },
+        { name: "Рыцарь Кубков", freq: 9.5, range: "Альфа", Q: 4, archetype: "Романтика / Идеализм", color: "#00ccff" },
+        { name: "Королева Кубков", freq: 7.0, range: "Тета", Q: 6, archetype: "Интуиция / Эмпатия", color: "#0066ff" },
+        { name: "Король Кубков", freq: 8.0, range: "Альфа", Q: 5, archetype: "Эмоц. зрелость", color: "#0099ff" },
+
+        // МЕЧИ (Воздух)
+        { name: "Туз Мечей", freq: 22.0, range: "Бета", Q: 4, archetype: "Истина / Ясность", color: "#ffff00" },
+        { name: "Двойка Мечей", freq: 10.0, range: "Альфа", Q: -2, archetype: "Тупик / Выбор", color: "#66ff00" },
+        { name: "Тройка Мечей", freq: 6.0, range: "Тета", Q: -5, archetype: "Боль / Предательство", color: "#0000ff" },
+        { name: "Четвёрка Мечей", freq: 4.0, range: "Тета", Q: 1, archetype: "Отдых / Восстановление", color: "#0033ff" },
+        { name: "Пятёрка Мечей", freq: 15.0, range: "Бета", Q: -3, archetype: "Поражение / Конфликт", color: "#ff0000" },
+        { name: "Шестёрка Мечей", freq: 8.0, range: "Альфа", Q: 2, archetype: "Переход / Путешествие", color: "#00ccff" },
+        { name: "Семёрка Мечей", freq: 14.0, range: "Бета", Q: -2, archetype: "Хитрость / Обман", color: "#ffcc00" },
+        { name: "Восьмёрка Мечей", freq: 7.0, range: "Тета", Q: -4, archetype: "Ограничение / Страх", color: "#3300ff" },
+        { name: "Девятка Мечей", freq: 5.0, range: "Тета", Q: -6, archetype: "Кошмары / Тревога", color: "#0000ff" },
+        { name: "Десятка Мечей", freq: 3.0, range: "Дельта", Q: -8, archetype: "Конец / Разрушение", color: "#9900ff" },
+        { name: "Паж Мечей", freq: 18.0, range: "Бета", Q: 2, archetype: "Любопытство / Анализ", color: "#ffff00" },
+        { name: "Рыцарь Мечей", freq: 22.0, range: "Бета", Q: 3, archetype: "Скорость / Решительность", color: "#ffcc00" },
+        { name: "Королева Мечей", freq: 11.0, range: "Альфа", Q: 4, archetype: "Независимость / Ум", color: "#66ff00" },
+        { name: "Король Мечей", freq: 20.0, range: "Бета", Q: 5, archetype: "Интеллект / Власть", color: "#ffff00" },
+
+        // ПЕНТАКЛИ (Земля)
+        { name: "Туз Пентаклей", freq: 6.0, range: "Тета", Q: 6, archetype: "Изобилие / Материя", color: "#00ff00" },
+        { name: "Двойка Пентаклей", freq: 8.0, range: "Альфа", Q: 2, archetype: "Баланс / Адаптация", color: "#33ff00" },
+        { name: "Тройка Пентаклей", freq: 9.0, range: "Альфа", Q: 4, archetype: "Мастерство / Труд", color: "#66ff00" },
+        { name: "Четвёрка Пентаклей", freq: 7.0, range: "Тета", Q: -1, archetype: "Скупость / Накопление", color: "#009900" },
+        { name: "Пятёрка Пентаклей", freq: 4.0, range: "Дельта", Q: -5, archetype: "Нужда / Изоляция", color: "#006600" },
+        { name: "Шестёрка Пентаклей", freq: 10.0, range: "Альфа", Q: 4, archetype: "Щедрость / Помощь", color: "#99ff00" },
+        { name: "Семёрка Пентаклей", freq: 7.5, range: "Тета", Q: 2, archetype: "Терпение / Оценка", color: "#33ff00" },
+        { name: "Восьмёрка Пентаклей", freq: 11.0, range: "Альфа", Q: 3, archetype: "Трудолюбие / Ученик", color: "#66ff00" },
+        { name: "Девятка Пентаклей", freq: 12.0, range: "Альфа", Q: 5, archetype: "Достаток / Независимость", color: "#99ff00" },
+        { name: "Десятка Пентаклей", freq: 10.0, range: "Альфа", Q: 7, archetype: "Наследие / Богатство", color: "#ccff00" },
+        { name: "Паж Пентаклей", freq: 8.0, range: "Альфа", Q: 2, archetype: "Учёба / Практика", color: "#33ff00" },
+        { name: "Рыцарь Пентаклей", freq: 7.0, range: "Тета", Q: 3, archetype: "Надёжность / Рутина", color: "#009900" },
+        { name: "Королева Пентаклей", freq: 6.0, range: "Тета", Q: 6, archetype: "Забота / Практичность", color: "#00ff00" },
+        { name: "Король Пентаклей", freq: 9.0, range: "Альфа", Q: 5, archetype: "Процветание / Управление", color: "#66ff00" }
+    ];
+
+    // Сортировка по частоте (от низкой к высокой)
+    allCards.sort((a, b) => a.freq - b.freq);
+
+    // Функция получения цвета по частоте
+    function getColorByFreq(freq) {
+        // От 0 до 40 Гц: красный → оранжевый → жёлтый → зелёный → синий → фиолетовый
+        const t = Math.min(freq / 40, 1); // Нормировка 0..1
+        if (t < 0.16) return `rgb(255,${Math.floor(t/0.16*255)},0)`; // Красный → Оранжевый
+        if (t < 0.33) return `rgb(255,255,${Math.floor((t-0.16)/0.17*255)})`; // Оранжевый → Жёлтый
+        if (t < 0.5) return `rgb(${Math.floor((1-(t-0.33)/0.17)*255)},255,0)`; // Жёлтый → Зелёный
+        if (t < 0.66) return `rgb(0,255,${Math.floor((t-0.5)/0.16*255)})`; // Зелёный → Циан
+        if (t < 0.83) return `rgb(0,${Math.floor((1-(t-0.66)/0.17)*255)},255)`; // Циан → Синий
+        return `rgb(${Math.floor((t-0.83)/0.17*255)},0,255)`; // Синий → Фиолетовый
+    }
+
+    // Заполнение таблицы
+    const tbody = document.getElementById('spectrumBody');
+    let html = '';
+    allCards.forEach(card => {
+        const color = getColorByFreq(card.freq);
+        const rangeBadge = {
+            'Дельта': 'badge-delta', 'Тета': 'badge-theta', 'Альфа': 'badge-alpha',
+            'Бета': 'badge-beta', 'Гамма': 'badge-gamma'
+        }[card.range] || '';
+        
+        html += '<tr>';
+        html += '<td><span class="freq-dot" style="background:' + color + ';"></span></td>';
+        html += '<td style="color:' + color + ';font-weight:bold;">' + card.freq.toFixed(1) + ' Гц</td>';
+        html += '<td>' + card.range + '</td>';
+        html += '<td><strong>' + card.name + '</strong></td>';
+        html += '<td style="color:' + (card.Q >= 0 ? '#81c784' : '#ef5350') + ';font-weight:bold;">' + (card.Q >= 0 ? '+' : '') + card.Q + '</td>';
+        html += '<td style="font-size:0.85rem;color:#c0b090;">' + card.archetype + '</td>';
+        html += '</tr>';
+    });
+    tbody.innerHTML = html;
+})();
+</script>
+
+</body>
+</html>

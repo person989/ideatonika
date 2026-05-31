@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEC-1: Аннигиляция • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1rem; overflow-x: hidden;
+        }
+        .stars-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; animation-delay: var(--delay); opacity: 0; }
+        @keyframes twinkle { 0%,100% { opacity:0.2; transform:scale(1); } 50% { opacity:1; transform:scale(1.8); } }
+        .main-container {
+            position: relative; z-index: 1; width: 100%; max-width: 1100px;
+            background: rgba(22,27,34,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 32px;
+            padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .header h1 { font-size: 2.5rem; font-weight: 400; letter-spacing: 3px; color: #f3e7c0; text-shadow: 0 0 20px rgba(255,215,80,0.4); margin-bottom: 0.3rem; }
+        .header .subtitle { font-size: 1rem; color: #c0b090; font-style: italic; border-bottom: 1px solid #5d4a3a; display: inline-block; padding-bottom: 0.4rem; }
+        .canvas-wrapper { position: relative; width: 100%; background: radial-gradient(ellipse at center, #1a2030 0%, #0a0e14 100%); border-radius: 20px; border: 1px solid #5d4a3a; overflow: hidden; margin-bottom: 1.5rem; box-shadow: inset 0 0 80px rgba(0,0,0,0.5); }
+        canvas { display: block; width: 100%; height: auto; }
+        .controls-panel { background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 20px; padding: 1.5rem 2rem; }
+        .controls-title { font-size: 1.2rem; color: #ffd54f; margin-bottom: 1.2rem; text-align: center; letter-spacing: 1px; }
+        .slider-group { margin-bottom: 1.2rem; }
+        .slider-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .slider-group label .param-value { color: #ffd54f; font-weight: bold; font-size: 1.1rem; min-width: 50px; text-align: right; }
+        .slider-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: linear-gradient(90deg, #3a2a4a, #5d4a3a, #3a2a4a); border-radius: 4px; outline: none; cursor: pointer; }
+        .slider-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: radial-gradient(circle at 40% 40%, #ffe082, #ff8f00); border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px rgba(255,215,80,0.6); border: 2px solid #ffd54f; }
+        .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.75rem; margin-top: 0.2rem; }
+        .info-box { margin-top: 1.5rem; padding: 1rem 1.5rem; background: rgba(255,215,80,0.05); border: 1px solid rgba(255,215,80,0.2); border-radius: 12px; text-align: center; color: #c0b090; font-size: 0.9rem; font-style: italic; }
+        .info-box .formula-display { font-family: 'Courier New', monospace; color: #ffd54f; font-size: 1rem; margin: 0.3rem 0; }
+        .back-row { text-align: center; margin-top: 1.5rem; }
+        .back-link { display: inline-block; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.3s; font-size: 0.9rem; }
+        .back-link:hover { background: #ffd54f; color: #0d1117; }
+        @media (max-width: 700px) { .main-container { padding: 1rem; } .header h1 { font-size: 1.8rem; } .controls-panel { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="stars-bg" id="starsBg"></div>
+<div class="main-container">
+    <div class="header">
+        <h1>⚡ SEC-1: Аннигиляция</h1>
+        <div class="subtitle">Визуализация Эксперимента №10: столкновение +Qₛ и –Qₛ в резонаторе</div>
+    </div>
+    <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="sec1Canvas"></canvas>
+    </div>
+    <div class="controls-panel">
+        <div class="controls-title">🎛️ Параметры</div>
+        <div class="slider-group">
+            <label><span>☀️ Положительный заряд (+Qₛ)</span><span class="param-value" id="posValue">+7</span></label>
+            <input type="range" id="posSlider" min="1" max="10" value="7" step="1">
+            <div class="range-labels"><span>+1 (слабый)</span><span>+7 (икона)</span><span>+10 (мощи)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>🌑 Отрицательный заряд (–Qₛ)</span><span class="param-value" id="negValue">-3</span></label>
+            <input type="range" id="negSlider" min="-10" max="-1" value="-3" step="1">
+            <div class="range-labels"><span>-10 (плутоний)</span><span>-3 (шунгит)</span><span>-1 (слабый)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>🎯 Когерентность оператора (Cₛ)</span><span class="param-value" id="csValue">0.7</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.7" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>0.7</span><span>1.0 (лазер)</span></div>
+        </div>
+        <div class="info-box">
+            <span id="statusText" style="color:#ffd54f;font-weight:bold;">⚡ Мощная аннигиляция — импульс зафиксирован!</span>
+            <div class="formula-display" id="formulaDisplay"></div>
+        </div>
+    </div>
+    <div class="back-row">
+        <a href="visualizations.html" class="back-link">← К списку визуализаций</a>
+    </div>
+</div>
+
+<script>
+(function(){
+    const starsBg=document.getElementById('starsBg');
+    for(let i=0;i<100;i++){
+        const d=document.createElement('div');d.className='star';
+        d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';
+        const s=Math.random()*2.5+0.5;d.style.width=s+'px';d.style.height=s+'px';
+        d.style.setProperty('--duration',(Math.random()*4+2)+'s');
+        d.style.setProperty('--delay',(Math.random()*5)+'s');
+        starsBg.appendChild(d);
+    }
+})();
+
+const canvas=document.getElementById('sec1Canvas');
+const ctx=canvas.getContext('2d');
+const wrapper=document.getElementById('canvasWrapper');
+let time=0,animId;
+
+// Вспышки от аннигиляции
+let flashes=[];
+
+function resize(){
+    const r=wrapper.getBoundingClientRect();
+    canvas.width=r.width;
+    canvas.height=Math.max(500,Math.min(650,r.width*0.7));
+    wrapper.style.height=canvas.height+'px';
+}
+resize();window.addEventListener('resize',resize);
+
+const posSlider=document.getElementById('posSlider');
+const negSlider=document.getElementById('negSlider');
+const csSlider=document.getElementById('csSlider');
+const posValue=document.getElementById('posValue');
+const negValue=document.getElementById('negValue');
+const csValue=document.getElementById('csValue');
+const statusText=document.getElementById('statusText');
+const formulaDisplay=document.getElementById('formulaDisplay');
+
+posSlider.oninput=function(){posValue.textContent='+'+this.value;updateInfo();};
+negSlider.oninput=function(){negValue.textContent=this.value;updateInfo();};
+csSlider.oninput=function(){csValue.textContent=parseFloat(this.value).toFixed(2);updateInfo();};
+
+function updateInfo(){
+    const Qpos=parseInt(posSlider.value);
+    const Qneg=Math.abs(parseInt(negSlider.value));
+    const C=parseFloat(csSlider.value);
+    const power=Qpos*Qneg*C;
+    const powerNorm=power/100; // нормировка для отображения
+    
+    if(powerNorm>0.7) statusText.textContent='⚡ МОЩНАЯ аннигиляция — осциллограф зашкаливает!';
+    else if(powerNorm>0.4) statusText.textContent='⚡ Хорошая аннигиляция — устойчивый импульс';
+    else if(powerNorm>0.15) statusText.textContent='📡 Слабая аннигиляция — сигнал едва заметен';
+    else statusText.textContent='🌫️ Аннигиляции почти нет — лучи не сфокусированы';
+    
+    formulaDisplay.textContent='P_имп≈|+'+Qpos+'|×|'+(-Qneg)+'|×'+C.toFixed(2)+'='+power.toFixed(0)+' усл. ед. | §10';
+}
+updateInfo();
+
+function drawFrame(){
+    const Qpos=parseInt(posSlider.value);
+    const Qneg=Math.abs(parseInt(negSlider.value));
+    const C=parseFloat(csSlider.value);
+    const w=canvas.width,h=canvas.height;
+    time+=0.016;
+    
+    const powerNorm=(Qpos*Qneg*C)/100;
+    
+    ctx.fillStyle='#060a10';
+    ctx.fillRect(0,0,w,h);
+    
+    // === ИСТОЧНИК +Qₛ (СЛЕВА) ===
+    const posX=w*0.15,posY=h*0.35;
+    const posGlow=ctx.createRadialGradient(posX,posY,0,posX,posY,40+Qpos*5);
+    posGlow.addColorStop(0,'rgba(255,255,255,0.9)');
+    posGlow.addColorStop(0.2,'rgba(255,220,80,'+(0.5+Qpos/20)+')');
+    posGlow.addColorStop(0.6,'rgba(255,150,20,0.2)');
+    posGlow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=posGlow;
+    ctx.beginPath();ctx.arc(posX,posY,40+Qpos*5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='white';
+    ctx.beginPath();ctx.arc(posX,posY,10+Qpos*2,0,Math.PI*2);ctx.fill();
+    
+    ctx.fillStyle='rgba(255,255,255,0.8)';
+    ctx.font='bold 14px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('ИСТОЧНИК +Qₛ',posX,posY-55);
+    ctx.fillText('(икона, серебро)',posX,posY-33);
+    ctx.fillText('Φ=+'+Qpos,posX,posY-13);
+    
+    // === ИСТОЧНИК –Qₛ (СПРАВА) ===
+    const negX=w*0.85,negY=h*0.35;
+    const negGlow=ctx.createRadialGradient(negX,negY,0,negX,negY,35+Qneg*4);
+    negGlow.addColorStop(0,'rgba(20,5,30,0.9)');
+    negGlow.addColorStop(0.3,'rgba(80,20,100,'+(0.4+Qneg/20)+')');
+    negGlow.addColorStop(0.7,'rgba(40,10,60,0.15)');
+    negGlow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=negGlow;
+    ctx.beginPath();ctx.arc(negX,negY,35+Qneg*4,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(30,5,45,0.9)';
+    ctx.beginPath();ctx.arc(negX,negY,8+Qneg*1.5,0,Math.PI*2);ctx.fill();
+    
+    ctx.fillStyle='rgba(200,150,220,0.8)';
+    ctx.fillText('ИСТОЧНИК –Qₛ',negX,negY-55);
+    ctx.fillText('(шунгит, торий)',negX,negY-33);
+    ctx.fillText('Φ=-'+Qneg,negX,negY-13);
+    
+    // === РЕЗОНАТОР (В ЦЕНТРЕ) ===
+    const resX=w*0.5,resY=h*0.65,resW=100,resH=60;
+    
+    // Корпус резонатора
+    ctx.fillStyle='rgba(60,50,40,0.8)';
+    ctx.strokeStyle='rgba(255,255,255,0.5)';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    ctx.roundRect(resX-resW/2,resY-resH/2,resW,resH,10);
+    ctx.fill();
+    ctx.stroke();
+    
+    // Фольга внутри
+    ctx.strokeStyle='rgba(200,200,200,0.2)';
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.roundRect(resX-resW/2+5,resY-resH/2+5,resW-10,resH-10,6);
+    ctx.stroke();
+    
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.font='bold 13px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('РЕЗОНАТОР',resX,resY-resH/2-15);
+    ctx.fillText('(фольга + кварц)',resX,resY-resH/2-0);
+    
+    // === ЛУЧИ ОТ ИСТОЧНИКОВ К РЕЗОНАТОРУ ===
+    // +Qₛ луч (золотой)
+    const posBeamAlpha=0.3+0.5*C;
+    const posBeamWidth=2+C*6;
+    const posGrad=ctx.createLinearGradient(posX,posY,resX-resW/2,resY);
+    posGrad.addColorStop(0,'rgba(255,220,80,'+posBeamAlpha+')');
+    posGrad.addColorStop(1,'rgba(255,200,50,'+(posBeamAlpha*0.7)+')');
+    ctx.strokeStyle=posGrad;
+    ctx.lineWidth=posBeamWidth;
+    ctx.beginPath();
+    ctx.moveTo(posX,posY);
+    ctx.lineTo(resX-resW/2,resY);
+    ctx.stroke();
+    
+    // –Qₛ луч (фиолетовый)
+    const negBeamAlpha=0.25+0.45*C;
+    const negBeamWidth=1.5+C*5;
+    const negGrad=ctx.createLinearGradient(negX,negY,resX+resW/2,resY);
+    negGrad.addColorStop(0,'rgba(120,40,180,'+negBeamAlpha+')');
+    negGrad.addColorStop(1,'rgba(80,20,120,'+(negBeamAlpha*0.7)+')');
+    ctx.strokeStyle=negGrad;
+    ctx.lineWidth=negBeamWidth;
+    ctx.beginPath();
+    ctx.moveTo(negX,negY);
+    ctx.lineTo(resX+resW/2,resY);
+    ctx.stroke();
+    
+    // === ЗОНА АННИГИЛЯЦИИ (ВНУТРИ РЕЗОНАТОРА) ===
+    const annihilationPower=powerNorm;
+    
+    // Фон аннигиляции
+    const annGlow=ctx.createRadialGradient(resX,resY,0,resX,resY,40);
+    annGlow.addColorStop(0,'rgba(255,255,255,'+(0.2+annihilationPower*0.8)+')');
+    annGlow.addColorStop(0.3,'rgba(255,200,50,'+(0.1+annihilationPower*0.5)+')');
+    annGlow.addColorStop(0.6,'rgba(200,100,255,'+(0.05+annihilationPower*0.3)+')');
+    annGlow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=annGlow;
+    ctx.beginPath();ctx.arc(resX,resY,40,0,Math.PI*2);ctx.fill();
+    
+    // Искры в точке аннигиляции
+    if(annihilationPower>0.05){
+        const numSparks=Math.floor(annihilationPower*30);
+        for(let i=0;i<numSparks;i++){
+            const seed=i*123.456+time*10;
+            const angle=seed*76.543;
+            const dist=(seed*98.765)%(30*annihilationPower);
+            const sx=resX+Math.cos(angle)*dist;
+            const sy=resY+Math.sin(angle)*dist;
+            const alpha=0.5+annihilationPower*0.5;
+            ctx.fillStyle=`rgba(255,255,200,${alpha})`;
+            ctx.beginPath();ctx.arc(sx,sy,1.5,0,Math.PI*2);ctx.fill();
+        }
+    }
+    
+    // Вспышки
+    if(!paused&&annihilationPower>0.2&&Math.random()<annihilationPower*0.3){
+        flashes.push({
+            x:resX+(Math.random()-0.5)*30,
+            y:resY+(Math.random()-0.5)*20,
+            radius:5+Math.random()*10*annihilationPower,
+            alpha:0.8,
+            life:0
+        });
+    }
+    
+    for(let i=flashes.length-1;i>=0;i--){
+        const f=flashes[i];
+        f.life+=0.03;
+        f.radius+=0.3;
+        f.alpha-=0.03;
+        
+        if(f.alpha<=0){
+            flashes.splice(i,1);
+            continue;
+        }
+        
+        const flashGrad=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.radius);
+        flashGrad.addColorStop(0,'rgba(255,255,255,'+f.alpha+')');
+        flashGrad.addColorStop(0.5,'rgba(255,200,100,'+(f.alpha*0.5)+')');
+        flashGrad.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=flashGrad;
+        ctx.beginPath();ctx.arc(f.x,f.y,f.radius,0,Math.PI*2);ctx.fill();
+    }
+    
+    // === КВАРЦЕВАЯ ПЛАСТИНА ===
+    ctx.fillStyle='rgba(200,220,255,0.5)';
+    ctx.fillRect(resX-15,resY-3,30,6);
+    ctx.strokeStyle='rgba(255,255,255,0.6)';
+    ctx.lineWidth=1;
+    ctx.strokeRect(resX-15,resY-3,30,6);
+    ctx.fillStyle='white';
+    ctx.font='10px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('КВАРЦ',resX,resY-8);
+    
+    // === ОСЦИЛЛОГРАФ (ВНИЗУ) ===
+    const oscX=w*0.25,oscY=h*0.85,oscW=w*0.5,oscH=40;
+    
+    ctx.fillStyle='rgba(0,10,0,0.6)';
+    ctx.fillRect(oscX,oscY,oscW,oscH);
+    ctx.strokeStyle='rgba(0,255,0,0.4)';
+    ctx.lineWidth=1;
+    ctx.strokeRect(oscX,oscY,oscW,oscH);
+    
+    // Сигнал на осциллографе
+    ctx.strokeStyle='rgba(0,255,0,0.8)';
+    ctx.lineWidth=2;
+    ctx.beginPath();
+    for(let i=0;i<=oscW;i+=2){
+        const t=i/oscW;
+        const signal=annihilationPower*Math.sin(t*Math.PI*4)*Math.exp(-t*3)*30;
+        const x=oscX+i;
+        const y=oscY+oscH/2-signal;
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    
+    ctx.fillStyle='rgba(0,255,0,0.6)';
+    ctx.font='11px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('ОСЦИЛЛОГРАФ',oscX+oscW/2,oscY-8);
+    
+    // Импульс напряжения
+    const voltage=(annihilationPower*50).toFixed(1);
+    ctx.fillText('U≈'+voltage+' mV',oscX+oscW/2,oscY+oscH+16);
+    
+    // === ОПЕРАТОР (СВЕРХУ) ===
+    const opX=w*0.5,opY=h*0.08;
+    
+    ctx.fillStyle='rgba(255,255,255,0.15)';
+    ctx.beginPath();ctx.arc(opX,opY,22,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.4)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(opX,opY,22,0,Math.PI*2);ctx.stroke();
+    
+    ctx.fillStyle='white';
+    ctx.font='bold 13px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('ОПЕРАТОР',opX,opY-30);
+    ctx.fillText('Cₛ='+C.toFixed(2),opX,opY+6);
+    
+    // Линии фокусировки от оператора к резонатору
+    ctx.strokeStyle='rgba(255,255,255,0.2)';
+    ctx.lineWidth=1;
+    ctx.setLineDash([3,5]);
+    ctx.beginPath();
+    ctx.moveTo(opX-12,opY+20);
+    ctx.lineTo(resX-20,resY-resH/2);
+    ctx.moveTo(opX+12,opY+20);
+    ctx.lineTo(resX+20,resY-resH/2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    
+    // Подпись
+    ctx.fillStyle='rgba(255,255,255,0.35)';
+    ctx.font='11px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('ФОКУСИРОВКА',opX,opY+46);
+    
+    animId=requestAnimationFrame(drawFrame);
+}
+
+let paused=false;
+drawFrame();
+window.addEventListener('beforeunload',()=>{if(animId)cancelAnimationFrame(animId);});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧮 Калькуляторы • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container {
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Заголовок */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #f3e7c0;
+            text-shadow: 0 0 20px rgba(255,215,150,0.5), 0 4px 10px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem;
+            font-family: 'Times New Roman', serif;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #c0b090;
+            font-style: italic;
+            border-bottom: 1px solid #c0b090;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        .hero .epigraph {
+            margin-top: 1.5rem;
+            color: #a09080;
+            font-size: 1rem;
+        }
+        
+        /* Сетка карточек */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .card {
+            background: rgba(30, 40, 60, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,245,215,0.1);
+            transition: transform 0.2s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px #e3b87c;
+            border-color: #e3b87c;
+        }
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .card h2 {
+            color: #f3e7c0;
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 1px dashed #8b7355;
+            padding-bottom: 0.8rem;
+        }
+        .card p {
+            color: #d0c8b8;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        .card .meta {
+            color: #a09080;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            background: transparent;
+            border: 1.5px solid #e3b87c;
+            color: #e3b87c;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 40px;
+            text-align: center;
+            transition: 0.2s;
+            letter-spacing: 1px;
+            margin-top: auto;
+        }
+        .btn:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(227,184,124,0.5);
+        }
+        .btn-disabled {
+            border-color: #5d4a3a;
+            color: #706858;
+            cursor: not-allowed;
+        }
+        .btn-disabled:hover {
+            background: transparent;
+            color: #706858;
+            box-shadow: none;
+        }
+        
+        /* Подвал */
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+            border-top: 1px solid #3a3a4a;
+            padding-top: 2rem;
+        }
+        .footer a {
+            color: #b0a090;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: #e3b87c;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #e3b87c;
+            text-decoration: none;
+            border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+        }
+        
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    
+    <div class="hero">
+        <h1>🧮 КАЛЬКУЛЯТОРЫ</h1>
+        <div class="subtitle">Интерактивные инструменты для расчётов</div>
+        <div class="epigraph">✧ «Формулы — это застывшая поэзия Смысла. Калькуляторы — её живое дыхание.» ✧</div>
+    </div>
+    
+    <div class="grid">
+        
+        <!-- Калькулятор 1: Вероятность события -->
+        <div class="card">
+            <div class="card-icon">🎲</div>
+            <h2>Вероятность События</h2>
+            <p>Рассчитайте, как ваше намерение (Qₛ) и концентрация (Cₛ) меняют вероятность желаемого исхода. Формула из §3 и §33.</p>
+            <div class="meta">📐 P = P₀ + ε · Qₛ · Cₛ</div>
+            <a href="calculator-probability.html" class="btn">🎲 Открыть</a>
+        </div>
+        
+        <!-- Калькулятор 2: Семантическое время -->
+        <div class="card">
+            <div class="card-icon">⏳</div>
+            <h2>Семантическое Время</h2>
+            <p>Узнайте, насколько субъективное время (τ) ускоряется или замедляется в зависимости от Cₛ и потока информации. Формула из §13.</p>
+            <div class="meta">📐 dτ/dt = 1 + κ · (dI/dt) · cos θₜ</div>
+            <a href="calculator-time.html" class="btn">⏳ Открыть</a>
+        </div>
+        
+        <!-- Калькулятор 3: Мощность воздействия -->
+        <div class="card">
+            <div class="card-icon">⚡</div>
+            <h2>Мощность Воздействия</h2>
+            <p>Вычислите P_sense — мощность вашего семантического импульса. Узнайте, хватит ли её для «пробития» Экрана. Формула из §86.</p>
+            <div class="meta">📐 P = U · I = I² · R</div>
+            <a href="calculator-power.html" class="btn">⚡ Открыть</a>
+        </div>
+        
+        <!-- Калькулятор 4: Резонансная частота -->
+        <div class="card">
+            <div class="card-icon">🎵</div>
+            <h2>Резонансная Частота</h2>
+            <p>Найдите частоту, на которой ваш семантический резонатор (храм, комната, кристалл) будет работать с максимальной мощностью. Формула из §87 и §96.</p>
+            <div class="meta">📐 ω_res = 1 / √(L · C)</div>
+            <a href="calculator-resonance.html" class="btn">🎵 Открыть</a>
+        </div>
+        
+        <!-- Калькулятор 5: Ранг блюда -->
+        <div class="card">
+            <div class="card-icon">🍽️</div>
+            <h2>Ранг Блюда</h2>
+            <p>Рассчитайте итоговый Qₛ вашего рецепта, исходя из ингредиентов, способа приготовления и ритуала. Формула из Гастрономической Таблицы.</p>
+            <div class="meta">📐 Q_блюда = Q_ингредиентов + ΔQ_повара + ΔQ_ритуала</div>
+            <a href="calculator-food.html" class="btn">🍽️ Открыть</a>
+        </div>
+        
+        <!-- Калькулятор 6: Эффективность очистки -->
+        <div class="card">
+            <div class="card-icon">🧂</div>
+            <h2>Эффективность Очистки</h2>
+            <p>Сравните, насколько разные материалы (соль, шунгит, уголь) восстанавливают Qₛ «загрязнённого» предмета. Формула из §47 (SALT-CLEAN).</p>
+            <div class="meta">📐 η = (Q_clean — Q_green) / (Q_pure — Q_green)</div>
+            <a href="calculator-cleaning.html" class="btn">🧂 Открыть</a>
+        </div>
+        
+        <!-- Калькулятор 7: Эффективность Щита -->
+<div class="card">
+    <div class="card-icon">🛡️</div>
+    <h2>Эффективность Щита</h2>
+    <p>Узнайте, насколько ваш семантический щит ослабит направленный негатив. Сравните серебро, шунгит и визуализацию.</p>
+    <div class="meta">📐 P_прошедшая = P_падающая / K_shield</div>
+    <a href="calculator-shield.html" class="btn">🛡️ Открыть</a>
+</div>
+
+<!-- Калькулятор 8: Коллективная Мощность -->
+<div class="card">
+    <div class="card-icon">👥</div>
+    <h2>Коллективная Мощность</h2>
+    <p>Посчитайте, во сколько раз группа молящихся сильнее одиночки. Эффект N² из §92 и SYNC-TEST.</p>
+    <div class="meta">📐 P_total = P₁ · Nᵏ</div>
+    <a href="calculator-sync.html" class="btn">👥 Открыть</a>
+</div>
+
+<!-- Калькулятор 9: Ранг Окружения -->
+<div class="card">
+    <div class="card-icon">🏠</div>
+    <h2>Ранг Окружения</h2>
+    <p>Выберите материалы стен, пола, мебели и узнайте итоговый Qₛ вашей комнаты. Храм или Бункер?</p>
+    <div class="meta">📐 Q_окружения = Σ Q_материалов / N</div>
+    <a href="calculator-environment.html" class="btn">🏠 Открыть</a>
+</div>
+
+<!-- Калькулятор 10: Семантический Сон -->
+<div class="card">
+    <div class="card-icon">😴</div>
+    <h2>Семантический Сон</h2>
+    <p>Узнайте, насколько ваш сон восстановит Qₛ. Зависит от вечернего Cₛ, шума в спальне и длительности.</p>
+    <div class="meta">📐 ΔQₛ = Qₛ_перед · Cₛ · (1 — S_noise) · t</div>
+    <a href="calculator-sleep.html" class="btn">😴 Открыть</a>
+</div>
+
+<!-- Калькулятор 11: Запутанность -->
+<div class="card">
+    <div class="card-icon">🔗</div>
+    <h2>Семантическая Запутанность</h2>
+    <p>Оцените силу нелокальной связи между двумя людьми (близнецы, супруги) и скорость её затухания.</p>
+    <div class="meta">📐 K = K₀ · Q_эмоций · e^(-t/τ)</div>
+    <a href="calculator-entanglement.html" class="btn">🔗 Открыть</a>
+</div>
+
+<!-- Калькулятор 12: Дальность Связи -->
+<div class="card">
+    <div class="card-icon">📡</div>
+    <h2>Дальность Семантической Связи</h2>
+    <p>Узнайте, на каком расстоянии ваше намерение ещё «долетит» до цели. Учитывает сопротивление среды.</p>
+    <div class="meta">📐 Q_принятый = Q · e^(-r/λ) / (1 + R)</div>
+    <a href="calculator-distance.html" class="btn">📡 Открыть</a>
+</div>
+
+<!-- Калькулятор 13: Ранг Материала -->
+<div class="card">
+    <div class="card-icon">🧱</div>
+    <h2>Ранг Материала</h2>
+    <p>Рассчитайте семантический ранг любого материала по 6 параметрам. Или выберите из 100+ готовых из Великой Таблицы.</p>
+    <div class="meta">📐 Rank = f(C, σ, L, Q, Gen, Архетип)</div>
+    <a href="calculator-material.html" class="btn">🧱 Открыть</a>
+</div>
+
+<!-- КАРТОЧКА: КАЛЬКУЛЯТОР ПАРАМЕТРОВ МАТЕРИАЛА -->
+<div class="card">
+    <div class="card-icon">🔬</div>
+    <h2>Оценщик параметров</h2>
+    <p>Введите физические свойства любого материала и узнайте его примерные семантические параметры — от Qₛ до C_sense, σ_sense, L_sense и Gen.</p>
+    <div class="meta">🧪 Обратный расчёт • из физики в семантику</div>
+    <a href="calculator-material-estimator.html" class="btn">🔬 Открыть</a>
+</div>
+
+<!-- Калькулятор 16: Идеальный Рабочий День -->
+<div class="card">
+    <div class="card-icon">🧠</div>
+    <h2>Идеальный Рабочий День</h2>
+    <p>Постройте оптимальный график на основе вашего хронотипа, текущего Cₛ и типа задач. Когда творить, когда отдыхать.</p>
+    <div class="meta">📐 Хронотип + Cₛ → график дня</div>
+    <a href="calculator-workday.html" class="btn">🧠 Открыть</a>
+</div>
+
+<!-- Калькулятор 17: Сколько медитировать? -->
+<div class="card">
+    <div class="card-icon">🧘</div>
+    <h2>Сколько медитировать?</h2>
+    <p>Введите ваш текущий Cₛ, Tₛ и цель — узнайте идеальную длительность и технику медитации прямо сейчас.</p>
+    <div class="meta">📐 Cₛ + Tₛ + цель → минуты и техника</div>
+    <a href="calculator-meditation.html" class="btn">🧘 Открыть</a>
+</div>
+
+<!-- Калькулятор 18: Доза соцсетей -->
+<div class="card">
+    <div class="card-icon">📱</div>
+    <h2>Доза соцсетей</h2>
+    <p>Сколько минут в день можно безопасно листать ленту, чтобы не обрушить Cₛ? Расчёт лимита по вашему S_noise.</p>
+    <div class="meta">📐 Cₛ + контент → безопасный лимит</div>
+    <a href="calculator-social.html" class="btn">📱 Открыть</a>
+</div>
+
+<!-- Калькулятор 19: Вероятность дежавю -->
+<div class="card">
+    <div class="card-icon">👁️</div>
+    <h2>Вероятность дежавю</h2>
+    <p>Оцените шанс испытать «уже виденное» сегодня. На основе вашей χ, Cₛ и усталости.</p>
+    <div class="meta">📐 §74 • Дежавю</div>
+    <a href="calculator-dejavu.html" class="btn">👁️ Открыть</a>
+</div>
+
+<!-- Калькулятор 20: Насколько я устал? -->
+<div class="card">
+    <div class="card-icon">😴</div>
+    <h2>Насколько я устал?</h2>
+    <p>Оцените уровень семантического истощения по subjective ощущениям. Узнайте свои Tₛ, Cₛ, Qₛ и получите совет.</p>
+    <div class="meta">📐 §44, §101, §108 • Усталость</div>
+    <a href="calculator-fatigue.html" class="btn">😴 Открыть</a>
+</div>
+
+<!-- Калькулятор 21: Совместимость -->
+<div class="card">
+    <div class="card-icon">💞</div>
+    <h2>Совместимость людей</h2>
+    <p>Введите параметры двух людей (Qₛ, Cₛ, χ) и узнайте, насколько гармоничным будет их общение и отношения.</p>
+    <div class="meta">📐 Три фактора: Q-резонанс, C-синхронизация, χ-эмпатия</div>
+    <a href="calculator-compatibility.html" class="btn">💞 Открыть</a>
+</div>
+
+<!-- Калькулятор 22: Растения -->
+<div class="card">
+    <div class="card-icon">🪴</div>
+    <h2>Сколько растений нужно?</h2>
+    <p>Введите площадь, материал стен и желаемый ранг комнаты — и узнайте, сколько растений потребуется для гармонии.</p>
+    <div class="meta">📐 Учитывает свет, размер растений и материал стен</div>
+    <a href="calculator-plants.html" class="btn">🪴 Открыть</a>
+</div>
+
+<!-- Калькулятор 23: Заземление -->
+<div class="card">
+    <div class="card-icon">🌍</div>
+    <h2>Заземление</h2>
+    <p>Узнайте, сколько минут нужно провести босиком на земле, траве или деревянном полу, чтобы сбросить избыток Tₛ и восстановить баланс.</p>
+    <div class="meta">📐 Учитывает поверхность, положение тела и текущую Tₛ</div>
+    <a href="calculator-grounding.html" class="btn">🌍 Открыть</a>
+</div>
+
+<!-- Калькулятор 24: Очистка пространства -->
+<div class="card">
+    <div class="card-icon">🧹</div>
+    <h2>Очистка пространства</h2>
+    <p>Узнайте, сколько соли, времени и огня нужно, чтобы полностью очистить комнату от негативного Qₛ. Научный подход к уборке.</p>
+    <div class="meta">📐 По площади, материалу и степени загрязнения</div>
+    <a href="calculator-cleaning-room.html" class="btn">🧹 Открыть</a>
+</div>
+
+<!-- Калькулятор 25: Идеальная спальня -->
+<div class="card">
+    <div class="card-icon">🛏️</div>
+    <h2>Идеальная спальня</h2>
+    <p>Подберите материалы, цвет стен, освещение и растения для максимального восстановления Qₛ во время сна.</p>
+    <div class="meta">📐 По материалам, цвету, растениям и шуму</div>
+    <a href="calculator-bedroom.html" class="btn">🛏️ Открыть</a>
+</div>
+
+<!-- Калькулятор 26: Акустика помещения -->
+<div class="card">
+    <div class="card-icon">🔊</div>
+    <h2>Акустика помещения</h2>
+    <p>Вычислите резонансную частоту комнаты по её размерам и материалам. Узнайте, какая музыка гармонизирует пространство.</p>
+    <div class="meta">📐 По длине, ширине, высоте и материалу стен</div>
+    <a href="calculator-acoustics.html" class="btn">🔊 Открыть</a>
+</div>
+
+<!-- Калькулятор 27: Семантический детокс -->
+<div class="card">
+    <div class="card-icon">🍃</div>
+    <h2>Семантический детокс</h2>
+    <p>Рассчитайте, сколько дней нужно питаться «Светлой» едой, чтобы поднять свой Qₛ до желаемого уровня.</p>
+    <div class="meta">📐 ΔQₛ = Σ (ранг_блюда · Cₛ_едока) / дней</div>
+    <a href="calculator-detox.html" class="btn">🍃 Открыть</a>
+</div>
+
+<!-- Калькулятор 28: Водный баланс -->
+<div class="card">
+    <div class="card-icon">💧</div>
+    <h2>Водный баланс</h2>
+    <p>Рассчитайте, сколько и какой воды нужно выпить, чтобы восстановить Qₛ. Святая, родниковая или фильтрованная — эффективность разная.</p>
+    <div class="meta">📐 ΔQₛ = объём · ранг_воды · Cₛ · усвояемость</div>
+    <a href="calculator-water.html" class="btn">💧 Открыть</a>
+</div>
+
+<!-- Калькулятор 29: Идеальное меню -->
+<div class="card">
+    <div class="card-icon">🍽️</div>
+    <h2>Идеальное меню</h2>
+    <p>Подберите завтрак, обед и ужин под ваши семантические параметры. Семантический диетолог на каждый день.</p>
+    <div class="meta">🍳🥗🍲 • персонализация</div>
+    <a href="calculator-menu.html" class="btn">🍽️ Открыть</a>
+</div>
+
+<!-- Калькулятор 30: Вред фастфуда -->
+<div class="card">
+    <div class="card-icon">🍔</div>
+    <h2>Вред фастфуда</h2>
+    <p>Узнайте, насколько упадёт ваш Qₛ после бургера, картошки фри и газировки. И сколько времени нужно на восстановление.</p>
+    <div class="meta">📉 Qₛ • Cₛ • Tₛ • время</div>
+    <a href="calculator-fastfood.html" class="btn">🍔 Открыть</a>
+</div>
+
+<!-- Калькулятор 31: Пробой Семантического Экрана -->
+<div class="card">
+    <div class="card-icon">⚡</div>
+    <h2>Пробой Семантического Экрана</h2>
+    <p>Способны ли вы на телекинез? Вычисляет, хватит ли вашей когерентности и заряда, чтобы пробить барьер между мыслью и материей.</p>
+    <div class="meta">📐 T = exp(-2/ħ ∫ √(2m(U-E)) dx)</div>
+    <a href="calculator-screen.html" class="btn">⚡ Открыть</a>
+</div>
+
+<!-- Калькулятор 32: Сила молитвы -->
+<div class="card">
+    <div class="card-icon">🙏</div>
+    <h2>Сила молитвы</h2>
+    <p>Насколько эффективна ваша молитва? Вычисляет силу воздействия на реальность с учётом места, Cₛ и коллективности.</p>
+    <div class="meta">📐 P = η · Qₛ · Cₛ · K_места · K_коллектива</div>
+    <a href="calculator-prayer.html" class="btn">🙏 Открыть</a>
+</div>
+
+<!-- Калькулятор 33: Радиус Ауры -->
+<div class="card">
+    <div class="card-icon">🌈</div>
+    <h2>Радиус Ауры</h2>
+    <p>На сколько метров простирается ваше семантическое поле? Вычисляет размер ауры по Qₛ и Cₛ.</p>
+    <div class="meta">📐 R_ауры = R_базовый · Qₛ · Cₛ</div>
+    <a href="calculator-aura.html" class="btn">🌈 Открыть</a>
+</div>
+
+<!-- Калькулятор 34: Скорость семантической волны -->
+<div class="card">
+    <div class="card-icon">🌊</div>
+    <h2>Скорость семантической волны</h2>
+    <p>Узнайте, с какой скоростью ваш Qₛ-импульс распространяется в воздухе, воде, камне, металле или в храме.</p>
+    <div class="meta">📐 c = √(K / ρ_Q) • §118</div>
+    <a href="calculator-speed.html" class="btn">🌊 Открыть</a>
+</div>
+
+<!-- Калькулятор 35: Энергия эмоции -->
+<div class="card">
+    <div class="card-icon">⚡</div>
+    <h2>Энергия эмоции</h2>
+    <p>Переведите силу чувства в Джоули смысла. Сколько энергии в вашей радости, гневе или страхе?</p>
+    <div class="meta">📐 E = |Q| · C · t • §7, §86</div>
+    <a href="calculator-emotion.html" class="btn">⚡ Открыть</a>
+</div>
+
+<!-- Калькулятор 36: Вероятность вещего сна -->
+<div class="card">
+    <div class="card-icon">🌙</div>
+    <h2>Вероятность вещего сна</h2>
+    <p>Оцените шанс, что сегодня ночью вы увидите пророческое сновидение. Учитывает χ, Cₛ, фазу Луны и эмоции.</p>
+    <div class="meta">📐 P = P_base · χ · C · K_moon · K_emotion • §18, §75</div>
+    <a href="calculator-dream.html" class="btn">🌙 Открыть</a>
+</div>
+
+<!-- Калькулятор 37: Сила Благословения -->
+<div class="card">
+    <div class="card-icon">🙏</div>
+    <h2>Сила Благословения</h2>
+    <p>Вычислите, насколько мощным будет ваше благословение. Зависит от Cₛ, типа благословения и расстояния.</p>
+    <div class="meta">📐 Q_благ = Q₀ · Cₛ · K_тип · e^(-r/λ)</div>
+    <a href="calculator-blessing.html" class="btn">🙏 Открыть</a>
+</div>
+
+<!-- Калькулятор 38: Затухание кармы -->
+<div class="card">
+    <div class="card-icon">🔄</div>
+    <h2>Затухание кармы</h2>
+    <p>Вычислите, через сколько времени ваш поступок (позитивный или негативный) перестанет влиять на ваше семантическое поле. III закон Идеатоники.</p>
+    <div class="meta">📐 Qₛ(t) = Qₛ(0) · e^(-t/τ)</div>
+    <a href="calculator-karma.html" class="btn">🔄 Открыть</a>
+</div>
+
+<!-- Калькулятор 39: Эффективность талисмана -->
+<div class="card">
+    <div class="card-icon">🔮</div>
+    <h2>Эффективность талисмана</h2>
+    <p>Вычислите Qₛ вашего амулета, кристалла или освящённого предмета. Учитывает материал, время зарядки и вашу Cₛ.</p>
+    <div class="meta">📐 Q = Q_материала + ΔQ(Cₛ, t, ритуал)</div>
+    <a href="calculator-talisman.html" class="btn">🔮 Открыть</a>
+</div>
+
+<!-- Калькулятор 40: Вероятность встретить «своего» человека -->
+<div class="card">
+    <div class="card-icon">💕</div>
+    <h2>Встретить «своего» человека</h2>
+    <p>Оцените вероятность судьбоносной встречи. Учитывает вашу чувствительность (χ), когерентность намерения (Cₛ) и открытость миру.</p>
+    <div class="meta">📐 P = P₀ · χ · Cₛ · (1 + открытость) · e^(-S_страха)</div>
+    <a href="calculator-soulmate.html" class="btn">💕 Открыть</a>
+</div>
+
+<!-- Калькулятор 41: Мой семантический след -->
+<div class="card">
+    <div class="card-icon">💫</div>
+    <h2>Мой семантический след</h2>
+    <p>Узнайте, на сколько лет ваше поле сохранится в ноосфере после ухода — через творчество, поступки, любовь и знания.</p>
+    <div class="meta">📐 τ_legacy = f(Qₛ, Cₛ, творчество, ученики)</div>
+    <a href="calculator-legacy.html" class="btn">💫 Открыть</a>
+</div>
+
+<!-- Калькулятор 42: Когда меня найдут? -->
+<div class="card">
+    <div class="card-icon">🔍</div>
+    <h2>Когда меня найдут?</h2>
+    <p>Если вы оставили сайт, книгу или идею — узнайте, через сколько лет кто-то обнаружит ваше творение и начнёт сарафанное радио.</p>
+    <div class="meta">📐 t = f(размер, видимость, χ человечества)</div>
+    <a href="calculator-discovery.html" class="btn">🔍 Открыть</a>
+</div>
+
+<!-- Калькулятор 43: Эволюция Cₛ человечества -->
+<div class="card">
+    <div class="card-icon">📈</div>
+    <h2>Эволюция Cₛ человечества</h2>
+    <p>По текущему тренду вычислите, когда средняя когерентность достигнет 0.8 — эпохи «просветлённых».</p>
+    <div class="meta">📐 t = f(Cₛ_сейчас, скорость роста, S_noise планеты)</div>
+    <a href="calculator-evolution.html" class="btn">📈 Открыть</a>
+</div>
+
+<!-- Калькулятор 44: Дальность телепатии -->
+<div class="card">
+    <div class="card-icon">🔮</div>
+    <h2>Дальность Телепатии</h2>
+    <p>На каком расстоянии вы можете «услышать» мысли другого человека? Учитывает χ, Cₛ, запутанность и помехи.</p>
+    <div class="meta">📐 R_max = f(χ, Cₛ, K_запутанности, среда)</div>
+    <a href="calculator-telepathy.html" class="btn">🔮 Открыть</a>
+</div>
+
+<!-- Калькулятор 45: Дата Первого Контакта -->
+<div class="card">
+    <div class="card-icon">🚀</div>
+    <h2>Дата Первого Контакта</h2>
+    <p>Когда о вашей идее узнает миллиард человек? Экспоненциальный рост и сила сарафанного радио.</p>
+    <div class="meta">📐 N(t) = N₀ · (1 + r)ᵗ</div>
+    <a href="calculator-first-contact.html" class="btn">🚀 Открыть</a>
+</div>
+
+<!-- Калькулятор 46: Интуитивное Предвидение -->
+<div class="card">
+    <div class="card-icon">🔮</div>
+    <h2>Интуитивное Предвидение</h2>
+    <p>Насколько заранее вы можете почувствовать важное событие? Расчёт времени упреждения.</p>
+    <div class="meta">📐 τ_lead = τ₀ · ln(|Φ|/θ) · e^(-Q/Q₀)</div>
+    <a href="calculator-intuition.html" class="btn">🔮 Открыть</a>
+</div>
+
+<!-- Калькулятор 47: Любовь с Первого Взгляда -->
+<div class="card">
+    <div class="card-icon">💞</div>
+    <h2>Любовь с Первого Взгляда</h2>
+    <p>Вероятность возникновения «искры» между двумя людьми. Научное обоснование химии.</p>
+    <div class="meta">📐 P = |⟨Φ₁|Φ₂⟩|² / (1 + (Δω/γ)²)</div>
+    <a href="calculator-love.html" class="btn">💞 Открыть</a>
+</div>
+
+<!-- Калькулятор 48: Телекинетический Потенциал -->
+<div class="card">
+    <div class="card-icon">⚡</div>
+    <h2>Телекинетический Потенциал</h2>
+    <p>Какую силу может создать ваша мысль? Честный расчёт без иллюзий.</p>
+    <div class="meta">📐 F_s = α · ∇Φ · g_{s-ph}</div>
+    <a href="calculator-telekinesis.html" class="btn">⚡ Открыть</a>
+</div>
+
+<!-- Калькулятор 49: Глубина Гипноза -->
+<div class="card">
+    <div class="card-icon">🧠</div>
+    <h2>Глубина Гипноза</h2>
+    <p>На какую глубину транса можно погрузиться? Расчёт по силе раппорта.</p>
+    <div class="meta">📐 D = D_max · (1 — e^(-R̂/R_crit))</div>
+    <a href="calculator-hypnosis.html" class="btn">🧠 Открыть</a>
+</div>
+
+<!-- Калькулятор 50: Осознанный Сон -->
+<div class="card">
+    <div class="card-icon">🌙</div>
+    <h2>Осознанный Сон</h2>
+    <p>Шанс войти в осознанное сновидение этой ночью.</p>
+    <div class="meta">📐 P_lucid = |⟨Ψ_w|Ψ_d⟩|² / (1 + γ⟨F⟩)</div>
+    <a href="calculator-lucid.html" class="btn">🌙 Открыть</a>
+</div>
+
+<!-- Калькулятор 51: Длина Серии Удач -->
+<div class="card">
+    <div class="card-icon">🍀</div>
+    <h2>Длина Серии Удач</h2>
+    <p>Сколько успехов подряд ждать в «полосе везения»?</p>
+    <div class="meta">📐 ⟨N⟩ = (1/(1-p)) · Q/(Q+Q₀)</div>
+    <a href="calculator-streak.html" class="btn">🍀 Открыть</a>
+</div>
+
+<!-- Калькулятор 52: Сопротивление Гипнозу -->
+<div class="card">
+    <div class="card-icon">🛡️</div>
+    <h2>Сопротивление Гипнозу</h2>
+    <p>Насколько вы защищены от внешнего внушения и манипуляций?</p>
+    <div class="meta">📐 R = 1 — |⟨Ψ_hyp|Ψ_pat⟩|²</div>
+    <a href="calculator-resist.html" class="btn">🛡️ Открыть</a>
+</div>
+
+<!-- Калькулятор 53: Эффект Плацебо -->
+<div class="card">
+    <div class="card-icon">💊</div>
+    <h2>Эффект Плацебо</h2>
+    <p>Насколько вера в лечение ускорит выздоровление?</p>
+    <div class="meta">📐 P = Q²/(θ²+Q²) · e^(-t/τ)</div>
+    <a href="calculator-placebo.html" class="btn">💊 Открыть</a>
+</div>
+
+<!-- Калькулятор 54: Вероятность Дежавю -->
+<div class="card">
+    <div class="card-icon">🕰️</div>
+    <h2>Вероятность Дежавю</h2>
+    <p>Шанс испытать «уже виденное» в ближайшее время.</p>
+    <div class="meta">📐 P = |⟨Φ_pres|Φ_past⟩|²/(θ²+|...|²)</div>
+    <a href="calculator-dejavu2.html" class="btn">🕰️ Открыть</a>
+</div>
+
+<!-- Калькулятор 55: Смысловая Чёрная Дыра -->
+<div class="card">
+    <div class="card-icon">🌌</div>
+    <h2>Смысловая Чёрная Дыра</h2>
+    <p>При какой «массе» идея неотвратимо притягивает всё внимание?</p>
+    <div class="meta">📐 r_g = 2G_s M_s</div>
+    <a href="calculator-blackhole.html" class="btn">🌌 Открыть</a>
+</div>
+        
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Калькуляторы семантической физики</p>
+        <p>🌐 <a href="about.html">О проекте</a> • <a href="contacts.html">Контакты</a> • <a href="license.html">Лицензия (CC BY-SA 4.0)</a></p>
+        <p style="margin-top: 1rem;">✧ «Не верь формулам на слово. Проверяй.» ✧</p>
+    </div>
+    
+</div>
+</body>
+</html>

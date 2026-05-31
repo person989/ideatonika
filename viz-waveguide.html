@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантический Волновод • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0d1117 0%, #161b22 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1rem; overflow-x: hidden;
+        }
+        .stars-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--duration) ease-in-out infinite; animation-delay: var(--delay); opacity: 0; }
+        @keyframes twinkle { 0%,100% { opacity:0.2; transform:scale(1); } 50% { opacity:1; transform:scale(1.8); } }
+        .main-container {
+            position: relative; z-index: 1; width: 100%; max-width: 1100px;
+            background: rgba(22,27,34,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 32px;
+            padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+        .header { text-align: center; margin-bottom: 1.5rem; }
+        .header h1 { font-size: 2.5rem; font-weight: 400; letter-spacing: 3px; color: #f3e7c0; text-shadow: 0 0 20px rgba(255,215,80,0.4); margin-bottom: 0.3rem; }
+        .header .subtitle { font-size: 1rem; color: #c0b090; font-style: italic; border-bottom: 1px solid #5d4a3a; display: inline-block; padding-bottom: 0.4rem; }
+        .canvas-wrapper { position: relative; width: 100%; background: radial-gradient(ellipse at center, #1a2030 0%, #0a0e14 100%); border-radius: 20px; border: 1px solid #5d4a3a; overflow: hidden; margin-bottom: 1.5rem; box-shadow: inset 0 0 80px rgba(0,0,0,0.5); }
+        canvas { display: block; width: 100%; height: auto; }
+        .controls-panel { background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 20px; padding: 1.5rem 2rem; }
+        .controls-title { font-size: 1.2rem; color: #ffd54f; margin-bottom: 1.2rem; text-align: center; letter-spacing: 1px; }
+        .slider-group { margin-bottom: 1.2rem; }
+        .slider-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 0.95rem; margin-bottom: 0.4rem; }
+        .slider-group label .param-value { color: #ffd54f; font-weight: bold; font-size: 1.1rem; min-width: 50px; text-align: right; }
+        .slider-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: linear-gradient(90deg, #3a2a4a, #5d4a3a, #3a2a4a); border-radius: 4px; outline: none; cursor: pointer; }
+        .slider-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: radial-gradient(circle at 40% 40%, #ffe082, #ff8f00); border-radius: 50%; cursor: pointer; box-shadow: 0 0 15px rgba(255,215,80,0.6); border: 2px solid #ffd54f; }
+        .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.75rem; margin-top: 0.2rem; }
+        .info-box { margin-top: 1.5rem; padding: 1rem 1.5rem; background: rgba(255,215,80,0.05); border: 1px solid rgba(255,215,80,0.2); border-radius: 12px; text-align: center; color: #c0b090; font-size: 0.9rem; font-style: italic; }
+        .info-box .formula-display { font-family: 'Courier New', monospace; color: #ffd54f; font-size: 1rem; margin: 0.3rem 0; }
+        .back-row { text-align: center; margin-top: 1.5rem; }
+        .back-link { display: inline-block; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.3s; font-size: 0.9rem; }
+        .back-link:hover { background: #ffd54f; color: #0d1117; }
+        @media (max-width: 700px) { .main-container { padding: 1rem; } .header h1 { font-size: 1.8rem; } .controls-panel { padding: 1rem; } }
+    </style>
+</head>
+<body>
+<div class="stars-bg" id="starsBg"></div>
+<div class="main-container">
+    <div class="header">
+        <h1>📡 Семантический Волновод</h1>
+        <div class="subtitle">Визуализация §93: направление потока Qₛ с минимальными потерями</div>
+    </div>
+    <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="waveguideCanvas"></canvas>
+    </div>
+    <div class="controls-panel">
+        <div class="controls-title">🎛️ Параметры</div>
+        <div class="slider-group">
+            <label><span>🧱 Материал волновода</span><span class="param-value" id="matValue">Серебро (σ=9)</span></label>
+            <input type="range" id="matSlider" min="1" max="10" value="9" step="1">
+            <div class="range-labels"><span>1 (пластик)</span><span>5 (шунгит)</span><span>10 (св. вода)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>↩️ Изгиб волновода</span><span class="param-value" id="bendValue">0°</span></label>
+            <input type="range" id="bendSlider" min="0" max="60" value="0" step="1">
+            <div class="range-labels"><span>0° (прямой)</span><span>30°</span><span>60° (изогнутый)</span></div>
+        </div>
+        <div class="slider-group">
+            <label><span>☀️ Семантический заряд Qₛ</span><span class="param-value" id="qsValue">+5</span></label>
+            <input type="range" id="qsSlider" min="-10" max="10" value="5" step="1">
+            <div class="range-labels"><span>-10 (Тьма)</span><span>0</span><span>+10 (Свет)</span></div>
+        </div>
+        <div class="info-box">
+            <span id="statusText" style="color:#ffd54f;font-weight:bold;">📡 Сигнал проходит с минимальными потерями</span>
+            <div class="formula-display" id="formulaDisplay"></div>
+        </div>
+    </div>
+    <div class="back-row">
+        <a href="visualizations.html" class="back-link">← К списку визуализаций</a>
+    </div>
+</div>
+
+<script>
+(function(){
+    const starsBg=document.getElementById('starsBg');
+    for(let i=0;i<100;i++){
+        const d=document.createElement('div');d.className='star';
+        d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';
+        const s=Math.random()*2.5+0.5;d.style.width=s+'px';d.style.height=s+'px';
+        d.style.setProperty('--duration',(Math.random()*4+2)+'s');
+        d.style.setProperty('--delay',(Math.random()*5)+'s');
+        starsBg.appendChild(d);
+    }
+})();
+
+const canvas=document.getElementById('waveguideCanvas');
+const ctx=canvas.getContext('2d');
+const wrapper=document.getElementById('canvasWrapper');
+let time=0,animId;
+
+let particles=[];
+const NUM_PARTICLES=120;
+
+function resize(){
+    const r=wrapper.getBoundingClientRect();
+    canvas.width=r.width;
+    canvas.height=Math.max(500,Math.min(650,r.width*0.7));
+    wrapper.style.height=canvas.height+'px';
+    initParticles();
+}
+function initParticles(){
+    particles=[];
+    const w=canvas.width,h=canvas.height;
+    for(let i=0;i<NUM_PARTICLES;i++){
+        particles.push({
+            x:Math.random()*w*0.15,
+            y:h*0.3+Math.random()*h*0.4,
+            vx:0,vy:0,
+            inGuide:false,
+            escaped:false,
+            leakChecked:false,
+            life:Math.random()
+        });
+    }
+}
+resize();window.addEventListener('resize',resize);
+
+const matSlider=document.getElementById('matSlider');
+const bendSlider=document.getElementById('bendSlider');
+const qsSlider=document.getElementById('qsSlider');
+const matValue=document.getElementById('matValue');
+const bendValue=document.getElementById('bendValue');
+const qsValue=document.getElementById('qsValue');
+const statusText=document.getElementById('statusText');
+const formulaDisplay=document.getElementById('formulaDisplay');
+
+const matNames=[
+    '',
+    'Пластик (σ=1)',
+    'Бетон (σ=2)',
+    'Гранит (σ=3)',
+    'Дерево (σ=4)',
+    'Шунгит (σ=5)',
+    'Железо (σ=6)',
+    'Медь (σ=7)',
+    'Серебро (σ=8)',
+    'Золото (σ=9)',
+    'Святая вода (σ=10)'
+];
+
+matSlider.oninput=function(){
+    matValue.textContent=matNames[parseInt(this.value)];
+    updateInfo();
+};
+bendSlider.oninput=function(){
+    bendValue.textContent=this.value+'°';
+    updateInfo();
+};
+qsSlider.oninput=function(){
+    qsValue.textContent=(parseInt(this.value)>=0?'+':'')+parseInt(this.value);
+};
+
+function updateInfo(){
+    const sigma=parseInt(matSlider.value);
+    const bend=parseInt(bendSlider.value);
+    const loss=Math.exp(-bend/(sigma*3));
+    if(loss>0.9) statusText.textContent='📡 Сигнал проходит почти без потерь';
+    else if(loss>0.6) statusText.textContent='📡 Умеренные потери на изгибе';
+    else if(loss>0.3) statusText.textContent='📡 Заметные потери — часть Qₛ рассеивается';
+    else statusText.textContent='💀 Сильные потери — изгиб слишком крут';
+    formulaDisplay.textContent='P_вых=P_вх·e^(-α·L)·K | Потери≈'+((1-loss)*100).toFixed(0)+'% | σ='+sigma;
+}
+updateInfo();
+
+function getQSColor(qs,alpha){
+    const absQ=Math.abs(qs);
+    const norm=Math.min(1,absQ/10);
+    if(absQ<0.5){const gray=Math.floor(100*norm+30);return `rgba(${gray},${gray},${gray},${alpha*0.3})`;}
+    if(qs>=0){const r=Math.floor(30+norm*225);const gr=Math.floor(5+norm*235);const b=Math.floor(80*(1-norm)+255*norm);return `rgba(${r},${gr},${b},${alpha})`;}
+    else{const r=Math.floor(80*(1-norm)+30*norm);const gr=Math.floor(40*(1-norm)+5*norm);const b=Math.floor(30+norm*200);return `rgba(${r},${gr},${b},${alpha})`;}
+}
+
+function drawFrame(){
+    const sigma=parseInt(matSlider.value);
+    const bendDeg=parseInt(bendSlider.value);
+    const qs=parseInt(qsSlider.value);
+    const w=canvas.width,h=canvas.height;
+    time+=0.016;
+    
+    ctx.fillStyle='#060a10';
+    ctx.fillRect(0,0,w,h);
+    
+    ctx.strokeStyle='rgba(255,255,255,0.02)';ctx.lineWidth=1;
+    for(let x=0;x<w;x+=50){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+    for(let y=0;y<h;y+=50){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+    
+    const guideStartX=w*0.12;
+    const guideEndX=w*0.88;
+    const guideCenterY=h/2;
+    const guideHalfWidth=22;
+    const bendRad=bendDeg*Math.PI/180;
+    const numSegments=60;
+    
+    function getGuideCenter(t){
+        const x=guideStartX+(guideEndX-guideStartX)*t;
+        const bendFactor=Math.sin(t*Math.PI)*bendRad;
+        const y=guideCenterY+bendFactor*(guideEndX-guideStartX)*0.5;
+        return {x,y};
+    }
+    
+    // Стенки волновода
+    for(let wall=0;wall<2;wall++){
+        const sign=wall===0?-1:1;
+        ctx.beginPath();
+        for(let i=0;i<=numSegments;i++){
+            const t=i/numSegments;
+            const c=getGuideCenter(t);
+            const dx=(guideEndX-guideStartX)/numSegments;
+            const dy=c.y-(i>0?getGuideCenter((i-1)/numSegments).y:c.y);
+            const len=Math.sqrt(dx*dx+dy*dy)||1;
+            const nx=-dy/len;
+            const ny=dx/len;
+            const x=c.x+nx*guideHalfWidth*sign;
+            const y=c.y+ny*guideHalfWidth*sign;
+            if(i===0) ctx.moveTo(x,y);
+            else ctx.lineTo(x,y);
+        }
+        const brightness=Math.floor(150+sigma*10);
+        ctx.strokeStyle=`rgba(${brightness},${140+sigma*8},${220-sigma*10},0.8)`;
+        ctx.lineWidth=2;
+        ctx.stroke();
+    }
+    
+    // Свечение материала
+    for(let i=0;i<numSegments;i++){
+        const t=i/numSegments;
+        const c=getGuideCenter(t);
+        const glowAlpha=0.03+sigma*0.008;
+        const brightness=Math.floor(150+sigma*10);
+        ctx.strokeStyle=`rgba(${brightness},${140+sigma*8},${220-sigma*10},${glowAlpha})`;
+        ctx.lineWidth=guideHalfWidth*2.5;
+        ctx.beginPath();
+        ctx.moveTo(c.x,c.y-guideHalfWidth);
+        ctx.lineTo(c.x,c.y+guideHalfWidth);
+        ctx.stroke();
+    }
+    
+    // Обновление частиц
+    for(const p of particles){
+        const t=(p.x-guideStartX)/(guideEndX-guideStartX);
+        const inGuideX=p.x>=guideStartX&&p.x<=guideEndX;
+        
+        if(inGuideX&&!p.escaped){
+            const c=getGuideCenter(Math.max(0,Math.min(1,t)));
+            const distFromCenter=p.y-c.y;
+            
+            if(Math.abs(distFromCenter)<guideHalfWidth){
+                p.inGuide=true;
+                p.vx=1.5;
+                const wallForce=distFromCenter/(guideHalfWidth*0.5);
+                p.vy+=-wallForce*0.3-p.vy*0.1;
+                p.y+=(c.y-p.y)*0.05;
+                
+                // Утечка на изгибе (проверяем только один раз при входе в зону)
+                if(bendDeg>0 && !p.leakChecked){
+                    const bendMid=0.5;
+                    const distFromBendMid=Math.abs(t-bendMid);
+                    const bendZone=0.25;
+                    if(distFromBendMid<bendZone){
+                        const bendIntensity=1-distFromBendMid/bendZone;
+                        const leakChance=bendIntensity*bendDeg/(sigma*60);
+                        if(Math.random()<leakChance){
+                            p.escaped=true;
+                            const sign=p.y>c.y?1:-1;
+                            p.vy=sign*(2+Math.random()*3);
+                            p.vx*=0.5;
+                        }
+                        p.leakChecked=true;
+                    }
+                }
+            }else{
+                if(p.inGuide){
+                    const lossChance=0.5/(sigma+0.1);
+                    if(Math.random()<lossChance){
+                        p.escaped=true;
+                        p.vx*=0.3;
+                    }else{
+                        p.vy*=-0.7;
+                    }
+                }
+            }
+        }else if(p.x>guideEndX&&p.inGuide){
+            p.inGuide=false;
+        }
+        
+        if(!p.inGuide&&!p.escaped){
+            p.vx=0.5+Math.random()*0.5;
+            p.vy+=(Math.random()-0.5)*0.5;
+        }
+        
+        p.x+=p.vx;
+        p.y+=p.vy;
+        p.vy*=0.98;
+        
+        if(p.escaped){
+            p.vy+=p.vy>0?0.1:-0.1;
+            p.vx*=0.95;
+        }
+        
+        if(p.x>w+20||p.x<-20||p.y>h+20||p.y<-20){
+            p.x=Math.random()*w*0.12;
+            p.y=h*0.3+Math.random()*h*0.4;
+            p.vx=0;p.vy=0;
+            p.inGuide=false;p.escaped=false;
+            p.leakChecked=false;
+        }
+    }
+    
+    // Рисуем частицы
+    for(const p of particles){
+        let alpha,size;
+        if(p.inGuide){
+            alpha=0.5+sigma*0.05;
+            size=2+sigma*0.3;
+        }else if(p.escaped){
+            alpha=0.1;
+            size=1;
+        }else{
+            alpha=0.2;
+            size=1.5;
+        }
+        alpha*=0.6+0.4*Math.sin(p.x*0.1+time*4+p.life*10);
+        ctx.fillStyle=getQSColor(qs,alpha);
+        ctx.beginPath();ctx.arc(p.x,p.y,size,0,Math.PI*2);ctx.fill();
+    }
+    
+    // Подписи
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.font='14px Georgia,serif';
+    ctx.textAlign='center';
+    ctx.fillText('Вход Qₛ →',guideStartX-40,guideCenterY-50);
+    ctx.fillText('→ Выход Qₛ',guideEndX+40,guideCenterY-50);
+    
+    const cMid=getGuideCenter(0.5);
+    ctx.fillText(matNames[sigma],cMid.x,guideCenterY-80);
+    
+    // Потери снаружи
+    for(let i=0;i<20;i++){
+        const seed=i*123.456+time*0.5;
+        const px=guideStartX+((seed*76.543)%(guideEndX-guideStartX));
+        const py=guideCenterY+(Math.random()-0.5)*140;
+        const alpha=0.03+0.03*Math.sin(time*3+seed);
+        ctx.fillStyle=`rgba(255,100,50,${alpha})`;
+        ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();
+    }
+    ctx.fillText('Потери Qₛ',guideStartX+guideHalfWidth+70,guideCenterY+80);
+    
+    animId=requestAnimationFrame(drawFrame);
+}
+
+drawFrame();
+window.addEventListener('beforeunload',()=>{if(animId)cancelAnimationFrame(animId);});
+</script>
+
+</body>
+</html>

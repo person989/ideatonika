@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта Сайта • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 1000px; width: 100%; position: relative; z-index: 1; }
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 { font-size: 3.5rem; font-weight: 400; letter-spacing: 4px; color: #ffd54f; text-shadow: 0 0 20px rgba(255,215,80,0.3); margin-bottom: 0.5rem; }
+        .hero .subtitle { font-size: 1.2rem; color: #c0b090; font-style: italic; }
+        .hero .epigraph { margin-top: 1rem; color: #a09080; font-size: 1rem; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .card {
+            background: rgba(30,40,60,0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 20px;
+            padding: 1.8rem; transition: transform 0.2s, border-color 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .card:hover { transform: translateY(-3px); border-color: #ffd54f; }
+        .card-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+        .card h3 { color: #ffd54f; font-size: 1.3rem; margin-bottom: 0.8rem; font-weight: 400; }
+        .card p { color: #d0c8b8; font-size: 0.9rem; line-height: 1.5; margin-bottom: 1.2rem; flex-grow: 1; }
+        .card a {
+            display: inline-block; color: #ffd54f; text-decoration: none;
+            border: 1px solid #ffd54f; padding: 0.5rem 1.2rem; border-radius: 20px;
+            font-size: 0.85rem; transition: 0.2s; text-align: center;
+        }
+        .card a:hover { background: #ffd54f; color: #1a1a2e; }
+
+        .back-link { display: inline-block; margin-top: 1rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>🗺️ КАРТА САЙТА</h1>
+        <div class="subtitle">Выберите свой вопрос — и мы приведём вас к ответу</div>
+        <div class="epigraph">✧ «Не знаешь, с чего начать? Начни с вопроса.» ✧</div>
+    </div>
+
+    <div class="grid">
+
+        <!-- Карточка 1 -->
+        <div class="card">
+            <div class="card-icon">😰</div>
+            <h3>Почему мне тревожно?</h3>
+            <p>Узнайте про семантический шум (S_noise), как новости и соцсети разрушают ваше поле, и как это исправить.</p>
+            <a href="учебник-идеатоники.html?page=47">📖 §44. Семантическая диета</a>
+            <a href="test-ts.html" style="margin-top: 0.5rem;">🌡️ Тест: Лёд или Пламя?</a>
+        </div>
+
+        <!-- Карточка 2 -->
+        <div class="card">
+            <div class="card-icon">🏠</div>
+            <h3>Почему в одном месте легко, а в другом давит?</h3>
+            <p>Узнайте про семантическое сопротивление (R_sense), как бетон и пластик истощают вас, а дерево и камень — исцеляют.</p>
+            <a href="учебник-идеатоники.html?page=46">📖 §43. Городская идеатоника</a>
+            <a href="таблица-материалов.html" style="margin-top: 0.5rem;">📊 Таблица Материалов</a>
+        </div>
+
+        <!-- Карточка 3 -->
+        <div class="card">
+            <div class="card-icon">🎯</div>
+            <h3>Как повысить концентрацию?</h3>
+            <p>Узнайте про когерентность (Cₛ), почему вы отвлекаетесь и как войти в состояние «потока».</p>
+            <a href="учебник-идеатоники.html?page=112">📖 §108. Когерентность Cₛ</a>
+            <a href="test-cs.html" style="margin-top: 0.5rem;">🎯 Тест: Лазер или Лампочка?</a>
+        </div>
+
+        <!-- Карточка 4 -->
+        <div class="card">
+            <div class="card-icon">🍽️</div>
+            <h3>Почему бабушкина еда вкуснее?</h3>
+            <p>Узнайте про семантический заряд пищи (Qₛ), как намерение повара меняет качество еды.</p>
+            <a href="учебник-идеатоники.html?page=126">📖 §122. Семантическая гастрономия</a>
+            <a href="таблица-еды.html" style="margin-top: 0.5rem;">🍎 Таблица Еды</a>
+        </div>
+
+        <!-- Карточка 5 -->
+        <div class="card">
+            <div class="card-icon">🙏</div>
+            <h3>Работает ли молитва?</h3>
+            <p>Узнайте про коллективную когерентность (C_collective), эффект N² и почему «где двое или трое» — это физика.</p>
+            <a href="учебник-идеатоники.html?page=32">📖 §30. Молитва и вера</a>
+            <a href="учебник-идеатоники.html?page=96">📖 §92. Интерференция</a>
+        </div>
+
+        <!-- Карточка 6 -->
+        <div class="card">
+            <div class="card-icon">🔮</div>
+            <h3>Почему я чувствую то, чего не вижу?</h3>
+            <p>Узнайте про семантическую чувствительность (χ), интуицию, эмпатию, чувство взгляда и вещие сны.</p>
+            <a href="учебник-идеатоники.html?page=59">📖 §55. Телепатия</a>
+            <a href="test-chi.html" style="margin-top: 0.5rem;">🔮 Тест: Чувствуете ли вы невидимое?</a>
+        </div>
+
+        <!-- Карточка 7 -->
+        <div class="card">
+            <div class="card-icon">🧹</div>
+            <h3>Как очистить дом от плохой энергии?</h3>
+            <p>Узнайте про семантическую гигиену, почему соль и шунгит работают, и как сделать дом «Храмом».</p>
+            <a href="учебник-идеатоники.html?page=132">📖 §128. Топология жилища</a>
+            <a href="calculator-environment.html" style="margin-top: 0.5rem;">🏠 Калькулятор Ранга Окружения</a>
+        </div>
+        
+        <!-- Карточка 9 -->
+<div class="card">
+    <div class="card-icon">🔥</div>
+    <h3>Как появляется Благодатный Огонь?</h3>
+    <p>Узнайте про семантический резонанс — как коллективная молитва в точке максимальной святости меняет свойства реальности.</p>
+    <a href="учебник-идеатоники.html?page=52">📖 §49.1. Благодатный Огонь</a>
+    <a href="учебник-идеатоники.html?page=53">📖 §49.2. Благодатный Огонь</a>
+</div>
+
+<!-- Карточка 10 -->
+<div class="card">
+    <div class="card-icon">👻</div>
+    <h3>Существуют ли призраки?</h3>
+    <p>Узнайте про незатухающие семантические следы — как сильные эмоции «впечатываются» в пространство.</p>
+    <a href="учебник-идеатоники.html?page=61">📖 §57. Призраки и привидения</a>
+</div>
+
+<!-- Карточка 11 -->
+<div class="card">
+    <div class="card-icon">🪐</div>
+    <h3>Почему гороскопы иногда сбываются?</h3>
+    <p>Узнайте про семантический резонанс с архетипическими частотами — как карты и планеты работают «антеннами».</p>
+    <a href="учебник-идеатоники.html?page=25">📖 §23. Таро, гороскопы и астрология</a>
+</div>
+
+<!-- Карточка 12 -->
+<div class="card">
+    <div class="card-icon">🧠</div>
+    <h3>Можно ли силой мысли сдвинуть предмет?</h3>
+    <p>Узнайте про Семантический Экран — почему телекинез почти невозможен, но теоретически реален.</p>
+    <a href="учебник-идеатоники.html?page=13">📖 §11. Семантический Экран и телекинез</a>
+</div>
+
+<!-- Карточка 13 -->
+<div class="card">
+    <div class="card-icon">👁️</div>
+    <h3>Почему мы чувствуем взгляд в спину?</h3>
+    <p>Узнайте про семантический луч внимания — как чужое внимание реально «касается» вашего поля.</p>
+    <a href="учебник-идеатоники.html?page=27">📖 §25. Семантический луч внимания</a>
+</div>
+
+<!-- Карточка 14 -->
+<div class="card">
+    <div class="card-icon">🔄</div>
+    <h3>Почему мы видим один и тот же сон с другим человеком?</h3>
+    <p>Узнайте про семантическую запутанность — как поля близких людей связаны невидимой нитью.</p>
+    <a href="учебник-идеатоники.html?page=108">📖 §104. Семантическая запутанность</a>
+</div>
+
+<!-- Карточка 15 -->
+<div class="card">
+    <div class="card-icon">💧</div>
+    <h3>Почему иконы «плачут»?</h3>
+    <p>Узнайте про семантическую конденсацию — как смысл превращается в вещество при критической плотности Qₛ.</p>
+    <a href="учебник-идеатоники.html?page=54">📖 §50. Мироточение икон</a>
+</div>
+
+<!-- Карточка 16 -->
+<div class="card">
+    <div class="card-icon">🕊️</div>
+    <h3>Почему тело святого не разлагается?</h3>
+    <p>Узнайте про остановку семантического времени — как экстремальная когерентность «замораживает» материю.</p>
+    <a href="учебник-идеатоники.html?page=55">📖 §51. Нетленные мощи</a>
+</div>
+
+<!-- Карточка 17 -->
+<div class="card">
+    <div class="card-icon">🗿</div>
+    <h3>Что такое круги на полях?</h3>
+    <p>Узнайте про семантические фрактальные проекции — как архетипические узоры проступают в материи.</p>
+    <a href="учебник-идеатоники.html?page=71">📖 §67. Круги на полях</a>
+</div>
+
+<!-- Карточка 18 -->
+<div class="card">
+    <div class="card-icon">🛸</div>
+    <h3>Почему интуиция работает?</h3>
+    <p>Узнайте про ретроградные семантические волны — как будущие события «шепчут» нам о себе заранее.</p>
+    <a href="учебник-идеатоники.html?page=79">📖 §75. Коллективные предчувствия</a>
+</div>
+
+<!-- Карточка 19 -->
+<div class="card">
+    <div class="card-icon">🥪</div>
+    <h3>Почему бутерброд всегда падает маслом вниз? (Закон подлости)</h3>
+    <p>Узнайте про семантическую инверсию ожиданий — почему слишком сильное желание даёт обратный результат.</p>
+    <a href="учебник-идеатоники.html?page=81">📖 §77. Закон подлости</a>
+</div>
+
+<!-- Карточка 20 -->
+<div class="card">
+    <div class="card-icon">🃏</div>
+    <h3>Почему карты Таро говорят правду?</h3>
+    <p>Узнайте про семантический резонанс с архетипами — как расклад становится «зеркалом» вашего поля.</p>
+    <a href="учебник-идеатоники.html?page=25">📖 §23. Таро и гороскопы</a>
+</div>
+
+<!-- Карточка 21 -->
+<div class="card">
+    <div class="card-icon">💀</div>
+    <h3>Почему снятся вещие сны?</h3>
+    <p>Узнайте про онейросемантику — как во сне ваше поле путешествует по ноосфере и считывает вероятности.</p>
+    <a href="учебник-идеатоники.html?page=130">📖 §126. Онейросемантика</a>
+</div>
+
+<!-- Карточка 22 -->
+<div class="card">
+    <div class="card-icon">👶</div>
+    <h3>Почему мать чувствует, что с ребёнком беда?</h3>
+    <p>Узнайте про семантическую запутанность — самую сильную нелокальную связь в природе.</p>
+    <a href="учебник-идеатоники.html?page=28">📖 §26. Связь родных людей</a>
+</div>
+
+<!-- Карточка 23 -->
+<div class="card">
+    <div class="card-icon">🧲</div>
+    <h3>Почему одни люди «притягивают» удачу, а другие — нет?</h3>
+    <p>Узнайте про Qₛ удачи — как ваше семантическое поле резонирует с благоприятными возможностями.</p>
+    <a href="учебник-идеатоники.html?page=21">📖 §19. Везение и удача</a>
+</div>
+
+<!-- Карточка 24 -->
+<div class="card">
+    <div class="card-icon">🔥</div>
+    <h3>Почему люди внезапно самовозгораются?</h3>
+    <p>Узнайте про семантическую пирокинетическую аномалию — как накопленный конфликт превращается в пламя.</p>
+    <a href="учебник-идеатоники.html?page=65">📖 §61. Самовозгорание человека</a>
+</div>
+
+<!-- Карточка 25 -->
+<div class="card">
+    <div class="card-icon">🌀</div>
+    <h3>Как работает гипноз?</h3>
+    <p>Узнайте про семантическую инженерию сознания — как оператор временно меняет Cₛ и Tₛ пациента.</p>
+    <a href="учебник-идеатоники.html?page=26">📖 §24. Гипноз</a>
+</div>
+
+<!-- Карточка 26 -->
+<div class="card">
+    <div class="card-icon">🌍</div>
+    <h3>Почему люди помнят то, чего не было? (Эффект Манделлы)</h3>
+    <p>Узнайте про семантическую интерференцию — как коллективная память «перезаписывается» более заряженным паттерном.</p>
+    <a href="учебник-идеатоники.html?page=30">📖 §28. Эффект Манделлы</a>
+</div>
+
+<!-- Карточка 27 -->
+<div class="card">
+    <div class="card-icon">🔁</div>
+    <h3>Почему возникает дежавю?</h3>
+    <p>Узнайте про сбой семантической маркировки времени — когда текущий момент ошибочно записывается как воспоминание.</p>
+    <a href="учебник-идеатоники.html?page=78">📖 §74. Дежавю и жаме векю</a>
+</div>
+
+<!-- Карточка 28 -->
+<div class="card">
+    <div class="card-icon">🧛</div>
+    <h3>Существуют ли энергетические вампиры?</h3>
+    <p>Узнайте про паразитирование на чужом Qₛ — как люди с низкой Cₛ бессознательно «высасывают» вашу энергию.</p>
+    <a href="учебник-идеатоники.html?page=76">📖 §72. Вампиризм энергетический</a>
+</div>
+
+<!-- Карточка 29 -->
+<div class="card">
+    <div class="card-icon">🧿</div>
+    <h3>Работает ли сглаз и проклятие?</h3>
+    <p>Узнайте про направленный отрицательный Qₛ — как чужая злоба реально «пробивает» ваше поле.</p>
+    <a href="учебник-идеатоники.html?page=60">📖 §56. Проклятия и сглаз</a>
+</div>
+
+<!-- Карточка 30 -->
+<div class="card">
+    <div class="card-icon">🕴️</div>
+    <h3>Возможна ли левитация?</h3>
+    <p>Узнайте про гравитационную семантическую аномалию — как святые «отрывались от земли» в молитвенном экстазе.</p>
+    <a href="учебник-идеатоники.html?page=57">📖 §53. Левитация святых</a>
+</div>
+
+<!-- Карточка 31 -->
+<div class="card">
+    <div class="card-icon">👶</div>
+    <h3>Помнят ли дети свои прошлые жизни?</h3>
+    <p>Узнайте про семантическую преемственность — как поле ребёнка «считывает» чужие следы из ноосферы.</p>
+    <a href="учебник-идеатоники.html?page=62">📖 §58. Реинкарнация</a>
+</div>
+
+<!-- Карточка 32 -->
+<div class="card">
+    <div class="card-icon">🌌</div>
+    <h3>Что такое астральные путешествия?</h3>
+    <p>Узнайте про диссоциацию семантического поля — как сознание временно «отсоединяется» от тела.</p>
+    <a href="учебник-идеатоники.html?page=63">📖 §59. Астральные путешествия</a>
+</div>
+
+<!-- Карточка 33 -->
+<div class="card">
+    <div class="card-icon">✝️</div>
+    <h3>Реальна ли одержимость и работает ли экзорцизм?</h3>
+    <p>Узнайте про захват семантического поля — как чужеродная сущность «оккупирует» сознание.</p>
+    <a href="учебник-идеатоники.html?page=72">📖 §68. Экзорцизм</a>
+</div>
+
+        <!-- Карточка 8 -->
+        <div class="card">
+            <div class="card-icon">📖</div>
+            <h3>Я хочу изучить всё по порядку</h3>
+            <p>Начните с первого параграфа и пройдите весь путь — от азов до квантовой семантики.</p>
+            <a href="учебник-идеатоники.html">📚 Открыть Учебник</a>
+            <a href="практикум-идеатоники.html" style="margin-top: 0.5rem;">🔬 Открыть Практикум</a>
+        </div>
+        
+        <!-- Карточка 9: Доказательная база (новая) -->
+<div class="card" style="border: 2px solid #ffd54f; background: linear-gradient(135deg, rgba(255,215,80,0.15), rgba(30,40,60,0.7));">
+    <div class="card-icon">📊</div>
+    <h3>Это вообще работает? Где доказательства?</h3>
+    <p>Мы собрали реальные научные исследования, которые подтверждают идеи Идеатоники. Принстон, Гарвард, Институт Макса Планка — смотрите сами.</p>
+    <a href="evidence-table.html" style="display: inline-block; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.5rem 1.2rem; border-radius: 20px; font-size: 0.85rem; transition: 0.2s;">📊 Открыть Доказательную базу</a>
+</div>
+
+<!-- Карточка 10: Перспективы Идеатоники -->
+<div class="card" style="border: 2px solid #81c784; background: linear-gradient(135deg, rgba(129,199,132,0.15), rgba(30,40,60,0.7));">
+    <div class="card-icon">🔮</div>
+    <h3>Зачем это учить? Перспективы</h3>
+    <p>Узнайте, какие профессии будущего потребуют знания Идеатоники. От кулинарии до космоса — почему это перспективно.</p>
+    <a href="perspectives.html" style="display: inline-block; color: #81c784; text-decoration: none; border: 1px solid #81c784; padding: 0.5rem 1.2rem; border-radius: 20px; font-size: 0.85rem; transition: 0.2s;">🔮 Открыть</a>
+</div>
+
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Карта Сайта</p>
+        <p>✧ «Смысл первичен. Материя — его проявление.» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

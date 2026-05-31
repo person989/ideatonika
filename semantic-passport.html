@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантический Паспорт • Идеатоника</title>
+    
+    <!-- Стили -->
+    <style>
+        /* ========== БАЗОВЫЕ СТИЛИ ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            margin-bottom: 2rem;
+        }
+        
+        /* ========== ЗАГОЛОВОК ========== */
+        .passport-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #ffd54f;
+        }
+        .passport-header h1 {
+            font-size: 2.5rem;
+            color: #ffd54f;
+            font-weight: 400;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+        }
+        .passport-header .subtitle {
+            color: #c0b090;
+            font-style: italic;
+            font-size: 1rem;
+        }
+        .passport-header .emblem {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* ========== ПОЛЯ ВВОДА ========== */
+        .personal-data {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            border: 1px solid #5d4a3a;
+        }
+        .personal-data input {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.8rem 1rem;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #5d4a3a;
+            border-radius: 10px;
+            color: #f3e7c0;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+        }
+        .personal-data input::placeholder {
+            color: #706858;
+        }
+        .personal-data label {
+            width: 100%;
+            color: #c0b090;
+            font-size: 0.9rem;
+            margin-bottom: -0.5rem;
+        }
+        
+        /* ========== ТАБЛИЦА РЕЗУЛЬТАТОВ ========== */
+        .results-section {
+            margin-bottom: 2rem;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            color: #ffd54f;
+            margin-bottom: 1rem;
+            border-left: 4px solid #ffd54f;
+            padding-left: 1rem;
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .results-table th {
+            background: #2a2a4a;
+            color: #f3e7c0;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #5d4a3a;
+        }
+        .results-table td {
+            padding: 10px 12px;
+            border: 1px solid #5d4a3a;
+            color: #d0c8b8;
+        }
+        .results-table tr:nth-child(even) td {
+            background: rgba(0,0,0,0.1);
+        }
+        .result-value {
+            font-weight: bold;
+            color: #ffd54f;
+            font-size: 1.1rem;
+        }
+        .result-missing {
+            color: #706858;
+            font-style: italic;
+        }
+        
+        /* ========== КНОПКА ОБНУЛЕНИЯ ========== */
+        .reset-btn {
+            background: transparent;
+            border: 1px solid #ef5350;
+            color: #ef5350;
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+        .reset-btn:hover {
+            background: #ef5350;
+            color: white;
+        }
+        
+        /* ========== ИНТЕГРАЛЬНЫЙ РАНГ ========== */
+        .integral-rank {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: rgba(255,215,80,0.1);
+            border: 2px solid #ffd54f;
+            border-radius: 20px;
+        }
+        .integral-rank .rank-number {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #ffd54f;
+            line-height: 1;
+        }
+        .integral-rank .rank-label {
+            color: #c0b090;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* ========== КНОПКА ПЕЧАТИ ========== */
+        .print-section {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .print-btn {
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: #ffd54f;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .print-btn:hover {
+            background: #ffc107;
+            box-shadow: 0 0 20px rgba(255,215,80,0.5);
+        }
+        .print-btn:disabled {
+            background: #5d4a3a;
+            color: #706858;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .print-hint {
+            color: #a09080;
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            font-style: italic;
+        }
+        
+        /* ========== КНОПКА НАЗАД ========== */
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #ffd54f;
+            text-decoration: none;
+            border: 1px solid #ffd54f;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: #ffd54f;
+            color: #1a1a2e;
+        }
+        
+        /* ========== СТИЛИ ДЛЯ ПЕЧАТИ ========== */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                font-size: 11pt;
+                color: black;
+            }
+            .cosmic-bg { display: none !important; }
+            .main-container {
+                background: white !important;
+                border: none !important;
+                box-shadow: none !important;
+                max-width: 100% !important;
+                padding: 1cm !important;
+                border-radius: 0 !important;
+            }
+            .no-print { display: none !important; }
+            .passport-header h1 { color: #2c1e0e !important; }
+            .passport-header .subtitle { color: #5d4a3a !important; }
+            .section-title { color: #2c1e0e !important; border-left-color: #2c1e0e !important; }
+            .results-table th { background: #e0e0e0 !important; color: black !important; border-color: #999 !important; }
+            .results-table td { color: black !important; border-color: #999 !important; }
+            .result-value { color: black !important; }
+            .result-missing { color: #999 !important; }
+            .integral-rank { border-color: #2c1e0e !important; background: #f5f5f5 !important; }
+            .integral-rank .rank-number { color: #2c1e0e !important; }
+            .integral-rank .rank-label { color: #5d4a3a !important; }
+            .personal-data { background: #f5f5f5 !important; border-color: #999 !important; }
+            .personal-data input { background: white !important; border-color: #999 !important; color: black !important; }
+            .back-link { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+
+<div class="main-container">
+    
+    <!-- Заголовок -->
+    <div class="passport-header">
+        <div class="emblem">🌌</div>
+        <h1>СЕМАНТИЧЕСКИЙ ПАСПОРТ</h1>
+        <div class="subtitle">Идеатоника • Версия 1.0</div>
+    </div>
+    
+    <!-- Поля ввода (одноразовые) -->
+    <div class="personal-data">
+        <label>👤 Владелец паспорта (для печати):</label>
+        <input type="text" id="inputName" placeholder="Ваше имя">
+        <input type="text" id="inputSurname" placeholder="Ваша фамилия">
+        <input type="date" id="inputDate" placeholder="Дата">
+    </div>
+    
+    <!-- Таблица результатов -->
+    <div class="results-section">
+        <div class="section-title">📊 Результаты тестов</div>
+        <table class="results-table" id="resultsTable">
+            <thead>
+                <tr>
+                    <th>Тест</th>
+                    <th>Результат</th>
+                    <th class="no-print">Действие</th>
+                </tr>
+            </thead>
+            <tbody id="resultsBody">
+                <!-- Заполняется скриптом -->
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Интегральный ранг -->
+    <div class="integral-rank" id="integralRank">
+        <div class="rank-number" id="rankNumber">—</div>
+        <div class="rank-label">Интегральный семантический ранг</div>
+    </div>
+    
+    <!-- Кнопка печати -->
+    <div class="print-section no-print">
+        <button class="print-btn" id="printBtn" disabled onclick="window.print()">
+            🖨️ Распечатать Семантический Паспорт
+        </button>
+        <div class="print-hint" id="printHint"></div>
+    </div>
+    
+    <button class="print-btn" id="saveHistoryBtn" style="display: block; margin: 0 auto 1rem auto; background: #ce93d8; color: #1a1a2e;">
+    📦 Сохранить в Историю
+</button>
+    
+    <!-- Ссылка назад -->
+    <div style="text-align: center;" class="no-print">
+        <a href="diagnostics-hub.html" class="back-link">← Вернуться в Хаб Диагностики</a>
+    </div>
+    
+</div>
+
+<script>
+    
+    // ========== РЕЖИМ ПРОСМОТРА ИЗ ИСТОРИИ ==========
+const urlParams = new URLSearchParams(window.location.search);
+const historyMode = urlParams.get('mode') === 'history';
+
+if (historyMode) {
+    const tempData = localStorage.getItem('ideatonika_temp_passport');
+    if (tempData) {
+        const passportData = JSON.parse(tempData);
+        // Временно подменяем все ключи в localStorage
+        const backup = {};
+        Object.keys(passportData).forEach(k => {
+            backup[k] = localStorage.getItem(k); // сохраняем текущее значение
+            localStorage.setItem(k, passportData[k]); // подставляем историческое
+        });
+        // После загрузки страницы — восстанавливаем
+        window.addEventListener('beforeunload', () => {
+            Object.keys(backup).forEach(k => {
+                if (backup[k] === null) {
+                    localStorage.removeItem(k);
+                } else {
+                    localStorage.setItem(k, backup[k]);
+                }
+            });
+        });
+        // Меняем заголовок
+        window.addEventListener('DOMContentLoaded', () => {
+            const h1 = document.querySelector('h1');
+            if (h1) h1.textContent = '📜 Архивный Паспорт';
+            const subtitle = document.querySelector('.subtitle');
+            if (subtitle) subtitle.textContent = 'Просмотр сохранённой копии • История';
+            // Скрываем кнопки сохранения и обнуления
+            const saveBtn = document.getElementById('saveHistoryBtn');
+            if (saveBtn) saveBtn.style.display = 'none';
+            const printBtn = document.getElementById('printBtn');
+            if (printBtn) {
+                printBtn.textContent = '🖨️ Распечатать архивный Паспорт';
+                printBtn.disabled = false;
+            }
+            const printHint = document.getElementById('printHint');
+            if (printHint) printHint.textContent = '📜 Это архивная копия Паспорта из Истории';
+        });
+    }
+}
+    
+(function() {
+    // ========== СПИСОК ТЕСТОВ (18 штук) ==========
+    const testList = [
+        { key: 'ideatonika_test_qs',       name: '☀️ Qₛ (Свет / Тьма)',           icon: '☀️' },
+        { key: 'ideatonika_test_cs',       name: '🎯 Cₛ (Лазер / Лампочка)',       icon: '🎯' },
+        { key: 'ideatonika_test_ts',       name: '🌡️ Tₛ (Лёд / Пламя)',            icon: '🌡️' },
+        { key: 'ideatonika_test_chi',      name: '🔮 χ (Интуиция)',                 icon: '🔮' },
+        { key: 'ideatonika_test_env',      name: '🏠 Окружение (Храм / Бункер)',    icon: '🏠' },
+        { key: 'ideatonika_test_food',     name: '🍽️ Еда (Светлая / Тёмная)',       icon: '🍽️' },
+        { key: 'ideatonika_test_chrono',   name: '⏰ Хронотип (Жаворонок / Сова)',  icon: '⏰' },
+        { key: 'ideatonika_test_shield',   name: '🛡️ Щит (Защита поля)',           icon: '🛡️' },
+        { key: 'ideatonika_test_dream',    name: '🌙 Сон (Качество)',               icon: '🌙' },
+        { key: 'ideatonika_test_egregor',  name: '🏛️ Эгрегор (Коллективность)',    icon: '🏛️' },
+        { key: 'ideatonika_test_water',    name: '💧 Вода (Живая / Мёртвая)',       icon: '💧' },
+        { key: 'ideatonika_test_material', name: '🧥 Одежда и материалы',           icon: '🧥' },
+        { key: 'ideatonika_test_color',    name: '🎨 Цвет (Спектр души)',           icon: '🎨' },
+        { key: 'ideatonika_test_sound',    name: '🎵 Звук (Частота души)',          icon: '🎵' },
+        { key: 'ideatonika_test_ritual',   name: '🕯️ Ритуалы (Порядок / Хаос)',    icon: '🕯️' },
+        { key: 'ideatonika_test_archetype',name: '🎭 Архетип (Ваш Дар)',            icon: '🎭' },
+        { key: 'ideatonika_test_circle',   name: '👥 Круг (Окружение люди)',        icon: '👥' },
+        { key: 'ideatonika_test_path',     name: '🧭 Путь (Вектор θₜ)',             icon: '🧭' }
+    ];
+    
+    let completedCount = 0;
+    let totalNumericSum = 0;
+    let totalNumericCount = 0;
+    
+    const tbody = document.getElementById('resultsBody');
+    const printBtn = document.getElementById('printBtn');
+    const printHint = document.getElementById('printHint');
+    const rankNumber = document.getElementById('rankNumber');
+    
+    // ========== ЗАПОЛНЕНИЕ ТАБЛИЦЫ ==========
+    testList.forEach(test => {
+        const raw = localStorage.getItem(test.key);
+        const tr = document.createElement('tr');
+        
+        // Название теста
+        const tdName = document.createElement('td');
+        tdName.textContent = test.name;
+        tr.appendChild(tdName);
+        
+        // Результат
+        const tdValue = document.createElement('td');
+        if (raw !== null) {
+            tdValue.textContent = raw;
+            tdValue.className = 'result-value';
+            completedCount++;
+            
+            // Пробуем извлечь число для расчёта ранга
+            const num = parseFloat(raw);
+            if (!isNaN(num)) {
+                totalNumericSum += num;
+                totalNumericCount++;
+            }
+        } else {
+            tdValue.textContent = '—';
+            tdValue.className = 'result-missing';
+        }
+        tr.appendChild(tdValue);
+        
+        // Кнопка обнуления
+        const tdAction = document.createElement('td');
+        tdAction.className = 'no-print';
+        const resetBtn = document.createElement('button');
+        resetBtn.textContent = '🗑️ Обнулить';
+        resetBtn.className = 'reset-btn';
+        resetBtn.addEventListener('click', function() {
+            if (confirm(`Вы точно хотите обнулить результат теста "${test.name}"?`)) {
+                localStorage.removeItem(test.key);
+                location.reload(); // Перезагружаем страницу, чтобы обновить всё
+            }
+        });
+        tdAction.appendChild(resetBtn);
+        tr.appendChild(tdAction);
+        
+        tbody.appendChild(tr);
+    });
+    
+    // ========== АКТИВАЦИЯ КНОПКИ ПЕЧАТИ ==========
+    const remaining = 18 - completedCount;
+    if (remaining === 0) {
+        printBtn.disabled = false;
+        printHint.textContent = '✅ Все тесты пройдены! Вы можете распечатать Паспорт.';
+        printHint.style.color = '#81c784';
+    } else {
+        printBtn.disabled = true;
+        printHint.textContent = `⚠️ Чтобы распечатать Паспорт, пройдите все 18 тестов. Осталось: ${remaining}`;
+        printHint.style.color = '#ef5350';
+    }
+    
+    // ========== РАСЧЁТ ИНТЕГРАЛЬНОГО РАНГА ==========
+    if (totalNumericCount > 0) {
+        const avg = totalNumericSum / totalNumericCount;
+        const rounded = Math.round(avg * 10) / 10;
+        rankNumber.textContent = (rounded >= 0 ? '+' : '') + rounded;
+    } else {
+        rankNumber.textContent = '—';
+    }
+    
+    // ========== ПРЕДЗАПОЛНЕНИЕ ДАТЫ ==========
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('inputDate').value = today;
+    
+    // ========== СОХРАНЕНИЕ В ИСТОРИЮ ==========
+document.getElementById('saveHistoryBtn').addEventListener('click', () => {
+    if (!confirm('Результаты ВСЕХ тестов будут сохранены в Историю и удалены из текущего Паспорта. Продолжить?')) return;
+    if (!confirm('Подтвердите: после сохранения вам нужно будет пройти тесты заново для нового Паспорта.')) return;
+
+    // Собираем все 18 ключей
+    const testKeys = [
+        'ideatonika_test_qs', 'ideatonika_test_cs', 'ideatonika_test_ts',
+        'ideatonika_test_chi', 'ideatonika_test_env',
+        'ideatonika_test_food', 'ideatonika_test_chrono', 'ideatonika_test_shield',
+        'ideatonika_test_dream', 'ideatonika_test_egregor', 'ideatonika_test_water',
+        'ideatonika_test_material', 'ideatonika_test_color', 'ideatonika_test_sound',
+        'ideatonika_test_ritual', 'ideatonika_test_archetype', 'ideatonika_test_circle',
+        'ideatonika_test_path'
+    ];
+    const passportData = {};
+    testKeys.forEach(k => {
+        const val = localStorage.getItem(k);
+        if (val !== null) passportData[k] = val;
+    });
+
+    // Вычисляем интегральный ранг
+    const rank = calculateIntegralRank(passportData);
+    if (rank === null) { alert('Нет данных для сохранения.'); return; }
+
+    // Сохраняем в профиль
+    const profileRaw = localStorage.getItem('ideatonika_user_profile');
+    const profile = profileRaw ? JSON.parse(profileRaw) : {};
+    if (!profile.passportHistory) profile.passportHistory = [];
+    profile.passportHistory.push({
+        date: new Date().toISOString(),
+        rank: rank,
+        passportData: passportData
+    });
+    localStorage.setItem('ideatonika_user_profile', JSON.stringify(profile));
+
+    // Удаляем все 18 ключей
+    testKeys.forEach(k => localStorage.removeItem(k));
+
+    alert('✅ Паспорт сохранён в Историю! Результаты тестов удалены. Можете пройти тесты заново.');
+    location.reload();
+});
+
+function calculateIntegralRank(data) {
+    let sum = 0, count = 0;
+    Object.values(data).forEach(v => {
+        const num = parseFloat(v);
+        if (!isNaN(num)) { sum += num; count++; }
+    });
+    return count > 0 ? Math.round((sum / count) * 10) / 10 : null;
+}
+    
+})();
+</script>
+
+</body>
+</html>
