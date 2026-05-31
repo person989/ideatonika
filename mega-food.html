@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мега-тест: Светлая или Тёмная еда? • Архив Ноосферы</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+            transition: background 0.5s ease;
+        }
+        .cosmic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .test-container {
+            max-width: 750px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+        .test-header { text-align: center; margin-bottom: 2rem; }
+        .test-header h1 {
+            font-size: 2.2rem; color: #f3e7c0; margin-bottom: 0.5rem;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1.5rem 0; }
+        .progress-fill { height: 100%; background: #ffd54f; border-radius: 3px; width: 0%; transition: width 0.3s ease; }
+        .progress-text { text-align: right; color: #a09080; font-size: 0.8rem; margin-top: 0.3rem; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.3rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option {
+            background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 0.9rem 1.2rem; cursor: pointer; transition: all 0.2s ease;
+            color: #d0c8b8; display: flex; align-items: center; gap: 12px;
+        }
+        .option:hover { background: rgba(255,215,80,0.15); border-color: #ffd54f; }
+        .option.selected { background: rgba(255,215,80,0.25); border-color: #ffd54f; color: #f3e7c0; }
+        .option-marker {
+            width: 24px; height: 24px; border-radius: 50%; border: 2px solid #5d4a3a;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
+        }
+        .option.selected .option-marker { border-color: #ffd54f; background: #ffd54f; box-shadow: 0 0 10px #ffd54f; }
+        .option.selected .option-marker::after { content: "✓"; color: #1a1a2e; font-weight: bold; }
+        .option-text { flex: 1; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 15px; }
+        .btn {
+            background: transparent; border: 1.5px solid #ffd54f; color: #ffd54f;
+            padding: 0.7rem 1.5rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit;
+        }
+        .btn:hover { background: #ffd54f; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-secondary { border-color: #5d4a3a; color: #a09080; }
+        .btn-secondary:hover { background: #5d4a3a; color: #d0c8b8; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 6rem; font-weight: bold; margin: 1rem 0; line-height: 1; }
+        .result-scale { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .result-comment { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 1.5rem; margin: 1.5rem 0; line-height: 1.6; }
+        .result-advice { padding: 1.2rem 1.5rem; border-radius: 0 12px 12px 0; text-align: left; margin-top: 1.5rem; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body id="mainBody">
+<div class="cosmic-bg"></div>
+<div class="test-container" id="testContainer">
+
+    <div class="test-header">
+        <h1><span>🍽️</span><span id="testTitle">Мега-тест: Светлая или Тёмная еда?</span><span>🍽️</span></h1>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Вопрос 1 из 30</div>
+    </div>
+
+    <div id="questionContainer"></div>
+
+    <div class="nav-buttons">
+        <button class="btn btn-secondary" id="prevBtn" disabled>← Назад</button>
+        <button class="btn btn-secondary" id="exitBtn">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="hidden-tests.html" class="back-link">← Вернуться к списку тестов</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const questions = [
+            // 30 вопросов, у каждого ровно 10 вариантов
+            { text: "Что вы едите на завтрак чаще всего?", options: [
+                { text: "Ничего не ем до обеда.", value: -2 },
+                { text: "Быстрые хлопья с молоком или бутерброд.", value: -1 },
+                { text: "Каша быстрого приготовления из пакетика.", value: 0 },
+                { text: "Яичница или омлет с овощами.", value: 3 },
+                { text: "Домашняя каша (овсянка, гречка) с ягодами.", value: 5 },
+                { text: "Домашний йогурт с орехами и мёдом.", value: 6 },
+                { text: "Свежие фрукты, орехи, травяной чай.", value: 7 },
+                { text: "Цельнозерновой хлеб с авокадо и зеленью.", value: 8 },
+                { text: "Свежевыжатый сок, проростки, суперфуды.", value: 9 },
+                { text: "Осознанный завтрак с молитвой и благодарностью.", value: 10 }
+            ]},
+            { text: "Как часто вы едите фастфуд (бургеры, картошку фри, пиццу и т.п.)?", options: [
+                { text: "Почти каждый день.", value: -5 },
+                { text: "3-4 раза в неделю.", value: -4 },
+                { text: "1-2 раза в неделю.", value: -2 },
+                { text: "Пару раз в месяц.", value: 0 },
+                { text: "Раз в месяц.", value: 1 },
+                { text: "Раз в несколько месяцев.", value: 2 },
+                { text: "Только по праздникам или в поездках.", value: 3 },
+                { text: "Почти никогда, я избегаю фастфуда.", value: 5 },
+                { text: "Я не ем фастфуд принципиально.", value: 7 },
+                { text: "Я даже не помню, когда в последний раз ел(а) фастфуд.", value: 10 }
+            ]},
+            { text: "Как часто вы едите свежие овощи и фрукты?", options: [
+    { text: "Почти никогда. Овощи — это невкусно.", value: -5 },
+    { text: "Очень редко, раз в несколько недель.", value: -3 },
+    { text: "Редко, пару раз в неделю.", value: -2 },
+    { text: "Стараюсь съедать хотя бы один фрукт в день.", value: 0 },
+    { text: "Каждый день ем хотя бы порцию овощей.", value: 3 },
+    { text: "2-3 порции свежих овощей и фруктов ежедневно.", value: 5 },
+    { text: "Овощи — основа моего рациона.", value: 7 },
+    { text: "Я ем много сырых овощей, зелени, проростков.", value: 8 },
+    { text: "Большую часть моей еды составляют живые растения.", value: 9 },
+    { text: "Я ем только то, что растёт под солнцем и даёт энергию.", value: 10 }
+]},
+            { text: "Сколько сладкого (конфеты, торты, пирожные) вы едите?", options: [
+                { text: "Каждый день и много.", value: -5 },
+                { text: "Почти каждый день понемногу.", value: -3 },
+                { text: "Несколько раз в неделю.", value: -1 },
+                { text: "Пару раз в неделю.", value: 0 },
+                { text: "Раз в неделю.", value: 1 },
+                { text: "Редко, в основном по праздникам.", value: 2 },
+                { text: "Я заменил(а) сладости на фрукты и мёд.", value: 4 },
+                { text: "Очень редко, я не люблю сладкое.", value: 6 },
+                { text: "Я не ем промышленные сладости вообще.", value: 8 },
+                { text: "Сладость для меня — это вкус жизни, но я беру её из фруктов.", value: 10 }
+            ]},
+            { text: "Какую воду вы пьёте чаще всего?", options: [
+                { text: "Сладкую газировку (кола, лимонады).", value: -5 },
+                { text: "Водопроводную воду без фильтра.", value: -2 },
+                { text: "Фильтрованную или бутилированную воду.", value: 0 },
+                { text: "Кипячёную воду.", value: 1 },
+                { text: "Покупаю качественную бутилированную воду.", value: 2 },
+                { text: "Родниковую воду, когда есть возможность.", value: 4 },
+                { text: "Пью структурированную или талую воду.", value: 6 },
+                { text: "Использую фильтр с минерализацией.", value: 7 },
+                { text: "Пью только живую, природную воду.", value: 9 },
+                { text: "Я заряжаю воду Светом и благодарностью перед тем, как пить.", value: 10 }
+            ]},
+            { text: "Как часто вы едите домашнюю еду, приготовленную с нуля?", options: [
+                { text: "Никогда, я питаюсь только готовым или в кафе.", value: -5 },
+                { text: "Очень редко, раз в неделю.", value: -2 },
+                { text: "Пару раз в неделю.", value: 0 },
+                { text: "Через день.", value: 2 },
+                { text: "Почти каждый день.", value: 4 },
+                { text: "Каждый день, я люблю готовить.", value: 6 },
+                { text: "Я готовлю только из свежих продуктов.", value: 7 },
+                { text: "Я готовлю осознанно, с любовью и вниманием.", value: 8 },
+                { text: "Моя кухня — это алтарь, а готовка — медитация.", value: 9 },
+                { text: "Каждое блюдо я готовлю как подношение Свету.", value: 10 }
+            ]},
+            { text: "Как часто вы едите мясо и продукты животного происхождения?", options: [
+                { text: "Каждый день и много.", value: -3 },
+                { text: "Почти каждый день.", value: -1 },
+                { text: "Несколько раз в неделю.", value: 0 },
+                { text: "Пару раз в неделю.", value: 1 },
+                { text: "Раз в неделю.", value: 2 },
+                { text: "Только рыбу и яйца.", value: 3 },
+                { text: "Я почти вегетарианец, иногда ем яйца.", value: 5 },
+                { text: "Я вегетарианец.", value: 7 },
+                { text: "Я веган.", value: 9 },
+                { text: "Я ем только живую, растительную пищу, благословляя её.", value: 10 }
+            ]},
+            { text: "Как вы относитесь к еде во время стресса или грусти?", options: [
+                { text: "Заедаю стресс всем подряд, особенно сладким.", value: -5 },
+                { text: "Ем больше обычного, это успокаивает.", value: -3 },
+                { text: "Иногда срываюсь на вредную еду.", value: -1 },
+                { text: "Стараюсь держаться, но бывает.", value: 0 },
+                { text: "В стрессе аппетит пропадает.", value: 1 },
+                { text: "Пью воду или травяной чай, чтобы успокоиться.", value: 2 },
+                { text: "В грусти я выбираю лёгкую, живую пищу.", value: 4 },
+                { text: "Я не связываю еду и эмоции.", value: 6 },
+                { text: "В трудные времена я ем ещё осознаннее.", value: 8 },
+                { text: "Я благодарю еду за поддержку, но не завишу от неё.", value: 10 }
+            ]},
+            { text: "Что для вас важнее всего в еде?", options: [
+                { text: "Чтобы было быстро, дёшево и сытно.", value: -5 },
+                { text: "Чтобы было вкусно, остальное не важно.", value: -3 },
+                { text: "Калорийность и состав.", value: 0 },
+                { text: "Свежесть и натуральность продуктов.", value: 2 },
+                { text: "Польза для здоровья.", value: 4 },
+                { text: "Вкус и польза в балансе.", value: 5 },
+                { text: "Энергия, которую несёт еда.", value: 7 },
+                { text: "Происхождение продуктов и способ приготовления.", value: 8 },
+                { text: "Смысл, вложенный в еду поваром.", value: 9 },
+                { text: "Свет и Любовь, которые еда передаёт моей душе.", value: 10 }
+            ]},
+            { text: "Как часто вы перекусываете между основными приёмами пищи?", options: [
+                { text: "Постоянно жую что-то.", value: -4 },
+                { text: "Часто перекусываю чипсами, сухариками.", value: -3 },
+                { text: "Перекусываю печеньем или бутербродами.", value: -1 },
+                { text: "Иногда перекусываю, но не регулярно.", value: 0 },
+                { text: "Перекусываю фруктами или орехами.", value: 3 },
+                { text: "Обычно не перекусываю, хватает основных приёмов.", value: 5 },
+                { text: "Слежу, чтобы перекусы были полезными.", value: 6 },
+                { text: "Практически не перекусываю.", value: 7 },
+                { text: "Я ем только тогда, когда по-настоящему голоден.", value: 9 },
+                { text: "Моё тело само знает, когда и что ему нужно.", value: 10 }
+            ]},
+            // Вопросы 11-20
+            { text: "Какую кухню вы предпочитаете?", options: [
+                { text: "Фастфуд.", value: -5 },
+                { text: "Жирную, жареную, острую.", value: -3 },
+                { text: "Традиционную, без изысков.", value: 0 },
+                { text: "Домашнюю, простую и сытную.", value: 2 },
+                { text: "Средиземноморскую.", value: 4 },
+                { text: "Азиатскую, с рисом и овощами.", value: 5 },
+                { text: "Вегетарианскую.", value: 7 },
+                { text: "Сыроедческую.", value: 8 },
+                { text: "Аюрведическую.", value: 9 },
+                { text: "Ту, что готовится с Любовью — неважно, какой кухни.", value: 10 }
+            ]},
+            { text: "Как вы относитесь к генетически модифицированным продуктам (ГМО)?", options: [
+    { text: "Мне всё равно, что есть. Я не читаю этикетки.", value: -5 },
+    { text: "Я не задумываюсь об этом. Ем что дают.", value: -3 },
+    { text: "Слышал(а) что-то, но не обращаю внимания.", value: -1 },
+    { text: "Стараюсь избегать, но не всегда получается.", value: 0 },
+    { text: "Иногда проверяю продукты на наличие ГМО.", value: 1 },
+    { text: "Читаю этикетки, выбираю без ГМО.", value: 3 },
+    { text: "Покупаю organic продукты, когда могу себе позволить.", value: 5 },
+    { text: "Принципиально избегаю ГМО во всех продуктах.", value: 7 },
+    { text: "Я сам(а) выращиваю часть еды, чтобы быть уверенным(ой).", value: 9 },
+    { text: "Я ем только то, что создано природой, без вмешательства человека.", value: 10 }
+]},
+            { text: "Как вы относитесь к еде, приготовленной другими людьми?", options: [
+    { text: "Ем всё, не задумываясь. Какая разница, кто готовил.", value: -5 },
+    { text: "Мне всё равно, лишь бы было съедобно.", value: -3 },
+    { text: "Мне важно, чтобы было чисто и аккуратно.", value: 0 },
+    { text: "Предпочитаю еду, приготовленную близкими.", value: 2 },
+    { text: "Я чувствую, с каким настроением готовили.", value: 4 },
+    { text: "Избегаю еды от людей, которые мне неприятны.", value: 5 },
+    { text: "Могу есть только от тех, кому доверяю.", value: 6 },
+    { text: "Для меня важно, кто готовил и с каким намерением.", value: 8 },
+    { text: "Я принимаю пищу только из рук осознанных людей.", value: 9 },
+    { text: "Я благословляю любую еду, и она становится Светом.", value: 10 }
+]},
+           { text: "Как вы выбираете продукты в магазине?", options: [
+    { text: "Хватаю первое, что вижу, не глядя.", value: -5 },
+    { text: "Смотрю только на цену — что дешевле, то и беру.", value: -3 },
+    { text: "Смотрю на срок годности, чтобы не испортилось.", value: -1 },
+    { text: "Читаю состав, избегаю явной химии.", value: 1 },
+    { text: "Выбираю продукты без искусственных добавок и красителей.", value: 3 },
+    { text: "Покупаю organic и local продукты, когда есть возможность.", value: 5 },
+    { text: "Хожу на рынок за свежими фермерскими продуктами.", value: 6 },
+    { text: "Я чувствую энергию продукта, прежде чем положить его в корзину.", value: 8 },
+    { text: "Я спрашиваю у продукта, нужен ли он мне, и слушаю ответ.", value: 9 },
+    { text: "Я выбираю сердцем. Еда сама меня находит.", value: 10 }
+]},
+            { text: "Как часто вы благодарите еду перед тем, как съесть её?", options: [
+    { text: "Никогда, это глупость.", value: -5 },
+    { text: "Очень редко, в особых случаях.", value: -2 },
+    { text: "Иногда, когда вспоминаю.", value: 0 },
+    { text: "Стараюсь не забывать.", value: 2 },
+    { text: "Часто благодарю, это уже привычка.", value: 4 },
+    { text: "Всегда говорю спасибо перед едой.", value: 6 },
+    { text: "Я читаю молитву или мантру перед каждым приёмом пищи.", value: 7 },
+    { text: "Я медитирую над едой, прежде чем начать есть.", value: 8 },
+    { text: "Каждый кусочек — это акт благодарности Вселенной.", value: 9 },
+    { text: "Моя жизнь — это непрерывная молитва, и еда — её часть.", value: 10 }
+]},
+            { text: "Как вы относитесь к алкоголю?", options: [
+                { text: "Пью часто и много.", value: -5 },
+                { text: "Выпиваю несколько раз в неделю.", value: -3 },
+                { text: "Пью по выходным.", value: -1 },
+                { text: "Иногда позволяю себе бокал вина.", value: 1 },
+                { text: "Только по большим праздникам.", value: 2 },
+                { text: "Очень редко, в символических дозах.", value: 3 },
+                { text: "Я почти не пью.", value: 5 },
+                { text: "Я совсем не пью алкоголь.", value: 7 },
+                { text: "Я считаю, что алкоголь затуманивает Сознание.", value: 9 },
+                { text: "Моя радость не зависит от веществ.", value: 10 }
+            ]},
+            { text: "Как вы относитесь к посту или пищевым ограничениям?", options: [
+                { text: "Это глупости, я ем всё и всегда.", value: -5 },
+                { text: "Не понимаю смысла постов.", value: -2 },
+                { text: "Иногда пробовал(а), но трудно.", value: 0 },
+                { text: "Держу пост пару раз в год по традиции.", value: 2 },
+                { text: "Соблюдаю пост регулярно.", value: 4 },
+                { text: "Пост — это очищение тела и духа.", value: 6 },
+                { text: "Я практикую разные виды голодания.", value: 7 },
+                { text: "Я ем только то, что действительно нужно моему телу.", value: 8 },
+                { text: "Пищевые ограничения — это путь к свободе.", value: 9 },
+                { text: "Я ем, когда голоден(на), и не ем, когда нет.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете после плотного, тяжёлого обеда?", options: [
+    { text: "Тяжесть, сонливость, лень. Еда меня вырубает.", value: -5 },
+    { text: "Сильную усталость, хочется лечь и не вставать.", value: -3 },
+    { text: "Хочется полежать, ничего не делать час-другой.", value: -1 },
+    { text: "Нормально, это просто еда. Ничего особенного.", value: 0 },
+    { text: "Лёгкую сытость и удовлетворение.", value: 2 },
+    { text: "Прилив энергии и хорошее настроение.", value: 4 },
+    { text: "Ясность, бодрость, готовность действовать.", value: 6 },
+    { text: "Чувство благодарности и лёгкости.", value: 8 },
+    { text: "Я не переедаю, поэтому чувствую себя отлично.", value: 9 },
+    { text: "Я ем осознанно, и еда даёт мне только Свет.", value: 10 }
+]},
+            { text: "Как часто вы едите вместе с семьёй или друзьями?", options: [
+                { text: "Никогда, я ем в одиночестве.", value: -3 },
+                { text: "Очень редко.", value: -1 },
+                { text: "Иногда по выходным.", value: 0 },
+                { text: "Пару раз в неделю.", value: 1 },
+                { text: "Часто ужинаем вместе.", value: 3 },
+                { text: "Почти каждый день.", value: 5 },
+                { text: "Каждый приём пищи — с близкими.", value: 7 },
+                { text: "Я всегда делю еду с теми, кто рядом.", value: 8 },
+                { text: "Совместная трапеза — это священный ритуал.", value: 9 },
+                { text: "Мы не просто едим вместе, мы делим Свет.", value: 10 }
+            ]},
+            { text: "Как вы относитесь к приготовлению еды?", options: [
+    { text: "Ненавижу готовить, это каторга.", value: -5 },
+    { text: "Готовлю, потому что надо.", value: -2 },
+    { text: "Нейтрально, это просто дело.", value: 0 },
+    { text: "Иногда нравится, когда есть настроение.", value: 2 },
+    { text: "Люблю готовить для себя и близких.", value: 4 },
+    { text: "Готовка — это творчество.", value: 5 },
+    { text: "Я вкладываю душу в каждое блюдо.", value: 6 },
+    { text: "Готовка — это моя медитация и молитва.", value: 8 },
+    { text: "Я — проводник Света, и еда — мой инструмент.", value: 9 },
+    { text: "Я творю миры через еду. Каждое блюдо — вселенная.", value: 10 }
+]},
+            // Вопросы 21-30
+            { text: "Как вы относитесь к еде из микроволновки?", options: [
+                { text: "Пользуюсь постоянно.", value: -5 },
+                { text: "Часто разогреваю.", value: -3 },
+                { text: "Иногда пользуюсь.", value: -1 },
+                { text: "Стараюсь реже использовать.", value: 0 },
+                { text: "Разогреваю на плите.", value: 1 },
+                { text: "Почти не пользуюсь.", value: 3 },
+                { text: "Не пользуюсь совсем.", value: 5 },
+                { text: "Считаю, что микроволны разрушают Qₛ еды.", value: 7 },
+                { text: "Я ем только свежеприготовленное.", value: 9 },
+                { text: "Моя еда не знает микроволн.", value: 10 }
+            ]},
+            { text: "Как вы относитесь к замороженным полуфабрикатам?", options: [
+                { text: "Это основа моего рациона.", value: -5 },
+                { text: "Часто покупаю.", value: -4 },
+                { text: "Иногда, когда нет времени.", value: -2 },
+                { text: "Редко, в крайнем случае.", value: 0 },
+                { text: "Почти не покупаю.", value: 2 },
+                { text: "Я избегаю полуфабрикатов.", value: 4 },
+                { text: "Готовлю только из свежих продуктов.", value: 6 },
+                { text: "Заморозка убивает жизнь в еде.", value: 8 },
+                { text: "Моя еда никогда не была заморожена.", value: 9 },
+                { text: "Я ем только то, что дышит и живёт.", value: 10 }
+            ]},
+            { text: "Что для вас идеальный обед?", options: [
+    { text: "Бургер, картошка фри и кола.", value: -5 },
+    { text: "Пицца и пиво.", value: -3 },
+    { text: "Суп, второе и компот.", value: -1 },
+    { text: "Домашний суп и салат.", value: 2 },
+    { text: "Лёгкий обед из овощей и рыбы.", value: 4 },
+    { text: "Свежий салат и травяной чай.", value: 5 },
+    { text: "Сезонные овощи, приготовленные на пару.", value: 7 },
+    { text: "Медитативно приготовленное блюдо.", value: 8 },
+    { text: "Еда, приготовленная с молитвой.", value: 9 },
+    { text: "Идеальный обед — это еда, разделённая с близкими в тишине и благодарности.", value: 10 }
+]},
+            { text: "Как часто вы едите консервированные продукты?", options: [
+                { text: "Почти каждый день.", value: -5 },
+                { text: "Несколько раз в неделю.", value: -3 },
+                { text: "Пару раз в неделю.", value: -1 },
+                { text: "Раз в неделю.", value: 0 },
+                { text: "Редко.", value: 1 },
+                { text: "Только домашние заготовки.", value: 3 },
+                { text: "Почти не ем консервы.", value: 5 },
+                { text: "Я избегаю консервов.", value: 7 },
+                { text: "Я ем только свежее.", value: 9 },
+                { text: "Консервы — это «мёртвая» еда.", value: 10 }
+            ]},
+            { text: "Как вы относитесь к специям и приправам?", options: [
+                { text: "Не использую, мне всё равно.", value: -3 },
+                { text: "Только соль и перец.", value: 0 },
+                { text: "Люблю добавлять разные специи.", value: 2 },
+                { text: "Использую натуральные травы.", value: 4 },
+                { text: "Специи — это душа блюда.", value: 5 },
+                { text: "Я знаю свойства трав и специй.", value: 6 },
+                { text: "Специи — это лекарство.", value: 7 },
+                { text: "Я добавляю специи осознанно, с намерением.", value: 8 },
+                { text: "Каждая специя — это вибрация, которую я вношу в еду.", value: 9 },
+                { text: "Специи — это голос Земли в моей тарелке.", value: 10 }
+            ]},
+            { text: "Как часто вы едите жареную пищу?", options: [
+                { text: "Почти каждый день.", value: -5 },
+                { text: "Несколько раз в неделю.", value: -3 },
+                { text: "Пару раз в неделю.", value: -1 },
+                { text: "Раз в неделю.", value: 0 },
+                { text: "Редко.", value: 1 },
+                { text: "Стараюсь избегать.", value: 3 },
+                { text: "Почти не ем жареного.", value: 5 },
+                { text: "Я не ем жареное.", value: 7 },
+                { text: "Я ем только варёное, пареное или сырое.", value: 9 },
+                { text: "Моя еда не знает огня.", value: 10 }
+            ]},
+            { text: "Как вы относитесь к еде, которую вы не готовили сами?", options: [
+    { text: "Ем всё, не задумываясь. Какая разница, кто готовил?", value: -5 },
+    { text: "Мне важно, чтобы было чисто и аккуратно на вид.", value: -2 },
+    { text: "Предпочитаю знать, кто готовил, но не критично.", value: 0 },
+    { text: "Обращаю внимание, с каким настроением готовили.", value: 1 },
+    { text: "Я чувствую энергию повара в еде.", value: 3 },
+    { text: "Избегаю еды от незнакомцев или неприятных мне людей.", value: 4 },
+    { text: "Ем только от тех, кому полностью доверяю.", value: 6 },
+    { text: "Я спрашиваю разрешения у еды, прежде чем её съесть.", value: 7 },
+    { text: "Я благословляю еду, и она становится моей, независимо от повара.", value: 8 },
+    { text: "Любая еда — это дар Вселенной, если принимать её с благодарностью.", value: 10 }
+]},
+            { text: "Что вы пьёте в течение дня?", options: [
+                { text: "Газировку и энергетики.", value: -5 },
+                { text: "Много кофе и чая с сахаром.", value: -3 },
+                { text: "Кофе, чай, иногда воду.", value: -1 },
+                { text: "Чай без сахара, воду.", value: 1 },
+                { text: "Травяные чаи, воду.", value: 3 },
+                { text: "Воду в приоритете.", value: 5 },
+                { text: "Только чистую воду.", value: 7 },
+                { text: "Заряженную воду.", value: 8 },
+                { text: "Живую воду с намерением.", value: 9 },
+                { text: "Я пью Свет.", value: 10 }
+            ]},
+            { text: "Как вы заканчиваете приём пищи?", options: [
+    { text: "Встаю из-за стола и бегу по делам, не задумываясь.", value: -5 },
+    { text: "Быстро убираю посуду и забываю о еде.", value: -3 },
+    { text: "Просто заканчиваю и всё, без эмоций.", value: -1 },
+    { text: "Говорю «спасибо» машинально.", value: 0 },
+    { text: "Мою посуду сразу и с лёгкостью.", value: 2 },
+    { text: "Несколько минут отдыхаю после еды, наслаждаясь.", value: 4 },
+    { text: "Благодарю всех, кто участвовал в создании еды.", value: 6 },
+    { text: "Я медитирую после еды, ощущая, как энергия входит в меня.", value: 8 },
+    { text: "Я осознаю, как еда становится частью моего тела и духа.", value: 9 },
+    { text: "Я продолжаю нести Свет, который получил(а) с едой, в мир.", value: 10 }
+]},
+{ text: "Что для вас идеальная еда?", options: [
+    { text: "Вкусная и дешёвая, остальное неважно.", value: -5 },
+    { text: "Быстрая и сытная, чтобы наесться и забыть.", value: -3 },
+    { text: "Домашняя и привычная, как в детстве.", value: -1 },
+    { text: "Просто чтобы была свежей и не вредной.", value: 0 },
+    { text: "Свежая и натуральная, без химии.", value: 2 },
+    { text: "Полезная и вкусная одновременно.", value: 4 },
+    { text: "Приготовленная с любовью и вниманием.", value: 6 },
+    { text: "Живая, цельная, без обработки, полная энергии.", value: 8 },
+    { text: "Энергия Солнца и Земли в каждой клетке.", value: 9 },
+    { text: "Идеальная еда — это Свет, принявший форму пищи.", value: 10 }
+]},
+        ];
+
+        const totalQuestions = questions.length;
+        let currentIndex = 0;
+        let answers = new Array(totalQuestions).fill(null);
+
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const exitBtn = document.getElementById('exitBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const testContainer = document.getElementById('testContainer');
+        const mainBody = document.getElementById('mainBody');
+        const testTitle = document.getElementById('testTitle');
+        let isResultMode = false;
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            let html = `<div class="question-box"><div class="question-text">${index + 1}. ${q.text}</div><div class="options">`;
+            q.options.forEach((opt) => {
+                const isSelected = answers[index] === opt.value;
+                html += `<div class="option ${isSelected ? 'selected' : ''}" data-value="${opt.value}"><div class="option-marker"></div><div class="option-text">${opt.text}</div></div>`;
+            });
+            html += `</div></div>`;
+            questionContainer.innerHTML = html;
+            document.querySelectorAll('.option').forEach(opt => { opt.addEventListener('click', () => { answers[index] = parseInt(opt.dataset.value); renderQuestion(index); }); });
+            progressFill.style.width = ((index + 1) / totalQuestions * 100) + '%';
+            progressText.textContent = `Вопрос ${index + 1} из ${totalQuestions}`;
+            prevBtn.disabled = index === 0;
+            nextBtn.textContent = index === totalQuestions - 1 ? '🎉 Завершить' : 'Далее →';
+        }
+
+        function calculateResult() {
+            let sum = 0; answers.forEach(v => sum += v);
+            const raw = sum / totalQuestions;
+            return Math.round(raw * 10) / 10;
+        }
+
+        function getResultStyle(score) {
+            if (score >= 7) return { color: '#ffd54f', borderColor: '#ffd54f', bg: 'rgba(255,215,80,0.1)', label: '🌟 Светлая еда', comment: 'Ваше питание — это источник Света. Вы едите осознанно, с благодарностью. Ваша еда исцеляет вас и мир вокруг.', advice: '🌟 Продолжайте! Делитесь своим опытом с другими. Ваш стол — это алтарь.' };
+            if (score >= 3) return { color: '#81c784', borderColor: '#81c784', bg: 'rgba(129,199,132,0.1)', label: '🌿 Живая еда', comment: 'Вы на правильном пути. В вашем рационе много живого и полезного. Немного осознанности — и вы перейдёте на следующий уровень.', advice: '🌱 Добавьте больше свежих овощей и благодарности перед едой.' };
+            if (score >= 0) return { color: '#90caf9', borderColor: '#90caf9', bg: 'rgba(144,202,249,0.1)', label: '🟰 Нейтральная еда', comment: 'Ваша еда — просто топливо. Вы не вредите себе, но и не получаете максимум энергии.', advice: '🧹 Попробуйте готовить хотя бы раз в день осознанно.' };
+            if (score >= -3) return { color: '#ffb74d', borderColor: '#ffb74d', bg: 'rgba(255,183,77,0.1)', label: '🌑 Тёмная еда', comment: 'В вашем рационе много «мёртвой» еды. Это истощает ваше поле.', advice: '⚠️ Начните с малого: замените газировку на воду, фастфуд на домашнюю еду.' };
+            return { color: '#ef5350', borderColor: '#ef5350', bg: 'rgba(239,83,80,0.1)', label: '☠️ Токсичная еда', comment: 'Ваше питание разрушает ваше семантическое поле. Вы едите то, что несёт Тьму.', advice: '🚨 Срочно пересмотрите рацион. Начните с чистой воды и свежих фруктов.' };
+        }
+
+        function showResult() {
+            isResultMode = true;
+            const score = calculateResult();
+            const style = getResultStyle(score);
+            mainBody.style.background = `linear-gradient(145deg, ${style.color}20 0%, #16213e 100%)`;
+            testContainer.style.borderColor = style.borderColor;
+            let html = `<div class="result-container"><h2 style="color: ${style.color};">${style.label}</h2><div class="result-score" style="color: ${style.color};">${score > 0 ? '+' : ''}${score}</div><div class="result-scale">по шкале Qₛ еды (от -5 до +10)</div><div class="result-comment" style="color: #d0c8b8; background: ${style.bg};">${style.comment}</div><div class="result-advice" style="color: #d0c8b8; background: ${style.bg}; border-left: 4px solid ${style.borderColor};">${style.advice}</div></div>`;
+            questionContainer.innerHTML = html;
+            prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden');
+            exitBtn.textContent = '🔄 Пройти заново'; exitBtn.classList.remove('btn-secondary'); exitBtn.classList.add('btn');
+            testTitle.textContent = `Результат: ${style.label}`;
+            progressText.textContent = `Тест завершён`;
+            
+            // --- СОХРАНЕНИЕ В УЛЬТРА-ПАСПОРТ ---
+setTimeout(function() {
+    const passportBtn = document.createElement('button');
+    passportBtn.textContent = '💾 Сохранить результат в Ультра-Паспорт';
+    passportBtn.style.cssText = 'display: block; margin: 2rem auto; padding: 1rem 2rem; background: #81c784; color: #1a1a2e; border: none; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s;';
+    passportBtn.onmouseover = () => passportBtn.style.background = '#4caf50';
+    passportBtn.onmouseout = () => passportBtn.style.background = '#81c784';
+
+    passportBtn.addEventListener('click', function() {
+        // Ищем результат на странице
+        const scoreElement = document.querySelector('.result-score');
+        if (scoreElement) {
+            const resultValue = parseFloat(scoreElement.textContent);
+            if (!isNaN(resultValue)) {
+                // Ключ: ideatonika_deep_qs (НЕ пересекается с обычным ideatonika_test_qs)
+                localStorage.setItem('ideatonika_deep_food', resultValue);
+                passportBtn.textContent = '✅ Сохранено в Ультра-Паспорт!';
+                passportBtn.style.background = '#388e3c';
+                passportBtn.style.color = 'white';
+                passportBtn.disabled = true;
+            }
+        }
+    });
+
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(passportBtn);
+    }
+}, 100);
+
+// ========== КНОПКА "ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ" ==========
+setTimeout(function() {
+    const shareContainer = document.createElement('div');
+    shareContainer.style.cssText = 'text-align: center; margin-top: 1.5rem;';
+
+    const shareBtn = document.createElement('button');
+    shareBtn.textContent = '📤 Поделиться результатом';
+    shareBtn.style.cssText = 'display: block; margin: 0 auto 0.8rem auto; padding: 0.8rem 2rem; background: transparent; color: #81c784; border: 1.5px solid #81c784; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: Georgia, serif;';
+    shareBtn.onmouseover = () => shareBtn.style.background = '#81c784';
+    shareBtn.onmouseout = () => shareBtn.style.background = 'transparent';
+    shareBtn.onmouseover = () => shareBtn.style.color = '#1a1a2e';
+    shareBtn.onmouseout = () => shareBtn.style.color = '#81c784';
+
+    shareBtn.addEventListener('click', function() {
+        // Получаем название теста из заголовка страницы
+        const testName = document.title.replace(' • Идеатоника', '').trim();
+        
+        // Получаем результат из элемента .result-score
+        const scoreElement = document.querySelector('.result-score');
+        let resultText = '';
+        if (scoreElement) {
+            resultText = scoreElement.textContent.trim();
+        }
+        
+        // Получаем комментарий из элемента .result-comment или .result-interpretation
+        const commentElement = document.querySelector('.result-comment') || document.querySelector('.result-interpretation');
+        let commentText = '';
+        if (commentElement) {
+            commentText = commentElement.textContent.trim();
+        }
+        
+        // Формируем текст для отправки
+        const shareText = `🧪 Я прошёл тест «${testName}» на портале Идеатоника!\n\n` +
+            `📊 Мой результат: ${resultText}\n` +
+            `💬 ${commentText}\n\n` +
+            `🎯 А какой результат у тебя?\n` +
+            `👉 Пройти тест: ${window.location.href}\n\n` +
+            `🌌 Идеатоника — физика смысла.`;
+        
+        // Пытаемся использовать Web Share API (мобильные устройства)
+        if (navigator.share) {
+            navigator.share({
+                title: `Мой результат теста «${testName}»`,
+                text: shareText,
+                url: window.location.href
+            }).catch(() => {
+                // Если не получилось — копируем в буфер
+                copyToClipboard(shareText);
+            });
+        } else {
+            // Если Web Share API не поддерживается — копируем в буфер
+            copyToClipboard(shareText);
+        }
+    });
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = shareBtn.textContent;
+                shareBtn.textContent = '✅ Скопировано! Отправь другу';
+                shareBtn.style.borderColor = '#ffd54f';
+                shareBtn.style.color = '#ffd54f';
+                setTimeout(() => {
+                    shareBtn.textContent = originalText;
+                    shareBtn.style.borderColor = '#81c784';
+                    shareBtn.style.color = '#81c784';
+                }, 2500);
+            }).catch(() => {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = '✅ Скопировано! Отправь другу';
+            shareBtn.style.borderColor = '#ffd54f';
+            shareBtn.style.color = '#ffd54f';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+                shareBtn.style.borderColor = '#81c784';
+                shareBtn.style.color = '#81c784';
+            }, 2500);
+        } catch(e) {
+            shareBtn.textContent = '❌ Не удалось скопировать';
+            shareBtn.style.borderColor = '#ef5350';
+            shareBtn.style.color = '#ef5350';
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Добавляем подсказку
+    const hint = document.createElement('div');
+    hint.style.cssText = 'color: #a09080; font-size: 0.8rem; font-style: italic;';
+    hint.textContent = 'Нажмите, чтобы скопировать результат и отправить другу';
+    shareContainer.appendChild(shareBtn);
+    shareContainer.appendChild(hint);
+
+    // Ищем контейнер с результатом
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(shareContainer);
+    }
+}, 100);
+
+        }
+
+        function resetTest() { isResultMode = false; currentIndex = 0; answers = new Array(totalQuestions).fill(null); mainBody.style.background = ''; testContainer.style.borderColor = ''; testTitle.textContent = 'Мега-тест: Светлая или Тёмная еда?'; prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); exitBtn.textContent = '🚪 Выйти'; exitBtn.classList.add('btn-secondary'); renderQuestion(0); }
+
+        prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderQuestion(currentIndex); } });
+        nextBtn.addEventListener('click', () => { if (answers[currentIndex] === null) { alert('Выберите ответ.'); return; } if (currentIndex < totalQuestions - 1) { currentIndex++; renderQuestion(currentIndex); } else { if (!answers.includes(null)) showResult(); else alert('Ответьте на все вопросы.'); } });
+        exitBtn.addEventListener('click', () => { if (isResultMode) resetTest(); else { if (confirm('Выйти?')) window.location.href = 'hidden-tests.html'; } });
+        renderQuestion(0);
+    })();
+</script>
+</body>
+</html>

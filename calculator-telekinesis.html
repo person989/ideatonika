@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Телекинетического Потенциала • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 3.5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-comparison { color: #a09080; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>⚡ Телекинетический Потенциал</h1>
+    <div class="subtitle">Калькулятор силы мысли (§53, §107, Формула F_s = α · ∇Φ · g_{s-ph})</div>
+
+    <div class="calc-section">
+        <div class="section-title">🧠 Параметры оператора</div>
+
+        <div class="input-group">
+            <label>🎯 Когерентность (Cₛ): <span id="csValue">0.7</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.7" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🌟 Семантический заряд (Qₛ): <span id="qsValue">5</span> из 10</label>
+            <input type="range" id="qsSlider" min="1" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>1 (слабый)</span><span>10 (экстаз)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🧘 Состояние:</label>
+            <select id="stateSelect">
+                <option value="2.0">Глубокая медитация, «самадхи» (×2.0)</option>
+                <option value="1.5">Сильная концентрация, молитва (×1.5)</option>
+                <option value="1.0" selected>Обычное, спокойное (×1.0)</option>
+                <option value="0.5">Усталость, рассеянность (×0.5)</option>
+                <option value="0.2">Стресс, паника (×0.2)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="calc-section">
+        <div class="section-title">🎯 Параметры объекта</div>
+
+        <div class="input-group">
+            <label>🏋️ Масса объекта: <span id="massValue">10</span> грамм</label>
+            <input type="range" id="massSlider" min="0.001" max="1000" value="10" step="0.001">
+            <div class="range-labels"><span>0.001 г (пылинка)</span><span>1 г (перо)</span><span>1000 г (книга)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>📏 Расстояние до объекта: <span id="distValue">1</span> метр</label>
+            <input type="range" id="distSlider" min="0.1" max="10" value="1" step="0.1">
+            <div class="range-labels"><span>0.1 м (рядом)</span><span>10 м (далеко)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>🔮 Семантическая поляризуемость объекта:</label>
+            <select id="materialSelect">
+                <option value="2.0">Кварц, кристалл (α=2.0)</option>
+                <option value="1.5">Дерево (α=1.5)</option>
+                <option value="1.0" selected>Вода, органика (α=1.0)</option>
+                <option value="0.5">Пластик (α=0.5)</option>
+                <option value="0.1">Металл, свинец (α=0.1)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Семантическая сила</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-comparison" id="resultComparison"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const csSlider = document.getElementById('csSlider');
+    const qsSlider = document.getElementById('qsSlider');
+    const stateSelect = document.getElementById('stateSelect');
+    const massSlider = document.getElementById('massSlider');
+    const distSlider = document.getElementById('distSlider');
+    const materialSelect = document.getElementById('materialSelect');
+    const csValue = document.getElementById('csValue');
+    const qsValue = document.getElementById('qsValue');
+    const massValue = document.getElementById('massValue');
+    const distValue = document.getElementById('distValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultComparison = document.getElementById('resultComparison');
+    const resultFormula = document.getElementById('resultFormula');
+
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    qsSlider.addEventListener('input', () => { qsValue.textContent = parseFloat(qsSlider.value).toFixed(1); calculate(); });
+    stateSelect.addEventListener('change', calculate);
+    massSlider.addEventListener('input', () => { massValue.textContent = parseFloat(massSlider.value).toFixed(3); calculate(); });
+    distSlider.addEventListener('input', () => { distValue.textContent = parseFloat(distSlider.value).toFixed(1); calculate(); });
+    materialSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const C = parseFloat(csSlider.value);
+        const Q = parseFloat(qsSlider.value);
+        const stateCoeff = parseFloat(stateSelect.value);
+        const mass = parseFloat(massSlider.value); // граммы
+        const dist = parseFloat(distSlider.value); // метры
+        const alpha = parseFloat(materialSelect.value);
+
+        // Константа связи g_{s-ph} (очень мала!)
+        const g_sph = 1e-6; // Ньютон · метр² / (ед. смысла)²
+
+        // Градиент поля ∇Φ_s (зависит от Cₛ, Qₛ, состояния, расстояния)
+        const gradPhi = C * Q * stateCoeff / (dist * dist);
+
+        // Семантическая сила (в Ньютонах)
+        const F_s = alpha * gradPhi * g_sph;
+
+        // Сила тяжести для сравнения (масса в кг)
+        const F_gravity = (mass / 1000) * 9.8;
+
+        // Форматирование
+        let forceText, forceLabel;
+        if (F_s >= 1) {
+            forceText = F_s.toFixed(2) + ' Н';
+        } else if (F_s >= 1e-3) {
+            forceText = (F_s * 1000).toFixed(2) + ' мН';
+        } else if (F_s >= 1e-6) {
+            forceText = (F_s * 1e6).toFixed(2) + ' мкН';
+        } else if (F_s >= 1e-9) {
+            forceText = (F_s * 1e9).toFixed(2) + ' нН';
+        } else {
+            forceText = (F_s * 1e12).toFixed(2) + ' пН';
+        }
+        resultNumber.textContent = forceText;
+        resultLabel.textContent = 'Семантическая сила';
+
+        let extra = '';
+        const ratio = F_s / F_gravity;
+        if (ratio >= 1) {
+            extra = '🚀 Невероятно! Вы можете поднять объект силой мысли! (Левитация!)';
+        } else if (ratio >= 0.01) {
+            extra = '⚡ Очень сильное воздействие! Объект заметно сдвинется.';
+        } else if (ratio >= 0.0001) {
+            extra = '🪶 Слабое воздействие. Возможно, дрогнет пёрышко или маятник.';
+        } else if (ratio >= 1e-6) {
+            extra = '🌬️ Очень слабое воздействие. Сравнимо с давлением света.';
+        } else if (F_s > 0) {
+            extra = '🔬 Микроскопическое воздействие. Заметно только на квантовом уровне.';
+        } else {
+            extra = '💤 Воздействие отсутствует. Семантический экран не пробит.';
+        }
+        resultExtra.textContent = extra;
+
+        resultComparison.textContent = `Для сравнения: сила тяжести объекта = ${(F_gravity * 1000).toFixed(1)} мН. Отношение F_s / F_g = ${ratio.toExponential(2)}`;
+
+        resultFormula.textContent = `∇Φ = ${C.toFixed(2)} · ${Q.toFixed(1)} · ${stateCoeff.toFixed(1)} / ${dist.toFixed(1)}² = ${gradPhi.toExponential(2)} | F_s = ${alpha.toFixed(1)} · ${gradPhi.toExponential(2)} · ${g_sph.toExponential(0)} = ${F_s.toExponential(2)} Н`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Презентация • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #111; font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; padding: 1rem;
+        }
+        .slide-container {
+            max-width: 900px; width: 100%; background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border: 2px solid #ffd54f; border-radius: 24px; padding: 3rem 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); min-height: 500px;
+            display: flex; flex-direction: column; justify-content: center;
+            transition: opacity 0.3s;
+        }
+        .slide-title {
+            font-size: 2.5rem; color: #ffd54f; margin-bottom: 1.5rem;
+            border-bottom: 2px solid #5d4a3a; padding-bottom: 0.8rem;
+        }
+        .slide-content { color: #d0c8b8; font-size: 1.2rem; line-height: 1.8; }
+        .slide-content ul { padding-left: 2rem; }
+        .slide-content li { margin-bottom: 0.8rem; }
+        .slide-content strong { color: #ffd54f; }
+        .slide-content em { color: #ce93d8; font-style: italic; }
+        .slide-number { text-align: right; color: #706858; font-size: 0.9rem; margin-top: 2rem; }
+
+        .nav { display: flex; gap: 1rem; margin-top: 1.5rem; align-items: center; }
+        .nav-btn {
+            background: transparent; border: 1.5px solid #ffd54f; color: #ffd54f;
+            padding: 0.8rem 2rem; font-size: 1.1rem; font-weight: bold;
+            border-radius: 40px; cursor: pointer; transition: 0.2s; font-family: inherit;
+        }
+        .nav-btn:hover { background: #ffd54f; color: #1a1a2e; }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .page-indicator { color: #a09080; font-size: 1rem; min-width: 100px; text-align: center; }
+
+        .download-btn {
+            display: inline-block; background: #ffd54f; color: #1a1a2e;
+            padding: 1rem 2.5rem; font-size: 1.2rem; font-weight: bold;
+            text-decoration: none; border-radius: 40px; margin-top: 1.5rem;
+            transition: 0.2s; text-align: center;
+        }
+        .download-btn:hover { background: #ffc107; box-shadow: 0 0 20px rgba(255,215,80,0.5); }
+
+        @media print {
+            body { background: white !important; }
+            .slide-container { background: white !important; border: 1px solid #999 !important; box-shadow: none !important; page-break-after: always; }
+            .slide-title { color: #2c1e0e !important; }
+            .slide-content { color: #333 !important; }
+            .slide-content strong { color: #5d4037 !important; }
+            .nav, .download-btn { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slide-container" id="slideContainer">
+    <div class="slide-title" id="slideTitle"></div>
+    <div class="slide-content" id="slideContent"></div>
+    <div class="slide-number" id="slideNumber"></div>
+</div>
+
+<div class="nav">
+    <button class="nav-btn" id="prevBtn" onclick="prevSlide()">◀ Назад</button>
+    <span class="page-indicator" id="pageIndicator">1 / 20</span>
+    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Вперёд ▶</button>
+</div>
+
+<button class="download-btn" id="downloadBtn" onclick="prepareAndPrint()">📥 Скачать как PDF</button>
+
+<!-- Скрытый контейнер для печати -->
+<div id="printContainer" style="display: none;"></div>
+
+<p style="color:#706858;margin-top:0.5rem;font-size:0.85rem;">Откроется окно печати — выберите «Сохранить как PDF»</p>
+
+<script>
+const slides = [
+    {
+        title: "📖 Что такое Идеатоника?",
+        content: `
+            <p><strong>Идеатоника</strong> — это наука о <strong>Семантическом Поле (Φₛ)</strong>.</p>
+            <p>Она утверждает: <strong>Смысл первичен. Материя — его проявление.</strong></p>
+            <p>Мысли, эмоции, намерения — не просто «химия в мозгу». Это реальные силы, подчиняющиеся строгим законам.</p>
+            <p><em>«То, что сейчас кажется магией, завтра станет обыденностью.»</em></p>
+        `
+    },
+    {
+        title: "🔬 Наука или эзотерика?",
+        content: `
+            <p><strong>Наука.</strong> Идеатоника не требует веры. Она предлагает <strong>проверяемые гипотезы</strong> и <strong>эксперименты</strong>.</p>
+            <ul>
+                <li>📐 Есть математический аппарат (135+ параграфов).</li>
+                <li>🧪 Есть лабораторный практикум (50+ экспериментов).</li>
+                <li>📊 Есть предсказания, которые можно проверить.</li>
+            </ul>
+            <p><strong>Для скептика:</strong> Не нужно верить. Нужно <strong>проверить</strong>. Возьмите ГСЧ и проведите тест.</p>
+        `
+    },
+    {
+        title: "🧠 Семантическое Поле (Φₛ)",
+        content: `
+            <p><strong>Φₛ</strong> — это «океан смыслов», в котором существуют все идеи, архетипы, мысли и эмоции.</p>
+            <p>Оно не имеет массы, но обладает <strong>плотностью, давлением и температурой</strong>.</p>
+            <p><strong>Аналогия:</strong> Как электромагнитное поле пронизывает всё, так и семантическое поле пронизывает реальность.</p>
+            <p><em>Пример: Почему в храме «легко», а в бетонном подъезде «давит»? Разная «плотность» Φₛ.</em></p>
+        `
+    },
+    {
+        title: "💎 Идеатон (Θ) — квант смысла",
+        content: `
+            <p><strong>Идеатон</strong> — элементарная частица семантического поля.</p>
+            <ul>
+                <li>Не имеет массы, электрического заряда или спина.</li>
+                <li>Обладает <strong>семантическим зарядом Qₛ</strong>.</li>
+                <li>Рождается и аннигилирует в «семантическом вакууме».</li>
+            </ul>
+            <p><strong>Аналогия:</strong> Фотон — квант света. Идеатон — квант смысла.</p>
+        `
+    },
+    {
+        title: "☀️ Семантический Заряд (Qₛ)",
+        content: `
+            <p><strong>Qₛ</strong> — мера «количества смысла», сила идеи или эмоции.</p>
+            <p>Шкала: от <strong>-10</strong> (Абсолютная Тьма) до <strong>+10</strong> (Абсолютный Свет).</p>
+            <ul>
+                <li>+1…+3: Лёгкая радость, симпатия.</li>
+                <li>+7…+9: Глубокая молитва, экстаз.</li>
+                <li>-4…-6: Страх, ненависть.</li>
+                <li>-10: Абсолютное Зло.</li>
+            </ul>
+            <p><em>Ваша мысль имеет вес. Буквально.</em></p>
+        `
+    },
+    {
+        title: "🎯 Когерентность (Cₛ) — Лазер или Лампочка?",
+        content: `
+            <p><strong>Cₛ</strong> — степень сфокусированности мысли.</p>
+            <ul>
+                <li><strong>Cₛ = 1.0</strong>: «Лазер». Полная концентрация. Мысль пробивает реальность.</li>
+                <li><strong>Cₛ = 0.5</strong>: Обычное состояние.</li>
+                <li><strong>Cₛ = 0.0</strong>: «Лампочка». Хаос, рассеянность.</li>
+            </ul>
+            <p><strong>История:</strong> Монахи, медитирующие годами, достигают Cₛ > 0.9. Их благословения «работают».</p>
+        `
+    },
+    {
+        title: "🌡️ Семантическая Температура (Tₛ) — Лёд или Пламя?",
+        content: `
+            <p><strong>Tₛ</strong> — мера хаотичности поля.</p>
+            <ul>
+                <li><strong>Tₛ низкая:</strong> «Кристаллизация». Страх, ступор, депрессия.</li>
+                <li><strong>Tₛ оптимальная (~5):</strong> Спокойная концентрация.</li>
+                <li><strong>Tₛ высокая:</strong> Хаос, паника, гнев.</li>
+            </ul>
+            <p><em>Пример: В панике человек «перегревается» и не может принять решение.</em></p>
+        `
+    },
+    {
+        title: "🔮 Семантическая Чувствительность (χ)",
+        content: `
+            <p><strong>χ</strong> — способность «считывать» поля других людей и мест.</p>
+            <ul>
+                <li>Высокая у детей, животных, эмпатов.</li>
+                <li>Низкая у людей, «отрезанных» от интуиции.</li>
+            </ul>
+            <p><strong>История:</strong> Мать просыпается за секунду до того, как заплачет младенец. Это χ.</p>
+            <p><strong>Для скептика:</strong> Это не «магия». Это эволюционный механизм выживания.</p>
+        `
+    },
+    {
+        title: "⏳ Семантическое Время (τ)",
+        content: `
+            <p>Время течёт <strong>неодинаково</strong>. Субъективная длительность зависит от Cₛ и потока информации.</p>
+            <p><strong>Формула:</strong> dτ/dt = 1 + κ · (dI/dt) · cos θₜ</p>
+            <ul>
+                <li>В потоке (Cₛ ↑) — время «летит».</li>
+                <li>В скуке (Cₛ ↓) — время «тянется».</li>
+            </ul>
+            <p><em>Пример: Свидание длится час, а кажется минутой. Лекция — наоборот.</em></p>
+        `
+    },
+    {
+        title: "🪑 Проклятый стул — история из бара",
+        content: `
+            <p>Старик проклял свой стул: «Кто сядет — умрёт». Люди садились и погибали.</p>
+            <p><strong>Объяснение Идеатоники:</strong></p>
+            <ul>
+                <li>Годы ненависти «зарядили» стул -Qₛ (§38).</li>
+                <li>Контакт «разряжал» стул в поле жертвы (§56).</li>
+                <li>-Qₛ повышал вероятность трагических случайностей.</li>
+            </ul>
+            <p><em>Это не магия. Это физика смысла.</em></p>
+        `
+    },
+    {
+        title: "⚡ Семантическая Электротехника",
+        content: `
+            <p>Поток Qₛ подчиняется <strong>закону Ома</strong>:</p>
+            <p><strong>I_Q = U_sense / R_sense</strong></p>
+            <ul>
+                <li><strong>U_sense</strong> — разность потенциалов (напряжение).</li>
+                <li><strong>R_sense</strong> — сопротивление среды (бетон — высокое, храм — низкое).</li>
+            </ul>
+            <p>Есть свои <strong>ёмкость (C_sense), индуктивность (L_sense), импеданс (Z_sense)</strong>.</p>
+        `
+    },
+    {
+        title: "🙏 Эффект N² — сила коллективной молитвы",
+        content: `
+            <p>Когда люди молятся <strong>синхронно</strong>, их мощность растёт <strong>квадратично</strong>:</p>
+            <p><strong>P_total = P₁ · N²</strong></p>
+            <ul>
+                <li>2 человека → в 4 раза сильнее.</li>
+                <li>10 человек → в 100 раз сильнее.</li>
+            </ul>
+            <p><em>«Где двое или трое собраны во имя Моё...» — это физика.</em></p>
+        `
+    },
+    {
+        title: "🛡️ Семантический Щит",
+        content: `
+            <p>Визуализация защитного кокона — не «фантазия». Это создание локальной зоны с высоким R_sense.</p>
+            <ul>
+                <li><strong>Зеркальный шар:</strong> Отражает Qₛ обратно.</li>
+                <li><strong>Золотой кокон:</strong> Поглощает и трансформирует.</li>
+            </ul>
+            <p><strong>Материалы-усилители:</strong> Серебро (σ=9), шунгит, соль.</p>
+        `
+    },
+    {
+        title: "🪴 Эксперимент с растениями (HEAL-TEST)",
+        content: `
+            <p>Два одинаковых ростка. Одному — внимание и визуализация роста. Другому — ничего.</p>
+            <p><strong>Результат:</strong> «Заряженное» растение вырастает на <strong>15-30% больше</strong>.</p>
+            <p><strong>Для скептика:</strong> Двойной слепой метод. Ассистент не знает, где «заряженный» росток. p-value < 0.05.</p>
+        `
+    },
+    {
+        title: "🧂 Соль, шунгит и очищение",
+        content: `
+            <p>Древние ритуалы имели смысл:</p>
+            <ul>
+                <li><strong>Соль:</strong> Впитывает -Qₛ, как губка (k_sense=5).</li>
+                <li><strong>Шунгит:</strong> Экранирует и трансформирует негатив.</li>
+                <li><strong>Вода:</strong> Смывает остаточный Qₛ (σ=9).</li>
+            </ul>
+            <p><em>Бабушкины советы работают. Теперь мы знаем почему.</em></p>
+        `
+    },
+    {
+        title: "📊 Таблица Материалов",
+        content: `
+            <p>Каждый материал имеет <strong>ранг Qₛ</strong>:</p>
+            <ul>
+                <li>+10: Мощи святых.</li>
+                <li>+7: Гранит, кварц, живое дерево.</li>
+                <li>+3: Хлопок, дерево.</li>
+                <li>0: Стекло, бумага.</li>
+                <li>-1: Пластик, синтетика.</li>
+                <li>-3: Железобетон.</li>
+            </ul>
+            <p><em>Окружайте себя «светлыми» материалами.</em></p>
+        `
+    },
+    {
+        title: "🍽️ Семантическая Кулинария",
+        content: `
+            <p><strong>Q_блюда = Q_ингредиентов + ΔQ_повара + ΔQ_ритуала</strong></p>
+            <ul>
+                <li>Еда, приготовленная с любовью (Cₛ > 0.8), имеет ранг на 1-2 пункта выше.</li>
+                <li>Фастфуд, приготовленный на конвейере, имеет отрицательный Qₛ.</li>
+            </ul>
+            <p><em>«Бабушкина еда вкуснее» — это не ностальгия. Это физика.</em></p>
+        `
+    },
+    {
+        title: "🌌 Ноосфера — Тонкий Мир",
+        content: `
+            <p>Все мысли, эмоции, архетипы образуют <strong>коллективное семантическое поле</strong>.</p>
+            <p>Слои Ноосферы:</p>
+            <ul>
+                <li>📡 Семантический шум (обрывки мыслей).</li>
+                <li>👻 Мир следов (призраки, отпечатки событий).</li>
+                <li>🎭 Мир архетипов (Мать, Герой, Тень).</li>
+                <li>🌟 Мир просветлённых (святые, гении).</li>
+            </ul>
+        `
+    },
+    {
+        title: "🔗 Квантовая Семантика",
+        content: `
+            <p><strong>Семантическая Запутанность (§104):</strong></p>
+            <p>Два поля могут быть связаны так, что изменение одного <strong>мгновенно</strong> влияет на другое.</p>
+            <p><strong>Семантический Коллапс (§105):</strong></p>
+            <p>Намерение «схлопывает» облако вероятностей в конкретное событие.</p>
+            <p><em>Это не магия. Это квантовая физика смысла.</em></p>
+        `
+    },
+    {
+        title: "🚀 Что дальше?",
+        content: `
+            <p>Идеатоника — это <strong>приглашение к исследованию</strong>.</p>
+            <ul>
+                <li>📖 Изучите Учебник (135 параграфов).</li>
+                <li>🧪 Проведите эксперимент из Практикума.</li>
+                <li>📊 Изучите Таблицы Материалов и Частот.</li>
+                <li>🩺 Пройдите диагностические тесты.</li>
+                <li>📤 Поделитесь ссылкой с тем, кто ищет.</li>
+            </ul>
+            <p><strong>Смысл первичен. Материя — его проявление.</strong></p>
+        `
+    }
+];
+
+let currentSlide = 0;
+const totalSlides = slides.length;
+
+function showSlide(index) {
+    const slide = slides[index];
+    document.getElementById('slideTitle').textContent = slide.title;
+    document.getElementById('slideContent').innerHTML = slide.content;
+    document.getElementById('slideNumber').textContent = 'Слайд ' + (index + 1) + ' из ' + totalSlides;
+    document.getElementById('pageIndicator').textContent = (index + 1) + ' / ' + totalSlides;
+    document.getElementById('prevBtn').disabled = (index === 0);
+    document.getElementById('nextBtn').disabled = (index === totalSlides - 1);
+}
+
+function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; showSlide(currentSlide); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; showSlide(currentSlide); } }
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevSlide(); }
+});
+
+showSlide(0);
+
+function prepareAndPrint() {
+    // Строим полную презентацию для печати
+    const printContainer = document.getElementById('printContainer');
+    let allSlidesHTML = '';
+    
+    slides.forEach((slide, index) => {
+        allSlidesHTML += `
+            <div style="
+                background: white;
+                min-height: 100vh;
+                padding: 3rem 2.5rem;
+                font-family: 'Georgia', 'Times New Roman', serif;
+                page-break-after: always;
+                color: #333;
+            ">
+                <h1 style="color: #3b2a1f; font-size: 2rem; border-bottom: 2px solid #8b7355; padding-bottom: 0.8rem; margin-bottom: 1.5rem;">
+                    ${slide.title}
+                </h1>
+                <div style="font-size: 1.1rem; line-height: 1.8; color: #333;">
+                    ${slide.content}
+                </div>
+                <p style="text-align: right; color: #999; margin-top: 3rem; font-size: 0.9rem;">
+                    Слайд ${index + 1} из ${slides.length} • Идеатоника • 2026
+                </p>
+            </div>
+        `;
+    });
+    
+    printContainer.innerHTML = allSlidesHTML;
+    printContainer.style.display = 'block';
+    
+    // Даём браузеру секунду на отрисовку
+    setTimeout(function() {
+        window.print();
+        // После печати (или отмены) скрываем контейнер
+        setTimeout(function() {
+            printContainer.style.display = 'none';
+            printContainer.innerHTML = '';
+        }, 500);
+    }, 300);
+}
+</script>
+
+</body>
+</html>

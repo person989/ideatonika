@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Выбор паспорта • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container { max-width: 900px; width: 100%; position: relative; z-index: 1; }
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 {
+            font-size: 2.5rem; font-weight: 400; letter-spacing: 4px;
+            color: #f3e7c0; text-shadow: 0 0 20px rgba(255,215,150,0.5);
+            margin-bottom: 0.5rem; font-family: 'Times New Roman', serif;
+        }
+        .hero .subtitle { font-size: 1.1rem; color: #c0b090; font-style: italic; }
+        .choice-grid {
+            display: flex; gap: 3rem; justify-content: center;
+            flex-wrap: wrap; max-width: 800px; margin: 0 auto;
+        }
+        .choice-card {
+            flex: 1; min-width: 300px; max-width: 380px;
+            background: rgba(30, 40, 60, 0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3); border-radius: 24px;
+            padding: 2.5rem 2rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transition: transform 0.2s, box-shadow 0.3s;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .choice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px #e3b87c;
+            border-color: #e3b87c;
+        }
+        .choice-card .icon { font-size: 4rem; margin-bottom: 1.5rem; }
+        .choice-card h2 { color: #f3e7c0; font-size: 1.6rem; font-weight: 400; margin-bottom: 1rem; }
+        .choice-card p { color: #d0c8b8; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+        .choice-card .meta { color: #a09080; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .badge-standard {
+            display: inline-block; background: #ffd54f; color: #1a1a2e;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-bottom: 1rem;
+        }
+        .badge-deep {
+            display: inline-block; background: #81c784; color: #1a1a2e;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-bottom: 1rem;
+        }
+        .btn {
+            display: inline-block; background: transparent;
+            border: 1.5px solid #e3b87c; color: #e3b87c;
+            padding: 0.8rem 2rem; text-decoration: none;
+            font-size: 1rem; font-weight: bold; border-radius: 40px;
+            transition: 0.2s; letter-spacing: 1px;
+        }
+        .btn:hover { background: #e3b87c; color: #1a1a2e; box-shadow: 0 0 15px rgba(227,184,124,0.5); }
+        .back-link {
+            display: inline-block; margin-top: 2rem; color: #e3b87c;
+            text-decoration: none; border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s;
+        }
+        .back-link:hover { background: #e3b87c; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>🪪 ВАШ ПАСПОРТ</h1>
+        <div class="subtitle">Выберите тип семантического паспорта</div>
+    </div>
+
+    <div class="choice-grid">
+
+        <!-- Стандартный паспорт -->
+        <div class="choice-card">
+            <div class="icon">📋</div>
+            <span class="badge-standard">СТАНДАРТ</span>
+            <h2>Базовый паспорт</h2>
+            <p>18 тестов по 7 вопросов. Быстрая диагностика, общая картина вашего семантического поля.</p>
+            <div class="meta">🧪 18 тестов • ~30 минут</div>
+            <a href="semantic-passport.html" class="btn">📋 Открыть базовый</a>
+        </div>
+
+        <!-- Углублённый паспорт -->
+        <div class="choice-card">
+            <div class="icon">🔬</div>
+            <span class="badge-deep">УГЛУБЛЁННЫЙ</span>
+            <h2>Точный паспорт</h2>
+            <p>6 тестов по 30 вопросов. Детальный анализ, высокая точность результатов.</p>
+            <div class="meta">🧪 6 тестов • ~36 минут</div>
+            <a href="ultra-passport.html" class="btn">🔬 Открыть углублённый</a>
+        </div>
+
+    </div>
+
+    <div style="text-align: center;">
+        <a href="account.html" class="back-link">← Вернуться в Аккаунт</a>
+    </div>
+
+    <div class="footer">
+        <p>© Идеатоника • Семантический Паспорт</p>
+        <p>✧ «Познай себя — и ты познаешь Вселенную» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

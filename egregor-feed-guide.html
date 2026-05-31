@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 Подробное руководство: EGREGOR-FEED • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #ce93d8; margin: 2.5rem 0 1rem; border-left: 4px solid #ce93d8; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #e1bee7; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #e1bee7; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .tip-box { background: rgba(206,147,216,0.1); border-left: 4px solid #ce93d8; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #e1bee7; margin: 0; }
+        .tip-box strong { color: #ce93d8; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #ce93d8; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; border: 1px solid #ce93d8; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ce93d8; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔮 EGREGOR-FEED: ПОЛНОЕ РУКОВОДСТВО</h1>
+    <div class="subtitle">Как организовать коллективный ритуал и зарядить предмет силой эгрегора</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое EGREGOR-FEED и зачем его проводить?</h2>
+    <p><strong>EGREGOR-FEED</strong> — это эксперимент, который доказывает, что <strong>группа людей, действующих синхронно, создаёт поле, мощность которого растёт не линейно (N), а квадратично (N²)</strong>. Два человека вместе не в 2 раза сильнее одного, а в 4 раза. Пять человек — в 25 раз.</p>
+    <p>Этот эффект лежит в основе всех коллективных духовных практик: церковной литургии, медитации в группе, хорового пения, шаманских ритуалов. Мы будем <strong>заряжать предмет</strong> (кристалл, воду, талисман) сначала в одиночку, а потом коллективно, и <strong>измерять разницу</strong> с помощью Q-METER.</p>
+    <p>В отличие от SEC-1, здесь не нужны паяльники и осциллографы. Нужны только <strong>люди, намерение и дисциплина</strong>.</p>
+
+    <!-- ПОДГОТОВКА -->
+    <h2>👥 Этап 1: Подготовка группы и предмета</h2>
+
+    <h3><span class="step-number">1</span> Как собрать группу (и кого НЕ брать)</h3>
+    <p><strong>Сколько человек нужно:</strong> Минимум — <strong>3</strong> (чтобы эффект N² был заметен). Оптимально — <strong>5-7</strong> (больше — уже сложно синхронизировать). Максимум для домашнего эксперимента — <strong>10-12</strong>.</p>
+    <p><strong>Кого приглашать:</strong></p>
+    <ul>
+        <li>Людей, которые <strong>доверяют вам</strong> и друг другу.</li>
+        <li>Тех, кто способен <strong>10-15 минут сидеть молча</strong> с закрытыми глазами (не каждый это умеет!).</li>
+        <li>Желательно — тех, кто уже практикует медитацию или молитву.</li>
+        <li><strong>Эмоционально совместимых.</strong> Если двое участников в ссоре — их поля будут в противофазе, и эффект разрушится.</li>
+    </ul>
+    <p><strong>Кого НЕ брать:</strong></p>
+    <ul>
+        <li><strong>Активных скептиков.</strong> Человек с мыслью «это всё фигня, зря трачу время» создаёт деструктивную интерференцию. Один такой участник может обрушить K с 1.8 до 1.2.</li>
+        <li><strong>Детей младше 12 лет</strong> — им трудно удерживать внимание.</li>
+        <li><strong>Людей в состоянии стресса или опьянения.</strong> Их Cₛ слишком низок, они будут «шумным болотом» в общем поле.</li>
+    </ul>
+
+    <h3><span class="step-number">2</span> Выбор и подготовка предмета для зарядки</h3>
+    <p><strong>Что можно заряжать:</strong></p>
+    <ul>
+        <li><strong>Кристалл кварца</strong> (идеально: C_sense=8, хорошо держит заряд).</li>
+        <li><strong>Стакан чистой воды</strong> (σ_sense=9, быстро принимает, но быстро теряет).</li>
+        <li><strong>Деревянный брусок или ложку</strong> (ранг +5).</li>
+        <li><strong>Серебряную монету или крестик</strong> (ранг +8).</li>
+    </ul>
+    <p><strong>Как подготовить предмет:</strong></p>
+    <ol>
+        <li><strong>Очистите предмет.</strong> Промойте его проточной водой (30 секунд), затем протрите сухой солью (соль впитывает старый Qₛ), затем стряхните соль и промойте снова. Вытрите чистой тканью.</li>
+        <li><strong>Измерьте фоновый Qₛ.</strong> Если у вас есть Q-METER — измерьте заряд предмета. Запишите: «Фон: ___ у.е.».</li>
+    </ol>
+
+    <h3><span class="step-number">3</span> Подготовка помещения</h3>
+    <ol>
+        <li><strong>Проветрите комнату</strong> (10 минут открытого окна).</li>
+        <li><strong>Сделайте влажную уборку</strong> с щепоткой соли в воде.</li>
+        <li><strong>Уберите источники шума:</strong> выключите телефоны (или переведите в авиарежим), закройте двери, предупредите домашних.</li>
+        <li><strong>Поставьте стулья в круг.</strong> В центре круга — <strong>маленький столик или табуретка</strong> для предмета.</li>
+        <li><strong>Зажгите одну свечу</strong> в центре. Свеча — это не просто красивый антураж. Огонь — генератор Qₛ (ранг +6), он структурирует поле.</li>
+    </ol>
+
+    <!-- РИТУАЛ -->
+    <h2>🕯️ Этап 2: Проведение ритуала</h2>
+
+    <h3><span class="step-number">4</span> Фаза 1: Индивидуальная зарядка (контроль)</h3>
+    <p><strong>Зачем это нужно:</strong> Мы должны знать «базовую мощность» каждого участника по отдельности, чтобы потом сравнить с коллективной.</p>
+    <ol>
+        <li><strong>Первый участник</strong> садится перед предметом. Остальные ждут в другой комнате.</li>
+        <li>Участник <strong>закрывает глаза</strong>, делает 5 глубоких вдохов, успокаивает ум.</li>
+        <li>Он кладёт руки <strong>по бокам от предмета</strong> (не касаясь его) и в течение <strong>5 минут</strong> визуализирует: <strong>«Из моих ладоней течёт золотой свет, он входит в предмет, наполняет его Силой и Чистотой».</strong></li>
+        <li>Через 5 минут участник открывает глаза. <strong>Измерьте Qₛ предмета</strong> Q-METER'ом. Запишите: «Участник 1: ___ у.е.».</li>
+        <li><strong>Очистите предмет заново</strong> (шаг 2).</li>
+        <li>Повторите для <strong>каждого участника по очереди</strong>.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Важно:</strong> Участники не должны знать результаты друг друга до конца эксперимента. Это исключает «соревновательный эффект» и сохраняет чистоту данных.</p></div>
+
+    <h3><span class="step-number">5</span> Фаза 2: Коллективная зарядка (эксперимент)</h3>
+    <p><strong>Это главный момент.</strong> Сейчас вы будете создавать <strong>эгрегор</strong> — временное коллективное семантическое поле.</p>
+    <ol>
+        <li><strong>Очистите предмет заново</strong> (шаг 2).</li>
+        <li><strong>Все участники садятся в круг</strong> вокруг столика с предметом.</li>
+        <li><strong>Возьмитесь за руки.</strong> Это создаёт «семантический волновод» (§93) — замкнутый контур, по которому Qₛ циркулирует и усиливается.</li>
+        <li><strong>Включите метроном</strong> (приложение на телефоне) с частотой <strong>4-7 ударов в минуту</strong> (не в секунду!). Это тета-ритм, идеальный для медитации. Телефон положите в центр круга.</li>
+        <li><strong>Синхронизируйте дыхание.</strong> Все делают <strong>вдох на 4 удара метронома, выдох на 6 ударов</strong> (выдох длиннее — активирует парасимпатику).</li>
+        <li><strong>Закройте глаза.</strong> Визуализируйте <strong>ОДНО И ТО ЖЕ</strong>: «Из наших рук, соединённых в кольцо, течёт золотой свет. Он собирается в центре круга, над предметом, образуя сияющий шар. Шар медленно опускается и входит в предмет». Визуализация должна быть <strong>одинаковой у всех</strong> — договоритесь о ней заранее.</li>
+        <li><strong>Продолжайте 5-10 минут.</strong> Не размыкайте рук. Не открывайте глаз. Дышите синхронно.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Секрет успеха:</strong> Самое главное — <strong>единство фазы</strong> (§92, §95). Все должны визуализировать не просто «свет», а <strong>одинаковую картинку</strong>. Например: «золотой шар размером с яблоко, медленно опускающийся на кристалл». Если один представляет шар, другой — поток, третий — спираль — интерференция будет неполной, и эффект N² не сработает.</p></div>
+    <div class="warning-box"><p><strong>⚠️ Типичные ошибки:</strong> (1) Кто-то открывает глаза и смотрит на других — его Cₛ падает. (2) Кто-то начинает хихикать или скептически думать — это создаёт противофазу. (3) Кто-то «старается слишком сильно» — напряжение снижает Cₛ. Идеальное состояние — <strong>спокойная, радостная уверенность</strong>.</p></div>
+
+    <h3><span class="step-number">6</span> Фиксация результата</h3>
+    <ol>
+        <li>Через 5-10 минут ведущий (вы) мягким голосом говорит: <strong>«Медленно открываем глаза. Ритуал завершён».</strong></li>
+        <li><strong>Не вскакивайте резко!</strong> Посидите ещё минуту в тишине. Поле должно «устаканиться».</li>
+        <li><strong>Измерьте Qₛ предмета</strong> Q-METER'ом. Запишите: «Коллектив: ___ у.е.».</li>
+    </ol>
+
+    <!-- АНАЛИЗ -->
+    <h2>📊 Этап 3: Анализ результатов</h2>
+
+    <h3><span class="step-number">7</span> Расчёт коэффициента синергии</h3>
+    <p>Сравните сумму индивидуальных зарядов с коллективным:</p>
+    <div class="formula" style="text-align:center; font-family:'Courier New',monospace; color:#f3e7c0; margin:1rem 0;">K = Q_коллектив / Σ Q_индивидуальных</div>
+    <p>Пример:</p>
+    <table class="materials-table">
+        <thead><tr><th>Участник</th><th>Q индивидуальный (усл. ед.)</th></tr></thead>
+        <tbody>
+            <tr><td>Участник 1</td><td>120</td></tr>
+            <tr><td>Участник 2</td><td>95</td></tr>
+            <tr><td>Участник 3</td><td>140</td></tr>
+            <tr><td>Участник 4</td><td>80</td></tr>
+            <tr><td><strong>Сумма Σ</strong></td><td><strong>435</strong></td></tr>
+            <tr><td><strong>Коллективный заряд</strong></td><td><strong>~650 — 900</strong></td></tr>
+            <tr><td><strong>Коэффициент K</strong></td><td><strong>1.5 — 2.0</strong></td></tr>
+        </tbody>
+    </table>
+    <p>Если K > 1.3 — эксперимент удался! Вы создали эгрегор.</p>
+    <div class="tip-box"><p><strong>💡 Что влияет на K:</strong> Чем дружнее группа, чем выше их средний Cₛ, чем точнее синхронизация — тем ближе K к теоретическому максимуму (2.0). Рекордные значения (K > 1.8) получаются у групп, которые практикуют вместе годами.</p></div>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=32" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробное руководство EGREGOR-FEED v1.0</p>
+        <p>✧ «Где двое или трое собраны во имя Моё — там Я посреди них» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

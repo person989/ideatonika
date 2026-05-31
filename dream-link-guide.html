@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌙 Подробный протокол DREAM-LINK • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0d0d2b 0%, #1a1a40 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(124,77,255,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%); }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(20, 20, 50, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(124,77,255,0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #b39ddb; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #7c4dff; margin: 2.5rem 0 1rem; border-left: 4px solid #7c4dff; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #b39ddb; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #9e9e9e; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #3a3a5a; padding-bottom: 1rem; }
+
+        p, li { color: #c0c0d0; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #b39ddb; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #b39ddb; padding: 12px; text-align: left; border: 1px solid #3a3a5a; }
+        .materials-table td { padding: 12px; border: 1px solid #3a3a5a; color: #c0c0d0; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .tip-box { background: rgba(124,77,255,0.1); border-left: 4px solid #7c4dff; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #b39ddb; margin: 0; }
+        .tip-box strong { color: #7c4dff; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #7c4dff; color: #ffffff; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #7c4dff; text-decoration: none; border: 1px solid #7c4dff; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #7c4dff; color: #ffffff; }
+        .footer { margin-top: 2rem; text-align: center; color: #706878; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🌙 DREAM-LINK: ПОДРОБНЫЙ ПРОТОКОЛ</h1>
+    <div class="subtitle">Пошаговое руководство по синхронизации сновидений с партнёром</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое DREAM-LINK и почему это работает?</h2>
+    <p>DREAM-LINK — это не прибор. Это <strong>протокол для двух людей</strong>, которые хотят встретиться в общем сне. С точки зрения Идеатоники, во время сна наше семантическое поле (Φₛ) частично отсоединяется от тела и свободно путешествует по ноосфере (§64, §126). Если два человека <strong>семантически запутаны</strong> (§104) — например, близнецы, супруги или просто очень близкие друзья — их поля могут встретиться в этом пространстве.</p>
+    <p>DREAM-LINK — это метод, который <strong>повышает вероятность</strong> такой встречи. Он не гарантирует успех (как и любой эксперимент), но даёт наилучшие шансы.</p>
+
+    <!-- ПОДГОТОВКА ПАРТНЁРОВ -->
+    <h2>👥 Этап 1: Выбор партнёра и подготовка</h2>
+
+    <h3><span class="step-number">1</span> Кто может участвовать?</h3>
+    <p><strong>Идеальный партнёр для DREAM-LINK:</strong></p>
+    <ul>
+        <li><strong>Близкий родственник:</strong> однояйцевый близнец (K₀=9), мать/ребёнок (K₀=10), родные братья/сёстры.</li>
+        <li><strong>Супруг или партнёр</strong> с многолетними доверительными отношениями (K₀=7).</li>
+        <li><strong>Очень близкий друг</strong>, с которым вы пережили сильные совместные эмоции (K₀=4-6).</li>
+    </ul>
+    <p>Чем выше изначальная семантическая запутанность (K₀), тем выше шансы на успех. С незнакомцем DREAM-LINK почти наверняка не сработает.</p>
+    <div class="tip-box"><p><strong>💡 Проверка связи:</strong> Прежде чем пытаться встретиться во сне, проверьте, есть ли у вас связь в бодрствовании. Часто ли вы думаете друг о друге одновременно? Звоните ли друг другу в один и тот же момент? Если да — хороший знак.</p></div>
+
+    <h3><span class="step-number">2</span> Предварительная синхронизация (за 3-7 дней до эксперимента)</h3>
+    <p><strong>Зачем это нужно:</strong> Даже у близких людей семантические поля могут быть «рассинхронизированы» из-за разного режима дня, стресса, информационного шума. За неделю до эксперимента мы начинаем «настраивать» поля друг на друга.</p>
+    <ol>
+        <li><strong>Синхронизируйте режим сна.</strong> Ложитесь и вставайте в одно и то же время (плюс-минус 30 минут). Это критически важно: если один уже видит сны в REM-фазе, а другой ещё не заснул — встреча невозможна.</li>
+        <li><strong>Создайте общий «якорь».</strong> Выберите <strong>предмет, изображение или аромат</strong>, который станет вашим «маяком» для встречи. Например: фотография красивого места (берег моря, лес, библиотека), кристалл аметиста, эфирное масло лаванды. Каждый вечер перед сном оба смотрите на этот якорь, держите его в руках, вдыхайте аромат — и проговаривайте мысленно: «Это наш ключ. Мы встретимся там».</li>
+        <li><strong>Ведите дневник снов.</strong> Каждое утро, не вставая с кровати, записывайте ВСЁ, что помните из снов. Даже обрывки, цвета, эмоции. Это тренирует «мышцу запоминания снов» и повышает осознанность.</li>
+    </ol>
+
+    <!-- РИТУАЛ ПЕРЕД СНОМ -->
+    <h2>🕯️ Этап 2: Вечерний ритуал (за 30-60 минут до сна)</h2>
+
+    <h3><span class="step-number">3</span> Подготовка пространства</h3>
+    <ol>
+        <li><strong>Очистите спальню.</strong> Проветрите комнату. Уберите гаджеты (телефон — в другую комнату или в режим «Не беспокоить»). Выключите Wi-Fi роутер, если он в спальне — электромагнитный шум (S_noise) мешает семантическому полю.</li>
+        <li><strong>Приглушите свет.</strong> За час до сна используйте только тёплый, тусклый свет (свеча, лампа с абажуром). Никаких холодных LED-ламп и экранов.</li>
+        <li><strong>Аромат.</strong> Зажгите аромалампу с лавандой или нанесите каплю эфирного масла на подушку. Запах — мощный якорь для подсознания.</li>
+    </ol>
+
+    <h3><span class="step-number">4</span> Синхронизация намерения (оба партнёра делают это одновременно)</h3>
+    <ol>
+        <li><strong>Созвонитесь по телефону или видеосвязи</strong> (это последнее использование гаджета перед сном!).</li>
+        <li><strong>Посмотрите на ваш общий «якорь»</strong> (фотографию, кристалл).</li>
+        <li><strong>Проговорите вслух или мысленно</strong> одну и ту же фразу-намерение. Например: <em>«Сегодня ночью я встречу [Имя партнёра] во сне. Мы будем в [описание места]. Я запомню этот сон».</em></li>
+        <li><strong>Визуализируйте место встречи.</strong> Закройте глаза и представляйте его 2-3 минуты: детали, цвета, запахи, звуки. Представьте партнёра там — как он выглядит, во что одет, как улыбается.</li>
+        <li><strong>Попрощайтесь и ложитесь спать.</strong> Телефон — в другую комнату.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Почему это важно:</strong> Вы создаёте общее семантическое намерение (Qₛ) и направляете его в одну точку пространства-времени (место встречи). Это как два луча лазера, сфокусированных на одной цели — они интерферируют и усиливают друг друга.</p></div>
+
+    <!-- УТРО -->
+    <h2>🌅 Этап 3: Утренняя фиксация (СРАЗУ после пробуждения!)</h2>
+
+    <h3><span class="step-number">5</span> Запись сна (самое критическое!)</h3>
+    <p><strong>Это самый важный шаг во всём эксперименте.</strong> Сны забываются в течение 1-2 минут после пробуждения. Если вы не запишете их немедленно — вы потеряете данные.</p>
+    <ol>
+        <li><strong>Не открывайте глаза!</strong> Как только вы проснулись, оставайтесь в том же положении. Не двигайтесь. Движение «стирает» память о сне.</li>
+        <li><strong>Вспомните сон.</strong> Начните с конца — что было последним, что вы помните? Затем двигайтесь назад по сюжету.</li>
+        <li><strong>Запишите ВСЁ.</strong> Держите блокнот и ручку ПРЯМО У КРОВАТИ (не на столе, не в телефоне!). Записывайте: место, люди, действия, эмоции, цвета, звуки, запахи. Даже если это бессвязный бред — пишите. Даже если «ничего не снилось» — запишите: «Ничего не помню». Это тоже данные.</li>
+    </ol>
+
+    <h3><span class="step-number">6</span> Обмен отчётами (в течение дня)</h3>
+    <ol>
+        <li><strong>Обменяйтесь записями</strong> с партнёром (по телефону, в мессенджере, при встрече).</li>
+        <li><strong>Ищите совпадения.</strong> Одинаковое место? Одинаковое действие? Одинаковый объект? Одинаковая эмоция? Даже частичное совпадение (например, обоим снилась вода, но одному — море, другому — река) считается.</li>
+        <li><strong>Записывайте совпадения в общий журнал.</strong> Создайте таблицу: Дата | Совпадение | Тип (место/действие/объект/эмоция) | Примечания.</li>
+    </ol>
+
+    <!-- СТАТИСТИКА -->
+    <h2>📊 Этап 4: Анализ результатов</h2>
+
+    <h3><span class="step-number">7</span> Как оценить успех</h3>
+    <p>Проведите <strong>минимум 10 ночей</strong> с ритуалом (активная серия) и <strong>10 ночей без ритуала</strong> (контрольная серия, когда вы просто записываете сны без намерения встретиться).</p>
+    <table class="materials-table">
+        <thead><tr><th>Тип совпадения</th><th>Случайная вероятность</th><th>Ваш результат (активная серия)</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Одинаковое место</strong></td><td>1-3%</td><td>Ожидается 5-15%</td></tr>
+            <tr><td><strong>Одинаковое действие</strong></td><td>2-4%</td><td>Ожидается 8-20%</td></tr>
+            <tr><td><strong>Одинаковый объект/персонаж</strong></td><td>3-5%</td><td>Ожидается 10-25%</td></tr>
+            <tr><td><strong>Одинаковая эмоция</strong></td><td>5-10%</td><td>Ожидается 15-30%</td></tr>
+            <tr><td><strong>Полное совпадение сюжета</strong></td><td>&lt; 1%</td><td>Ожидается 3-10%</td></tr>
+        </tbody>
+    </table>
+    <p>Если в активной серии частота совпадений <strong>статистически значимо выше</strong>, чем в контрольной — DREAM-LINK сработал.</p>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=35" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробный протокол DREAM-LINK v1.0</p>
+        <p>✧ «Сны — это врата в ноосферу» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

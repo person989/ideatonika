@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цели • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 1.5rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .main-container {
+            max-width: 700px; width: 100%;
+            background: rgba(20, 25, 40, 0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 28px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { text-align: center; color: #f3e7c0; font-size: 1.8rem; font-weight: 400; margin-bottom: 0.3rem; }
+        .subtitle { text-align: center; color: #706858; font-size: 0.85rem; margin-bottom: 1.5rem; font-style: italic; }
+
+        /* Рекомендации */
+        .recommendations {
+            background: rgba(255,215,80,0.05);
+            border: 1px solid rgba(255,215,80,0.2);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .recommendations h3 { color: #ffd54f; font-size: 1rem; margin-bottom: 0.8rem; }
+        .rec-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #d0c8b8; font-size: 0.9rem;
+        }
+        .rec-item:last-child { border-bottom: none; }
+        .rec-add-btn {
+            background: #ffd54f; color: #1a1a2e; border: none; padding: 0.4rem 1rem;
+            border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.8rem;
+            font-weight: bold; transition: 0.2s;
+        }
+        .rec-add-btn:hover { background: #ffc107; }
+        .rec-added { color: #81c784; font-style: italic; font-size: 0.8rem; }
+
+        /* Активные цели */
+        .goals-section { margin-top: 1.5rem; }
+        .goal-card {
+            background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1.2rem; margin-bottom: 1rem;
+        }
+        .goal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; }
+        .goal-title { color: #f3e7c0; font-size: 1.1rem; font-weight: bold; }
+        .goal-delete {
+            background: transparent; border: 1px solid #ef5350; color: #ef5350;
+            padding: 0.3rem 0.8rem; border-radius: 15px; cursor: pointer; font-family: inherit;
+            font-size: 0.75rem; transition: 0.2s;
+        }
+        .goal-delete:hover { background: #ef5350; color: white; }
+        .progress-bar {
+            width: 100%; height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px;
+            margin-bottom: 0.5rem; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: #81c784; border-radius: 5px; transition: width 0.3s;
+        }
+        .goal-stats { color: #706858; font-size: 0.8rem; margin-bottom: 0.8rem; }
+        .goal-check-btn {
+            background: #81c784; color: #1a1a2e; border: none; padding: 0.5rem 1.2rem;
+            border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.85rem;
+            font-weight: bold; transition: 0.2s;
+        }
+        .goal-check-btn:hover { background: #66bb6a; }
+        .goal-check-btn:disabled { background: #5d4a3a; color: #706858; cursor: not-allowed; }
+
+        /* Добавление своей цели */
+        .add-custom {
+            display: flex; gap: 0.5rem; margin-top: 1.5rem;
+        }
+        .add-custom input {
+            flex: 1; padding: 0.7rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a;
+            border-radius: 12px; color: #f3e7c0; font-family: inherit; font-size: 0.9rem;
+        }
+        .add-custom select {
+            width: 80px; padding: 0.7rem 0.5rem; background: rgba(0,0,0,0.3);
+            border: 1px solid #5d4a3a; border-radius: 12px; color: #f3e7c0;
+            font-family: inherit; font-size: 0.9rem;
+        }
+        .add-custom select option { background: #1a1a2e; }
+        .add-custom button {
+            padding: 0.7rem 1.5rem; background: #ffd54f; color: #1a1a2e; border: none;
+            border-radius: 12px; cursor: pointer; font-family: inherit; font-weight: bold;
+        }
+
+        .empty-state { text-align: center; color: #706858; font-style: italic; padding: 2rem; }
+        .back-link { display: block; text-align: center; margin-top: 1.5rem; color: #706858; text-decoration: none; font-size: 0.85rem; }
+        .back-link:hover { color: #f3e7c0; }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <h1>🎯 Цели</h1>
+    <p class="subtitle">Семантический план развития</p>
+
+    <!-- Рекомендации -->
+    <div class="recommendations" id="recommendations">
+        <h3>💡 Рекомендации на основе ваших тестов</h3>
+        <div id="recList"></div>
+    </div>
+
+    <!-- Активные цели -->
+    <div class="goals-section">
+        <h3 style="color: #f3e7c0; margin-bottom: 1rem;">📋 Мои активные цели</h3>
+        <div id="goalsList"></div>
+    </div>
+
+    <!-- Добавить свою -->
+    <div class="add-custom">
+        <input type="text" id="customGoalName" placeholder="Своя цель...">
+        <select id="customGoalDays">
+            <option value="7">7 дн</option>
+            <option value="14">14 дн</option>
+            <option value="21" selected>21 дн</option>
+            <option value="30">30 дн</option>
+            <option value="90">90 дн</option>
+        </select>
+        <button id="addCustomBtn">➕</button>
+    </div>
+
+    <a href="account.html" class="back-link">← Вернуться в Аккаунт</a>
+</div>
+
+<script>
+(function() {
+    const STORAGE_KEY = 'ideatonika_goals';
+    const TODAY = new Date().toISOString().split('T')[0];
+
+    // ========== БАЗА РЕКОМЕНДАЦИЙ (ПОЛНАЯ, С ГРАДАЦИЕЙ) ==========
+const recommendationsDB = [
+    // --- Cₛ (Когерентность) ---
+    { test: 'cs', condition: (v) => v < 0.25, name: '😴 Сон 8 часов (восстановление базы)', effect: 'Базовое восстановление Cₛ' },
+    { test: 'cs', condition: (v) => v >= 0.25 && v < 0.4, name: '📵 30 минут без телефона в тишине', effect: 'Снижение S_noise, повышение Cₛ' },
+    { test: 'cs', condition: (v) => v >= 0.4 && v < 0.5, name: '🕯️ Смотреть на пламя свечи 5 минут', effect: 'Тренировка фокуса, +0.05 Cₛ' },
+    { test: 'cs', condition: (v) => v >= 0.5 && v < 0.6, name: '🧘 Медитация 10 минут (дыхание 4-7-8)', effect: 'Повышение Cₛ до 0.7' },
+    { test: 'cs', condition: (v) => v >= 0.6 && v < 0.7, name: '📖 Чтение бумажной книги 30 минут без отвлечений', effect: 'Укрепление Cₛ' },
+    { test: 'cs', condition: (v) => v >= 0.7 && v < 0.8, name: '🎯 Работа в режиме "Однозадачность" весь день', effect: 'Поддержание высокой Cₛ' },
+    { test: 'cs', condition: (v) => v >= 0.8 && v < 0.9, name: '🧘‍♀️ Медитация 30 минут (глубокая)', effect: 'Закрепление Cₛ > 0.85' },
+    { test: 'cs', condition: (v) => v >= 0.9, name: '🌟 Практика "Поток" — 1 час полного погружения в творчество', effect: 'Поддержание Cₛ > 0.9' },
+
+    // --- Tₛ (Температура) ---
+    { test: 'ts', condition: (v) => v < 2, name: '🔥 Горячий душ или ванна 15 минут', effect: 'Разогрев Tₛ (выход из ступора)' },
+    { test: 'ts', condition: (v) => v >= 2 && v < 3, name: '🚶 Прогулка быстрым шагом 20 минут', effect: 'Мягкое повышение Tₛ' },
+    { test: 'ts', condition: (v) => v >= 3 && v < 4, name: '🎵 Слушать энергичную музыку 15 минут', effect: 'Повышение Tₛ до оптимума' },
+    { test: 'ts', condition: (v) => v >= 4 && v < 5.5, name: '😌 День в обычном режиме (вы в оптимуме!)', effect: 'Поддержание баланса Tₛ' },
+    { test: 'ts', condition: (v) => v >= 5.5 && v < 6.5, name: '🍵 Травяной чай (ромашка, мелисса)', effect: 'Лёгкое охлаждение Tₛ' },
+    { test: 'ts', condition: (v) => v >= 6.5 && v < 7.5, name: '🚫 Отказ от кофеина на день', effect: 'Снижение Tₛ' },
+    { test: 'ts', condition: (v) => v >= 7.5 && v < 8.5, name: '🧊 Прохладный душ утром', effect: 'Активное охлаждение Tₛ' },
+    { test: 'ts', condition: (v) => v >= 8.5 && v < 9.5, name: '❄️ Дыхание 4-7-8 (5 циклов, 3 раза в день)', effect: 'Сильное охлаждение Tₛ' },
+    { test: 'ts', condition: (v) => v >= 9.5, name: '🆘 Полный покой, тишина, без гаджетов', effect: 'Экстренное снижение Tₛ' },
+
+    // --- Qₛ (Заряд) ---
+    { test: 'qs', condition: (v) => v < -5, name: '🆘 Поговорить с близким человеком', effect: 'Выход из глубокого минуса' },
+    { test: 'qs', condition: (v) => v >= -5 && v < -2, name: '🌿 Прогулка в парке 30 минут', effect: 'Мягкое повышение Qₛ' },
+    { test: 'qs', condition: (v) => v >= -2 && v < 0, name: '🫂 Обнять близкого или погладить животное', effect: 'Подъём Qₛ до нейтрального' },
+    { test: 'qs', condition: (v) => v >= 0 && v < 2, name: '😊 Улыбнуться 3 незнакомцам', effect: 'Лёгкое повышение Qₛ' },
+    { test: 'qs', condition: (v) => v >= 2 && v < 4, name: '🙏 Практика благодарности (5 пунктов)', effect: 'Устойчивое повышение Qₛ' },
+    { test: 'qs', condition: (v) => v >= 4 && v < 6, name: '💝 Сделать маленький подарок без повода', effect: 'Повышение Qₛ до +6' },
+    { test: 'qs', condition: (v) => v >= 6 && v < 8, name: '🌟 Помочь незнакомцу (волонтёрство, донаты)', effect: 'Закрепление высокого Qₛ' },
+    { test: 'qs', condition: (v) => v >= 8, name: '🕊️ Медитация "Любящая доброта" (Metta)', effect: 'Поддержание Qₛ > +8' },
+
+    // --- χ (Интуиция) ---
+    { test: 'chi', condition: (v) => v < 2, name: '🎲 Угадывать число от 1 до 10 (10 попыток в день)', effect: 'Пробуждение интуиции' },
+    { test: 'chi', condition: (v) => v >= 2 && v < 4, name: '📝 Записывать первое впечатление о людях', effect: 'Тренировка χ' },
+    { test: 'chi', condition: (v) => v >= 4 && v < 6, name: '🌙 Вести дневник снов', effect: 'Развитие интуиции' },
+    { test: 'chi', condition: (v) => v >= 6 && v < 8, name: '🔮 Медитация на "третий глаз" 10 минут', effect: 'Усиление χ' },
+    { test: 'chi', condition: (v) => v >= 8, name: '🧿 Практика чтения ауры (тренировка с растениями)', effect: 'Поддержание высокой χ' },
+
+    // --- Окружение ---
+    { test: 'env', condition: (v) => v < -5, name: '🪴 Купить живое растение (хлорофитум)', effect: 'Базовое оживление пространства' },
+    { test: 'env', condition: (v) => v >= -5 && v < -2, name: '🧹 Генеральная уборка с солью', effect: 'Очистка пространства' },
+    { test: 'env', condition: (v) => v >= -2 && v < 0, name: '🪟 Проветривание + зажечь свечу', effect: 'Повышение Qₛ комнаты' },
+    { test: 'env', condition: (v) => v >= 0 && v < 2, name: '🪴 Добавить второе растение', effect: 'Улучшение атмосферы' },
+    { test: 'env', condition: (v) => v >= 2 && v < 4, name: '🪵 Заменить одну пластиковую вещь на деревянную', effect: 'Повышение ранга окружения' },
+    { test: 'env', condition: (v) => v >= 4 && v < 6, name: '🕯️ Создать алтарь / красный угол', effect: 'Создание места силы' },
+    { test: 'env', condition: (v) => v >= 6, name: '🏛️ Освятить дом (пригласить священника)', effect: 'Поддержание Храма' },
+
+    // --- Еда ---
+    { test: 'food', condition: (v) => v < -2, name: '🥗 Съесть одно свежее яблоко или салат', effect: 'Базовое очищение' },
+    { test: 'food', condition: (v) => v >= -2 && v < 0, name: '🍎 Заменить один перекус на фрукт', effect: 'Повышение ранга еды' },
+    { test: 'food', condition: (v) => v >= 0 && v < 2, name: '🥦 Добавить зелень в каждый приём пищи', effect: 'Улучшение Qₛ еды' },
+    { test: 'food', condition: (v) => v >= 2 && v < 4, name: '🍯 Есть мёд (1 ч.л. в день)', effect: 'Повышение ранга до +5' },
+    { test: 'food', condition: (v) => v >= 4 && v < 6, name: '👨‍🍳 Приготовить еду с любовью (Cₛ > 0.7)', effect: 'Max Qₛ пищи' },
+    { test: 'food', condition: (v) => v >= 6, name: '🙏 Благословлять еду перед каждым приёмом', effect: 'Поддержание Светлой еды' },
+
+    // --- Вода ---
+    { test: 'water', condition: (v) => v < 0, name: '💧 Выпивать стакан чистой воды утром', effect: 'Базовое очищение' },
+    { test: 'water', condition: (v) => v >= 0 && v < 2, name: '🚰 Фильтровать воду перед питьём', effect: 'Улучшение качества воды' },
+    { test: 'water', condition: (v) => v >= 2 && v < 4, name: '💧 Пить родниковую/бутилированную воду', effect: 'Повышение Qₛ воды' },
+    { test: 'water', condition: (v) => v >= 4 && v < 6, name: '🙏 Заряжать воду молитвой/намерением', effect: 'Создание "живой" воды' },
+    { test: 'water', condition: (v) => v >= 6, name: '💒 Пить святую воду (освящённую)', effect: 'Поддержание высокого Qₛ воды' },
+
+    // --- Ритуалы ---
+    { test: 'ritual', condition: (v) => v < -3, name: '⏰ Вставать в одно и то же время 3 дня', effect: 'Создание базового ритма' },
+    { test: 'ritual', condition: (v) => v >= -3 && v < -1, name: '🕯️ Зажигать свечу вечером (5 минут)', effect: 'Мягкая ритуализация' },
+    { test: 'ritual', condition: (v) => v >= -1 && v < 1, name: '📿 Утренняя аффирмация (1 минута)', effect: 'Закрепление ритуала' },
+    { test: 'ritual', condition: (v) => v >= 1 && v < 3, name: '🧘 Утренняя медитация 10 минут', effect: 'Усиление ритуалов' },
+    { test: 'ritual', condition: (v) => v >= 3 && v < 5, name: '🙏 Молитва утром и вечером', effect: 'Духовная практика' },
+    { test: 'ritual', condition: (v) => v >= 5, name: '🛐 Посещение храма раз в неделю', effect: 'Поддержание высокого уровня' }
+];
+
+    // ========== ЗАГРУЗКА ТЕКУЩИХ РЕЗУЛЬТАТОВ ==========
+    function getLatestTestValue(key) {
+        const raw = localStorage.getItem(key);
+        if (raw) {
+            const num = parseFloat(raw);
+            if (!isNaN(num)) return num;
+        }
+        return null;
+    }
+
+    function getTestValues() {
+    // 1. Пробуем взять из текущего localStorage (если тесты пройдены заново)
+    let values = {
+        qs: getLatestTestValue('ideatonika_test_qs'),
+        cs: getLatestTestValue('ideatonika_test_cs'),
+        ts: getLatestTestValue('ideatonika_test_ts'),
+        chi: getLatestTestValue('ideatonika_test_chi'),
+        env: getLatestTestValue('ideatonika_test_env'),
+        food: getLatestTestValue('ideatonika_test_food'),
+        water: getLatestTestValue('ideatonika_test_water'),
+        ritual: getLatestTestValue('ideatonika_test_ritual')
+    };
+
+    // 2. Проверяем, есть ли хотя бы одно значение
+    const hasAnyValue = Object.values(values).some(v => v !== null);
+    if (hasAnyValue) return values;
+
+    // 3. Если текущих нет — ищем последнюю запись в Истории (архив)
+    const profileRaw = localStorage.getItem('ideatonika_user_profile');
+    if (!profileRaw) return values;
+    
+    const profile = JSON.parse(profileRaw);
+    const history = profile.passportHistory || [];
+    if (history.length === 0) return values;
+
+    // Берём самую свежую запись
+    const lastEntry = history[history.length - 1];
+    const passportData = lastEntry.passportData || {};
+
+    // Извлекаем значения из архивных ключей
+    return {
+        qs: parseIfExists(passportData, 'ideatonika_test_qs'),
+        cs: parseIfExists(passportData, 'ideatonika_test_cs'),
+        ts: parseIfExists(passportData, 'ideatonika_test_ts'),
+        chi: parseIfExists(passportData, 'ideatonika_test_chi'),
+        env: parseIfExists(passportData, 'ideatonika_test_env'),
+        food: parseIfExists(passportData, 'ideatonika_test_food'),
+        water: parseIfExists(passportData, 'ideatonika_test_water'),
+        ritual: parseIfExists(passportData, 'ideatonika_test_ritual')
+    };
+}
+
+function parseIfExists(data, key) {
+    const val = data[key];
+    if (val === undefined || val === null) return null;
+    const num = parseFloat(val);
+    return isNaN(num) ? null : num;
+}
+
+    // ========== ЗАГРУЗКА ЦЕЛЕЙ ==========
+    function loadGoals() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+    }
+
+    function saveGoals(goals) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(goals));
+    }
+
+    // ========== ОТРИСОВКА РЕКОМЕНДАЦИЙ ==========
+    function renderRecommendations() {
+        const values = getTestValues();
+        const goals = loadGoals();
+        const existingNames = goals.map(g => g.name);
+        const recList = document.getElementById('recList');
+
+        // Фильтруем: тест пройден, условие выполнено, цель ещё не добавлена
+        const active = recommendationsDB.filter(r => {
+            const val = values[r.test];
+            if (val === null) return false;
+            if (!r.condition(val)) return false;
+            if (existingNames.includes(r.name)) return false;
+            return true;
+        });
+
+        if (active.length === 0) {
+            recList.innerHTML = '<p style="color:#706858; font-style:italic;">🎉 Нет новых рекомендаций! Все слабые места прорабатываются.</p>';
+            return;
+        }
+
+        let html = '';
+        active.forEach(rec => {
+            html += `
+                <div class="rec-item">
+                    <span>${rec.name} <span style="font-size:0.75rem; color:#706858;">— ${rec.effect}</span></span>
+                    <button class="rec-add-btn" data-name="${rec.name}">+ Добавить</button>
+                </div>
+            `;
+        });
+        recList.innerHTML = html;
+
+        // Обработчики кнопок
+        recList.querySelectorAll('.rec-add-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const name = btn.dataset.name;
+                const goals = loadGoals();
+                goals.push({ name, target: 21, completed: [], createdAt: TODAY });
+                saveGoals(goals);
+                renderAll();
+            });
+        });
+    }
+
+    // ========== ОТРИСОВКА ЦЕЛЕЙ ==========
+    function renderGoals() {
+        const goals = loadGoals();
+        const goalsList = document.getElementById('goalsList');
+
+        if (goals.length === 0) {
+            goalsList.innerHTML = '<div class="empty-state">🎯 Пока нет активных целей. Добавьте из рекомендаций или создайте свою.</div>';
+            return;
+        }
+
+        let html = '';
+        goals.forEach((goal, i) => {
+            const progress = goal.completed.length;
+            const percent = Math.round((progress / goal.target) * 100);
+            const completedToday = goal.completed.includes(TODAY);
+
+            html += `
+                <div class="goal-card">
+                    <div class="goal-header">
+                        <span class="goal-title">${goal.name}</span>
+                        <button class="goal-delete" data-idx="${i}">🗑️</button>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width:${percent}%"></div>
+                    </div>
+                    <div class="goal-stats">${progress} / ${goal.target} дней (${percent}%)</div>
+                    <button class="goal-check-btn" data-idx="${i}" ${completedToday ? 'disabled' : ''}>
+                        ${completedToday ? '✅ Отмечено сегодня' : '✅ Отметить выполнение'}
+                    </button>
+                </div>
+            `;
+        });
+        goalsList.innerHTML = html;
+
+        // Обработчики
+        goalsList.querySelectorAll('.goal-check-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                const goals = loadGoals();
+                if (!goals[idx].completed.includes(TODAY)) {
+                    goals[idx].completed.push(TODAY);
+                    saveGoals(goals);
+                    renderAll();
+                }
+            });
+        });
+
+        goalsList.querySelectorAll('.goal-delete').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                if (confirm('Удалить эту цель?')) {
+                    const goals = loadGoals();
+                    goals.splice(idx, 1);
+                    saveGoals(goals);
+                    renderAll();
+                }
+            });
+        });
+    }
+
+    function renderAll() {
+        renderRecommendations();
+        renderGoals();
+    }
+
+    // ========== ДОБАВЛЕНИЕ СВОЕЙ ЦЕЛИ ==========
+    document.getElementById('addCustomBtn').addEventListener('click', () => {
+        const name = document.getElementById('customGoalName').value.trim();
+        if (!name) { alert('Введите название цели.'); return; }
+        const target = parseInt(document.getElementById('customGoalDays').value);
+        const goals = loadGoals();
+        goals.push({ name, target, completed: [], createdAt: TODAY });
+        saveGoals(goals);
+        document.getElementById('customGoalName').value = '';
+        renderAll();
+    });
+
+    // ========== ЗАПУСК ==========
+    renderAll();
+})();
+</script>
+
+</body>
+</html>

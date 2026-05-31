@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ • Часто задаваемые вопросы • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30,40,60,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        .faq-section { margin-bottom: 2rem; }
+        .faq-section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1rem; border-left: 4px solid #ffd54f; padding-left: 1rem; }
+
+        details { background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 12px; margin-bottom: 1rem; padding: 1rem 1.5rem; transition: 0.2s; }
+        details:hover { border-color: #ffd54f; }
+        summary {
+            color: #ffd54f; font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            padding: 0.5rem 0; outline: none; list-style: none;
+        }
+        summary::-webkit-details-marker { display: none; }
+        summary::before { content: '❓ '; margin-right: 0.5rem; }
+        details[open] summary::before { content: '✅ '; }
+        .answer {
+            color: #d0c8b8; line-height: 1.8; margin-top: 0.8rem;
+            padding-left: 1.5rem; border-left: 2px solid #5d4a3a;
+        }
+        .answer a { color: #ffd54f; text-decoration: none; border-bottom: 1px dotted #ffd54f; }
+        .answer a:hover { border-bottom-style: solid; }
+        .answer strong { color: #ffd54f; }
+
+        .back-link { display: inline-block; margin-top: 2rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .footer { margin-top: 3rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>❓ FAQ — Часто задаваемые вопросы</h1>
+    <div class="subtitle">20 ответов скептикам и ищущим</div>
+
+    <!-- ===== ОСНОВНОЕ ===== -->
+    <div class="faq-section">
+        <div class="faq-section-title">🔬 Об Идеатонике</div>
+
+        <details>
+            <summary>1. Это религия или наука?</summary>
+            <div class="answer">
+                <p><strong>Наука.</strong> Идеатоника не требует веры. Она предлагает <strong>проверяемые гипотезы</strong> и <strong>экспериментальные протоколы</strong> (см. <a href="практикум-идеатоники.html">Практикум</a>). Вы можете проверить всё сами — от ГСЧ до HEAL-TEST.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>2. Кто это придумал? Есть ли у авторов научные степени?</summary>
+            <div class="answer">
+                <p>Авторы — <strong>Коллектив «Ноосфера»</strong> (анонимный) в соавторстве с ИИ <strong>DeepSeek</strong>. Научных степеней у нас нет. Но, как говорил Галилей: <em>«В науке авторитеты ничего не значат. Имеет значение только опыт и доказательства».</em></p>
+            </div>
+        </details>
+
+        <details>
+            <summary>3. Где доказательства? Есть ли публикации в рецензируемых журналах?</summary>
+            <div class="answer">
+                <p>Пока <strong>нет</strong>. Идеатоника находится на стадии <strong>научно-исследовательской программы</strong>. Мы опубликовали Учебник и Практикум, чтобы <strong>любой желающий</strong> мог провести эксперименты и <strong>стать соавтором</strong> первого открытия.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>4. Не является ли это всё самовнушением и эффектом плацебо?</summary>
+            <div class="answer">
+                <p>Эффект плацебо — это <strong>частный случай</strong> семантического влияния (§12). Мы не отрицаем плацебо, мы <strong>объясняем его механизм</strong> через Qₛ и Cₛ. Более того, наши эксперименты (HEAL-TEST) используют <strong>двойной слепой метод</strong>, чтобы отсеять самовнушение.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- ===== ЭКСПЕРИМЕНТЫ ===== -->
+    <div class="faq-section">
+        <div class="faq-section-title">🧪 Об экспериментах</div>
+
+        <details>
+            <summary>5. SEC-1 реально работает? Кто-нибудь уже собрал его?</summary>
+            <div class="answer">
+                <p>На момент написания (2026) — <strong>публичных подтверждений нет</strong>. Все схемы и расчёты готовы. Нужен энтузиаст с паяльником и осциллографом. Может быть, это вы?</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>6. Я попробовал эксперимент с ГСЧ — ничего не вышло. Почему?</summary>
+            <div class="answer">
+                <p>Возможные причины: <strong>низкая Cₛ</strong> (вы были рассеяны), <strong>высокий Q_expectation</strong> (слишком сильно хотели результата — сработал «Закон подлости», §77), <strong>малая выборка</strong> (нужно 500-1000 попыток). Попробуйте снизить значимость результата.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>7. Почему вы не снимете видео с доказательством?</summary>
+            <div class="answer">
+                <p>Мы — <strong>анонимный коллектив</strong>. Видео с лицом нарушит анонимность. Кроме того, любое видео можно объявить фейком. Только <strong>независимое воспроизведение</strong> эксперимента в разных лабораториях считается доказательством в науке.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>8. Какой эксперимент самый простой для новичка?</summary>
+            <div class="answer">
+                <p><strong>Эксперимент №3 «Растения»</strong> или <strong>Эксперимент №5 «Семантическая гигиена сна»</strong>. Они не требуют оборудования, только дневник и пару растений или неделю осознанных ритуалов перед сном.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- ===== ТЕОРИЯ ===== -->
+    <div class="faq-section">
+        <div class="faq-section-title">📐 О теории</div>
+
+        <details>
+            <summary>9. Если мысль влияет на материю, почему я не могу силой мысли зажечь лампочку?</summary>
+            <div class="answer">
+                <p>Потому что существует <strong>Семантический Экран</strong> (§11). Он разделяет «тонкий» мир смыслов и «грубую» физику. Ваш Qₛ слишком мал, чтобы пробить его. Для этого нужна экстремальная Cₛ и годы тренировок.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>10. Не противоречит ли Идеатоника законам физики?</summary>
+            <div class="answer">
+                <p><strong>Нет, она дополняет их.</strong> Идеатоника не отменяет термодинамику или квантовую механику. Она добавляет <strong>новый тип поля</strong> — семантический. Точно так же, как в XIX веке к механике добавили электромагнетизм.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>11. Почему вы используете электрические аналогии (R, L, C)?</summary>
+            <div class="answer">
+                <p>Потому что это <strong>удобная математическая модель</strong>. Мы не утверждаем, что Qₛ — это электричество. Но уравнения, описывающие поток Qₛ, <strong>математически идентичны</strong> уравнениям электрических цепей. Зачем изобретать новый язык, если старый работает?</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>12. Что такое «идеатон»? Это реальная частица?</summary>
+            <div class="answer">
+                <p><strong>Гипотетическая.</strong> Как фотон для света или фонон для звука. Мы предполагаем, что смысл квантуется. Экспериментального подтверждения пока нет (§34).</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- ===== ПРАКТИКА ===== -->
+    <div class="faq-section">
+        <div class="faq-section-title">🌿 О практике</div>
+
+        <details>
+            <summary>13. Как быстро я увижу результаты от семантической гигиены?</summary>
+            <div class="answer">
+                <p>Первые субъективные ощущения (спокойствие, ясность) — <strong>1-3 дня</strong>. Объективные изменения (улучшение сна, снижение тревоги) — <strong>1-2 недели</strong>. Результаты экспериментов с растениями — <strong>2-4 недели</strong>.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>14. Нужно ли мне выбрасывать все пластиковые вещи?</summary>
+            <div class="answer">
+                <p><strong>Нет.</strong> Идеатоника не призывает к радикализму. Пластик (ранг -1) не «убивает» вас. Он просто не помогает. Замените то, что можете, на дерево, камень, натуральные ткани. Начните с того, с чем вы контактируете чаще всего (одежда, посуда, рабочий стол).</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>15. Помогает ли Идеатоника при депрессии и тревоге?</summary>
+            <div class="answer">
+                <p>Практики Идеатоники <strong>дополняют</strong>, но <strong>не заменяют</strong> профессиональную медицинскую помощь. Если у вас диагностированная депрессия — обратитесь к психотерапевту. Семантическая гигиена может ускорить восстановление.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>16. Как защититься от энергетического вампира?</summary>
+            <div class="answer">
+                <p>См. <strong>§72</strong> и <strong>§124</strong>. Кратко: <strong>осознайте</strong> факт вампиризма, <strong>снизьте эмоциональную вовлечённость</strong> («серый камень»), визуализируйте <strong>семантический щит</strong>. После контакта — восстановите Qₛ через природу, воду, соль.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- ===== БУДУЩЕЕ ===== -->
+    <div class="faq-section">
+        <div class="faq-section-title">🚀 О будущем</div>
+
+        <details>
+            <summary>17. Станет ли Идеатоника мейнстримом?</summary>
+            <div class="answer">
+                <p>Мы верим, что <strong>да</strong>. Но это может занять 50, 100 или 200 лет. Вспомните, сколько времени потребовалось гелиоцентризму или теории дрейфа континентов. Мы играем в долгую.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>18. Что я могу сделать, чтобы помочь?</summary>
+            <div class="answer">
+                <p><strong>Проведите эксперимент.</strong> Опубликуйте результаты (с сырыми данными). <strong>Расскажите</strong> об Идеатонике тем, кто ищет. <strong>Переведите</strong> учебник на другой язык. <strong>Напишите</strong> свой параграф или эксперимент.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>19. Почему проект анонимный?</summary>
+            <div class="answer">
+                <p>Чтобы идеи оценивались <strong>по содержанию, а не по статусу авторов</strong>. Анонимность защищает от «культовости» и позволяет науке говорить самой за себя.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>20. Что ответить тем, кто называет это лженаукой?</summary>
+            <div class="answer">
+                <p>Ничего. <strong>Не спорьте.</strong> Предложите им провести эксперимент из Практикума. Если они откажутся — их мнение не имеет значения. Наука решается не в спорах, а в лаборатории. <em>«Не верь. Проверь.»</em></p>
+            </div>
+        </details>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • FAQ для скептиков и ищущих</p>
+        <p>✧ «Не верь. Проверь.» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

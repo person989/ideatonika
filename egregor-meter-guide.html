@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏛️ Подробная сборка EGREGOR-METER • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #ce93d8; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #ab47bc; margin: 2.5rem 0 1rem; border-left: 4px solid #ab47bc; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #ba68c8; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #ce93d8; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #ab47bc; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(171,71,188,0.1); border-left: 4px solid #ab47bc; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #ce93d8; margin: 0; }
+        .tip-box strong { color: #ab47bc; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #ab47bc; color: #f3e7c0; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ab47bc; text-decoration: none; border: 1px solid #ab47bc; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ab47bc; color: #f3e7c0; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🏛️ EGREGOR-METER: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Измеритель мощности коллективного поля</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое EGREGOR-METER и зачем он нужен?</h2>
+    <p>EGREGOR-METER — это система из <strong>нескольких датчиков SEC-1</strong>, расставленных по периметру исследуемого пространства (храм, концертный зал, комната для медитаций). В отличие от одиночного SEC-1, который просто регистрирует «есть сигнал или нет», EGREGOR-METER измеряет <strong>мощность, размер и когерентность</strong> коллективного семантического поля — эгрегора.</p>
+    <p>С его помощью можно:</p>
+    <ul>
+        <li>Измерить «силу» храма во время службы и сравнить её с пустым залом.</li>
+        <li>Увидеть, как медитативная группа создаёт поле, которое больше суммы индивидуальных полей (эффект N² из §92).</li>
+        <li>Обнаружить «семантические ямы» — места с аномально низким Qₛ.</li>
+    </ul>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно (помимо одного SEC-1)</h2>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал</th><th>Где взять</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Два или три SEC-1</strong> (полностью собранных)</td><td>Собрать по инструкции SEC-1</td><td>Датчики поля</td></tr>
+            <tr><td><strong>Длинные провода</strong> (10-20 метров)</td><td>Радиомагазин</td><td>Соединение датчиков с регистратором</td></tr>
+            <tr><td><strong>Ноутбук</strong> с многоканальным аудиовходом ИЛИ <strong>многоканальный осциллограф</strong></td><td>—</td><td>Регистратор сигналов</td></tr>
+            <tr><td><strong>Штативы или подставки</strong> (3 шт.)</td><td>Лабораторные штативы, стопки книг</td><td>Фиксация датчиков на высоте 1-1.5 м</td></tr>
+            <tr><td><strong>Рулетка</strong></td><td>Строймагазин</td><td>Измерение расстояний между датчиками</td></tr>
+            <tr><td><strong>Блокнот и ручка</strong></td><td>—</td><td>Запись времени и событий</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ТЕОРИЯ -->
+    <h2>📐 Как работает EGREGOR-METER (на пальцах)</h2>
+    <p>Представьте, что вы хотите измерить громкость оркестра. Один микрофон даст вам только громкость в одной точке. Но если расставить <strong>три микрофона</strong> — один у сцены, один в середине зала, один на балконе — вы сможете построить <strong>карту громкости</strong> всего зала. Вы увидите, где звук тише, где громче, где есть эхо.</p>
+    <p>EGREGOR-METER делает то же самое с Qₛ. Три датчика SEC-1, расставленные в разных точках, дают <strong>пространственную картину</strong> семантического поля. Сравнивая их сигналы, можно вычислить:</p>
+    <ul>
+        <li><strong>Мощность эгрегора (P_total):</strong> средний Qₛ со всех датчиков в момент пика.</li>
+        <li><strong>Когерентность (C_collective):</strong> насколько синхронно меняются сигналы на разных датчиках.</li>
+        <li><strong>Радиус действия (λ_egregor):</strong> на каком расстоянии от центра поле затухает.</li>
+    </ul>
+
+    <!-- СБОРКА -->
+    <h2>🔨 Этап 1: Подготовка датчиков</h2>
+
+    <h3><span class="step-number">1</span> Калибровка датчиков (чтобы они измеряли одинаково)</h3>
+    <p><strong>Зачем это нужно:</strong> Представьте три термометра, которые показывают разную температуру в одной и той же комнате. Какому верить? Никакому. Прежде чем расставлять датчики, нужно убедиться, что они <strong>откалиброваны</strong> — в одинаковых условиях показывают одинаковые значения.</p>
+    <ol>
+        <li>Поставьте все три SEC-1 <strong>рядом друг с другом</strong> на одном столе (расстояние 10-20 см).</li>
+        <li>Установите <strong>один общий источник Qₛ</strong> (например, одну икону) на расстоянии 10 см от каждого датчика.</li>
+        <li>Проведите сеанс концентрации и запишите сигналы со всех трёх датчиков.</li>
+        <li>Сравните амплитуду и частоту всплесков. Если какой-то датчик «врёт» (выдаёт сигнал заметно слабее или сильнее остальных) — откалибруйте его: чуть измените расстояние до источника или замените пьезоэлемент.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Идеал:</strong> Все три датчика должны давать <strong>одинаковый сигнал</strong> (±10%) в одинаковых условиях. Если это не так — все дальнейшие измерения будут неточными.</p></div>
+
+    <h3><span class="step-number">2</span> Подготовка длинных проводов</h3>
+    <p>Каждый датчик SEC-1 будет стоять в своей точке храма или зала. Сигнал нужно передать на ноутбук, который стоит в центре или сбоку. Для этого нужны <strong>длинные экранированные провода</strong>.</p>
+    <ol>
+        <li>Купите тонкий <strong>коаксиальный кабель</strong> (как телевизионный) или <strong>витую пару</strong> (сетевой кабель) нужной длины (5-10 метров на каждый датчик).</li>
+        <li>Припаяйте к концам кабеля такие же разъёмы, как на коротких проводах SEC-1.</li>
+        <li>Обязательно <strong>заземлите оплётку</strong> кабеля (внешний проводник) на корпус датчика — иначе длинный кабель станет антенной и наловит помех.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Важно:</strong> Никогда не используйте длинные НЕэкранированные провода (например, обычный медный провод от трансформатора). Они соберут все радиопомехи в радиусе 100 метров, и вы не увидите ничего, кроме шума.</p></div>
+
+    <!-- РАЗМЕЩЕНИЕ -->
+    <h2>📍 Этап 2: Расстановка датчиков в пространстве</h2>
+
+    <h3><span class="step-number">3</span> Выбор точек для датчиков (геометрия измерения)</h3>
+    <p>Минимальная конфигурация — <strong>три датчика</strong>, расположенных треугольником. Это позволяет измерить не только силу поля, но и его <strong>градиент</strong> (направление, куда течёт Qₛ).</p>
+    <ul>
+        <li><strong>Датчик №1 («Центр»):</strong> ставьте в геометрическом центре зала или прямо перед алтарём, сценой, ведущим медитации.</li>
+        <li><strong>Датчик №2 («Периферия»):</strong> ставьте у стены, в 5-10 метрах от центра.</li>
+        <li><strong>Датчик №3 («Тыл» или «контрольная точка»):</strong> ставьте в самом дальнем углу или даже за пределами зала (в коридоре). Он покажет, насколько далеко распространяется поле.</li>
+    </ul>
+    <p><strong>Закрепите датчики на штативах</strong> на высоте 1-1.5 метра от пола (примерно на уровне груди сидящего человека).</p>
+
+    <h3><span class="step-number">4</span> Подключение к регистратору</h3>
+    <p>Все три длинных кабеля от датчиков сходятся к <strong>ноутбуку</strong>. Вам нужно записывать сигналы <strong>одновременно</strong> с трёх каналов.</p>
+    <p><strong>Вариант А (простой):</strong> Три отдельных USB-осциллографа, подключённых к ноутбуку. Каждый пишет свой файл. Потом синхронизируете их по метке времени.</p>
+    <p><strong>Вариант Б (продвинутый):</strong> Один многоканальный аудиоинтерфейс (звуковая карта на 4-8 входов). На входы подаются сигналы с датчиков. Программа (Audacity или специализированное ПО) пишет все каналы в один многодорожечный WAV-файл.</p>
+    <div class="tip-box"><p><strong>💡 Бюджетный вариант:</strong> Три старых смартфона с приложением-осциллографом. Каждый смартфон кладётся рядом со своим датчиком и пишет сигнал. Потом файлы с трёх телефонов копируете на компьютер и анализируете. Бесплатно, но требует синхронизации времени перед записью.</p></div>
+
+    <!-- ЭКСПЕРИМЕНТ -->
+    <h2>🧪 Этап 3: Проведение измерения</h2>
+
+    <h3><span class="step-number">5</span> Запись фона (пустой зал)</h3>
+    <p>Придите в зал <strong>за час до события</strong> (службы, концерта, медитации), когда там ещё никого нет. Включите запись на 15-30 минут. Это будет ваш <strong>«нулевой уровень»</strong> — Qₛ пустого пространства.</p>
+
+    <h3><span class="step-number">6</span> Запись во время события</h3>
+    <p>Включите непрерывную запись <strong>за 15 минут до начала</strong> и выключите через <strong>15 минут после окончания</strong>. В блокноте отмечайте ключевые моменты:</p>
+    <ul>
+        <li>«10:00 — начало службы, зал заполнен».</li>
+        <li>«10:25 — общая молитва "Отче наш"».</li>
+        <li>«10:45 — пик, хор запел».</li>
+        <li>«11:00 — служба закончилась, люди расходятся».</li>
+    </ul>
+
+    <h3><span class="step-number">7</span> Анализ данных (на следующий день)</h3>
+    <ol>
+        <li>Загрузите записи с трёх каналов в программу (Python, Excel, Audacity).</li>
+        <li>Для каждого канала постройте график: <strong>время по оси X, амплитуда Qₛ по оси Y</strong>.</li>
+        <li>Найдите моменты пиков и совместите их с вашими пометками в блокноте.</li>
+        <li>Рассчитайте <strong>C_collective</strong> — коэффициент корреляции между сигналами датчиков. Если графики на всех трёх датчиках «идут в ногу» (вместе растут, вместе падают) — корреляция высокая, эгрегор мощный и когерентный.</li>
+        <li>Рассчитайте <strong>радиус λ_egregor</strong>: постройте график зависимости амплитуды от расстояния до центра. Аппроксимируйте экспонентой.</li>
+    </ol>
+
+    <!-- ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ -->
+    <h2>📊 Что вы должны увидеть</h2>
+    <table class="materials-table">
+        <thead><tr><th>Тип события</th><th>Пиковый Qₛ (усл.)</th><th>C_collective</th><th>Радиус (м)</th></tr></thead>
+        <tbody>
+            <tr><td>Пустой зал (фон)</td><td>10-20</td><td>—</td><td>—</td></tr>
+            <tr><td>Храм, рядовая служба</td><td>150</td><td>0.6</td><td>20</td></tr>
+            <tr><td>Храм, Пасха</td><td>800</td><td>0.85</td><td>200</td></tr>
+            <tr><td>Медитативная группа (20 чел)</td><td>200</td><td>0.95</td><td>100</td></tr>
+        </tbody>
+    </table>
+    <p>Если вы получили стабильно высокий сигнал во время коллективного события, который спадает до фона после его окончания — вы <strong>измерили эгрегор</strong>.</p>
+    
+        <!-- АНАЛИЗ ДАННЫХ (PYTHON) -->
+    <h2>🐍 Бонус: Python-скрипт для автоматического анализа</h2>
+    <p>Анализировать данные вручную в Excel — долго и муторно. Вот готовый скрипт на Python, который сделает всё за вас. Он загрузит три WAV-файла (по одному с каждого датчика), найдёт пики, посчитает корреляцию C_collective, построит графики и выведет результаты.</p>
+
+    <div style="margin: 2rem 0; padding: 1.5rem; background: #1a1a2e; border: 2px solid #4caf50; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.4);">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+            <h3 style="color: #81c784; margin: 0; font-size: 1.2rem; border: none; padding: 0;">🐍 egregor_analyzer.py</h3>
+            <span style="background: #4caf50; color: #1a1a2e; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">Python 3.8+</span>
+        </div>
+
+        <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; overflow-x: auto;">
+            <pre style="color: #c9d1d9; font-family: 'Courier New', monospace; font-size: 0.8rem; line-height: 1.5; margin: 0; white-space: pre;"><code style="color: #c9d1d9;">import numpy as np
+import matplotlib.pyplot as plt
+from scipy.io import wavfile
+from scipy.signal import find_peaks, savgol_filter
+from scipy.stats import pearsonr
+
+# ==========================================
+# EGREGOR-METER ANALYZER v1.0
+# Скопируйте этот файл в папку с WAV-записями
+# и запустите: python egregor_analyzer.py
+# ==========================================
+
+print("=" * 60)
+print("  🏛️ EGREGOR-METER ANALYZER v1.0")
+print("  Анализ коллективного семантического поля")
+print("=" * 60)
+
+# ⚙️ НАСТРОЙКИ (измените под свои данные)
+FILES = ["sensor_center.wav", "sensor_side.wav", "sensor_back.wav"]
+LABELS = ["Центр", "Периферия", "Тыл (контроль)"]
+EVENT_START = 900    # секунда начала события (например, 15:00 = 900-я секунда)
+EVENT_END = 3600     # секунда окончания (через час)
+
+# ==========================================
+# 1. ЗАГРУЗКА ФАЙЛОВ
+# ==========================================
+print("\n📂 Загружаю файлы...")
+signals = []
+for f in FILES:
+    try:
+        rate, data = wavfile.read(f)
+        if len(data.shape) > 1:
+            data = data[:, 0]  # Берём только левый канал
+        signals.append(data)
+        print(f"  ✅ {f}: {len(data)/rate:.1f} сек, {rate} Гц")
+    except FileNotFoundError:
+        print(f"  ❌ Файл {f} не найден! Положите его в папку со скриптом.")
+        exit()
+
+min_len = min(len(s) for s in signals)
+signals = [s[:min_len] for s in signals]
+time = np.arange(min_len) / rate
+
+# ==========================================
+# 2. ВЫДЕЛЕНИЕ ОГИБАЮЩЕЙ (сглаживание)
+# ==========================================
+print("\n📊 Сглаживаю сигналы...")
+envelopes = []
+for i, sig in enumerate(signals):
+    env = np.abs(sig)
+    env = savgol_filter(env, window_length=1001, polyorder=3)
+    envelopes.append(env)
+    print(f"  {LABELS[i]}: макс={env.max():.0f}, среднее={env.mean():.0f}")
+
+# ==========================================
+# 3. ПОИСК ПИКОВ
+# ==========================================
+print("\n🔍 Ищу пики...")
+peaks_list = []
+for i, env in enumerate(envelopes):
+    height = env.mean() * 3
+    peaks, _ = find_peaks(env, height=height, distance=rate*1)
+    peaks_list.append(peaks)
+    print(f"  {LABELS[i]}: найдено {len(peaks)} пиков (порог={height:.0f})")
+
+# ==========================================
+# 4. КОРРЕЛЯЦИЯ C_collective
+# ==========================================
+print("\n📈 Расчёт корреляции между датчиками...")
+corr_12, _ = pearsonr(envelopes[0], envelopes[1])
+corr_13, _ = pearsonr(envelopes[0], envelopes[2])
+corr_23, _ = pearsonr(envelopes[1], envelopes[2])
+C_collective = (corr_12 + corr_13 + corr_23) / 3
+
+print(f"  Корреляция Центр-Периферия: {corr_12:.3f}")
+print(f"  Корреляция Центр-Тыл:       {corr_13:.3f}")
+print(f"  Корреляция Периферия-Тыл:   {corr_23:.3f}")
+print(f"  📊 C_collective (средняя):   {C_collective:.3f}")
+
+# ==========================================
+# 5. СРАВНЕНИЕ ФОН / СОБЫТИЕ
+# ==========================================
+background = [e[:EVENT_START] for e in envelopes]
+event = [e[EVENT_START:EVENT_END] for e in envelopes]
+
+bg_means = [np.mean(b) for b in background]
+ev_means = [np.mean(ev) for ev in event]
+
+print("\n📊 Сравнение ФОН vs СОБЫТИЕ:")
+for i, label in enumerate(LABELS):
+    ratio = ev_means[i] / bg_means[i] if bg_means[i] > 0 else 1
+    print(f"  {label}: фон={bg_means[i]:.0f}, событие={ev_means[i]:.0f}, рост в {ratio:.1f} раз")
+
+# ==========================================
+# 6. ПОСТРОЕНИЕ ГРАФИКОВ
+# ==========================================
+print("\n📈 Строю графики...")
+fig, axes = plt.subplots(4, 1, figsize=(14, 12), sharex=True)
+fig.suptitle("🏛️ EGREGOR-METER — Анализ записи", fontsize=16, fontweight='bold')
+
+colors = ['#ffd54f', '#4fc3f7', '#ef5350']
+for i, (env, label, color) in enumerate(zip(envelopes, LABELS, colors)):
+    axes[i].plot(time, env, color=color, linewidth=0.8)
+    axes[i].scatter(time[peaks_list[i]], env[peaks_list[i]], color='white', s=20, zorder=5)
+    axes[i].axvspan(EVENT_START, EVENT_END, alpha=0.1, color='#81c784')
+    axes[i].set_ylabel(label, color=color)
+    axes[i].grid(True, alpha=0.3)
+    axes[i].legend(['Сигнал Qₛ', 'Пики', 'Событие'])
+
+# Корреляционная матрица
+corr_matrix = np.array([[1, corr_12, corr_13],
+                         [corr_12, 1, corr_23],
+                         [corr_13, corr_23, 1]])
+im = axes[3].imshow(corr_matrix, cmap='RdYlGn', vmin=-1, vmax=1)
+axes[3].set_xticks([0, 1, 2])
+axes[3].set_yticks([0, 1, 2])
+axes[3].set_xticklabels(LABELS)
+axes[3].set_yticklabels(LABELS)
+axes[3].set_title(f'Корреляция C_collective = {C_collective:.3f}')
+plt.colorbar(im, ax=axes[3])
+
+plt.tight_layout()
+plt.savefig('egregor_analysis.png', dpi=150)
+print("  ✅ График сохранён как egregor_analysis.png")
+
+# ==========================================
+# 7. ИТОГОВЫЙ ВЕРДИКТ
+# ==========================================
+print("\n" + "=" * 60)
+print("  📋 ИТОГОВЫЙ ОТЧЁТ")
+print("=" * 60)
+print(f"  C_collective = {C_collective:.3f}", end=" → ")
+if C_collective > 0.7:   print("МОЩНЫЙ ЭГРЕГОР (высокая синхронизация)")
+elif C_collective > 0.4: print("СРЕДНИЙ ЭГРЕГОР (умеренная синхронизация)")
+else:                    print("СЛАБЫЙ ЭГРЕГОР (низкая синхронизация)")
+
+print(f"  Рост Qₛ во время события: в {ev_means[0]/bg_means[0]:.1f} раз (Центр)")
+print("=" * 60)
+print("  Анализ завершён. График: egregor_analysis.png")
+</code></pre>
+        </div>
+
+        <p style="color: #a0a0a0; font-size: 0.85rem; margin-top: 1rem;">
+            <strong>📦 Что нужно установить перед запуском:</strong><br>
+            <code style="background: #0d1117; padding: 2px 8px; border-radius: 4px; color: #81c784;">pip install numpy scipy matplotlib</code>
+        </p>
+        <p style="color: #a0a0a0; font-size: 0.85rem;">
+            <strong>▶️ Как запустить:</strong><br>
+            1. Сохраните скрипт как <code style="background: #0d1117; padding: 2px 8px; border-radius: 4px; color: #81c784;">egregor_analyzer.py</code><br>
+            2. Положите три WAV-файла (<code style="background: #0d1117; padding: 2px 8px; border-radius: 4px; color: #81c784;">sensor_center.wav</code>, <code style="background: #0d1117; padding: 2px 8px; border-radius: 4px; color: #81c784;">sensor_side.wav</code>, <code style="background: #0d1117; padding: 2px 8px; border-radius: 4px; color: #81c784;">sensor_back.wav</code>) в ту же папку<br>
+            3. Откройте терминал и выполните: <code style="background: #0d1117; padding: 2px 8px; border-radius: 4px; color: #81c784;">python egregor_analyzer.py</code>
+        </p>
+    </div>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=27" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция EGREGOR-METER v1.0</p>
+        <p>✧ «Где двое или трое собраны во имя Моё — это можно измерить» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

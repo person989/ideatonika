@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👻 Подробная сборка PHANTOM-SCAN • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #ce93d8; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #ab47bc; margin: 2.5rem 0 1rem; border-left: 4px solid #ab47bc; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #ce93d8; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #ce93d8; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #ab47bc; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(171,71,188,0.1); border-left: 4px solid #ab47bc; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #ce93d8; margin: 0; }
+        .tip-box strong { color: #ab47bc; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #ab47bc; color: #fff; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ab47bc; text-decoration: none; border: 1px solid #ab47bc; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ab47bc; color: #fff; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>👻 PHANTOM-SCAN: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Регистрация семантического следа человека</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое PHANTOM-SCAN и зачем его строить?</h2>
+    <p>Вы когда-нибудь заходили в комнату и чувствовали, что там «кто-то есть»? Или садились в кресло, с которого только что встал человек, и ощущали странное «тепло» или «холод»? Это не мистика. Это <strong>семантический след</strong> — остаточное поле Qₛ, которое человек оставляет на предметах после себя.</p>
+    <p>PHANTOM-SCAN — это прибор, который позволяет <strong>увидеть этот след</strong>. Он не просто регистрирует «есть сигнал или нет». Он строит <strong>двумерную карту</strong> — как тепловизор, но для Смысла. Вы сможете увидеть контуры человека на кресле, где он сидел, или свечение вокруг его ладони.</p>
+    <p>Этот эксперимент — прямой путь к доказательству того, что <strong>семантическое поле объективно существует</strong> и подчиняется измеримым законам.</p>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно купить (или найти)</h2>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал</th><th>Где взять</th><th>Примерная стоимость</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Кварцевые пластины</strong> (16 шт., одинаковые)</td><td>Радиомагазин, старые часы, пьезозажигалки</td><td>200-400 ₽</td><td>Пиксели матрицы датчиков (4x4)</td></tr>
+            <tr><td><strong>Фольгированный стеклотекстолит</strong> (пластина ~10x10 см)</td><td>Радиомагазин</td><td>100-200 ₽</td><td>Основание для матрицы</td></tr>
+            <tr><td><strong>Тонкие провода</strong> (32 шт. по 15-20 см)</td><td>Старые USB-кабели, наушники</td><td>0 ₽</td><td>Подключение пикселей к мультиплексору</td></tr>
+            <tr><td><strong>Мультиплексор</strong> (CD4051 или аналог)</td><td>Радиомагазин</td><td>50-100 ₽</td><td>Последовательный опрос пикселей</td></tr>
+            <tr><td><strong>Микроконтроллер Arduino Uno/Nano</strong></td><td>Радиомагазин, интернет</td><td>300-500 ₽</td><td>Управление сканированием и передача данных</td></tr>
+            <tr><td><strong>USB-кабель</strong> для Arduino</td><td>В комплекте с Arduino</td><td>0 ₽</td><td>Подключение к компьютеру</td></tr>
+            <tr><td><strong>Ноутбук или ПК</strong> с установленной Arduino IDE</td><td>Ваш компьютер</td><td>0 ₽</td><td>Программирование и визуализация</td></tr>
+            <tr><td><strong>Кресло</strong> с тканевой обивкой</td><td>Дома</td><td>0 ₽</td><td>Объект для регистрации следа</td></tr>
+            <tr><td><strong>Пластилин или воск</strong></td><td>Канцтовары</td><td>50 ₽</td><td>Фиксация кварцевых пластин на подложке</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ТЕОРИЯ -->
+    <h2>📐 Как работает матрица датчиков (принцип «семантического тепловизора»)</h2>
+    <p>Представьте тепловизор. Он не видит свет. Он видит <strong>тепло</strong> — инфракрасное излучение. Матрица в тепловизоре — это много маленьких датчиков, каждый измеряет температуру в своей точке. Компьютер собирает эти точки и строит цветную картинку.</p>
+    <p>PHANTOM-SCAN работает точно так же, но вместо тепла он измеряет <strong>Qₛ</strong>. Каждая кварцевая пластина — это один «пиксель». Когда на неё попадает семантическое поле, она выдаёт крошечный электрический импульс (пьезоэффект). Мультиплексор быстро опрашивает все 16 пикселей, Arduino оцифровывает сигнал и отправляет на компьютер. Программа строит <strong>тепловую карту</strong>: красный — сильный Qₛ, синий — слабый.</p>
+    <div class="scheme-box"><pre>
+    КРЕСЛО (след)
+         │
+         ▼
+    Матрица 4x4 кварцевых пластин
+         │
+         ▼
+    Мультиплексор (CD4051)
+         │
+         ▼
+    Arduino (АЦП + отправка)
+         │
+         ▼
+    Компьютер (тепловая карта)
+    </pre></div>
+
+    <!-- СБОРКА -->
+    <h2>🔨 Этап 1: Сборка матрицы датчиков (4x4)</h2>
+
+    <h3><span class="step-number">1</span> Подготовка кварцевых пластин</h3>
+    <p>Вам нужно <strong>16 одинаковых</strong> кварцевых пластин. Лучший источник — старые пьезозажигалки. Разберите 16 зажигалок и извлеките пьезоэлементы (как это сделать — см. подробную инструкцию по SEC-1, шаг 1).</p>
+    <p><strong>Важно:</strong> Все пластины должны быть примерно одного размера (5x5 мм или около того). Это нужно для равномерной чувствительности матрицы. Если пластины разного размера — откалибруйте их потом в программе.</p>
+    <div class="tip-box"><p><strong>💡 Лайфхак:</strong> Если не хотите разбирать 16 зажигалок, купите в радиомагазине <strong>16 одинаковых кварцевых резонаторов</strong> (например, 32 кГц). Они стоят по 10-15 рублей. У них уже есть провода, ничего паять не надо.</p></div>
+
+    <h3><span class="step-number">2</span> Создание подложки (основания матрицы)</h3>
+    <ol>
+        <li>Возьмите фольгированный стеклотекстолит (или любой жёсткий диэлектрик — фанеру, пластик). Вырежьте квадрат <strong>10x10 см</strong>.</li>
+        <li>Расчертите сетку <strong>4x4</strong> (16 клеток). Каждая клетка — примерно 2x2 см.</li>
+        <li>В центре каждой клетки капните <strong>каплю пластилина</strong> (диаметром ~5 мм, высотой 3-5 мм). Это будут «подушки» для кварцевых пластин.</li>
+    </ol>
+
+    <h3><span class="step-number">3</span> Установка кварцевых пластин (пикселей)</h3>
+    <ol>
+        <li>На каждую пластилиновую подушку положите <strong>одну кварцевую пластину</strong> (пьезоэлемент).</li>
+        <li>Пластина должна лежать <strong>горизонтально</strong> и не касаться соседних пластин. Зазор между пластинами — не менее 2 мм.</li>
+        <li>От каждой пластины отходят два провода. Всего 32 провода. Промаркируйте их (например, П1+, П1-, П2+, П2-... П16+, П16-), чтобы не запутаться.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Осторожно:</strong> Провода от кварцев очень тонкие и легко ломаются у основания. Не дёргайте их. Если провод отломился — придётся припаивать заново (см. инструкцию SEC-1, шаг 2).</p></div>
+
+    <!-- ЭЛЕКТРИКА -->
+    <h2>⚡ Этап 2: Подключение матрицы к Arduino через мультиплексор</h2>
+
+    <h3><span class="step-number">4</span> Что такое мультиплексор и зачем он нужен</h3>
+    <p>У Arduino Uno всего <strong>6 аналоговых входов</strong>. А у нас 16 датчиков. Если подключать каждый датчик к своему входу — не хватит. Мультиплексор CD4051 — это <strong>электронный переключатель</strong>. Он как «ленивый секретарь»: по очереди подключает один из 16 датчиков к ОДНОМУ входу Arduino. Вы говорите: «Дай мне сигнал с датчика №5», и мультиплексор переключается на него. Через секунду: «Дай мне сигнал с датчика №6» — переключается на следующий.</p>
+
+    <h3><span class="step-number">5</span> Схема подключения (подробно)</h3>
+    <p><strong>CD4051 имеет 16 ножек:</strong></p>
+    <ul>
+        <li><strong>Ножки 13, 14, 15, 12, 1, 5, 2, 4</strong> — это каналы X0-X7. К ним подключаются <strong>выходы датчиков</strong> (по одному проводу от каждого кварца).</li>
+        <li><strong>Ножка 3</strong> — это общий выход (COM). Сюда приходит сигнал от выбранного датчика. Подключается к аналоговому входу A0 на Arduino.</li>
+        <li><strong>Ножки 11, 10, 9</strong> — это адресные входы (A, B, C). Подключаются к цифровым пинам Arduino (например, D2, D3, D4).</li>
+        <li><strong>Ножка 6</strong> (INH) — запрет работы. Подключите к GND (земля), чтобы мультиплексор всегда был включён.</li>
+        <li><strong>Ножка 7</strong> (VEE) — отрицательное питание. Подключите к GND.</li>
+        <li><strong>Ножка 8</strong> (VSS) — земля. GND.</li>
+        <li><strong>Ножка 16</strong> (VDD) — питание +5V от Arduino.</li>
+    </ul>
+    <p><strong>Упрощённо:</strong> Вы подключаете 16 сигнальных проводов от кварцев к каналам мультиплексора (X0-X7 на двух CD4051, так как один мультиплексор — это 8 каналов, а нам нужно 16). Общий выход мультиплексора — на A0 Arduino. Три адресных пина — на D2, D3, D4. Землю и питание — на GND и 5V.</p>
+    <div class="tip-box"><p><strong>💡 Лайфхак:</strong> Если у вас есть два мультиплексора CD4051 — подключите первые 8 датчиков к первому, вторые 8 — ко второму. Адресные пины у обоих мультиплексоров соедините параллельно (на одни и те же D2, D3, D4). А общие выходы (COM) — на РАЗНЫЕ аналоговые входы Arduino (A0 и A1). Тогда опрос будет быстрее.</p></div>
+
+    <!-- ПРОГРАММИРОВАНИЕ -->
+    <h2>💻 Этап 3: Программирование Arduino</h2>
+
+    <h3><span class="step-number">6</span> Код для Arduino (скетч)</h3>
+    <p>Подключите Arduino к компьютеру через USB. Откройте Arduino IDE. Создайте новый скетч и вставьте этот код:</p>
+    <div class="scheme-box"><pre>
+// Адресные пины мультиплексора
+const int A = 2;
+const int B = 3;
+const int C = 4;
+
+void setup() {
+    Serial.begin(9600);
+    pinMode(A, OUTPUT);
+    pinMode(B, OUTPUT);
+    pinMode(C, OUTPUT);
+}
+
+void loop() {
+    // Опрашиваем 8 каналов первого мультиплексора
+    for (int i = 0; i < 8; i++) {
+        selectChannel(i);
+        int val = analogRead(A0); // Читаем сигнал с выбранного датчика
+        Serial.print(val);
+        if (i < 7) Serial.print(",");
+    }
+    Serial.println(); // Перевод строки
+    delay(100); // Задержка 100 мс между сканами
+}
+
+void selectChannel(int channel) {
+    digitalWrite(A, channel & 1);
+    digitalWrite(B, (channel >> 1) & 1);
+    digitalWrite(C, (channel >> 2) & 1);
+}
+    </pre></div>
+    <p>Этот код опрашивает 8 каналов мультиплексора и выводит значения в Serial Monitor (Инструменты → Монитор порта). Вы увидите строки чисел, например: <strong>512, 520, 495, 510, ...</strong> Это сырые значения АЦП (0-1023) для каждого пикселя.</p>
+
+    <!-- ЭКСПЕРИМЕНТ -->
+    <h2>🧪 Этап 4: Проведение эксперимента</h2>
+
+    <h3><span class="step-number">7</span> Подготовка кресла и оператора</h3>
+    <ol>
+        <li><strong>Очистите кресло</strong> от старых следов. Протрите спинку и сиденье солёной водой, проветрите 1-2 часа или окурите шалфеем.</li>
+        <li><strong>Измерьте фон.</strong> Приложите матрицу датчиков к спинке кресла. Включите Arduino и запишите показания в течение 2-3 минут. Это будет ваш «нулевой уровень».</li>
+        <li><strong>Посадите оператора</strong> (человека) в кресло. Попросите его медитировать, визуализировать золотой свет и «впечатывать» себя в кресло. Сеанс: <strong>30-60 минут</strong>.</li>
+        <li><strong>Оператор встаёт и быстро уходит</strong> из комнаты (чтобы его текущее поле не мешало измерениям).</li>
+    </ol>
+
+    <h3><span class="step-number">8</span> Сканирование следа</h3>
+    <ol>
+        <li>Сразу после ухода оператора (в течение 1-2 минут) приложите матрицу к спинке кресла <strong>в том же месте</strong>, где измеряли фон.</li>
+        <li>Включите запись в Serial Monitor. Записывайте показания <strong>каждые 10-15 секунд</strong> в течение 5 минут.</li>
+        <li>Скопируйте данные в Excel или Google Sheets. Постройте <strong>тепловую карту</strong> (условное форматирование: зелёный — низкие значения, красный — высокие).</li>
+    </ol>
+
+    <!-- ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ -->
+    <h2>📊 Что вы должны увидеть</h2>
+    <p>На тепловой карте вы увидите <strong>«фантом»</strong> — области с повышенным Qₛ, соответствующие контурам спины, плеч и головы оператора. Особенно ярко должны светиться <strong>зона сердца</strong> (середина спинки) и <strong>зона затылка</strong> (верх спинки).</p>
+    <p>С течением времени (через 10-30 минут) «фантом» будет <strong>затухать</strong> — это соответствует экспоненциальному спаду Qₛ(t) = Q₀ · e^(-t/τ).</p>
+    <div class="tip-box"><p><strong>💡 Для чистоты эксперимента:</strong> Проведите контрольный опыт — посадите оператора в кресло, но попросите его <strong>НЕ медитировать</strong>, а просто листать ленту соцсетей (Cₛ ~0.3). Сравните тепловые карты. След от «рассеянного» оператора должен быть значительно слабее и быстрее затухать.</p></div>
+    <p><strong>Поздравляем!</strong> Вы впервые в истории визуализировали семантический след человека. Теперь вы знаете: мы оставляем после себя не только пустоту.</p>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=41" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция PHANTOM-SCAN v1.0</p>
+        <p>✧ «Мы оставляем после себя не только пустоту» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Дневник Исследователя • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: #2c2418;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        
+        /* Стол, на котором лежит тетрадь */
+        .desk {
+            max-width: 750px;
+            width: 100%;
+            background: #5c4a3a;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.1);
+        }
+        
+        /* Сама тетрадь */
+        .notebook {
+            background: #fdf8f0;
+            border-radius: 8px;
+            padding: 2.5rem 2rem 2rem 3.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 0 0 1px #e0d5c0;
+            position: relative;
+            /* Линовка */
+            background-image: 
+                linear-gradient(to bottom, #d0e0f0 1px, transparent 1px);
+            background-size: 100% 2rem;
+            background-position: 0 1.5rem;
+            line-height: 2rem;
+            min-height: 500px;
+        }
+        
+        /* Красная вертикальная линия (поля) */
+        .notebook::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 3rem;
+            width: 2px;
+            height: 100%;
+            background: #e57373;
+            opacity: 0.6;
+        }
+        
+        /* Следы от скрепок (декор) */
+        .notebook::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 60px;
+            height: 10px;
+            background: #c0b0a0;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        /* Заголовок тетради */
+        .notebook-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e0d5c0;
+        }
+        .notebook-header h1 {
+            font-size: 1.8rem;
+            color: #3b2a1f;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 0.3rem;
+        }
+        .notebook-header .exp-label {
+            font-size: 0.9rem;
+            color: #8b7355;
+            font-style: italic;
+        }
+        
+        /* Строки формы */
+        .form-row {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .form-label {
+            width: 100px;
+            text-align: right;
+            padding-right: 1.5rem;
+            color: #5d4037;
+            font-weight: bold;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .form-input {
+            flex: 1;
+            border: none;
+            border-bottom: 1px solid #c0b0a0;
+            background: transparent;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 1rem;
+            color: #2c1e0e;
+            padding: 0.3rem 0;
+            line-height: 2rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-input:focus {
+            border-bottom-color: #5d4037;
+        }
+        .form-input::placeholder {
+            color: #c0b0a0;
+            font-style: italic;
+        }
+        textarea.form-input {
+            resize: vertical;
+            min-height: 4rem;
+            line-height: 2rem;
+        }
+        
+        /* Кнопка сохранения */
+        .save-btn {
+            display: block;
+            width: fit-content;
+            margin: 2rem auto 1rem;
+            padding: 0.7rem 2.5rem;
+            background: #5d4037;
+            color: #fdf8f0;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Georgia', serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            letter-spacing: 1px;
+        }
+        .save-btn:hover {
+            background: #3b2a1f;
+        }
+        
+        /* Записи */
+        .entries-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #e0d5c0;
+        }
+        .entries-title {
+            font-size: 1rem;
+            color: #8b7355;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .entry {
+            background: rgba(139,115,85,0.08);
+            border-left: 3px solid #e57373;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.8rem;
+            border-radius: 0 8px 8px 0;
+        }
+        .entry-date {
+            color: #5d4037;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+        .entry-result {
+            color: #2c1e0e;
+            margin-top: 0.2rem;
+        }
+        .entry-notes {
+            color: #8b7355;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+        }
+        .entry-btns {
+            margin-top: 0.5rem;
+        }
+        .entry-btns button {
+            background: transparent;
+            border: 1px solid #c0b0a0;
+            color: #8b7355;
+            padding: 2px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+        }
+        .entry-btns button:hover {
+            background: #8b7355;
+            color: #fdf8f0;
+        }
+        .empty-msg {
+            color: #c0b0a0;
+            font-style: italic;
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        /* Ссылка назад */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            color: #c0b090;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover {
+            color: #fdf8f0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="desk">
+    <div class="notebook">
+        
+        <div class="notebook-header">
+            <h1>📝 ДНЕВНИК ИССЛЕДОВАТЕЛЯ</h1>
+            <div class="exp-label" id="expLabel">Загрузка...</div>
+        </div>
+        
+        <div class="form-row">
+            <span class="form-label">Дата:</span>
+            <input type="date" class="form-input" id="journalDate">
+        </div>
+        
+        <div class="form-row">
+            <span class="form-label">Результат:</span>
+            <input type="text" class="form-input" id="journalResult" placeholder="Опишите, что получилось...">
+        </div>
+        
+        <div class="form-row">
+            <span class="form-label">Заметки:</span>
+            <textarea class="form-input" id="journalNotes" placeholder="Условия, наблюдения, мысли..."></textarea>
+        </div>
+        
+        <button class="save-btn" onclick="saveEntry()">💾 Сохранить запись</button>
+        
+        <div class="entries-section">
+            <div class="entries-title">Предыдущие записи:</div>
+            <div id="journalEntries"></div>
+        </div>
+        
+    </div>
+    
+    <a href="практикум-идеатоники.html" class="back-link">← Вернуться к Практикуму</a>
+</div>
+
+<script>
+// ==========================================
+// ДНЕВНИК ИССЛЕДОВАТЕЛЯ — ОБЩИЙ СКРИПТ
+// ==========================================
+
+// Определяем номер эксперимента из URL (например, journal.html?exp=03)
+const urlParams = new URLSearchParams(window.location.search);
+const EXP_NUM = urlParams.get('exp') || '01';
+const STORAGE_KEY = 'ideatonika_journal_exp' + EXP_NUM;
+
+// Названия экспериментов
+const expNames = {
+    '01': 'Эксперимент №1 «Монетка»',
+    '02': 'Эксперимент №2 «ГСЧ на телефоне»',
+    '03': 'Эксперимент №3 «Растения»',
+    '04': 'Эксперимент №4 «Интуитивный выбор»',
+    '05': 'Эксперимент №5 «Семантическая гигиена сна»',
+    '06': 'Эксперимент №6 «Резонанс Шумана»',
+    '07': 'Эксперимент №7 «Семантическая батарейка»',
+    '08': 'Эксперимент №8 «Семантический волновод»',
+    '09': 'Эксперимент №9 «Семантическая конвекция»',
+    '10': 'Эксперимент №10 «SEC-1»',
+    '11': 'Эксперимент №11 «Семантический резонатор»',
+    '12': 'Эксперимент №12 «SEC-2»',
+    '13': 'Эксперимент №13 «SEC-3 — Квантовый триггер»',
+    '14': 'Эксперимент №14 «DST-1 — Детектор турбулентности»',
+    '15': 'Эксперимент №15 «SL-1 — Семантический Лазер»',
+    '16': 'Эксперимент №16 «AS-1 — Аккумулятор Смысла»',
+    '17': 'Эксперимент №17 «SEM-1 — Семантический микроскоп»',
+    '18': 'Эксперимент №18 «Q-METER»',
+    '19': 'Эксперимент №19 «CHI-METER»',
+    '20': 'Эксперимент №20 «COH-METER»',
+    '21': 'Эксперимент №21 «TEMP-METER»',
+    '22': 'Эксперимент №22 «SEC-4 — Каскадный умножитель»',
+    '23': 'Эксперимент №23 «SEC-5 — Вакуумный преобразователь»',
+    '24': 'Эксперимент №24 «FIELD-MAP»',
+    '25': 'Эксперимент №25 «HEAL-TEST»',
+    '26': 'Эксперимент №26 «EGREGOR-METER»',
+    '27': 'Эксперимент №27 «FOOD-Q»',
+    '28': 'Эксперимент №28 «CHEF-COH»',
+    '29': 'Эксперимент №29 «SLOW-FOOD»',
+    '30': 'Эксперимент №30 «CHRONOS-1»',
+    '31': 'Эксперимент №31 «EGREGOR-FEED»',
+    '32': 'Эксперимент №32 «SHIELD-TEST»',
+    '33': 'Эксперимент №33 «AURA-PHOTO»',
+    '34': 'Эксперимент №34 «DREAM-LINK»',
+    '35': 'Эксперимент №35 «WATER-MEM»',
+    '36': 'Эксперимент №36 «HOME-SCAN»',
+    '37': 'Эксперимент №37 «COH-METER 2.0»',
+    '38': 'Эксперимент №38 «AS-2 — Зарядная Станция»',
+    '39': 'Эксперимент №39 «TEMP-STAB»',
+    '40': 'Эксперимент №40 «PHANTOM-SCAN»',
+    '41': 'Эксперимент №41 «GRAV-SENSE»',
+    '42': 'Эксперимент №42 «CHRONOS-2»',
+    '43': 'Эксперимент №43 «AURA-PRINT»',
+    '44': 'Эксперимент №44 «DREAM-CATCH»',
+    '45': 'Эксперимент №45 «SYNC-TEST»',
+    '46': 'Эксперимент №46 «FOOD-PRINTER»',
+    '47': 'Эксперимент №47 «SALT-CLEAN»',
+    '48': 'Эксперимент №48 «LIGHT-SPECTR»',
+    '49': 'Эксперимент №49 «SOUND-RES»',
+    '50': 'Эксперимент №50 «SEC-MOBILE»',
+    '51': 'Эксперимент №51 «S-RADIO»'
+};
+
+document.getElementById('expLabel').textContent = expNames[EXP_NUM] || 'Эксперимент №' + EXP_NUM;
+document.getElementById('journalDate').value = new Date().toISOString().split('T')[0];
+
+function loadJournal() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    try { return JSON.parse(raw); } catch(e) { return []; }
+}
+
+function saveJournal(entries) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+}
+
+function renderEntries() {
+    const entries = loadJournal();
+    const container = document.getElementById('journalEntries');
+    
+    if (entries.length === 0) {
+        container.innerHTML = '<div class="empty-msg">Пока нет записей. Проведите эксперимент и сохраните первый результат!</div>';
+        return;
+    }
+    
+    let html = '';
+    entries.forEach((entry, index) => {
+        html += '<div class="entry">';
+        html += '<div class="entry-date">📅 ' + entry.date + '</div>';
+        html += '<div class="entry-result">📊 ' + entry.result + '</div>';
+        if (entry.notes) html += '<div class="entry-notes">📝 ' + entry.notes + '</div>';
+        html += '<div class="entry-btns">';
+        html += '<button onclick="editEntry(' + index + ')">✏️</button>';
+        html += '<button onclick="deleteEntry(' + index + ')">🗑️</button>';
+        html += '</div></div>';
+    });
+    container.innerHTML = html;
+}
+
+window.saveEntry = function() {
+    const date = document.getElementById('journalDate').value;
+    const result = document.getElementById('journalResult').value.trim();
+    const notes = document.getElementById('journalNotes').value.trim();
+    
+    if (!date || !result) { alert('Пожалуйста, заполните дату и результат.'); return; }
+    
+    const entries = loadJournal();
+    const editIndex = document.getElementById('journalDate').dataset.editIndex;
+    
+    if (editIndex !== undefined && editIndex !== '') {
+        entries[parseInt(editIndex)] = { date, result, notes };
+        delete document.getElementById('journalDate').dataset.editIndex;
+    } else {
+        entries.push({ date, result, notes });
+    }
+    
+    saveJournal(entries);
+    document.getElementById('journalResult').value = '';
+    document.getElementById('journalNotes').value = '';
+    renderEntries();
+};
+
+window.editEntry = function(index) {
+    const entries = loadJournal();
+    const entry = entries[index];
+    document.getElementById('journalDate').value = entry.date;
+    document.getElementById('journalResult').value = entry.result;
+    document.getElementById('journalNotes').value = entry.notes || '';
+    document.getElementById('journalDate').dataset.editIndex = index;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.deleteEntry = function(index) {
+    if (!confirm('Удалить эту запись?')) return;
+    const entries = loadJournal();
+    entries.splice(index, 1);
+    saveJournal(entries);
+    renderEntries();
+};
+
+renderEntries();
+</script>
+
+</body>
+</html>

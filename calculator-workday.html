@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Идеального Рабочего Дня • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; margin-top: 2rem; }
+        .result-title { font-size: 1.5rem; color: #ffd54f; text-align: center; margin-bottom: 1.5rem; }
+        .schedule-block { background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 0.8rem; border-left: 4px solid #ffd54f; }
+        .schedule-time { color: #ffd54f; font-weight: bold; font-size: 1rem; }
+        .schedule-task { color: #d0c8b8; margin-top: 0.3rem; }
+        .schedule-why { color: #a09080; font-size: 0.85rem; font-style: italic; margin-top: 0.2rem; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1.5rem; text-align: center; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🧠 Идеальный Рабочий День</h1>
+    <div class="subtitle">Калькулятор оптимального графика на основе хронотипа и Cₛ (§108, §125)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваши параметры</div>
+
+        <div class="input-group">
+            <label>⏰ Хронотип:</label>
+            <select id="chronoSelect">
+                <option value="lark">Жаворонок (пик: 6:00–12:00)</option>
+                <option value="dove" selected>Голубь (пик: 9:00–15:00)</option>
+                <option value="owl">Сова (пик: 14:00–22:00)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>🎯 Текущий Cₛ (когерентность): <span id="csValue">0.6</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <div class="input-group">
+            <label>📊 Тип задач на сегодня:</label>
+            <select id="taskSelect">
+                <option value="creative" selected>Творческие (мозговой штурм, дизайн, текст)</option>
+                <option value="routine">Рутинные (отчёты, почта, уборка)</option>
+                <option value="social">Социальные (встречи, звонки, переговоры)</option>
+                <option value="learning">Обучение (чтение, курс, практика)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="result-box" id="resultBox">
+        <div class="result-title">📋 Ваш оптимальный график на сегодня</div>
+        <div id="scheduleContainer"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const chronoSelect = document.getElementById('chronoSelect');
+    const csSlider = document.getElementById('csSlider');
+    const taskSelect = document.getElementById('taskSelect');
+    const csValue = document.getElementById('csValue');
+    const scheduleContainer = document.getElementById('scheduleContainer');
+    const resultFormula = document.getElementById('resultFormula');
+
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    chronoSelect.addEventListener('change', calculate);
+    taskSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const chrono = chronoSelect.value;
+        const C = parseFloat(csSlider.value);
+        const task = taskSelect.value;
+
+        // Пиковое время для каждого хронотипа
+        const peakStart = chrono === 'lark' ? 6 : (chrono === 'dove' ? 9 : 14);
+        const peakEnd = chrono === 'lark' ? 12 : (chrono === 'dove' ? 15 : 22);
+        const wakeUp = chrono === 'lark' ? 5 : (chrono === 'dove' ? 7 : 9);
+        const bedTime = chrono === 'lark' ? 21 : (chrono === 'dove' ? 23 : 1);
+
+        // Длительность эффективной работы в зависимости от Cₛ
+        const focusBlock = Math.round(C * 180); // в минутах (макс 3 часа)
+        const breakTime = Math.round((1 - C) * 30 + 10); // перерыв: 10–40 мин
+        const meditationTime = Math.round(C * 30 + 5); // медитация: 5–35 мин
+        const routineTime = Math.round((1 - C) * 120 + 30); // рутина: 30–150 мин
+
+        function formatTime(hour) {
+            const h = Math.floor(hour);
+            const m = Math.round((hour - h) * 60);
+            return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        }
+
+        function addHours(base, hours) {
+            let result = base + hours;
+            if (result >= 24) result -= 24;
+            return result;
+        }
+
+        let html = '';
+        let currentTime = wakeUp + 0.5; // через 30 мин после пробуждения
+
+        // 1. Утренняя настройка
+        html += '<div class="schedule-block">';
+        html += '<div class="schedule-time">' + formatTime(wakeUp) + ' — Пробуждение</div>';
+        html += '<div class="schedule-task">🌅 5 минут благодарности. Стакан воды. Открыть окно.</div>';
+        html += '<div class="schedule-why">Снижает S_noise после сна, повышает Qₛ на +1.</div>';
+        html += '</div>';
+
+        // 2. Утренняя медитация (если Cₛ < 0.7)
+        if (C < 0.7) {
+            html += '<div class="schedule-block">';
+            html += '<div class="schedule-time">' + formatTime(currentTime) + ' — Медитация (' + meditationTime + ' мин)</div>';
+            html += '<div class="schedule-task">🧘 Дыхание 4-7-8 или наблюдение за мыслями.</div>';
+            html += '<div class="schedule-why">Повышает Cₛ перед работой. Ваш текущий Cₛ = ' + C.toFixed(2) + '.</div>';
+            html += '</div>';
+            currentTime = addHours(currentTime, meditationTime / 60);
+        }
+
+        // 3. Пиковый блок (творчество или главная задача)
+        const peakHour = Math.max(peakStart, Math.floor(currentTime));
+        html += '<div class="schedule-block">';
+        html += '<div class="schedule-time">' + formatTime(peakHour) + ' — ' + formatTime(addHours(peakHour, focusBlock / 60)) + ' | 🔥 Главный блок (' + focusBlock + ' мин)</div>';
+        html += '<div class="schedule-task">' + (task === 'creative' ? '🎨 Творческая работа. Телефон выключен. Монохромный режим.' : 
+            (task === 'routine' ? '📋 Важные рутинные задачи. Метод Pomodoro.' :
+            (task === 'social' ? '🤝 Встречи и переговоры. Самое время для общения.' :
+            '📚 Интенсивное обучение. Конспекты, практика.'))) + '</div>';
+        html += '<div class="schedule-why">Пик Cₛ для вашего хронотипа. Максимальная продуктивность.</div>';
+        html += '</div>';
+        currentTime = addHours(peakHour, focusBlock / 60);
+
+        // 4. Перерыв
+        html += '<div class="schedule-block">';
+        html += '<div class="schedule-time">' + formatTime(currentTime) + ' — Перерыв (' + breakTime + ' мин)</div>';
+        html += '<div class="schedule-task">🚶 Прогулка, чай, посмотреть в окно. БЕЗ телефона.</div>';
+        html += '<div class="schedule-why">Сброс S_noise и восстановление Cₛ.</div>';
+        html += '</div>';
+        currentTime = addHours(currentTime, breakTime / 60);
+
+        // 5. Второй блок (рутина или лёгкие задачи)
+        html += '<div class="schedule-block">';
+        html += '<div class="schedule-time">' + formatTime(currentTime) + ' — ' + formatTime(addHours(currentTime, routineTime / 60)) + ' | 📎 Рутинный блок (' + routineTime + ' мин)</div>';
+        html += '<div class="schedule-task">Почта, документы, уборка, соцсети (ограниченно).</div>';
+        html += '<div class="schedule-why">Низкая Cₛ позволяет делать механическую работу без потери качества.</div>';
+        html += '</div>';
+        currentTime = addHours(currentTime, routineTime / 60);
+
+        // 6. Вечерняя медитация (если Cₛ < 0.8)
+        if (C < 0.8) {
+            const eveningMed = Math.round(C * 20 + 10);
+            const eveningTime = Math.min(bedTime - 1, currentTime + 1);
+            html += '<div class="schedule-block">';
+            html += '<div class="schedule-time">' + formatTime(eveningTime) + ' — Вечерняя медитация (' + eveningMed + ' мин)</div>';
+            html += '<div class="schedule-task">🕯️ Свеча, тишина, благодарность за день.</div>';
+            html += '<div class="schedule-why">Очищает поле перед сном, снижает Tₛ.</div>';
+            html += '</div>';
+        }
+
+        // 7. Отбой
+        html += '<div class="schedule-block">';
+        html += '<div class="schedule-time">' + formatTime(bedTime) + ' — Отбой</div>';
+        html += '<div class="schedule-task">🌙 Никаких экранов за час до сна. Проветрить комнату.</div>';
+        html += '<div class="schedule-why">Запускает дельта-ритм, восстанавливает Qₛ.</div>';
+        html += '</div>';
+
+        scheduleContainer.innerHTML = html;
+        resultFormula.textContent = 'Оптимизация на основе: хронотип=' + chrono + ', Cₛ=' + C.toFixed(2) + ', задачи=' + task + ' | Пик продуктивности: ' + formatTime(peakStart) + '–' + formatTime(peakEnd);
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

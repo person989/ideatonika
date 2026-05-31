@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои Тесты • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1a1a2e;
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 1rem;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .main-container {
+            max-width: 750px; width: 100%;
+            background: rgba(20, 25, 40, 0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 28px;
+            padding: 1.5rem 1.5rem 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { text-align: center; color: #f3e7c0; font-size: 1.8rem; font-weight: 400; margin-bottom: 0.2rem; }
+        .subtitle { text-align: center; color: #706858; font-size: 0.85rem; margin-bottom: 1.5rem; font-style: italic; }
+
+        /* График */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            cursor: default;
+        }
+
+        /* Кнопки масштаба */
+        .scale-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .scale-btn {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: #706858;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+        .scale-btn.active {
+            background: rgba(255,255,255,0.1);
+            color: #f3e7c0;
+            border-color: rgba(255,255,255,0.4);
+        }
+        .scale-btn:hover { color: #d0c8b8; }
+
+        /* Карусель */
+        .carousel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .carousel-arrow {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.4);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: color 0.3s;
+            font-family: inherit;
+        }
+        .carousel-arrow:hover { color: rgba(255,255,255,0.8); }
+        .carousel-items {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+        }
+        .carousel-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            white-space: nowrap;
+        }
+        .carousel-item.prev, .carousel-item.next {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.2);
+        }
+        .carousel-item.active {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #f3e7c0;
+        }
+
+        /* Подсказка при пустых данных */
+        .no-data {
+            text-align: center;
+            color: #706858;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #706858;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #f3e7c0; }
+
+        @media (max-width: 500px) {
+            .main-container { padding: 1rem; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <h1>🧪 Мои Тесты</h1>
+    <p class="subtitle">Динамика семантических параметров</p>
+
+    <div class="chart-container">
+        <canvas id="mainChart"></canvas>
+    </div>
+    <div class="no-data" id="noDataMsg" style="display:none;">Нет сохранённых данных для этого теста.</div>
+
+    <div class="scale-buttons">
+        <button class="scale-btn active" data-scale="day">День</button>
+        <button class="scale-btn" data-scale="week">Неделя</button>
+        <button class="scale-btn" data-scale="month">Месяц</button>
+    </div>
+
+    <div class="carousel">
+        <button class="carousel-arrow" id="prevArrow">◀</button>
+        <div class="carousel-items" id="carouselItems">
+            <!-- JS заполнит -->
+        </div>
+        <button class="carousel-arrow" id="nextArrow">▶</button>
+    </div>
+
+    <a href="account.html" class="back-link">← Вернуться в Аккаунт</a>
+</div>
+
+<script>
+(function() {
+    // ========== КОНФИГУРАЦИЯ ТЕСТОВ ==========
+    const tests = [
+        { key: 'qs_history',  name: '☀️ Qₛ',  color: '#ef5350', yMin: -10, yMax: 10, yStep: 5 },
+        { key: 'cs_history',  name: '🎯 Cₛ',  color: '#42a5f5', yMin: 0,   yMax: 1,  yStep: 0.2 },
+        { key: 'ts_history',  name: '🌡️ Tₛ',  color: '#ff9800', yMin: 0,   yMax: 10, yStep: 2 },
+        { key: 'chi_history', name: '🔮 χ',   color: '#ab47bc', yMin: 0,   yMax: 10, yStep: 2 },
+        { key: 'env_history', name: '🏠 Окр.', color: '#8d6e63', yMin: -10, yMax: 10, yStep: 5 }
+    ];
+    const totalTests = tests.length;
+    let currentIndex = 0; // 0..4
+    let currentScale = 'day'; // 'day' | 'week' | 'month'
+
+    // ========== DOM ==========
+    const canvas = document.getElementById('mainChart');
+    const ctx = canvas.getContext('2d');
+    const carouselItems = document.getElementById('carouselItems');
+    const noDataMsg = document.getElementById('noDataMsg');
+    const scaleBtns = document.querySelectorAll('.scale-btn');
+
+    // ========== ЗАГРУЗКА ДАННЫХ ==========
+    function loadHistory(key) {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : [];
+    }
+
+    // ========== АГРЕГАЦИЯ ПО МАСШТАБУ ==========
+    function aggregateData(rawData, scale) {
+        if (!rawData.length) return [];
+        
+        // Сортируем по дате
+        const sorted = [...rawData].sort((a, b) => a.date.localeCompare(b.date));
+        
+        if (scale === 'day') {
+            return sorted.map(d => ({ label: formatDate(d.date, 'day'), value: d.value, date: d.date }));
+        }
+        
+        // Группировка
+        const groups = {};
+        sorted.forEach(d => {
+            let bucket;
+            const date = new Date(d.date);
+            if (scale === 'week') {
+                // Номер недели в году
+                const startOfYear = new Date(date.getFullYear(), 0, 1);
+                const weekNum = Math.floor(((date - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+                bucket = `${date.getFullYear()}-W${weekNum}`;
+            } else if (scale === 'month') {
+                bucket = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+            }
+            if (!groups[bucket]) groups[bucket] = [];
+            groups[bucket].push(d.value);
+        });
+        
+        const result = [];
+        for (const [bucket, values] of Object.entries(groups)) {
+            const avg = values.reduce((a, b) => a + b, 0) / values.length;
+            result.push({ label: bucket, value: Math.round(avg * 100) / 100, date: bucket });
+        }
+        return result.sort((a, b) => a.label.localeCompare(b.label));
+    }
+
+    function formatDate(dateStr, scale) {
+        const d = new Date(dateStr);
+        if (scale === 'day') {
+            return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+        }
+        return dateStr;
+    }
+
+    // ========== РИСОВАНИЕ ГРАФИКА ==========
+    function drawChart() {
+        const test = tests[currentIndex];
+        const rawData = loadHistory(test.key);
+        const data = aggregateData(rawData, currentScale);
+
+        // Показываем/скрываем сообщение
+        if (data.length === 0) {
+            canvas.style.display = 'none';
+            noDataMsg.style.display = 'block';
+            return;
+        }
+        canvas.style.display = 'block';
+        noDataMsg.style.display = 'none';
+
+        // Размеры canvas (retina-ready)
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.parentElement.getBoundingClientRect();
+        const W = rect.width - 16;
+        const H = 320;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        // Поля
+        const padLeft = 50, padRight = 20, padTop = 25, padBottom = 45;
+        const plotW = W - padLeft - padRight;
+        const plotH = H - padTop - padBottom;
+
+        // Очистка
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = 'transparent';
+        ctx.fillRect(0, 0, W, H);
+
+        // Сетка (горизонтальные линии)
+        const yRange = test.yMax - test.yMin;
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        ctx.lineWidth = 1;
+        for (let v = test.yMin; v <= test.yMax; v += test.yStep) {
+            const y = padTop + plotH - ((v - test.yMin) / yRange) * plotH;
+            ctx.beginPath();
+            ctx.moveTo(padLeft, y);
+            ctx.lineTo(W - padRight, y);
+            ctx.stroke();
+        }
+
+        // Линия нуля (пунктир)
+        if (test.yMin <= 0 && test.yMax >= 0) {
+            const y0 = padTop + plotH - ((0 - test.yMin) / yRange) * plotH;
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.setLineDash([6, 4]);
+            ctx.beginPath();
+            ctx.moveTo(padLeft, y0);
+            ctx.lineTo(W - padRight, y0);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // Подписи оси Y
+ctx.fillStyle = 'rgba(255,255,255,0.35)';
+ctx.font = `${Math.round(11 * dpr)}px Georgia`;
+ctx.textAlign = 'right';
+for (let v = test.yMin; v <= test.yMax; v += test.yStep) {
+    const y = padTop + plotH - ((v - test.yMin) / yRange) * plotH;
+    const displayValue = Number.isInteger(v) ? v : parseFloat(v.toFixed(1));
+    ctx.fillText(displayValue, padLeft - 8, y + 4);
+}
+
+// Подписи оси X (даты)
+ctx.textAlign = 'center';
+ctx.fillStyle = 'rgba(255,255,255,0.35)';
+ctx.font = `${Math.round(10 * dpr)}px Georgia`;
+
+        if (data.length < 2) {
+            // Одна точка — просто кружок
+            const x = padLeft + plotW / 2;
+            const v = data[0].value;
+            const y = padTop + plotH - ((Math.min(test.yMax, Math.max(test.yMin, v)) - test.yMin) / yRange) * plotH;
+            ctx.fillStyle = test.color;
+            ctx.beginPath();
+            ctx.arc(x, y, 6, 0, Math.PI * 2);
+            ctx.fill();
+            return;
+        }
+
+        // Построение точек
+        const points = data.map((d, i) => {
+            const x = padLeft + (i / (data.length - 1)) * plotW;
+            const v = Math.min(test.yMax, Math.max(test.yMin, d.value));
+            const y = padTop + plotH - ((v - test.yMin) / yRange) * plotH;
+            return { x, y, v, date: d.label };
+        });
+
+        // Вертикальные полоски (серые)
+        ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+        ctx.lineWidth = 1;
+        points.forEach(p => {
+            ctx.beginPath();
+            ctx.moveTo(p.x, padTop + plotH);
+            ctx.lineTo(p.x, p.y);
+            ctx.stroke();
+        });
+
+        // Волна (основная линия)
+        ctx.strokeStyle = test.color;
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+            const cp1x = points[i - 1].x + (points[i].x - points[i - 1].x) / 3;
+            const cp1y = points[i - 1].y;
+            const cp2x = points[i].x - (points[i].x - points[i - 1].x) / 3;
+            const cp2y = points[i].y;
+            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, points[i].x, points[i].y);
+        }
+        ctx.stroke();
+
+        // Точки на волне
+        ctx.fillStyle = test.color;
+        points.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+        });
+    }
+
+    // ========== КАРУСЕЛЬ ==========
+    function renderCarousel() {
+        const prevIdx = (currentIndex - 1 + totalTests) % totalTests;
+        const nextIdx = (currentIndex + 1) % totalTests;
+
+        carouselItems.innerHTML = `
+            <div class="carousel-item prev" data-idx="${prevIdx}">${tests[prevIdx].name}</div>
+            <div class="carousel-item active" data-idx="${currentIndex}">${tests[currentIndex].name}</div>
+            <div class="carousel-item next" data-idx="${nextIdx}">${tests[nextIdx].name}</div>
+        `;
+
+        // Клики по элементам карусели
+        carouselItems.querySelectorAll('.carousel-item').forEach(el => {
+            el.addEventListener('click', () => {
+                const idx = parseInt(el.dataset.idx);
+                if (idx !== currentIndex) {
+                    currentIndex = idx;
+                    renderCarousel();
+                    drawChart();
+                }
+            });
+        });
+    }
+
+    // Стрелки
+    document.getElementById('prevArrow').addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + totalTests) % totalTests;
+        renderCarousel();
+        drawChart();
+    });
+    document.getElementById('nextArrow').addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % totalTests;
+        renderCarousel();
+        drawChart();
+    });
+
+    // ========== КНОПКИ МАСШТАБА ==========
+    scaleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            scaleBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentScale = btn.dataset.scale;
+            drawChart();
+        });
+    });
+
+    // ========== ПОДДЕРЖКА СВАЙПА (touch) ==========
+    let touchStartX = 0;
+    canvas.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    canvas.addEventListener('touchend', (e) => {
+        const diff = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(diff) > 60) {
+            if (diff > 0) {
+                currentIndex = (currentIndex - 1 + totalTests) % totalTests;
+            } else {
+                currentIndex = (currentIndex + 1) % totalTests;
+            }
+            renderCarousel();
+            drawChart();
+        }
+    });
+
+    // ========== РЕСАЙЗ ==========
+    window.addEventListener('resize', drawChart);
+
+    // ========== ЗАПУСК ==========
+    renderCarousel();
+    drawChart();
+})();
+</script>
+
+</body>
+</html>

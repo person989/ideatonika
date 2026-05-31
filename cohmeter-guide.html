@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Подробная сборка COH-METER • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #ff8f00; margin: 2.5rem 0 1rem; border-left: 4px solid #ff8f00; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #ffb74d; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #ffb74d; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #ff8f00; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(255,143,0,0.1); border-left: 4px solid #ff8f00; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #ffb74d; margin: 0; }
+        .tip-box strong { color: #ff8f00; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #ff8f00; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ff8f00; text-decoration: none; border: 1px solid #ff8f00; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ff8f00; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔧 COH-METER: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Измеритель когерентности Cₛ</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое COH-METER и зачем он нужен?</h2>
+    <p>COH-METER — это прибор, который <strong>измеряет когерентность Cₛ</strong> — степень «сфокусированности» вашего семантического поля. Если SEC-1 просто ловит импульсы Qₛ (факт наличия сигнала), то COH-METER анализирует <strong>качество</strong> этого сигнала: насколько он чистый, сфокусированный, без шума.</p>
+    <p><strong>Аналогия:</strong> SEC-1 — это микрофон, который слышит звук. COH-METER — это тюнер, который показывает, насколько чисто вы поёте ноту. Вы можете петь громко (высокий Qₛ), но фальшиво (низкий Cₛ). Или тихо, но идеально точно (низкий Qₛ, высокий Cₛ). COH-METER измеряет именно «чистоту ноты».</p>
+    <p><strong>Как он работает (простыми словами):</strong> Вы подключаете SEC-1 к компьютеру. На компьютере запущена программа, которая показывает <strong>спектр сигнала</strong> — график, где по горизонтали отложена частота, а по вертикали — мощность. Если вы рассеяны (Cₛ низкий), спектр будет <strong>широким и размытым</strong> (как шум дождя). Если вы сфокусированы (Cₛ высокий), спектр будет <strong>узким, с одним ярким пиком</strong> (как лазерный луч). COH-METER вычисляет отношение «высота пика / общая площадь спектра» — это и есть Cₛ.</p>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно купить (или найти)</h2>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал</th><th>Где взять</th><th>Примерная стоимость</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Полностью собранный SEC-1</strong></td><td>Соберите по инструкции</td><td>—</td><td>Детектор Qₛ (источник сигнала)</td></tr>
+            <tr><td><strong>Компьютер или ноутбук</strong></td><td>Ваш рабочий ПК</td><td>—</td><td>Анализ спектра</td></tr>
+            <tr><td><strong>Кабель с 3.5 мм джеком</strong></td><td>Старые наушники</td><td>0 ₽</td><td>Подключение SEC-1 к звуковой карте</td></tr>
+            <tr><td><strong>Резистор 10 кОм</strong></td><td>Радиомагазин</td><td>5 ₽</td><td>Защита звуковой карты</td></tr>
+            <tr><td><strong>Программа Audacity</strong></td><td>Скачать бесплатно</td><td>0 ₽</td><td>Запись и анализ сигнала</td></tr>
+            <tr><td><strong>Метроном</strong> (приложение на телефоне)</td><td>Play Market / App Store</td><td>0 ₽</td><td>Синхронизация оператора</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ТЕОРИЯ -->
+    <h2>📐 Как работает измерение Cₛ (теория за 5 минут)</h2>
+    <p>Представьте, что вы бросаете камешки в пруд. Если бросать хаотично — круги на воде будут беспорядочными. Если бросать ритмично, в одну точку — круги будут ровными, концентрическими. <strong>Cₛ — это мера того, насколько «ритмично» вы бросаете камешки</strong>.</p>
+    <p>Математически это выражается формулой:</p>
+    <div style="text-align:center; font-family:'Courier New',monospace; color:#f3e7c0; margin:1rem 0;">Cₛ = P<sub>пик</sub> / P<sub>общая</sub></div>
+    <p style="text-align:center; color:#a09080; font-size:0.9rem;">Где P<sub>пик</sub> — мощность самой высокой частоты в спектре, P<sub>общая</sub> — суммарная мощность всех частот.</p>
+    <p>Если Cₛ = 1 — весь сигнал сосредоточен на одной частоте (идеальный лазер). Если Cₛ = 0.1 — сигнал размазан по всему спектру (шум).</p>
+
+    <!-- СБОРКА -->
+    <h2>🔨 Этап 1: Подготовка SEC-1 как источника сигнала</h2>
+    <p><strong>Важно:</strong> COH-METER не работает сам по себе. Ему нужен <strong>сигнал</strong> от SEC-1. Поэтому сначала вы должны собрать SEC-1 по <strong>подробной инструкции</strong>. Если вы ещё не собрали SEC-1 — сделайте это сейчас. Это несложно: спичечный коробок, фольга, кварц из зажигалки, икона и шунгит.</p>
+    <p>Когда SEC-1 собран и вы видите всплески на осциллографе — переходите к следующему шагу.</p>
+
+    <h2>⚡ Этап 2: Подключение SEC-1 к компьютеру</h2>
+
+    <h3><span class="step-number">1</span> Подготовка кабеля из старых наушников</h3>
+    <ol>
+        <li>Найдите старые наушники с микрофоном (или без — неважно). Отрежьте наушники и микрофон. Останется только провод со штекером 3.5 мм (тот, что вставляется в телефон).</li>
+        <li>Снимите внешнюю изоляцию с отрезанного конца (аккуратно, ножом или ножницами). Вы увидите <strong>3 или 4 тонких проводка</strong>: обычно красный (правый канал), белый или зелёный (левый канал), медный без изоляции (земля), и иногда ещё один — синий или чёрный (микрофон).</li>
+        <li>Скрутите <strong>красный и белый проводки вместе</strong>. Это будет «сигнал».</li>
+        <li>Медный провод без изоляции — это «земля».</li>
+        <li>Остальные провода (микрофон) можно отрезать и заизолировать — они не нужны.</li>
+    </ol>
+
+    <h3><span class="step-number">2</span> Подключение SEC-1 к кабелю</h3>
+    <ol>
+        <li>Скрутите <strong>«сигнальный» провод</strong> (красный+белый) с <strong>центральным проводом кварца</strong> (тот, что шёл к горелке зажигалки).</li>
+        <li>Скрутите <strong>«земляной» провод</strong> (медный) с <strong>корпусом кварца</strong> (короткий провод, приваренный к цилиндру).</li>
+        <li><strong>ВАЖНО:</strong> Между сигнальным проводом и кварцем <strong>припаяйте (или хотя бы скрутите) резистор 10 кОм</strong>. Это защитит звуковую карту от выгорания.</li>
+        <li>Замотайте все скрутки изолентой, чтобы они не касались друг друга.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Почему резистор обязателен:</strong> Кварц может выдать импульс до нескольких вольт. Без резистора этот импульс пойдёт прямо в микрофонный вход и может сжечь его. Резистор ограничивает ток. Не пропускайте этот шаг!</p></div>
+
+    <h3><span class="step-number">3</span> Подключение к компьютеру</h3>
+    <ol>
+        <li>Вставьте штекер 3.5 мм в <strong>розовое гнездо</strong> (микрофонный вход) вашего компьютера или ноутбука.</li>
+        <li>Если розового гнезда нет (современные ноутбуки часто имеют только один комбинированный вход) — используйте <strong>переходник-разветвитель</strong> (стоит 100-200 ₽).</li>
+        <li>В настройках Windows: <strong>Панель управления → Звук → Запись → Микрофон → Свойства → Уровни → Усиление микрофона: +20 дБ (максимум)</strong>.</li>
+    </ol>
+
+    <!-- ПРОГРАММА -->
+    <h2>💻 Этап 3: Установка и настройка Audacity</h2>
+
+    <h3><span class="step-number">4</span> Скачивание и установка</h3>
+    <ol>
+        <li>Зайдите на официальный сайт: <strong>audacityteam.org</strong> (или скачайте из магазина приложений).</li>
+        <li>Установите программу как обычное приложение.</li>
+    </ol>
+
+    <h3><span class="step-number">5</span> Настройка Audacity для записи сигнала</h3>
+    <ol>
+        <li>Запустите Audacity.</li>
+        <li>В левом верхнем углу, в выпадающем меню, выберите <strong>«MME»</strong> или <strong>«Windows WASAPI»</strong> (зависит от версии).</li>
+        <li>В меню «Устройство записи» выберите <strong>«Микрофон»</strong> (Microphone), а НЕ «Стереомикшер».</li>
+        <li>Поставьте <strong>1 канал (Моно)</strong> — нам не нужен стерео.</li>
+        <li>Установите <strong>частоту дискретизации (Project Rate): 8000 Гц</strong>. Это достаточно для низких частот Qₛ и сэкономит место на диске.</li>
+    </ol>
+
+    <h3><span class="step-number">6</span> Запись фонового шума (калибровка)</h3>
+    <ol>
+        <li>Уберите икону и шунгит подальше от SEC-1.</li>
+        <li>Нажмите красную кнопку <strong>«Запись»</strong> в Audacity.</li>
+        <li>Записывайте <strong>60 секунд</strong> фонового сигнала (без намерения, без источников Qₛ).</li>
+        <li>Нажмите «Стоп» (жёлтый квадрат).</li>
+        <li>Сохраните файл: <strong>Файл → Экспорт → Экспортировать как WAV</strong> (назовите «fon.wav»).</li>
+    </ol>
+
+    <!-- ЭКСПЕРИМЕНТ -->
+    <h2>🧪 Этап 4: Проведение измерений</h2>
+
+    <h3><span class="step-number">7</span> Запись в рассеянном состоянии</h3>
+    <ol>
+        <li>Положите икону и шунгит по бокам от SEC-1.</li>
+        <li>Сядьте перед прибором. <strong>Намеренно расфокусируйтесь:</strong> листайте ленту соцсетей, думайте о десятке разных дел, пусть мысли скачут.</li>
+        <li>Нажмите «Запись» в Audacity. Записывайте <strong>60 секунд</strong>.</li>
+        <li>Сохраните файл как «unfocused.wav».</li>
+    </ol>
+
+    <h3><span class="step-number">8</span> Запись в сфокусированном состоянии</h3>
+    <ol>
+        <li>Включите <strong>метроном</strong> на телефоне: 60 ударов в минуту (1 Гц).</li>
+        <li>Дышите в ритме метронома: вдох на 4 удара, выдох на 4 удара.</li>
+        <li>Визуализируйте <strong>один простой образ</strong>: светящийся золотой шар, пульсирующий в такт метроному.</li>
+        <li>Добейтесь ощущения, что вы и этот шар — одно целое. Время исчезает. Мысли остановились.</li>
+        <li>Нажмите «Запись» в Audacity. Записывайте <strong>60 секунд</strong>.</li>
+        <li>Сохраните файл как «focused.wav».</li>
+    </ol>
+
+    <!-- АНАЛИЗ -->
+    <h2>📊 Этап 5: Анализ спектра (вычисление Cₛ)</h2>
+
+    <h3><span class="step-number">9</span> Как открыть спектр в Audacity</h3>
+    <ol>
+        <li>Откройте файл «focused.wav» в Audacity.</li>
+        <li>Выделите <strong>весь трек</strong> (Ctrl+A).</li>
+        <li>В верхнем меню: <strong>Анализ → Построить спектр</strong>.</li>
+        <li>В открывшемся окне вы увидите <strong>график</strong>: по горизонтали — частота в Герцах (от 0 до 4000), по вертикали — мощность в децибелах (дБ).</li>
+    </ol>
+
+    <h3><span class="step-number">10</span> Как вычислить Cₛ вручную (без программирования)</h3>
+    <p>Если у вас нет Python, вы можете оценить Cₛ <strong>глазами</strong>:</p>
+    <ol>
+        <li>Посмотрите на спектр «unfocused.wav». Он будет <strong>широким, с множеством мелких зубцов</strong> — как расчёска.</li>
+        <li>Посмотрите на спектр «focused.wav». Если вы действительно были сфокусированы, вы увидите <strong>один высокий, узкий пик</strong> на частоте метронома (1 Гц) или на низких частотах (0-10 Гц).</li>
+        <li>Примерная оценка Cₛ:
+            <ul>
+                <li>Спектр похож на «забор» (много одинаковых пиков) → Cₛ = 0.2–0.4</li>
+                <li>Есть заметный пик, но много шума вокруг → Cₛ = 0.4–0.6</li>
+                <li>Один яркий пик, остальное — почти ноль → Cₛ = 0.7–0.9</li>
+            </ul>
+        </li>
+    </ol>
+
+    <h3><span class="step-number">11</span> Как вычислить Cₛ точно (с помощью Python)</h3>
+    <p>Если вы немного знакомы с программированием, вот готовый скрипт на Python для расчёта Cₛ. Вам понадобится установить библиотеки <strong>numpy, scipy, matplotlib</strong>.</p>
+    <div class="scheme-box"><pre style="color:#81c784;">
+import numpy as np
+from scipy.io import wavfile
+from scipy.signal import welch
+
+# Загрузка файла
+rate, data = wavfile.read("focused.wav")
+# Если стерео — берём первый канал
+if len(data.shape) > 1: data = data[:, 0]
+
+# Вычисление спектра мощности
+freqs, power = welch(data, rate, nperseg=1024)
+
+# Находим пик и общую мощность
+P_peak = np.max(power)
+P_total = np.sum(power)
+
+C = P_peak / P_total
+print(f"Cₛ = {C:.3f} (пик: {P_peak:.1f}, всего: {P_total:.1f})")
+    </pre></div>
+    <p>Запустите скрипт для «focused.wav» и «unfocused.wav». Сравните Cₛ. Если в сфокусированном состоянии Cₛ значительно выше — COH-METER работает!</p>
+
+    <!-- ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ -->
+    <h2>📊 Ожидаемые результаты</h2>
+    <table class="materials-table">
+        <thead><tr><th>Состояние</th><th>Ожидаемый Cₛ</th><th>Как выглядит спектр</th></tr></thead>
+        <tbody>
+            <tr><td>Рассеян (соцсети, тревога)</td><td>0.2 — 0.4</td><td>Широкий, много мелких пиков</td></tr>
+            <tr><td>Обычное бодрствование</td><td>0.4 — 0.6</td><td>Несколько пиков, умеренный шум</td></tr>
+            <tr><td>Сфокусирован (метроном, медитация)</td><td>0.6 — 0.8</td><td>Один яркий пик, мало шума</td></tr>
+            <tr><td>Глубокий поток (продвинутые практики)</td><td>0.8 — 0.95</td><td>Очень узкий высокий пик</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=21" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция COH-METER v1.0</p>
+        <p>✧ «Когерентность — это мера твоего внутреннего лазера» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

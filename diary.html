@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дневник • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 700px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        /* Список заметок */
+        .notes-list { margin-bottom: 2rem; }
+        .note-card {
+            background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1.2rem 1.5rem; margin-bottom: 1rem; cursor: pointer;
+            transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;
+        }
+        .note-card:hover { border-color: #ffd54f; background: rgba(255,215,80,0.05); }
+        .note-title { color: #f3e7c0; font-size: 1.2rem; font-weight: bold; }
+        .note-date { color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .note-preview { color: #a09080; font-size: 0.85rem; margin-top: 0.3rem; font-style: italic; }
+        .delete-btn {
+            background: transparent; border: 1px solid #ef5350; color: #ef5350;
+            padding: 0.4rem 1rem; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.8rem;
+        }
+        .delete-btn:hover { background: #ef5350; color: white; }
+        .empty-state { text-align: center; color: #706858; font-style: italic; padding: 2rem; }
+
+        /* Кнопки */
+        .btn {
+            padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; font-family: inherit; text-decoration: none; transition: 0.3s;
+            display: inline-block; border: none; width: 100%; text-align: center;
+        }
+        .btn-add { background: #ffd54f; color: #1a1a2e; }
+        .btn-add:hover { background: #ffc107; box-shadow: 0 0 20px rgba(255,215,80,0.3); }
+
+        /* Редактор заметки */
+        .editor-section { margin-top: 1rem; }
+        .editor-section input, .editor-section textarea {
+            width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a;
+            border-radius: 12px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem;
+            margin-bottom: 1rem; resize: vertical;
+        }
+        .editor-section input:focus, .editor-section textarea:focus { outline: none; border-color: #ffd54f; }
+        .editor-section textarea { min-height: 200px; }
+        .btn-row { display: flex; gap: 1rem; }
+        .btn-save { background: #81c784; color: #1a1a2e; }
+        .btn-save:hover { background: #66bb6a; }
+        .btn-cancel { background: transparent; border: 1px solid #ffd54f; color: #ffd54f; }
+        .btn-cancel:hover { background: rgba(255,215,80,0.1); }
+
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container" id="mainContainer">
+    <!-- Заполняется через JS -->
+</div>
+
+<script>
+(function() {
+    const container = document.getElementById('mainContainer');
+    const STORAGE_KEY = 'ideatonika_diary_notes';
+
+    // Загрузка заметок
+    function loadNotes() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+    }
+
+    // Сохранение заметок
+    function saveNotes(notes) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+    }
+
+    // Текущая редактируемая заметка (null = новая, иначе индекс)
+    let editingIndex = null;
+
+    // ========== ГЛАВНЫЙ ЭКРАН: СПИСОК ЗАМЕТОК ==========
+    function renderList() {
+        const notes = loadNotes();
+        editingIndex = null;
+
+        let html = `
+            <h1>📝 Дневник</h1>
+            <p class="subtitle">Ваши заметки и наблюдения</p>
+            <div class="notes-list">
+        `;
+
+        if (notes.length === 0) {
+            html += `<div class="empty-state">📭 Здесь пока пусто. Создайте первую заметку!</div>`;
+        } else {
+            notes.forEach((note, i) => {
+                const preview = note.content ? note.content.substring(0, 80) + (note.content.length > 80 ? '...' : '') : 'Пустая заметка';
+                html += `
+                    <div class="note-card" data-index="${i}">
+                        <div style="flex: 1;" class="note-clickable">
+                            <div class="note-title">${escapeHTML(note.title) || 'Без названия'}</div>
+                            <div class="note-date">${note.date}</div>
+                            <div class="note-preview">${escapeHTML(preview)}</div>
+                        </div>
+                        <button class="delete-btn" data-delete="${i}">🗑️</button>
+                    </div>
+                `;
+            });
+        }
+
+        html += `
+            </div>
+            <button class="btn btn-add" id="addNoteBtn">➕ Новая заметка</button>
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <a href="account.html" class="back-link">← Вернуться в Аккаунт</a>
+            </div>
+        `;
+
+        container.innerHTML = html;
+
+        // Обработчики кликов по карточкам
+        document.querySelectorAll('.note-clickable').forEach(el => {
+            el.addEventListener('click', function(e) {
+                if (e.target.closest('.delete-btn')) return;
+                const index = parseInt(this.parentElement.dataset.index);
+                renderEditor(index);
+            });
+        });
+
+        // Обработчики кнопок удаления
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const index = parseInt(this.dataset.delete);
+                if (confirm('Удалить эту заметку?')) {
+                    const notes = loadNotes();
+                    notes.splice(index, 1);
+                    saveNotes(notes);
+                    renderList();
+                }
+            });
+        });
+
+        // Кнопка добавления
+        if (notes.length > 0 || true) {
+            document.getElementById('addNoteBtn').addEventListener('click', () => renderEditor(null));
+        }
+    }
+
+    // ========== ЭКРАН РЕДАКТИРОВАНИЯ ==========
+    function renderEditor(index) {
+        editingIndex = index;
+        const notes = loadNotes();
+        const note = index !== null ? notes[index] : { title: '', content: '', date: new Date().toLocaleDateString('ru-RU') };
+
+        container.innerHTML = `
+            <h1>${index !== null ? '✏️ Редактировать' : '➕ Новая заметка'}</h1>
+            <p class="subtitle">${index !== null ? 'Измените заголовок и содержание' : 'Запишите свои мысли, наблюдения, результаты экспериментов'}</p>
+            <div class="editor-section">
+                <input type="text" id="noteTitle" placeholder="Название заметки..." value="${escapeHTML(note.title)}">
+                <textarea id="noteContent" placeholder="Пишите здесь что угодно...">${escapeHTML(note.content)}</textarea>
+                <div class="btn-row">
+                    <button class="btn btn-save" id="saveNoteBtn">💾 Сохранить</button>
+                    <button class="btn btn-cancel" id="cancelNoteBtn">Отмена</button>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('saveNoteBtn').addEventListener('click', () => {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+            const now = new Date().toLocaleString('ru-RU');
+
+            if (index !== null) {
+                notes[index].title = title;
+                notes[index].content = content;
+                notes[index].date = 'Изменено: ' + now;
+            } else {
+                notes.push({
+                    title: title || 'Без названия',
+                    content: content,
+                    date: 'Создано: ' + now
+                });
+            }
+
+            saveNotes(notes);
+            renderList();
+        });
+
+        document.getElementById('cancelNoteBtn').addEventListener('click', () => {
+            if (confirm('Отменить изменения? Несохранённые данные будут потеряны.')) {
+                renderList();
+            }
+        });
+    }
+
+    function escapeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // ЗАПУСК
+    renderList();
+})();
+</script>
+
+</body>
+</html>

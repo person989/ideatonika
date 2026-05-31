@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лесной Договор • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a2e1a 0%, #0d1f0d 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(100,200,100,0.06) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(150,200,150,0.04) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container {
+            max-width: 1200px; width: 100%; position: relative; z-index: 1;
+        }
+        .hero {
+            text-align: center; margin-bottom: 3rem;
+        }
+        .hero h1 {
+            font-size: 3.5rem; font-weight: 400; letter-spacing: 4px;
+            color: #c8e6c9; text-shadow: 0 0 20px rgba(100,200,100,0.5), 0 4px 10px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem; font-family: 'Times New Roman', serif;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem; color: #a5d6a7; font-style: italic;
+            border-bottom: 1px solid #81c784; display: inline-block; padding-bottom: 0.5rem;
+        }
+        .hero .intro {
+            max-width: 800px; margin: 2rem auto 0; text-align: left;
+            background: rgba(20, 40, 20, 0.6); backdrop-filter: blur(4px);
+            padding: 2rem; border-radius: 24px; border: 1px solid rgba(129, 199, 132, 0.4);
+            color: #c8e6c9; line-height: 1.8;
+        }
+        .hero .intro p { margin-bottom: 1rem; }
+
+        /* Сетка карточек */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem; margin-bottom: 3rem;
+        }
+        .card {
+            background: rgba(20, 40, 20, 0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(129, 199, 132, 0.3); border-radius: 24px;
+            padding: 2rem 1.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transition: transform 0.2s, box-shadow 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px #81c784;
+            border-color: #81c784;
+        }
+        .card-icon { font-size: 3rem; margin-bottom: 1rem; text-align: center; }
+        .card h2 {
+            color: #c8e6c9; font-size: 1.8rem; font-weight: 400;
+            margin-bottom: 1rem; text-align: center;
+            border-bottom: 1px dashed #4caf50; padding-bottom: 0.8rem;
+        }
+        .card p { color: #a5d6a7; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+        .card .meta { color: #81c784; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .btn {
+            display: inline-block; background: transparent;
+            border: 1.5px solid #81c784; color: #81c784;
+            padding: 0.8rem 1.5rem; text-decoration: none;
+            font-size: 1rem; font-weight: bold; border-radius: 40px;
+            text-align: center; transition: 0.2s; letter-spacing: 1px; margin-top: auto;
+        }
+        .btn:hover { background: #81c784; color: #1a1a2e; box-shadow: 0 0 15px rgba(129,199,132,0.5); }
+        .btn-disabled {
+            border-color: #2e7d32; color: #4caf50; cursor: not-allowed; opacity: 0.6;
+        }
+        .btn-disabled:hover { background: transparent; color: #4caf50; box-shadow: none; }
+        .back-link {
+            display: inline-block; margin-top: 1rem; color: #81c784;
+            text-decoration: none; border: 1px solid #81c784;
+            padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s;
+        }
+        .back-link:hover { background: #81c784; color: #1a1a2e; }
+        .footer {
+            margin-top: 2rem; text-align: center; color: #66bb6a;
+            font-size: 0.8rem; border-top: 1px solid #2e7d32; padding-top: 2rem;
+        }
+        .footer a { color: #81c784; text-decoration: none; }
+        .footer a:hover { color: #c8e6c9; }
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    
+    <div class="hero">
+        <h1>🌿 ЛЕСНОЙ ДОГОВОР</h1>
+        <div class="subtitle">Семантическая дипломатия с духами природы</div>
+        <div class="intro">
+            <p><strong>Духи природы</strong> — это не миф и не сказка. С точки зрения Идеатоники, это <strong>локальные эгрегоры</strong> (§79) — устойчивые семантические поля, сформированные веками взаимодействия человека и места. Домовой — эгрегор дома. Леший — эгрегор леса. Водяной — эгрегор водоёма.</p>
+            <p>Они не «добрые» и не «злые». Они — <strong>хранители равновесия</strong>. Если относиться к ним с уважением, они могут стать союзниками. Если пренебрегать — источниками помех (S_noise, падающие предметы, чувство тревоги).</p>
+            <p>Эта программа научит вас <strong>семантической дипломатии</strong> — искусству выстраивать добрые отношения с невидимыми хозяевами мест, где вы живёте и бываете.</p>
+        </div>
+    </div>
+    
+    <div class="grid">
+        
+        <!-- Домовой -->
+        <div class="card">
+            <div class="card-icon">🏠</div>
+            <h2>Домовой</h2>
+            <p>Хранитель дома. Живёт за печью, в тёмном углу, на чердаке. Любит порядок, уважение и подношения. Может предупреждать о беде.</p>
+            <div class="meta">🌿 Уровень: лёгкий • Время: 1–2 недели</div>
+            <a href="forest-domovoy.html" class="btn">🏠 Подружиться</a>
+        </div>
+        
+        <!-- Леший -->
+        <div class="card">
+            <div class="card-icon">🌲</div>
+            <h2>Леший</h2>
+            <p>Хозяин леса. Следит за порядком, может запутать незваного гостя или помочь заблудившемуся. Любит уважение к природе.</p>
+            <div class="meta">🌿 Уровень: средний • Время: 1–2 месяца</div>
+            <a href="forest-leshy.html" class="btn">🌲 Подружиться</a>
+        </div>
+        
+        <!-- Водяной -->
+        <div class="card">
+            <div class="card-icon">💧</div>
+            <h2>Водяной</h2>
+            <p>Хозяин рек, озёр, прудов. Следит за чистотой воды. Может помочь рыбаку или наказать загрязнителя.</p>
+            <div class="meta">🌿 Уровень: средний • Время: 1–2 месяца</div>
+            <a href="forest-vodyanoy.html" class="btn">💧 Подружиться</a>
+        </div>
+        
+        <!-- Банник -->
+        <div class="card">
+            <div class="card-icon">🛁</div>
+            <h2>Банник</h2>
+            <p>Дух бани. Капризен, но справедлив. Любит чистоту и уважение к банным правилам. Может исцелить или наказать.</p>
+            <div class="meta">🌿 Уровень: лёгкий • Время: 1–2 недели</div>
+            <a href="forest-bannik.html" class="btn">🛁 Подружиться</a>
+        </div>
+        
+        <!-- Кикимора -->
+        <div class="card">
+            <div class="card-icon">🧶</div>
+            <h2>Кикимора</h2>
+            <p>Дух домашнего очага, жена домового. Помогает с рукоделием, но может путать нитки, если её обидеть.</p>
+            <div class="meta">🌿 Уровень: лёгкий • Время: 2–3 недели</div>
+            <a href="forest-kikimora.html" class="btn">🧶 Подружиться</a>
+        </div>
+        
+        <!-- Русалка -->
+        <div class="card">
+            <div class="card-icon">🧜‍♀️</div>
+            <h2>Русалка</h2>
+            <p>Дух воды и луны. Хранительница речных трав и цветов. Может предупредить об опасности на воде.</p>
+            <div class="meta">🌿 Уровень: сложный • Время: 2–3 месяца</div>
+            <a href="forest-rusalka.html" class="btn">🧜‍♀️ Подружиться</a>
+        </div>
+        
+        <!-- Полевой -->
+        <div class="card">
+            <div class="card-icon">🌾</div>
+            <h2>Полевой</h2>
+            <p>Дух полей и лугов. Помогает путникам, охраняет урожай. Любит подношения хлебом и молоком.</p>
+            <div class="meta">🌿 Уровень: лёгкий • Время: 1–2 недели</div>
+            <a href="forest-polevoy.html" class="btn">🌾 Подружиться</a>
+        </div>
+        
+        <!-- Овинник -->
+        <div class="card">
+            <div class="card-icon">🔥</div>
+            <h2>Овинник</h2>
+            <p>Дух овина, хранитель зерна и сена. Следит за сохранностью урожая. Боится огня и неуважения.</p>
+            <div class="meta">🌿 Уровень: средний • Время: 2–3 недели</div>
+            <a href="forest-ovinnik.html" class="btn">🔥 Подружиться</a>
+        </div>
+        
+        <!-- Дворовой -->
+<div class="card">
+    <div class="card-icon">🏡</div>
+    <h2>Дворовой</h2>
+    <p>Хранитель двора и придомовой территории. Следит за порядком снаружи дома: забор, сад, огород, гараж. Добрый, но строгий.</p>
+    <div class="meta">🌿 Уровень: лёгкий • Время: 1–2 недели</div>
+    <a href="forest-dvorovoy.html" class="btn">🏡 Подружиться</a>
+</div>
+
+<!-- Колодезный -->
+<div class="card">
+    <div class="card-icon">🪣</div>
+    <h2>Колодезный</h2>
+    <p>Дух колодца или скважины. Хранитель подземных вод. Может помочь с поиском воды или предупредить о её загрязнении.</p>
+    <div class="meta">🌿 Уровень: средний • Время: 2–3 недели</div>
+    <a href="forest-kolodezny.html" class="btn">🪣 Подружиться</a>
+</div>
+
+<!-- Мельничный -->
+<div class="card">
+    <div class="card-icon">🎡</div>
+    <h2>Мельничный</h2>
+    <p>Дух мельницы, водяного колеса, любого механизма, работающего от силы природы. Любит порядок и ритмичную работу.</p>
+    <div class="meta">🌿 Уровень: средний • Время: 2–3 недели</div>
+    <a href="forest-melnichny.html" class="btn">🎡 Подружиться</a>
+</div>
+
+<!-- Хлевник -->
+<div class="card">
+    <div class="card-icon">🐄</div>
+    <h2>Хлевник</h2>
+    <p>Дух хлева, конюшни, сарая для скота. Заботится о животных, помогает им быть здоровыми и спокойными.</p>
+    <div class="meta">🌿 Уровень: лёгкий • Время: 1–2 недели</div>
+    <a href="forest-hlevnik.html" class="btn">🐄 Подружиться</a>
+</div>
+        
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Лесной Договор</p>
+        <p>🌐 <a href="about.html">О проекте</a> • <a href="contacts.html">Контакты</a></p>
+        <p style="margin-top: 1rem;">✧ «Невидимое — не значит несуществующее. Уважай духов места, и место будет уважать тебя.» ✧</p>
+    </div>
+    
+</div>
+</body>
+</html>

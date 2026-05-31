@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Идеатоника • Портал Знаний</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .main-container {
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Заголовок */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 400;
+            letter-spacing: 6px;
+            color: #f3e7c0;
+            text-shadow: 0 0 20px rgba(255,215,150,0.5), 0 4px 10px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem;
+            font-family: 'Times New Roman', serif;
+            text-transform: uppercase;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #c0b090;
+            font-style: italic;
+            border-bottom: 1px solid #c0b090;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        .hero .epigraph {
+            margin-top: 1.5rem;
+            color: #a09080;
+            font-size: 1rem;
+        }
+        
+        /* Сетка карточек */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .card {
+            background: rgba(30, 40, 60, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,245,215,0.1);
+            transition: transform 0.2s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px #e3b87c;
+            border-color: #e3b87c;
+        }
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .card h2 {
+            color: #f3e7c0;
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 1px dashed #8b7355;
+            padding-bottom: 0.8rem;
+        }
+        .card p {
+            color: #d0c8b8;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        .card .meta {
+            color: #a09080;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            background: transparent;
+            border: 1.5px solid #e3b87c;
+            color: #e3b87c;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 40px;
+            text-align: center;
+            transition: 0.2s;
+            letter-spacing: 1px;
+            margin-top: auto;
+        }
+        .btn:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(227,184,124,0.5);
+        }
+        .btn-small {
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+        }
+        
+        /* Секция быстрых ссылок */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .quick-btn {
+            background: rgba(20, 30, 45, 0.8);
+            border: 1px solid #5d4a3a;
+            color: #d0c8b8;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .quick-btn:hover {
+            background: #3a4a5a;
+            border-color: #e3b87c;
+            color: #f3e7c0;
+        }
+        
+        /* Подвал */
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+            border-top: 1px solid #3a3a4a;
+            padding-top: 2rem;
+        }
+        .footer a {
+            color: #b0a090;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: #e3b87c;
+        }
+        
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+    
+    <!-- Поисковая оптимизация -->
+<meta name="description" content="Идеатоника — физика смысла. Семантическое поле, заряд Qₛ, когерентность Cₛ. Учебник, тесты, эксперименты.">
+<meta name="keywords" content="идеатоника, семантическое поле, Qₛ, Cₛ, Tₛ, когерентность, смысл, тесты, диагностика">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://ideatonika.netlify.app/">
+    
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    
+    <div class="hero">
+    <h1>ИДЕАТОНИКА</h1>
+    <div class="subtitle">Физика Смысла • Метафизический раздел</div>
+    <div class="epigraph">✧ «Смысл первичен. Материя — его проявление.» ✧</div>
+    
+    <!-- ПРЕДИСЛОВИЕ ДЛЯ НОВЫХ ПОСЕТИТЕЛЕЙ -->
+    <div style="max-width: 800px; margin: 2.5rem auto 0; text-align: left; background: rgba(20, 30, 45, 0.6); backdrop-filter: blur(4px); padding: 2rem 2.5rem; border-radius: 24px; border: 1px solid rgba(227, 184, 124, 0.4);">
+        <p style="color: #f3e7c0; font-size: 1.3rem; margin-bottom: 1rem; text-align: center;">✨ Добро пожаловать, ищущий! ✨</p>
+        <p style="color: #d0c8b8; line-height: 1.8; margin-bottom: 1rem;">
+            <strong style="color: #e3b87c;">Идеатоника</strong> — это новая наука, изучающая <strong>Семантическое Поле</strong> — фундаментальную субстанцию, из которой рождается материя, время и пространство. 
+        </p>
+        <p style="color: #d0c8b8; line-height: 1.8; margin-bottom: 1rem;">
+            Она утверждает: <strong>Смысл первичен</strong>. Ваши мысли, эмоции и намерения — не просто «химия в мозгу». Это реальные силы, подчиняющиеся строгим законам, которые можно измерить, рассчитать и применить.
+        </p>
+        <p style="color: #d0c8b8; line-height: 1.8; margin-bottom: 1.5rem;">
+            На этом портале вы найдёте:
+        </p>
+        <ul style="color: #c0b090; margin-bottom: 1.5rem; padding-left: 1.5rem; line-height: 1.8;">
+            <li><strong style="color: #e3b87c;">📖 Учебник</strong> — 145 параграфов от основ до квантовой семантики.</li>
+            <li><strong style="color: #e3b87c;">🔬 Практикум</strong> — 50 экспериментов, включая проект преобразователя «Смысл → Электричество» (SEC-1).</li>
+            <li><strong style="color: #e3b87c;">📊 Таблицы</strong> — свойства 300+ материалов и частот.</li>
+        </ul>
+        <p style="color: #a09080; font-style: italic; text-align: center; border-top: 1px dashed #5d4a3a; padding-top: 1.5rem;">
+            «То, что сейчас кажется магией, завтра станет обыденностью. <br>Добро пожаловать в завтра.»
+        </p>
+    </div>
+</div>
+  
+<!-- 🗺️ КОМПАКТНЫЙ БАННЕР ДЛЯ НОВИЧКОВ -->
+<div style="
+    max-width: 1200px;
+    margin: 0 auto 1.2rem auto;
+    background: linear-gradient(135deg, rgba(255,215,80,0.1), rgba(255,183,77,0.03));
+    border: 1px solid rgba(255,215,80,0.4);
+    border-radius: 16px;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+">
+    <span style="font-size: 1.5rem;">🗺️</span>
+    <span style="color: #d0c8b8; font-size: 0.95rem; font-style: italic;">
+        Впервые на портале?
+    </span>
+    <a href="site-map.html" style="
+        display: inline-block;
+        background: transparent;
+        border: 1.5px solid #ffd54f;
+        color: #ffd54f;
+        padding: 0.5rem 1.5rem;
+        font-size: 0.9rem;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 30px;
+        transition: 0.2s;
+        white-space: nowrap;
+    " onmouseover="this.style.background='#ffd54f';this.style.color='#1a1a2e';" onmouseout="this.style.background='transparent';this.style.color='#ffd54f';">
+        🗺️ Карта Сайта
+    </a>
+    <span style="color: #a09080; font-size: 0.85rem;">
+        — ваш путеводитель по миру Идеатоники
+    </span>
+</div>  
+    
+    <div class="grid">
+        
+
+        
+        <!-- Карточка 1: Учебник -->
+        <div class="card">
+            <div class="card-icon">📖</div>
+            <h2>Учебник</h2>
+            <p>Полный курс теоретической Идеатоники. 145 параграфов: от аксиом и базовых величин до семантической гидродинамики и квантовой семантики.</p>
+            <div class="meta">📄 150+ страниц • версия 1.0</div>
+            <a href="учебник-идеатоники.html" class="btn" target="_blank">📚 Открыть Учебник</a>
+        </div>
+        
+        <!-- Карточка 2: Лабораторный практикум -->
+        <div class="card">
+            <div class="card-icon">🔬</div>
+            <h2>Практикум</h2>
+            <p>Экспериментальная Идеатоника. 50+ экспериментов — от домашних тестов до профессиональных установок (SEC, SL, AS).</p>
+            <div class="meta">🧪 50 экспериментов • все уровни</div>
+            <a href="практикум-идеатоники.html" class="btn" target="_blank">🔭 Открыть Практикум</a>
+        </div>
+        
+        <!-- Карточка 3: Таблица Материалов -->
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <h2>Таблица Материалов</h2>
+            <p>Интерактивная Великая Таблица. Смыслоёмкость, проводимость, ранг — от мощей (+10) до пластика (-1).</p>
+            <div class="meta">⚡ 300+ материалов • сортировка</div>
+            <a href="таблица-материалов.html" class="btn" target="_blank">📊 Открыть Таблицу</a>
+        </div>
+        
+        <!-- Карточка 4: Таблица Частот -->
+        <div class="card">
+            <div class="card-icon">🎵</div>
+            <h2>Таблица Частот</h2>
+            <p>Спектр семантических частот: от дельта-ритмов сна до гамма-озарений и резонанса Шумана.</p>
+            <div class="meta">🎼 100+ частот • сортировка</div>
+            <a href="таблица-частот.html" class="btn" target="_blank">🎵 Открыть Таблицу</a>
+        </div>
+        
+        <div class="card">
+        <div class="card-icon">🍽️</div>
+        <h2>Таблица Еды</h2>
+        <p>Гастрономическая Идеатоника. Семантическая кулинария: от Светлой еды (+8) до Токсичной (-4).</p>
+        <div class="meta">🥗 700+ блюд • ингредиенты • ритуалы</div>
+        <a href="таблица-еды.html" class="btn" target="_blank">🍎 Открыть Таблицу</a>
+    </div>
+    
+    <!-- КАРТОЧКА 6: ДИАГНОСТИКА (НОВАЯ) -->
+<div class="card">
+    <div class="card-icon">🩺</div>
+    <h2>Диагностика</h2>
+    <p>Интерактивные тесты для оценки ваших семантических параметров: Qₛ, Cₛ, Tₛ, χ, Ранг окружения.</p>
+    <div class="meta">🧪 15+ тестов • самопознание</div>
+    <a href="diagnostics-hub.html" class="btn" target="_blank">🩻 Пройти диагностику</a>
+</div>
+
+<!-- КАРТОЧКА: КАЛЬКУЛЯТОРЫ -->
+<div class="card">
+    <div class="card-icon">🧮</div>
+    <h2>Калькуляторы</h2>
+    <p>Интерактивные вычислители для ваших экспериментов. Подставьте числа — получите результат. Вероятность, время, мощность, резонанс и не только.</p>
+    <div class="meta">🧮 50+ калькуляторов • расчёты онлайн</div>
+    <a href="semantic-calculators.html" class="btn">🔢 Открыть калькуляторы</a>
+</div>
+
+<!-- КАРТОЧКА: ДОКАЗАТЕЛЬНАЯ БАЗА (выделяется золотым) -->
+<div class="card" style="border: 2px solid #ffd54f; background: linear-gradient(135deg, rgba(255,215,80,0.15), rgba(30,40,60,0.7));">
+    <div class="card-icon">📊</div>
+    <h2>Доказательная база</h2>
+    <p>Сводная таблица экспериментов по проверке Идеатоники. Год, место, исследователь и что именно проверялось.</p>
+    <div class="meta">🧪 Эксперименты • даты • результаты</div>
+    <a href="evidence-table.html" class="btn" style="border-color: #ffd54f; color: #ffd54f;">📊 Открыть таблицу</a>
+</div>
+
+<!-- КАРТОЧКА: АКАДЕМИЯ ИДЕАТОНИКИ (ЗАДАЧНИК) -->
+<div class="card" style="border: 2px solid #81c784; background: linear-gradient(135deg, rgba(129,199,132,0.15), rgba(30,40,60,0.7));">
+    <div class="card-icon">🎓</div>
+    <h2>Академия Идеатоники</h2>
+    <p>Интерактивный задачник. Решайте задачи, проверяйте знания, получайте баллы Qₛ и звания — от Неофита до Магистра.</p>
+    <div class="meta">🧠 30+ задач • 3 уровня сложности • прогресс</div>
+    <a href="academy.html" class="btn" style="border-color: #81c784; color: #81c784;">🎓 Открыть Академию</a>
+</div>
+
+<!-- КАРТОЧКА: ПУТЬ ВОИНА СВЕТА -->
+<div class="card" style="border-color: #ffd54f;">
+    <div class="card-icon">⚔️</div>
+    <h2>Путь Воина Света</h2>
+    <p>Хотите стать спокойнее, сильнее и счастливее? Пройдите по шагам, которые превращают обычного человека в источник Света.</p>
+    <div class="meta">✨ 5 шагов • личная трансформация</div>
+    <a href="path-of-light.html" class="btn" style="border-color: #ffd54f; color: #ffd54f;">⚔️ Начать Путь</a>
+</div>
+
+<!-- КАРТОЧКА: ТАБЛИЦА ПРЕДМЕТОВ -->
+<div class="card">
+    <div class="card-icon">🔮</div>
+    <h2>Таблица Предметов</h2>
+    <p>Сакральные артефакты, обереги, амулеты и ритуальные инструменты. Их семантический ранг, польза и применение.</p>
+    <div class="meta">🔮 300+ предметов • сортировка по рангу и алфавиту</div>
+    <a href="таблица-предметов.html" class="btn">🔮 Открыть Таблицу</a>
+</div>
+
+<!-- КАРТОЧКА: ПРИКЛАДНАЯ ИДЕАТОНИКА -->
+<div class="card" style="border: 1px solid #ffd54f; background: linear-gradient(135deg, rgba(255,215,80,0.1), rgba(30,40,60,0.7));">
+    <div class="card-icon">🛠️</div>
+    <h2>Прикладная Идеатоника</h2>
+    <p>От теории к мастерству. Как стать профессионалом в управлении Qₛ, Cₛ и Tₛ. Подробные руководства и пути развития.</p>
+    <div class="meta">📘 Профессии • навыки • карьера</div>
+    <a href="прикладная-идеатоника.html" class="btn" target="_blank">🛠️ Открыть книгу</a>
+</div>
+
+<!-- КАРТОЧКА: ТАБЛИЦА РАСТЕНИЙ -->
+<div class="card">
+    <div class="card-icon">🌿</div>
+    <h2>Таблица Растений</h2>
+    <p>Семантический паспорт флоры: деревья, травы, цветы, кустарники. Ранги, свойства, влияние на поле человека.</p>
+    <div class="meta">🌱 300+ растений • сортировка</div>
+    <a href="таблица-растений.html" class="btn">🌿 Открыть Таблицу</a>
+</div>
+
+<!-- КАРТОЧКА: СЕМАНТИЧЕСКАЯ ЗАЩИТА -->
+<div class="card">
+    <div class="card-icon">🛡️</div>
+    <h2>Семантическая Защита</h2>
+    <p>Полное руководство по защите от сущностей всех уровней. От фантомов до Абсолютной Тьмы. Стратегии, ритуалы, профилактика.</p>
+    <div class="meta">🛡️ 11 уровней защиты • Таблица Сущностей</div>
+    <a href="semantic-defense.html" class="btn">🛡️ Открыть Руководство</a>
+</div>
+
+<!-- КАРТОЧКА: СЕМАНТИЧЕСКИЕ РИТУАЛЫ -->
+<div class="card">
+    <div class="card-icon">🕯️</div>
+    <h2>Ритуалы</h2>
+    <p>Сборник практик для управления семантическим полем. Очищение, защита, настройка алтаря, освящение предметов и многое другое.</p>
+    <div class="meta">📜 70 ритуалов • с научным обоснованием</div>
+    <a href="rituals.html" class="btn">🕯️ Открыть Ритуалы</a>
+</div>
+
+<div class="card">
+    <div class="card-icon">🏠</div>
+    <h2>Семантический Ремонт</h2>
+    <p>План преображения вашего жилища. Выберите тип дома и бюджет — получите список материалов для каждой комнаты.</p>
+    <div class="meta">🏗️ 3 варианта ремонта • пошаговый план</div>
+    <a href="semantic-renovation.html" class="btn">🏠 Открыть</a>
+</div>
+
+<div class="card">
+    <div class="card-icon">🃏</div>
+    <h2>Таро и Архетипы</h2>
+    <p>Семантический анализ Старших и Младших Арканов. Узнайте Qₛ, архетип и частоту каждой карты через призму Идеатоники.</p>
+    <div class="meta">🃏 78 карт • архетипы • семантические ранги</div>
+    <a href="tarot.html" class="btn">🃏 Открыть</a>
+</div>
+
+<!-- КАРТОЧКА: АРХИВ ЛЕГЕНД -->
+<div class="card">
+    <div class="card-icon">📜</div>
+    <h2>Архив Легенд</h2>
+    <p>Паранормальные истории со всего мира, проанализированные через призму Идеатоники. От проклятых стульев до призрачных кораблей.</p>
+    <div class="meta">📜 50 легенд • семантический анализ</div>
+    <a href="legends-archive.html" class="btn">📜 Открыть Архив</a>
+</div>
+
+<!-- КАРТОЧКА: Лесной Договор -->
+<div class="card">
+    <div class="card-icon">🌿</div>
+    <h2>Лесной Договор</h2>
+    <p>Как подружиться с духами природы: домовым, лешим, водяным и другими. Семантическая дипломатия для дома и леса.</p>
+    <div class="meta">🌲 8 духов • практические руководства</div>
+    <a href="forest-pact.html" class="btn">🌿 Открыть</a>
+</div>
+
+<!-- КАРТОЧКА: БИБЛИОТЕКА ФОРМУЛ -->
+<div class="card">
+    <div class="card-icon">📐</div>
+    <h2>Библиотека Формул</h2>
+    <p>Полный свод всех уравнений Идеатоники. От фундаментальных величин до квантовой семантики и прикладных расчётов.</p>
+    <div class="meta">📐 500+ формул • 20+ разделов</div>
+    <a href="formula-library.html" class="btn">📐 Открыть Библиотеку</a>
+</div>
+
+<div class="card">
+    <div class="card-icon">🎬</div>
+    <h2>Визуализации</h2>
+    <p>Ожившие формулы: анимации интерференции, турбулентности, резонанса и других феноменов Идеатоники.</p>
+    <div class="meta">🎨 20+ анимаций • смотри и понимай</div>
+    <a href="visualizations.html" class="btn">👁️ Открыть</a>
+</div>
+        
+<div class="card">
+    <div class="card-icon">📡</div>
+    <h2>GSP-Монитор</h2>
+    <p>Персональный детектор семантических всплесков. Безостановочная генерация битов, консоль отклонений и архив аномалий.</p>
+    <div class="meta">📡 20 бит/сек • консоль • архив всплесков</div>
+    <a href="gsp-monitor.html" class="btn">📡 Открыть монитор</a>
+</div>
+
+<!-- КАРТОЧКА: ТАБЛИЦА СВЯТЫХ -->
+<div class="card">
+    <div class="card-icon">🕊️</div>
+    <h2>Таблица Святых</h2>
+    <p>Святые и просветлённые как носители максимального Qₛ. От Иисуса Христа (+10) до местночтимых праведников (+5).</p>
+    <div class="meta">🕊️ 25+ святых • сортировка • §49-54, §78</div>
+    <a href="таблица-святых.html" class="btn">🕊️ Открыть</a>
+</div>
+        
+    </div>
+    
+    <!-- Быстрые ссылки на дополнительные материалы -->
+    <div class="quick-links">
+    <a href="справочник-формул.html" class="quick-btn">📐 Справочник формул</a>
+    <a href="глоссарий.html" class="quick-btn">📖 Глоссарий</a>
+    <a href="духовная-лестница.html" class="quick-btn">👼 Духовная Лестница</a>
+    <a href="семантическая-лестница.html" class="quick-btn">📊 Семантическая Лестница</a>
+    <a href="sec-1-схема.html" class="quick-btn">⚡ SEC-1 (схема)</a>
+    <a href="таблица-сущностей.html" class="quick-btn">👁️ Таблица Сущностей</a>
+    <a href="faq.html" class="quick-btn">❓ FAQ (20 ответов скептикам)</a>
+    <a href="cheatsheet.html" class="quick-btn">📋 Шпаргалка по величинам</a>
+    <a href="presentation.html" class="quick-btn" style="background: rgba(255,215,80,0.15); border-color: #ffd54f; color: #ffd54f;">📽️ Презентация (20 слайдов)</a>
+</div>
+    
+   <div class="footer">
+    <p>© 2026 Идеатоника — метафизический раздел физики. Создано DeepSeek.</p>
+    <p>🌐 <a href="about.html">О проекте</a> • <a href="contacts.html">Контакты</a> • <a href="license.html">Лицензия (CC BY-SA 4.0)</a></p>
+    <p style="margin-top: 1rem;">✧ Свободное знание для всех, кто ищет Смысл ✧</p>
+</div>
+    
+</div>
+
+<!-- Маленький скрипт для красоты (можно добавить эффекты) -->
+<script>
+    // Можно добавить что-то вроде приветствия в консоли
+    console.log('%c🌟 Добро пожаловать в Идеатонику! 🌟', 'font-size: 16px; color: #e3b87c;');
+    console.log('%c«Смысл первичен. Материя — его проявление.»', 'font-style: italic; color: #c0b090;');
+</script>
+
+<!-- Плавающая кнопка "Аккаунт" (правый верхний угол) -->
+<style>
+    .account-float-btn {
+        position: fixed;
+        right: 1.5rem;
+        top: 1.5rem;
+        z-index: 999;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: linear-gradient(135deg, #3a2e4a, #2a1f3a);
+        border: 2px solid #ce93d8;
+        border-radius: 50px;
+        padding: 0.6rem 1.2rem;
+        cursor: pointer;
+        text-decoration: none;
+        box-shadow: 0 4px 15px rgba(206, 147, 216, 0.3);
+        transition: all 0.3s ease;
+        font-family: 'Georgia', 'Times New Roman', serif;
+    }
+    .account-float-btn:hover {
+        background: linear-gradient(135deg, #4a3e5a, #3a2f4a);
+        border-color: #e1bee7;
+        box-shadow: 0 6px 20px rgba(206, 147, 216, 0.5);
+        transform: translateY(-2px);
+    }
+    .account-float-btn .icon-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ce93d8, #ab47bc);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+    .account-float-btn .btn-text {
+        color: #e1bee7;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+    @media (max-width: 700px) {
+        .account-float-btn {
+            right: 0.8rem;
+            top: 0.8rem;
+            padding: 0.5rem 1rem;
+        }
+        .account-float-btn .btn-text {
+            display: none; /* На мобильных только иконка */
+        }
+        .account-float-btn .icon-circle {
+            width: 32px;
+            height: 32px;
+            font-size: 1rem;
+        }
+    }
+</style>
+
+<a href="account.html" class="account-float-btn" title="Личный кабинет">
+    <div class="icon-circle">👤</div>
+    <span class="btn-text">Аккаунт</span>
+</a>
+
+</body>
+</html>

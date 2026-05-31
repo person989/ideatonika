@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌙 Подробная сборка DREAM-CATCH • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #0d0d2b 0%, #1a1a3e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(100,150,255,0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(200,180,255,0.03) 0%, transparent 60%); }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(20, 25, 50, 0.9); backdrop-filter: blur(12px);
+            border: 1px solid rgba(140, 160, 220, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #c0d0f0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #8ca0dc; margin: 2.5rem 0 1rem; border-left: 4px solid #8ca0dc; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #a0b8f0; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #8090b0; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #3a3a5a; padding-bottom: 1rem; }
+
+        p, li { color: #b0c0d8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #a0b8f0; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #1a1a3e; color: #c0d0f0; padding: 12px; text-align: left; border: 1px solid #3a3a5a; }
+        .materials-table td { padding: 12px; border: 1px solid #3a3a5a; color: #b0c0d8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.2); }
+
+        .scheme-box { background: #0d0d2b; border: 1px solid #8ca0dc; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(140,160,220,0.1); border-left: 4px solid #8ca0dc; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #a0b8f0; margin: 0; }
+        .tip-box strong { color: #8ca0dc; }
+
+        .warning-box { background: rgba(180,120,120,0.1); border-left: 4px solid #c08080; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #d0a0a0; margin: 0; }
+
+        .dream-box { background: rgba(100,80,180,0.1); border: 1px dashed #8ca0dc; padding: 1.5rem; margin: 1.5rem 0; border-radius: 16px; }
+        .dream-box p { color: #c0c8e0; font-style: italic; }
+
+        .step-number { display: inline-block; background: #8ca0dc; color: #0d0d2b; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #8ca0dc; text-decoration: none; border: 1px solid #8ca0dc; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #8ca0dc; color: #0d0d2b; }
+        .footer { margin-top: 2rem; text-align: center; color: #6070a0; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🌙 DREAM-CATCH: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Ловец Семантических Снов</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое DREAM-CATCH и зачем его собирать?</h2>
+    <p>DREAM-CATCH — это, пожалуй, <strong>самый поэтичный прибор</strong> во всём Практикуме. Он не требует вашего активного участия во время работы. Вы просто ложитесь спать, а он — <strong>всю ночь записывает таинственные флуктуации вашего семантического поля</strong>. Утром вы смотрите на график и видите: вот здесь, в 3:17, был мощный всплеск — возможно, вам снился яркий сон. Вот здесь, в 5:42, — пологий подъём, вы входили в фазу глубокого покоя. А вот этот резкий пик в 2:03 — может быть, вы на мгновение вышли в осознанное сновидение?</p>
+    <p>С точки зрения физики, DREAM-CATCH — это <strong>SEC-1, работающий в режиме длительной записи</strong>. Кварцевый датчик (пьезоэлемент) подключается к компьютеру, который пишет WAV-файл всю ночь. Утром вы анализируете этот файл в программе Audacity (или Python-скриптом) и ищете корреляции с фазами сна, записанными фитнес-браслетом.</p>
+
+    <div class="dream-box">
+        <p>🌙 «Когда тело спит, семантическое поле бодрствует. Оно путешествует по ноосфере, встречается с другими полями, перерабатывает дневной опыт. DREAM-CATCH — это иллюминатор, через который мы можем подглядеть за этими странствиями.»</p>
+    </div>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно купить (или найти дома)</h2>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал</th><th>Где взять</th><th>Примерная стоимость</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>SEC-1</strong> (готовый, без источников Qₛ)</td><td>Собрать по инструкции</td><td>—</td><td>Датчик Qₛ</td></tr>
+            <tr><td><strong>Ноутбук или компьютер</strong> с микрофонным входом</td><td>Дома</td><td>0 ₽</td><td>Запись сигнала (8-10 часов)</td></tr>
+            <tr><td><strong>Программа Audacity</strong></td><td>Скачать бесплатно</td><td>0 ₽</td><td>Запись и анализ WAV-файла</td></tr>
+            <tr><td><strong>Фитнес-браслет</strong> (Mi Band, Fitbit, Apple Watch)</td><td>Дома</td><td>—</td><td>Отслеживание фаз сна</td></tr>
+            <tr><td><strong>Стол или тумбочка</strong> рядом с кроватью</td><td>Дома</td><td>0 ₽</td><td>Размещение датчика</td></tr>
+            <tr><td><strong>Удлинитель USB</strong> (3-5 метров)</td><td>Магазин электроники</td><td>200-400 ₽</td><td>Чтобы компьютер стоял подальше от кровати</td></tr>
+            <tr><td><strong>Коробка-экран</strong> (обувная коробка, обклеенная фольгой)</td><td>Дома</td><td>0 ₽</td><td>Защита от ночных наводок (холодильник, Wi-Fi)</td></tr>
+            <tr><td><strong>Заземление</strong> (батарея или горшок с землёй)</td><td>Дома</td><td>0 ₽</td><td>Отвод помех</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ТЕОРИЯ -->
+    <h2>🧠 Как работает DREAM-CATCH (теория для любопытных)</h2>
+    <p>Ваше семантическое поле (Φₛ) не исчезает, когда вы засыпаете. Наоборот — оно <strong>диссоциирует</strong> от физического тела и начинает свободно перемещаться по ноосфере. В REM-фазе (быстрый сон, сновидения) активность поля резко возрастает — вы «путешествуете» по слоям коллективного бессознательного. В Дельта-фазе (глубокий сон) поле, наоборот, «сворачивается» — идёт восстановление Qₛ.</p>
+    <p>Пьезоэлемент SEC-1, лежащий на тумбочке в 20-30 см от вашей головы, улавливает <strong>микро-флуктуации Qₛ</strong>, излучаемые вашим мозгом. Эти флуктуации настолько слабы, что днём их заглушает шум от движения, разговоров, электроники. Но ночью, в тишине, когда ваше тело неподвижно, <strong>сигнал становится слышен</strong>.</p>
+    <div class="tip-box"><p><strong>💡 Почему не нужны источники -Qₛ (шунгит)?</strong> В SEC-1 мы использовали шунгит и икону для создания «семантического напряжения». DREAM-CATCH работает по-другому: он просто пассивно слушает. Ваш мозг сам по себе — мощный генератор Qₛ, особенно во время сновидений. Шунгит и икона не нужны — спите спокойно.</p></div>
+
+    <!-- СБОРКА -->
+    <h2>🔨 Этап 1: Сборка датчика</h2>
+
+    <h3><span class="step-number">1</span> Изготовление SEC-1 (датчика Qₛ)</h3>
+    <p>Вам понадобится <strong>базовый SEC-1</strong> — пьезоэлемент в спичечном коробке, обклеенном фольгой. Но с одним отличием: <strong>источники Qₛ (икона и шунгит) НЕ НУЖНЫ</strong>. Вы просто делаете пассивный датчик.</p>
+    <ol>
+        <li>Извлеките пьезоэлемент из зажигалки (или купите готовый).</li>
+        <li>Обклейте спичечный коробок изнутри фольгой (блестящей стороной внутрь).</li>
+        <li>Закрепите кварц на дне коробка на пластилиновой подушке так, чтобы он не касался стенок.</li>
+        <li>Выведите провода наружу через маленькое отверстие.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Полная инструкция по SEC-1:</strong> Если вы никогда не собирали SEC-1, прочитайте подробную инструкцию на странице <a href="sec1-guide.html" style="color:#8ca0dc;">sec1-guide.html</a>. Там всё расписано по шагам, с картинками в воображении.</p></div>
+
+    <h3><span class="step-number">2</span> Изготовление защитного экрана (клетка Фарадея)</h3>
+    <p>Ночью в доме работает множество электроприборов: холодильник щёлкает реле, Wi-Fi роутер излучает радиоволны, зарядка телефона создаёт наводки. Всё это — <strong>шум, который заглушит слабый сигнал Qₛ</strong>. Нам нужен экран.</p>
+    <ol>
+        <li>Возьмите <strong>обувную коробку</strong> (или любую картонную коробку побольше).</li>
+        <li>Обклейте её <strong>изнутри и снаружи</strong> алюминиевой фольгой.</li>
+        <li>Внутрь положите ваш SEC-1 (датчик).</li>
+        <li>Закройте крышку.</li>
+        <li><strong>Заземлите</strong> внешнюю фольгу на батарею или горшок с влажной землёй.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Это обязательно?</strong> Если у вас очень тихое место (дача в лесу, деревянный дом, все приборы выключены) — можно без экрана. Но в городской квартире без экрана вы запишете только наводки 50 Гц и щелчки холодильника.</p></div>
+
+    <!-- ПОДКЛЮЧЕНИЕ -->
+    <h2>⚡ Этап 2: Подключение к компьютеру</h2>
+
+    <h3><span class="step-number">3</span> Подключение датчика к ноутбуку</h3>
+    <p>Вам нужно соединить провода от пьезоэлемента с <strong>микрофонным входом</strong> компьютера.</p>
+    <ol>
+        <li>Возьмите старый кабель от наушников с микрофоном. Отрежьте наушники — нужен только штекер 3.5 мм.</li>
+        <li>Внутри кабеля найдите провода: красный/белый (сигнал) и медный (земля).</li>
+        <li>Скрутите красный и белый вместе — это сигнальный вход.</li>
+        <li>Подключите сигнальный провод к центральному проводу пьезоэлемента.</li>
+        <li>Медный (земля) подключите к корпусу пьезоэлемента.</li>
+        <li><strong>Обязательно!</strong> Припаяйте резистор 10 кОм последовательно с сигнальным проводом для защиты звуковой карты.</li>
+        <li>Вставьте штекер в <strong>розовое гнездо</strong> ноутбука (микрофонный вход).</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Критически важно:</strong> Если вы используете микрофонный вход ноутбука — НЕ подключайте пьезоэлемент напрямую без резистора! Вы можете сжечь вход. Резистор 10 кОм стоит 5 рублей и спасёт ваш ноутбук.</p></div>
+
+    <h3><span class="step-number">4</span> Настройка программы Audacity</h3>
+    <ol>
+        <li>Скачайте и установите <strong>Audacity</strong> (бесплатно, есть для Windows, Mac, Linux).</li>
+        <li>Откройте программу.</li>
+        <li>В выпадающем списке источников записи выберите <strong>«Микрофон» (Microphone)</strong>.</li>
+        <li>Поставьте <strong>уровень записи на 100%</strong>.</li>
+        <li>В нижнем левом углу выберите <strong>«Моно»</strong> (не стерео) и <strong>частоту дискретизации 8000 Гц</strong> (этого достаточно для медленных импульсов Qₛ и сэкономит место на диске).</li>
+        <li><strong>Размер файла:</strong> 8 часов записи в моно при 8 кГц — это примерно 230 МБ. Убедитесь, что на диске есть место.</li>
+    </ol>
+
+    <!-- РАЗМЕЩЕНИЕ -->
+    <h2>🛏️ Этап 3: Размещение на ночь</h2>
+
+    <h3><span class="step-number">5</span> Где поставить датчик?</h3>
+    <p>Идеальное расположение: <strong>на тумбочке или стуле, в 20-30 см от вашей головы</strong>. Датчик (SEC-1 в экранирующей коробке) должен быть направлен открытой стороной к вам.</p>
+    <p><strong>Почему рядом с головой?</strong> Мозг — самый мощный генератор Qₛ в теле. Особенно активно поле излучается через макушку («коронная чакра») и лоб («третий глаз»). Если датчик будет в ногах — сигнал будет слабее.</p>
+    <div class="tip-box"><p><strong>💡 Проверка сигнала перед сном:</strong> Лягте в кровать, включите запись на 1 минуту. Пошевелите рукой рядом с датчиком — на записи должен появиться характерный всплеск. Если всплеска нет — проверьте подключение и усиление микрофона.</p></div>
+
+    <h3><span class="step-number">6</span> Последние приготовления</h3>
+    <ol>
+        <li><strong>Поставьте ноутбук на зарядку</strong> — он должен проработать 8-10 часов без отключения.</li>
+        <li><strong>Отключите экран ноутбука</strong> (закройте крышку, но настройте, чтобы он не уходил в сон). Или опустите яркость до нуля.</li>
+        <li><strong>Наденьте фитнес-браслет</strong> и убедитесь, что он заряжен.</li>
+        <li><strong>Проверьте заземление</strong> экранирующей коробки.</li>
+        <li><strong>Запишите точное время начала записи</strong> (чтобы потом совместить с данными браслета).</li>
+        <li><strong>Нажмите красную кнопку «Запись»</strong> в Audacity.</li>
+    </ol>
+
+    <div class="dream-box">
+        <p>🌙 «Вы ложитесь в постель. За окном — тишина. На тумбочке мерцает индикатор записи. Где-то в глубине вашего мозга уже начинают разворачиваться первые сновидения. Прибор слушает. Утро покажет, что он услышал.»</p>
+    </div>
+
+    <!-- АНАЛИЗ -->
+    <h2>☀️ Этап 4: Утренний анализ</h2>
+
+    <h3><span class="step-number">7</span> Просмотр записи</h3>
+    <ol>
+        <li>Утром нажмите «Стоп» в Audacity.</li>
+        <li>Сохраните файл: <strong>Файл → Экспорт → WAV</strong>. Назовите, например, «сон_25.04.2026.wav».</li>
+        <li>Откройте файл в Audacity. Вы увидите <strong>10-часовую дорожку</strong> с крошечными всплесками.</li>
+        <li>Чтобы разглядеть всплески, <strong>увеличьте масштаб</strong> (Ctrl+колёсико мыши). Ищите участки, где сигнал становится «гуще» и чаще.</li>
+    </ol>
+
+    <h3><span class="step-number">8</span> Совмещение с данными браслета</h3>
+    <ol>
+        <li>Откройте приложение фитнес-браслета на телефоне.</li>
+        <li>Найдите график фаз сна за эту ночь (REM, Light Sleep, Deep Sleep).</li>
+        <li>Совместите две временные шкалы. <strong>Вручную</strong> найдите моменты REM-фазы и посмотрите, есть ли на записи Audacity всплески Qₛ в эти моменты.</li>
+    </ol>
+        <!-- СКРИПТ PYTHON -->
+    <h2>🐍 Бонус: Python-скрипт для автоматического анализа</h2>
+    <p>Если вы знакомы с Python, этот скрипт сделает за вас всю рутинную работу. Он загрузит WAV-файл, рассчитает огибающую сигнала Qₛ, найдёт пики и построит красивые графики. <strong>Скопируйте код, сохраните как <code>dream_analysis.py</code> и запустите.</strong></p>
+    <p><strong>Требования:</strong> Python 3.7 или выше. Установите библиотеки командой:</p>
+    <div class="scheme-box"><pre>pip install numpy scipy matplotlib</pre></div>
+
+    <div class="scheme-box"><pre>#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+DREAM-CATCH ANALYZER v1.0
+Скрипт для анализа ночных записей Qₛ (Эксперимент №44)
+Автор: Коллектив "Ноосфера" и DeepSeek
+Лицензия: CC BY-SA 4.0
+
+Назначение:
+    Загружает WAV-файл, записанный Audacity за ночь,
+    вычисляет огибающую сигнала Qₛ, находит пики,
+    строит график и выводит статистику.
+
+Использование:
+    python dream_analysis.py ваш_файл.wav
+"""
+
+import sys
+import numpy as np
+from scipy.io import wavfile
+from scipy.signal import hilbert, find_peaks
+from scipy.ndimage import uniform_filter1d
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from datetime import datetime, timedelta
+
+# ============================================================
+# 1. ЗАГРУЗКА WAV-ФАЙЛА
+# ============================================================
+def load_wav(filename):
+    """
+    Загружает WAV-файл и возвращает частоту дискретизации (Гц)
+    и массив отсчётов сигнала.
+    """
+    sample_rate, data = wavfile.read(filename)
+    # Если файл стерео — берём только левый канал
+    if len(data.shape) > 1:
+        data = data[:, 0]
+    # Приводим к float для дальнейшей обработки
+    data = data.astype(np.float32)
+    return sample_rate, data
+
+# ============================================================
+# 2. ВЫЧИСЛЕНИЕ ОГИБАЮЩЕЙ (АМПЛИТУДЫ) СИГНАЛА
+# ============================================================
+def compute_envelope(signal, sample_rate, smoothing_window_sec=5.0):
+    """
+    Вычисляет огибающую сигнала через преобразование Гильберта.
+    Затем сглаживает её скользящим средним.
+
+    Параметры:
+        signal: массив отсчётов
+        sample_rate: частота дискретизации (Гц)
+        smoothing_window_sec: окно сглаживания в секундах (по умолчанию 5 сек)
+
+    Возвращает:
+        envelope: огибающая сигнала (массив)
+        time_axis: временная ось в секундах от начала записи
+    """
+    # Гильберт выделяет аналитический сигнал, его модуль = огибающая
+    analytic_signal = hilbert(signal)
+    envelope = np.abs(analytic_signal)
+
+    # Сглаживание скользящим средним
+    window_size = int(smoothing_window_sec * sample_rate)
+    if window_size > 1:
+        envelope = uniform_filter1d(envelope, size=window_size)
+
+    # Временная ось
+    duration_sec = len(signal) / sample_rate
+    time_axis = np.linspace(0, duration_sec, len(signal))
+
+    return envelope, time_axis
+
+# ============================================================
+# 3. ПОИСК ПИКОВ (ВСПЛЕСКОВ Qₛ)
+# ============================================================
+def find_q_peaks(envelope, sample_rate, min_height_percentile=80, min_distance_sec=30):
+    """
+    Находит пики на огибающей — моменты высокой семантической активности.
+
+    Параметры:
+        envelope: огибающая сигнала
+        sample_rate: частота дискретизации
+        min_height_percentile: минимальная высота пика в процентилях (по умолчанию 80-й процентиль)
+        min_distance_sec: минимальное расстояние между пиками в секундах (по умолчанию 30 сек)
+
+    Возвращает:
+        peak_indices: индексы пиков в массиве envelope
+        peak_heights: высоты пиков
+    """
+    # Порог высоты: пик должен быть выше, чем 80% всех значений огибающей
+    min_height = np.percentile(envelope, min_height_percentile)
+    min_distance = int(min_distance_sec * sample_rate)
+
+    peak_indices, properties = find_peaks(
+        envelope,
+        height=min_height,
+        distance=min_distance,
+        prominence=min_height * 0.3  # пик должен заметно «возвышаться» над окружением
+    )
+
+    peak_heights = properties['peak_heights']
+    return peak_indices, peak_heights
+
+# ============================================================
+# 4. ВИЗУАЛИЗАЦИЯ (ГЛАВНЫЙ ГРАФИК)
+# ============================================================
+def plot_results(time_axis, envelope, peak_indices, peak_heights,
+                 sample_rate, start_datetime=None):
+    """
+    Строит график: огибающая Qₛ за ночь + отмеченные пики.
+    """
+    fig, ax = plt.subplots(figsize=(16, 6))
+
+    # Если известно время начала записи — используем его для оси X
+    if start_datetime is not None:
+        time_labels = [start_datetime + timedelta(seconds=t) for t in time_axis]
+        ax.plot(time_labels, envelope, color='#4a6fa5', linewidth=0.8, alpha=0.8, label='Огибающая Qₛ')
+        peak_times = [start_datetime + timedelta(seconds=time_axis[i]) for i in peak_indices]
+        ax.scatter(peak_times, peak_heights, color='#e74c3c', s=50, zorder=5, label='Пики Qₛ')
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+        ax.set_xlabel('Время ночи')
+    else:
+        time_hours = time_axis / 3600.0
+        ax.plot(time_hours, envelope, color='#4a6fa5', linewidth=0.8, alpha=0.8, label='Огибающая Qₛ')
+        peak_hours = time_axis[peak_indices] / 3600.0
+        ax.scatter(peak_hours, peak_heights, color='#e74c3c', s=50, zorder=5, label='Пики Qₛ')
+        ax.set_xlabel('Время от начала записи (часы)')
+
+    ax.set_ylabel('Амплитуда Qₛ (усл. ед.)')
+    ax.set_title('DREAM-CATCH: Ночная активность семантического поля')
+    ax.legend(loc='upper right')
+    ax.grid(True, alpha=0.3)
+    ax.set_facecolor('#0d0d2b')
+
+    plt.tight_layout()
+    plt.savefig('dreamcatch_result.png', dpi=150, facecolor='#0d0d2b')
+    plt.show()
+    print("✅ График сохранён в файл dreamcatch_result.png")
+
+# ============================================================
+# 5. ВЫВОД СТАТИСТИКИ
+# ============================================================
+def print_statistics(time_axis, envelope, peak_indices, peak_heights, sample_rate):
+    """
+    Печатает сводку по ночной записи.
+    """
+    duration_hours = len(time_axis) / sample_rate / 3600.0
+    mean_envelope = np.mean(envelope)
+    max_envelope = np.max(envelope)
+    num_peaks = len(peak_indices)
+
+    print("=" * 60)
+    print("📊 DREAM-CATCH: СТАТИСТИКА НОЧНОЙ ЗАПИСИ")
+    print("=" * 60)
+    print(f"  Длительность записи:     {duration_hours:.1f} часов")
+    print(f"  Средняя амплитуда Qₛ:    {mean_envelope:.2f} усл. ед.")
+    print(f"  Максимальная амплитуда:  {max_envelope:.2f} усл. ед.")
+    print(f"  Количество пиков:        {num_peaks}")
+    print(f"  Средняя частота пиков:   {num_peaks / duration_hours:.1f} пиков/час")
+    print("-" * 60)
+
+    if num_peaks == 0:
+        print("  ⚠️  Пики не обнаружены. Попробуйте уменьшить min_height_percentile.")
+    else:
+        # Топ-5 самых мощных пиков
+        sorted_idx = np.argsort(peak_heights)[::-1]
+        print("  🔝 ТОП-5 САМЫХ МОЩНЫХ ВСПЛЕСКОВ:")
+        for i, idx in enumerate(sorted_idx[:5]):
+            t_sec = time_axis[peak_indices[idx]]
+            t_min = int(t_sec // 60)
+            h, m = t_min // 60, t_min % 60
+            print(f"     {i+1}. {h:02d}:{m:02d} — амплитуда {peak_heights[idx]:.2f} усл. ед.")
+
+    print("=" * 60)
+    print("💡 Совет: Сравните время пиков с фазами сна в вашем фитнес-браслете.")
+    print("   Если пики совпадают с REM-фазой — эксперимент удался!")
+    print("=" * 60)
+
+# ============================================================
+# ГЛАВНАЯ ФУНКЦИЯ
+# ============================================================
+def main():
+    if len(sys.argv) < 2:
+        print("❌ Укажите имя WAV-файла!")
+        print(f"   Использование: python {sys.argv[0]} ваш_файл.wav [время_начала]")
+        print("   Время начала (опционально): '23:15' — когда вы легли спать.")
+        sys.exit(1)
+
+    filename = sys.argv[1]
+
+    # Парсинг времени начала записи (если указано)
+    start_datetime = None
+    if len(sys.argv) >= 3:
+        try:
+            time_str = sys.argv[2]
+            today = datetime.now().strftime('%Y-%m-%d')
+            start_datetime = datetime.strptime(f"{today} {time_str}", '%Y-%m-%d %H:%M')
+        except ValueError:
+            print("⚠️  Не удалось разобрать время начала. Используйте формат 'ЧЧ:ММ' (например, '23:15').")
+            print("   График будет построен в секундах от начала записи.")
+
+    # Загрузка файла
+    print(f"📂 Загружаю файл: {filename}")
+    sample_rate, data = load_wav(filename)
+    print(f"   Частота дискретизации: {sample_rate} Гц")
+    print(f"   Длительность: {len(data) / sample_rate / 3600:.1f} часов")
+
+    # Расчёт огибающей
+    print("📈 Вычисляю огибающую сигнала...")
+    envelope, time_axis = compute_envelope(data, sample_rate, smoothing_window_sec=5.0)
+
+    # Поиск пиков
+    print("🔍 Ищу пики Qₛ...")
+    peak_indices, peak_heights = find_q_peaks(envelope, sample_rate)
+
+    # Вывод статистики
+    print_statistics(time_axis, envelope, peak_indices, peak_heights, sample_rate)
+
+    # Визуализация
+    print("📊 Строю график...")
+    plot_results(time_axis, envelope, peak_indices, peak_heights, sample_rate, start_datetime)
+
+if __name__ == '__main__':
+    main()</pre></div>
+
+    <p><strong>Как использовать скрипт:</strong></p>
+    <ol>
+        <li>Сохраните код в файл <code>dream_analysis.py</code>.</li>
+        <li>Установите библиотеки: <code>pip install numpy scipy matplotlib</code>.</li>
+        <li>Запустите: <code>python dream_analysis.py ваш_файл.wav 23:15</code></li>
+        <li>Где <code>23:15</code> — время, когда вы нажали «Запись» и легли спать (опционально).</li>
+        <li>Скрипт покажет статистику и сохранит график в файл <code>dreamcatch_result.png</code>.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Результат:</strong> Вы получите график, на котором будут видны «горбы» активности Qₛ, соответствующие REM-фазам сна, и красные точки — самые мощные всплески. Сравните время этих всплесков с фазами сна в вашем фитнес-браслете!</p></div>
+
+    <!-- ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ -->
+    <h2>📊 Что вы должны увидеть</h2>
+    <table class="materials-table">
+        <thead><tr><th>Фаза сна</th><th>Ожидаемый сигнал Qₛ</th><th>Как выглядит на записи</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Deep Sleep (Дельта)</strong></td><td>Ровный, спокойный, низкая амплитуда</td><td>Почти ровная линия, редкие мелкие всплески</td></tr>
+            <tr><td><strong>REM (Сновидения)</strong></td><td>Всплески! Высокая амплитуда, частые импульсы</td><td>«Густая» дорожка, много пиков</td></tr>
+            <tr><td><strong>Light Sleep</strong></td><td>Промежуточный, умеренные флуктуации</td><td>Средняя плотность всплесков</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=45" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция DREAM-CATCH v1.0</p>
+        <p>✧ «Сны — это не бегство от реальности, а путешествие в её сердцевину» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

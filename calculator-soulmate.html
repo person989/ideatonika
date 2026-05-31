@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор вероятности встретить «своего» человека • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 5rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-advice { color: #a09080; font-size: 0.9rem; margin-top: 1rem; font-style: italic; border-top: 1px dashed #5d4a3a; padding-top: 1rem; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .heart { display: inline-block; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>💕 Встретить «своего» человека</h1>
+    <div class="subtitle">Калькулятор вероятности судьбоносной встречи (§19, §26, §104)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваши параметры</div>
+
+        <!-- Чувствительность χ -->
+        <div class="input-group">
+            <label>🔮 Ваша чувствительность (χ): <span id="chiValue">5</span> из 10</label>
+            <input type="range" id="chiSlider" min="1" max="10" value="5" step="0.5">
+            <div class="range-labels"><span>1 (глухарь)</span><span>5 (средне)</span><span>10 (медиум)</span></div>
+        </div>
+
+        <!-- Когерентность намерения Cₛ -->
+        <div class="input-group">
+            <label>🎯 Когерентность намерения (Cₛ): <span id="csValue">0.5</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.5" step="0.01">
+            <div class="range-labels"><span>0.1 (размыто)</span><span>0.5 (умеренно)</span><span>1.0 (чёткий запрос)</span></div>
+        </div>
+
+        <!-- Открытость миру -->
+        <div class="input-group">
+            <label>🌍 Открытость миру (новые знакомства, места):</label>
+            <select id="opennessSelect">
+                <option value="2.0">Очень открыт(а) — часто знакомлюсь, хожу в новые места (×2.0)</option>
+                <option value="1.5">Открыт(а) — иногда выхожу из зоны комфорта (×1.5)</option>
+                <option value="1.0" selected>Умеренно — работа-дом, редкие выходы (×1.0)</option>
+                <option value="0.6">Закрыт(а) — почти не знакомлюсь (×0.6)</option>
+                <option value="0.3">Очень закрыт(а) — изолирован(а) (×0.3)</option>
+            </select>
+        </div>
+
+        <!-- Уровень страха (блокирует) -->
+        <div class="input-group">
+            <label>😰 Уровень страха / прошлых травм (S_страха): <span id="fearValue">5</span> из 10</label>
+            <input type="range" id="fearSlider" min="0" max="10" value="5" step="0.5">
+            <div class="range-labels"><span>0 (нет страха)</span><span>5 (умеренно)</span><span>10 (паника)</span></div>
+        </div>
+
+        <!-- Уже есть запутанность? -->
+        <div class="input-group">
+            <label>🔗 Есть ли у вас предчувствие / «знак» / повторяющиеся совпадения?:</label>
+            <select id="signSelect">
+                <option value="2.0">Да, были яркие «совпадения», вещие сны (×2.0)</option>
+                <option value="1.3">Иногда замечаю «знаки» (×1.3)</option>
+                <option value="1.0" selected>Нет (×1.0)</option>
+            </select>
+        </div>
+
+        <!-- Временной горизонт -->
+        <div class="input-group">
+            <label>📅 Горизонт прогноза: <span id="horizonValue">6</span> месяцев</label>
+            <input type="range" id="horizonSlider" min="1" max="24" value="6" step="1">
+            <div class="range-labels"><span>1 месяц</span><span>6 месяцев</span><span>24 месяца</span></div>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="heart">❤️</div>
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Вероятность встречи</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-advice" id="resultAdvice"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const chiSlider = document.getElementById('chiSlider');
+    const csSlider = document.getElementById('csSlider');
+    const opennessSelect = document.getElementById('opennessSelect');
+    const fearSlider = document.getElementById('fearSlider');
+    const signSelect = document.getElementById('signSelect');
+    const horizonSlider = document.getElementById('horizonSlider');
+    const chiValue = document.getElementById('chiValue');
+    const csValue = document.getElementById('csValue');
+    const fearValue = document.getElementById('fearValue');
+    const horizonValue = document.getElementById('horizonValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultAdvice = document.getElementById('resultAdvice');
+    const resultFormula = document.getElementById('resultFormula');
+
+    chiSlider.addEventListener('input', () => { chiValue.textContent = parseFloat(chiSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    fearSlider.addEventListener('input', () => { fearValue.textContent = parseFloat(fearSlider.value).toFixed(1); calculate(); });
+    horizonSlider.addEventListener('input', () => { horizonValue.textContent = parseInt(horizonSlider.value); calculate(); });
+    [opennessSelect, signSelect].forEach(s => s.addEventListener('change', calculate));
+
+    function calculate() {
+        const chi = parseFloat(chiSlider.value);
+        const C = parseFloat(csSlider.value);
+        const openness = parseFloat(opennessSelect.value);
+        const Sfear = parseFloat(fearSlider.value);
+        const signBonus = parseFloat(signSelect.value);
+        const months = parseInt(horizonSlider.value);
+
+        // Базовая месячная вероятность «случайной» встречи
+        const P0 = 0.01; // 1% в месяц без всяких факторов
+
+        // Формула: P = P₀ · (χ/5) · C · openness · e^(-Sfear/5) · signBonus · months
+        const fearFactor = Math.exp(-Sfear / 5);
+        const Pmonth = P0 * (chi / 5) * C * openness * fearFactor * signBonus;
+        const Ptotal = Pmonth * months;
+        const Ppercent = Math.min(95, Math.round(Ptotal * 1000) / 10);
+
+        resultNumber.textContent = Ppercent.toFixed(1) + '%';
+        resultLabel.textContent = 'Вероятность встречи за ' + months + ' мес.';
+
+        let extra = '';
+        if (Ppercent >= 50) extra = '💖 Очень высокая вероятность! Вселенная на вашей стороне. Будьте внимательны к «знакам».';
+        else if (Ppercent >= 25) extra = '💫 Хорошие шансы! Продолжайте быть открытым(ой) и доверяйте интуиции.';
+        else if (Ppercent >= 10) extra = '🌱 Умеренная вероятность. Попробуйте снизить страх и повысить открытость.';
+        else if (Ppercent >= 3) extra = '🍃 Небольшая вероятность. Возможно, стоит поработать над страхами и расширить круг общения.';
+        else extra = '🕊️ Очень низкая вероятность. Не отчаивайтесь — иногда встреча приходит, когда её не ждёшь.';
+        resultExtra.textContent = extra;
+
+        let advice = '';
+        if (Sfear > 6) advice += '💡 Главный совет: работайте со страхом. Он сильнее всего блокирует семантический резонанс. ';
+        if (C < 0.4) advice += '💡 Попробуйте чётче сформулировать, какого человека вы ищете. Размытый запрос даёт размытый результат. ';
+        if (openness < 1.0) advice += '💡 Выходите из дома! Семантическое поле не работает в изоляции. ';
+        if (chi < 3) advice += '💡 Развивайте интуицию: ведите дневник снов, медитируйте. ';
+        if (Ppercent > 30) advice += '💡 Не форсируйте. Самое лучшее часто приходит неожиданно. ';
+        if (!advice) advice = '✨ Вы в гармонии. Продолжайте в том же духе!';
+        resultAdvice.textContent = advice;
+
+        resultFormula.textContent = `P = 0.01 · (${chi}/5) · ${C.toFixed(2)} · ${openness} · e^(-${Sfear}/5) · ${signBonus} · ${months} = ${Ppercent.toFixed(1)}%`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

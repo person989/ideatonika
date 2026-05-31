@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Вероятности События • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container {
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+        .subtitle {
+            text-align: center;
+            color: #c0b090;
+            font-style: italic;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #5d4a3a;
+            padding-bottom: 1rem;
+        }
+
+        /* Секции */
+        .calc-section {
+            background: rgba(0,0,0,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #5d4a3a;
+        }
+        .section-title {
+            font-size: 1.4rem;
+            color: #ffd54f;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Слайдеры и поля */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        .input-group label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #d0c8b8;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .input-group label span {
+            color: #ffd54f;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .input-group input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            background: #5d4a3a;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+        .input-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            background: #ffd54f;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255,215,80,0.5);
+        }
+        .input-group .range-labels {
+            display: flex;
+            justify-content: space-between;
+            color: #706858;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        /* Чекбокс */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            color: #d0c8b8;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #ffd54f;
+            cursor: pointer;
+        }
+
+        /* Результат */
+        .result-box {
+            background: rgba(255,215,80,0.1);
+            border: 2px solid #ffd54f;
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .result-number {
+            font-size: 5rem;
+            font-weight: bold;
+            color: #ffd54f;
+            line-height: 1;
+        }
+        .result-label {
+            color: #c0b090;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        .result-formula {
+            color: #a09080;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Кнопка пересчёта */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: #ffd54f;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: inherit;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background: #ffc107;
+            box-shadow: 0 0 20px rgba(255,215,80,0.3);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 1.5rem;
+            color: #ffd54f;
+            text-decoration: none;
+            border: 1px solid #ffd54f;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: #ffd54f;
+            color: #1a1a2e;
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🎲 Вероятность События</h1>
+    <div class="subtitle">Калькулятор семантического влияния (§3, §33)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры намерения</div>
+
+        <!-- Qₛ — семантический заряд -->
+        <div class="input-group">
+            <label>🌟 Семантический заряд (Qₛ): <span id="qsValue">5</span></label>
+            <input type="range" id="qsSlider" min="0" max="10" value="5" step="0.1">
+            <div class="range-labels">
+                <span>0 (мысль-пустышка)</span>
+                <span>10 (экстаз, ужас)</span>
+            </div>
+        </div>
+
+        <!-- Cₛ — когерентность -->
+        <div class="input-group">
+            <label>🎯 Когерентность (Cₛ): <span id="csValue">0.70</span></label>
+            <input type="range" id="csSlider" min="0" max="1" value="0.7" step="0.01">
+            <div class="range-labels">
+                <span>0 (хаос, опьянение)</span>
+                <span>1 (лазер, просветление)</span>
+            </div>
+        </div>
+
+        <!-- P_phys — физическая вероятность -->
+        <div class="input-group">
+            <label>⚛️ Физическая вероятность (P_phys): <span id="physValue">0.10</span></label>
+            <input type="range" id="physSlider" min="0" max="1" value="0.1" step="0.01">
+            <div class="range-labels">
+                <span>0 (невозможно)</span>
+                <span>0.5 (орел/решка)</span>
+                <span>1 (гарантировано)</span>
+            </div>
+        </div>
+
+        <!-- Чекбокс: закон подлости -->
+        <div class="checkbox-group">
+            <input type="checkbox" id="inversionCheck">
+            <label for="inversionCheck">🔄 Учитывать «Закон подлости» (инверсия при Q_expectation > Q_critical)</label>
+        </div>
+    </div>
+
+    <!-- Кнопка -->
+    <!--<button class="btn" id="calculateBtn">🔢 Рассчитать</button>-->
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Вероятность влияния</div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    // Элементы ввода
+    const qsSlider = document.getElementById('qsSlider');
+    const csSlider = document.getElementById('csSlider');
+    const physSlider = document.getElementById('physSlider');
+    const inversionCheck = document.getElementById('inversionCheck');
+
+    // Отображение значений
+    const qsValue = document.getElementById('qsValue');
+    const csValue = document.getElementById('csValue');
+    const physValue = document.getElementById('physValue');
+
+    // Результат
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultFormula = document.getElementById('resultFormula');
+    const calculateBtn = document.getElementById('calculateBtn');
+
+    // Обновление отображаемых значений при движении слайдеров
+    qsSlider.addEventListener('input', () => qsValue.textContent = parseFloat(qsSlider.value).toFixed(1));
+    csSlider.addEventListener('input', () => csValue.textContent = parseFloat(csSlider.value).toFixed(2));
+    physSlider.addEventListener('input', () => physValue.textContent = parseFloat(physSlider.value).toFixed(2));
+
+    // Функция расчёта
+    function calculate() {
+        const Q = parseFloat(qsSlider.value);
+        const C = parseFloat(csSlider.value);
+        const P0 = parseFloat(physSlider.value);
+        const useInversion = inversionCheck.checked;
+
+        // Коэффициент связи ε (очень мал, константа)
+        const epsilon = 0.05;
+
+        // Базовая вероятность влияния
+        let P_influence = epsilon * Q * C * P0;
+
+        // Если включена инверсия
+        if (useInversion) {
+            const Q_critical = 7.0; // Критический порог
+            if (Q > Q_critical) {
+                const alpha = 0.01; // Коэффициент инверсии
+                const excess = Q - Q_critical;
+                P_influence = P0 - alpha * excess * excess;
+                // Вероятность не может быть ниже 0
+                if (P_influence < 0) P_influence = 0;
+            }
+        }
+
+        // Итоговая вероятность события = базовая + добавка от влияния
+        let P_final = P0 + P_influence;
+        if (P_final > 1) P_final = 1;
+        if (P_final < 0) P_final = 0;
+
+        // Отображение результата
+        resultNumber.textContent = (P_final * 100).toFixed(1) + '%';
+        resultLabel.textContent = 'Итоговая вероятность события';
+
+        // Формула с подставленными значениями
+        if (useInversion && Q > 7.0) {
+            resultFormula.textContent = `P = ${P0.toFixed(2)} — 0.01 · (${Q.toFixed(1)} — 7.0)² = ${P_final.toFixed(3)} (инверсия!)`;
+        } else {
+            resultFormula.textContent = `P = ${P0.toFixed(2)} + 0.05 · ${Q.toFixed(1)} · ${C.toFixed(2)} · ${P0.toFixed(2)} = ${P_final.toFixed(3)}`;
+        }
+    }
+
+    // Автоматический расчёт при изменении любого параметра
+    qsSlider.addEventListener('input', calculate);
+    csSlider.addEventListener('input', calculate);
+    physSlider.addEventListener('input', calculate);
+    inversionCheck.addEventListener('change', calculate);
+    <!--calculateBtn.addEventListener('click', calculate);-->
+
+    // Первичный расчёт при загрузке
+    calculate();
+</script>
+
+</body>
+</html>

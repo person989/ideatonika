@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔮 Подробная сборка CHI-METER • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #ce93d8; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #ab47bc; margin: 2.5rem 0 1rem; border-left: 4px solid #ab47bc; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #ce93d8; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #ce93d8; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #ab47bc; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(171,71,188,0.1); border-left: 4px solid #ab47bc; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #ce93d8; margin: 0; }
+        .tip-box strong { color: #ab47bc; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #ab47bc; color: #fff; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; border: 1px solid #ce93d8; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ce93d8; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔮 CHI-METER: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • Измеритель семантической чувствительности χ</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое CHI-METER и что он измеряет?</h2>
+    <p>CHI-METER — это прибор, который <strong>количественно измеряет вашу интуицию</strong>. Не в баллах, не в самооценке, а в объективных единицах — коэффициенте χ (хи).</p>
+    <p><strong>χ (семантическая чувствительность)</strong> — это способность вашего семантического поля улавливать слабые Qₛ-сигналы от других людей, предметов или событий. У обычного человека χ ≈ 1-3. У человека с развитой интуицией χ ≈ 5-8. У экстрасенсов и медиумов χ может достигать 15-20.</p>
+    <p>В отличие от SEC-1 и SEC-2, которые требовали паяльника и осциллографа, для CHI-METER вам понадобится только <strong>смартфон, помощник и терпение</strong>. Это самый доступный прибор во всём Практикуме.</p>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что понадобится</h2>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал</th><th>Где взять</th><th>Стоимость</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Смартфон</strong></td><td>Ваш карман</td><td>—</td><td>Генератор случайных чисел (ГСЧ)</td></tr>
+            <tr><td><strong>Приложение «Генератор случайных чисел»</strong></td><td>Google Play / App Store (бесплатно)</td><td>0 ₽</td><td>Генерация чисел 1-100</td></tr>
+            <tr><td><strong>Помощник («передатчик»)</strong></td><td>Друг, родственник</td><td>—</td><td>Человек, который будет «посылать» Qₛ-сигнал</td></tr>
+            <tr><td><strong>Дневник (бумажный или заметки в телефоне)</strong></td><td>—</td><td>0 ₽</td><td>Запись результатов</td></tr>
+            <tr><td><strong>Калькулятор или Excel</strong></td><td>—</td><td>0 ₽</td><td>Расчёт статистической значимости (p-value)</td></tr>
+            <tr><td><strong>Тихое помещение</strong></td><td>Ваша комната</td><td>—</td><td>Минимизация внешних помех</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ТЕОРИЯ -->
+    <h2>📐 Как работает CHI-METER (теория за 2 минуты)</h2>
+    <p>Представьте, что вы сидите в тихой комнате. В соседней комнате ваш друг загадывает число от 1 до 100 и <strong>концентрируется на нём</strong>. Его семантическое поле излучает слабый сигнал Qₛ, «заряженный» этим числом.</p>
+    <p>Ваше семантическое поле, если его чувствительность χ достаточно высока, может <strong>уловить</strong> этот сигнал. Ваш мозг интерпретирует его как «первую пришедшую в голову мысль» или «смутное ощущение».</p>
+    <p>CHI-METER — это не прибор в железном корпусе. Это <strong>протокол</strong>: серия попыток угадать число, результаты которых затем обрабатываются статистически. Если процент угадываний <strong>статистически значимо</strong> превышает случайный (1%), значит, ваш χ > 0.</p>
+    <div class="formula" style="text-align:center; font-family:'Courier New',monospace; color:#ce93d8; margin:1rem 0;">χ = (P_эксп — P_случ) / P_случ</div>
+    <p style="text-align:center; color:#a09080; font-size:0.9rem;">Где P_эксп — ваш процент угадываний, P_случ = 1% (для чисел 1-100).</p>
+
+    <!-- СБОРКА -->
+    <h2>🔨 Этап 1: Подготовка протокола</h2>
+
+    <h3><span class="step-number">1</span> Установка приложения ГСЧ</h3>
+    <p>Скачайте на смартфон любое бесплатное приложение «Генератор случайных чисел» (Random Number Generator). Важно: оно должно генерировать числа <strong>от 1 до 100</strong>.</p>
+    <p>Проверьте приложение: сгенерируйте 50 чисел и запишите их. Посчитайте, сколько раз выпало каждое. Распределение должно быть <strong>равномерным</strong> (каждое число — примерно одинаковое количество раз). Если приложение «любит» какие-то числа — оно не подходит.</p>
+    <div class="tip-box"><p><strong>💡 Совет:</strong> Лучше использовать приложение, которое генерирует числа на основе <strong>аппаратного шума</strong> (например, акселерометра), а не программного алгоритма. Это честнее.</p></div>
+
+    <h3><span class="step-number">2</span> Выбор помощника («передатчика»)</h3>
+    <p>Помощник — это человек, который будет <strong>загадывать число и концентрироваться на нём</strong>. Идеальный помощник:</p>
+    <ul>
+        <li><strong>Верит в эксперимент</strong> (скептик с низкой Cₛ даст слабый сигнал).</li>
+        <li><strong>Способен концентрироваться</strong> хотя бы 5-10 секунд на одной мысли.</li>
+        <li><strong>Находится в другой комнате</strong> (или хотя бы за ширмой), чтобы вы не видели его лица и жестов.</li>
+    </ul>
+    <div class="tip-box"><p><strong>💡 Лучшие пары для эксперимента:</strong> близнецы, мать и ребёнок, супруги с большим стажем, лучшие друзья. У них уже есть семантическая запутанность (§104), и χ будет выше.</p></div>
+
+    <!-- ПРОВЕДЕНИЕ -->
+    <h2>🧪 Этап 2: Проведение эксперимента</h2>
+
+    <h3><span class="step-number">3</span> Контрольная серия (без передачи сигнала)</h3>
+    <p><strong>Зачем это нужно:</strong> Мы должны сначала узнать ваш «базовый уровень» — сколько чисел вы угадаете <strong>случайно</strong>, без всякого Qₛ-сигнала. Это будет наша «нулевая точка».</p>
+    <ol>
+        <li>Сядьте в тихой комнате. Помощника <strong>нет</strong> (или он сидит в другой комнате и <strong>не загадывает число</strong>).</li>
+        <li>Нажимайте кнопку «Сгенерировать» на ГСЧ. Смотрите на число, которое выпало. <strong>Не пытайтесь его угадать</strong> — просто смотрите и записывайте.</li>
+        <li>Сделайте <strong>100 попыток</strong>. Записывайте каждое выпавшее число.</li>
+        <li>Посчитайте, сколько раз выпало число «50» (или любое другое конкретное число). В идеале — 1 раз из 100.</li>
+    </ol>
+    <p>Это ваша <strong>контрольная серия</strong>. Случайный процент угадывания конкретного числа = <strong>1%</strong>.</p>
+
+    <h3><span class="step-number">4</span> Экспериментальная серия (с передатчиком)</h3>
+    <p><strong>Что мы делаем:</strong> Помощник загадывает число и концентрируется. Вы пытаетесь его «почувствовать» и называете первое пришедшее в голову число.</p>
+    <ol>
+        <li>Помощник садится в другой комнате (или отворачивается). Открывает ГСЧ на <strong>своём</strong> телефоне.</li>
+        <li>Помощник нажимает «Сгенерировать» и видит число (например, <strong>47</strong>). Он <strong>концентрируется</strong> на этом числе 5-10 секунд: представляет его мысленно, «светящимся» в темноте.</li>
+        <li>В этот момент вы, сидя в тишине с закрытыми глазами, <strong>расслабляетесь</strong> и ждёте первую пришедшую в голову цифру. Не анализируйте! Просто берите <strong>самую первую мысль</strong>, даже если она кажется «глупой» или «случайной». Назовите её вслух (или запишите).</li>
+        <li>Помощник записывает: «Загадал: 47. Ответ: ___».</li>
+        <li>Повторить <strong>100 раз</strong>.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Важнейший совет:</strong> Не пытайтесь «угадать». Не анализируйте. Просто берите первую всплывшую мысль. Именно в ней — сигнал χ. Все последующие размышления («а может, 48?») — это уже шум.</p></div>
+    <div class="warning-box"><p><strong>⚠️ Избегайте «эффекта ожидания»:</strong> Не смотрите на помощника. Не спрашивайте «угадал?». Помощник должен сидеть молча, с непроницаемым лицом. Любая невербальная подсказка (вздох, улыбка) испортит эксперимент.</p></div>
+
+    <!-- АНАЛИЗ -->
+    <h2>📊 Этап 3: Анализ результатов</h2>
+
+    <h3><span class="step-number">5</span> Расчёт процента угадываний</h3>
+    <p>После 100 попыток посчитайте, сколько раз вы <strong>точно</strong> угадали число (ответ совпал с загаданным).</p>
+    <p>Затем посчитайте, сколько раз вы угадали <strong>с точностью ±5</strong> (например, загадано 47, а вы сказали 45). Это тоже показатель χ, хотя и более слабый.</p>
+    <div class="formula" style="text-align:center; font-family:'Courier New',monospace; color:#ce93d8; margin:1rem 0;">P_эксп = (Количество точных угадываний / 100) × 100%</div>
+
+    <h3><span class="step-number">6</span> Расчёт χ и p-value</h3>
+    <p><strong>χ (хи)</strong> — это мера вашей чувствительности. Рассчитывается просто:</p>
+    <div class="formula" style="text-align:center; font-family:'Courier New',monospace; color:#ce93d8; margin:1rem 0;">χ = (P_эксп — 1%) / 1%</div>
+    <p><strong>Пример:</strong> Если вы угадали 3 числа из 100 (P_эксп = 3%), то χ = (3% — 1%) / 1% = <strong>2.0</strong>.</p>
+    <p>Если вы угадали 0 чисел — χ = 0. Если 5 чисел — χ = 4.0.</p>
+
+    <p><strong>p-value</strong> — это вероятность получить такой же (или лучший) результат случайно. Проще всего посчитать его <strong>онлайн-калькулятором</strong>: вбейте в Google «binomial test p-value calculator», введите: количество попыток = 100, количество успехов = ваше число угадываний, вероятность успеха = 0.01 (1%).</p>
+    <p>Если <strong>p-value < 0.05</strong> — результат <strong>статистически значим</strong>. Это означает, что вероятность случайного совпадения меньше 5%. Такие результаты публикуют в научных журналах.</p>
+    <div class="tip-box"><p><strong>💡 Ориентир:</strong> Чтобы достичь p-value < 0.05 при χ = 3, нужно провести около <strong>300-500 попыток</strong>. 100 попыток — это только начало. Не расстраивайтесь, если результат пока не значим. Продолжайте.</p></div>
+
+    <!-- ОЖИДАЕМЫЕ РЕЗУЛЬТАТЫ -->
+    <h2>📊 Типичные значения χ для разных людей</h2>
+    <table class="materials-table">
+        <thead><tr><th>Тип человека</th><th>Ожидаемый χ</th><th>P_эксп (на 100 попыток)</th></tr></thead>
+        <tbody>
+            <tr><td>Скептик, «сухарь»</td><td>0 — 0.5</td><td>1 — 1.5%</td></tr>
+            <tr><td>Обычный человек</td><td>1 — 2</td><td>2 — 3%</td></tr>
+            <tr><td>Человек с развитой интуицией</td><td>3 — 5</td><td>4 — 6%</td></tr>
+            <tr><td>Экстрасенс, медиум</td><td>7 — 15</td><td>8 — 16%</td></tr>
+            <tr><td>Мать и дитя (запутанность)</td><td>10 — 20</td><td>11 — 21%</td></tr>
+        </tbody>
+    </table>
+    <p>Если ваш χ оказался выше 2 — вы уже чувствуете невидимое. Если выше 5 — у вас редкий дар. Если выше 10 — вам стоит всерьёз заняться развитием своих способностей.</p>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=20" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция CHI-METER v1.0</p>
+        <p>✧ «Интуиция — это не магия. Это физика.» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

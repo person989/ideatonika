@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏳ Подробное руководство CHRONOS-2 • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #7986cb; margin: 2.5rem 0 1rem; border-left: 4px solid #7986cb; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #9fa8da; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #9fa8da; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .tip-box { background: rgba(121,134,203,0.1); border-left: 4px solid #7986cb; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #9fa8da; margin: 0; }
+        .tip-box strong { color: #7986cb; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #7986cb; color: #fff; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .formula-box { background: #1a1a2e; border: 1px solid #7986cb; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; text-align: center; }
+        .formula-box p { font-family: 'Courier New', monospace; color: #f3e7c0; font-size: 1.2rem; margin: 0; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #7986cb; text-decoration: none; border: 1px solid #7986cb; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #7986cb; color: #fff; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>⏳ CHRONOS-2: ПОДРОБНОЕ РУКОВОДСТВО</h1>
+    <div class="subtitle">Как доказать, что время течёт с разной скоростью • Пошаговый протокол</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что мы доказываем и зачем это нужно</h2>
+    <p>Обычный человек считает, что время — это константа. Тикают часики, секунда за секундой, одинаково для всех. Но вы когда-нибудь замечали, что <strong>скучная лекция длится вечность, а интересный фильм пролетает за миг</strong>? Это не иллюзия. Это прямое следствие формулы Идеатоники:</p>
+    <div class="formula-box"><p>dτ/dt = 1 + κ · Cₛ · (dI/dt) · cos θₜ</p></div>
+    <p>Где <strong>τ</strong> — субъективное время, <strong>t</strong> — физическое, <strong>Cₛ</strong> — ваша когерентность, <strong>dI/dt</strong> — поток новой информации, <strong>θₜ</strong> — вектор внимания, <strong>κ</strong> — ваш личный хроносемантический коэффициент.</p>
+    <p>CHRONOS-2 — это эксперимент, который позволяет <strong>измерить ваш личный κ</strong> и доказать, что субъективное время действительно подчиняется этой формуле.</p>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что вам понадобится (почти всё уже есть дома)</h2>
+    <table class="materials-table">
+        <thead><tr><th>Предмет</th><th>Где взять</th><th>Назначение</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Скрепки канцелярские</strong> (100 штук)</td><td>Канцтовары</td><td>Монотонная задача (Задача А — «Скука»)</td></tr>
+            <tr><td><strong>Тетрис</strong> (или любая простая игра)</td><td>Телефон, компьютер</td><td>Увлекательная задача (Задача Б — «Поток»)</td></tr>
+            <tr><td><strong>Математические примеры</strong> (30 штук)</td><td>Распечатать или написать от руки</td><td>Стресс-задача (Задача В — «Стресс»)</td></tr>
+            <tr><td><strong>Таймер</strong> (отдельное устройство!)</td><td>Кухонный таймер, второй телефон</td><td>Отсчёт времени. Испытуемый НЕ должен его видеть!</td></tr>
+            <tr><td><strong>Ассистент</strong> (друг, родственник)</td><td>—</td><td>Следит за таймером и записывает оценки</td></tr>
+            <tr><td><strong>Дневник</strong> (блокнот или файл)</td><td>—</td><td>Запись субъективных оценок</td></tr>
+            <tr><td><strong>COH-METER 2.0</strong> (опционально)</td><td>ЭЭГ-гарнитура Muse/NeuroSky</td><td>Объективный контроль Cₛ во время задач</td></tr>
+        </tbody>
+    </table>
+
+    <!-- ПОДГОТОВКА -->
+    <h2>🔨 Этап 1: Подготовка задач и пространства</h2>
+
+    <h3><span class="step-number">1</span> Подготовка Задачи А («Скука»)</h3>
+    <p>Возьмите 100 канцелярских скрепок. Перемешайте их в коробке. Задача испытуемого: <strong>сцепить их все в одну длинную цепочку</strong>. Это монотонно, не требует ума, но требует внимания. Идеальная «скучная» задача.</p>
+    <div class="tip-box"><p><strong>💡 Важно:</strong> Скрепки должны быть одинаковыми, без цветных или деформированных. Любая «новизна» (попалась гнутая скрепка) повышает dI/dt и портит чистоту эксперимента.</p></div>
+
+    <h3><span class="step-number">2</span> Подготовка Задачи Б («Поток»)</h3>
+    <p>Установите на телефон или компьютер простую игру — <strong>Тетрис</strong> (или любую аркаду: змейка, три в ряд, лабиринт). Важно: игра должна быть достаточно быстрой, чтобы вызывать состояние потока, но не слишком сложной, чтобы не вызывать стресс. Идеально — средний уровень сложности.</p>
+
+    <h3><span class="step-number">3</span> Подготовка Задачи В («Стресс»)</h3>
+    <p>Напишите или распечатайте <strong>30 математических примеров</strong> средней сложности (например: 47 × 13, 156 ÷ 12, 23² — 17²). Задача испытуемого: решить их все <strong>на время</strong>, зная, что ассистент засекает время и будет сравнивать результат с другими участниками. Это создаёт лёгкий стресс.</p>
+
+    <h3><span class="step-number">4</span> Подготовка пространства и ассистента</h3>
+    <p><strong>Ассистент</strong> — критически важный участник. Его задача:</p>
+    <ul>
+        <li>Следить за таймером (отдельное устройство, которое НЕ видит испытуемый).</li>
+        <li>Давать команды «Начали» и «Стоп».</li>
+        <li>Записывать субъективные оценки испытуемого в дневник.</li>
+        <li>НЕ подсказывать, НЕ комментировать, НЕ смотреть на испытуемого во время задачи (чтобы не влиять на его Cₛ).</li>
+    </ul>
+    <p><strong>Пространство:</strong> Тихое помещение без отвлекающих факторов. Телефон испытуемого — в авиарежиме. Часы на стене — <strong>сняты или завешены</strong>. Испытуемый НЕ должен знать, сколько времени прошло.</p>
+    <div class="warning-box"><p><strong>⚠️ Критически важно:</strong> Испытуемый НЕ должен видеть таймер, часы, телефон или любые другие индикаторы времени. Если он случайно увидит время — эксперимент испорчен, результат для этой сессии недействителен.</p></div>
+
+    <!-- ПРОВЕДЕНИЕ -->
+    <h2>🧪 Этап 2: Проведение трёх сессий</h2>
+    <p>Мы проведём <strong>три сессии по 10 минут</strong> каждая (точное время знает только ассистент). Между сессиями — <strong>обязательный перерыв 15-20 минут</strong> для «обнуления» ощущения времени. Порядок сессий можно менять для разных испытуемых, чтобы исключить эффект последовательности.</p>
+
+    <h3><span class="step-number">5</span> Сессия А: «Скука» (низкая Cₛ, низкий dI/dt)</h3>
+    <ol>
+        <li><strong>Разминка (2 минуты):</strong> Испытуемый садится за стол. Ассистент высыпает скрепки. Испытуемый делает 2-3 глубоких вдоха, но <strong>специально НЕ медитирует</strong>. Его задача — быть в обычном, слегка рассеянном состоянии (Cₛ ~0.3-0.4).</li>
+        <li><strong>Старт:</strong> Ассистент говорит «Начали» и запускает таймер на <strong>10 минут</strong>. Испытуемый начинает сцеплять скрепки.</li>
+        <li><strong>Процесс:</strong> Испытуемый работает. Ему разрешено думать о чём угодно, но задача — сцеплять скрепки. Это монотонно, и через 3-5 минут Cₛ естественным образом падает.</li>
+        <li><strong>Стоп:</strong> Через 10 минут ассистент говорит «Стоп». Испытуемый немедленно записывает (или диктует ассистенту) ответ на вопрос: <strong>«Сколько, по вашим ощущениям, прошло времени?»</strong> Важно: первое пришедшее в голову число, без раздумий.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Ожидаемый результат:</strong> Испытуемый назовёт число <strong>больше 10 минут</strong> (обычно 12-18 минут). Время «растянулось».</p></div>
+
+    <h3><span class="step-number">6</span> Сессия Б: «Поток» (высокая Cₛ, высокий dI/dt)</h3>
+    <ol>
+        <li><strong>Разминка (2 минуты):</strong> Испытуемый играет в Тетрис на лёгком уровне, «разогреваясь». Входит во вкус.</li>
+        <li><strong>Старт:</strong> Ассистент говорит «Начали» и запускает таймер на <strong>10 минут</strong>. Испытуемый играет.</li>
+        <li><strong>Процесс:</strong> Игра увлекает. Испытуемый забывает о времени. Его Cₛ растёт до 0.7-0.8, он входит в «поток».</li>
+        <li><strong>Стоп:</strong> Через 10 минут ассистент говорит «Стоп». Испытуемый немедленно оценивает: <strong>«Сколько времени прошло?»</strong></li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Ожидаемый результат:</strong> Испытуемый назовёт число <strong>меньше 10 минут</strong> (обычно 3-6 минут). Время «пролетело».</p></div>
+
+    <h3><span class="step-number">7</span> Сессия В: «Стресс» (низкая Cₛ, очень высокий dI/dt)</h3>
+    <ol>
+        <li><strong>Разминка (1 минута):</strong> Ассистент говорит: «Сейчас вам нужно будет решить 30 примеров. Это тест на скорость. Я засекаю время. Ваш результат пойдёт в общий зачёт». Это создаёт лёгкий стресс.</li>
+        <li><strong>Старт:</strong> Ассистент даёт лист с примерами и говорит «Начали!». Таймер на <strong>10 минут</strong>.</li>
+        <li><strong>Процесс:</strong> Испытуемый лихорадочно решает примеры. Cₛ падает из-за тревоги, но dI/dt — огромный (поток новых задач).</li>
+        <li><strong>Стоп:</strong> Через 10 минут (или раньше, если испытуемый всё решил) ассистент говорит «Стоп». Вопрос: <strong>«Сколько времени прошло?»</strong></li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Интересный эффект («Парадокс Стресса»):</strong> Несмотря на низкую Cₛ, время может показаться <strong>короче</strong> 10 минут. Это потому, что огромный поток информации dI/dt «сжимает» время, даже если вы в тревоге. Формула работает: dI/dt тянет время вперёд, Cₛ тормозит его. Кто победит — зависит от вашего κ.</p></div>
+
+    <!-- АНАЛИЗ -->
+    <h2>📊 Этап 3: Расчёт вашего личного коэффициента κ</h2>
+
+    <h3><span class="step-number">8</span> Заполнение таблицы и расчёт</h3>
+    <p>После всех трёх сессий у вас есть три числа — субъективные оценки времени τ для каждой задачи. Сведём их в таблицу:</p>
+    <table class="materials-table">
+        <thead><tr><th>Задача</th><th>Реальное t (мин)</th><th>Субъективная τ (мин)</th><th>Cₛ (примерно)</th><th>dI/dt (0-1)</th><th>cos θₜ</th></tr></thead>
+        <tbody>
+            <tr><td>А (Скрепки)</td><td>10</td><td>____</td><td>0.35</td><td>0.1</td><td>1</td></tr>
+            <tr><td>Б (Тетрис)</td><td>10</td><td>____</td><td>0.75</td><td>0.8</td><td>1</td></tr>
+            <tr><td>В (Примеры)</td><td>10</td><td>____</td><td>0.40</td><td>0.9</td><td>1</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Формула для расчёта κ:</strong></p>
+    <div class="formula-box"><p>κ = (τ/t — 1) / (Cₛ · dI/dt · cos θₜ)</p></div>
+    <p>Рассчитайте κ для каждой сессии. Если значения близки — возьмите среднее. Это и есть ваш <strong>личный хроносемантический коэффициент</strong>.</p>
+    <ul>
+        <li><strong>κ > 0:</strong> Вы склонны к «сжатию» времени (время летит).</li>
+        <li><strong>κ < 0:</strong> Вы склонны к «растяжению» времени (время тянется).</li>
+    </ul>
+
+    <h3><span class="step-number">9</span> Контрольный опыт: проверка воспроизводимости</h3>
+    <p>Повторите все три сессии <strong>в другой день</strong> (желательно в то же время суток). Сравните значения κ. Если они близки — ваш коэффициент стабилен. Если сильно различаются — возможно, на вас повлияли внешние факторы (недосып, кофеин, стресс). Попробуйте в третий раз для уточнения.</p>
+    <div class="tip-box"><p><strong>💡 Научная ценность:</strong> Если вы наберёте статистику по 10-20 испытуемым и у всех окажется разный, но стабильный κ — это будет доказательством того, что хроносемантический коэффициент — реальная индивидуальная характеристика, как рост или цвет глаз.</p></div>
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=43" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • CHRONOS-2: Подробное руководство v1.0</p>
+        <p>✧ «Время — не тиран, а инструмент. Научись им управлять.» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

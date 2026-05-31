@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Эксперимент №2. ГСЧ • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+            transition: background 0.5s ease;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%); }
+        .exp-container {
+            max-width: 750px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center;
+        }
+        h1 { font-size: 2rem; color: #f3e7c0; margin-bottom: 1rem; font-weight: 400; letter-spacing: 2px; }
+        .phase-title { font-size: 1.3rem; color: #e3b87c; margin-bottom: 1.5rem; }
+        .instruction { color: #d0c8b8; margin-bottom: 2rem; line-height: 1.6; }
+        .progress { color: #a09080; font-size: 0.9rem; margin-bottom: 1rem; }
+        .current-number { font-size: 4rem; font-weight: bold; color: #f3e7c0; margin: 1rem 0; min-height: 5rem; display: flex; align-items: center; justify-content: center; }
+        .stats { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .stat-box { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1rem 1.5rem; text-align: center; }
+        .stat-label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; }
+        .btn {
+            background: transparent; border: 1.5px solid #e3b87c; color: #e3b87c;
+            padding: 0.8rem 2rem; font-size: 1.1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0.5rem;
+        }
+        .btn:hover { background: #e3b87c; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .final-results { margin-top: 2rem; background: rgba(0,0,0,0.3); border-radius: 20px; padding: 1.5rem; }
+        .result-row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+        .result-item { text-align: center; }
+        .result-item .label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .result-item .value { font-size: 1.3rem; font-weight: bold; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #e3b87c; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="exp-container" id="expContainer">
+    <h1>🎲 Эксперимент с Генератором Случайных Чисел</h1>
+    
+    <div id="startScreen">
+        <p class="instruction" style="font-size: 1.1rem; margin-bottom: 2rem;">
+            Этот эксперимент проверит, можете ли вы своим намерением влиять на генератор случайных чисел.<br>
+            Вам предстоит три фазы по 100 нажатий.
+        </p>
+        <p class="instruction" style="color: #a09080;">
+            📋 <strong>Протокол:</strong><br>
+            <span style="color: #81c784;">Фаза 1:</span> Нажимайте кнопку, <strong>ни о чём не думая</strong> (контроль).<br>
+            <span style="color: #ffb74d;">Фаза 2:</span> Представляйте числа <strong>больше 50</strong>.<br>
+            <span style="color: #64b5f6;">Фаза 3:</span> Представляйте числа <strong>меньше 50</strong>.<br>
+        </p>
+        <button class="btn" id="startBtn" style="margin-top: 2rem; font-size: 1.3rem; padding: 1rem 3rem;">
+            🚀 Начать эксперимент
+        </button>
+    </div>
+    
+    <div id="phaseScreen" class="hidden">
+        <div class="phase-title" id="phaseTitle"></div>
+        <p class="instruction" id="phaseInstruction"></p>
+        <div class="progress" id="progressText"></div>
+        <div class="current-number" id="currentNumber">—</div>
+        <button class="btn" id="rollBtn" style="font-size: 1.3rem; padding: 1rem 3rem;">
+            🎲 Сгенерировать число
+        </button>
+        <div class="stats" style="margin-top: 1.5rem;">
+            <div class="stat-box">
+                <div class="stat-label">Выше 50</div>
+                <div class="stat-value" style="color: #ffb74d;" id="statHigh">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Ниже 50</div>
+                <div class="stat-value" style="color: #64b5f6;" id="statLow">0</div>
+            </div>
+        </div>
+        <p class="instruction" style="margin-top: 1rem; color: #a09080;">
+            Нажатий осталось: <span id="remainCount" style="color: #f3e7c0;">100</span>
+        </p>
+    </div>
+    
+    <div id="resultScreen" class="hidden">
+        <h2 style="color: #e3b87c; margin-bottom: 1.5rem;">📊 ИТОГИ ЭКСПЕРИМЕНТА</h2>
+        
+        <div class="result-row">
+            <div class="result-item">
+                <div class="label">🧘 Без мыслей<br>(контроль)</div>
+                <div class="value" style="color: #81c784;" id="resultNeutral"></div>
+                <div class="label" style="margin-top:0.3rem;">чисел выше 50</div>
+            </div>
+            <div class="result-item">
+                <div class="label">⬆️ Мысли «выше 50»</div>
+                <div class="value" style="color: #ffb74d;" id="resultHigh"></div>
+                <div class="label" style="margin-top:0.3rem;">чисел выше 50</div>
+            </div>
+            <div class="result-item">
+                <div class="label">⬇️ Мысли «ниже 50»</div>
+                <div class="value" style="color: #64b5f6;" id="resultLow"></div>
+                <div class="label" style="margin-top:0.3rem;">чисел ниже 50</div>
+            </div>
+        </div>
+        
+        <div id="interpretation" style="margin-top: 2rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 16px; text-align: left; color: #d0c8b8; line-height: 1.6;"></div>
+        <button class="btn" id="restartBtn" style="margin-top: 2rem;">🔄 Пройти заново</button>
+    </div>
+    
+    <a href="experiment-gsc-selector.html" class="back-link">← Выбрать другой режим</a>
+</div>
+
+<script>
+    (function() {
+        const TOTAL_TRIALS = 100;
+        const phases = [
+            { name: 'Фаза 1: Контроль', instruction: 'Нажимайте кнопку, <strong>ни о чём не думая</strong>. Пусть числа будут случайными.', key: 'neutral' },
+            { name: 'Фаза 2: Мысли «Выше 50»', instruction: '<strong>Представляйте числа больше 50.</strong> Визуализируйте, как стрелка уходит вверх.', key: 'high' },
+            { name: 'Фаза 3: Мысли «Ниже 50»', instruction: '<strong>Представляйте числа меньше 50.</strong> Визуализируйте, как стрелка уходит вниз.', key: 'low' }
+        ];
+        
+        let currentPhase = 0;
+        let trialInPhase = 0;
+        let results = {
+            neutral: { high: 0, low: 0, total: 0 },
+            high: { high: 0, low: 0, total: 0 },
+            low: { high: 0, low: 0, total: 0 }
+        };
+        
+        const startScreen = document.getElementById('startScreen');
+        const phaseScreen = document.getElementById('phaseScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const phaseTitle = document.getElementById('phaseTitle');
+        const phaseInstruction = document.getElementById('phaseInstruction');
+        const progressText = document.getElementById('progressText');
+        const currentNumber = document.getElementById('currentNumber');
+        const statHigh = document.getElementById('statHigh');
+        const statLow = document.getElementById('statLow');
+        const remainCount = document.getElementById('remainCount');
+        const rollBtn = document.getElementById('rollBtn');
+        
+        function startExperiment() {
+            currentPhase = 0;
+            trialInPhase = 0;
+            results = {
+                neutral: { high: 0, low: 0, total: 0 },
+                high: { high: 0, low: 0, total: 0 },
+                low: { high: 0, low: 0, total: 0 }
+            };
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            phaseScreen.classList.remove('hidden');
+            loadPhase();
+        }
+        
+        function loadPhase() {
+            const phase = phases[currentPhase];
+            phaseTitle.textContent = phase.name;
+            phaseInstruction.innerHTML = phase.instruction;
+            trialInPhase = 0;
+            updateStatsDisplay();
+            updateRemainDisplay();
+            currentNumber.textContent = '—';
+            progressText.textContent = '';
+            rollBtn.disabled = false;
+        }
+        
+        function roll() {
+            const num = Math.floor(Math.random() * 100) + 1;
+            currentNumber.textContent = num;
+            
+            const phaseKey = phases[currentPhase].key;
+            const isHigh = num > 50;
+            
+            results[phaseKey].total++;
+            if (isHigh) results[phaseKey].high++;
+            else results[phaseKey].low++;
+            
+            trialInPhase++;
+            updateStatsDisplay();
+            updateRemainDisplay();
+            progressText.textContent = `Нажатий в фазе: ${trialInPhase} / ${TOTAL_TRIALS}`;
+            
+            if (trialInPhase >= TOTAL_TRIALS) {
+                rollBtn.disabled = true;
+                if (currentPhase < phases.length - 1) {
+                    currentPhase++;
+                    setTimeout(() => loadPhase(), 1500);
+                } else {
+                    setTimeout(() => showResults(), 1500);
+                }
+            }
+        }
+        
+        function updateStatsDisplay() {
+            const phaseKey = phases[currentPhase].key;
+            const data = results[phaseKey];
+            statHigh.textContent = data.high;
+            statLow.textContent = data.low;
+        }
+        
+        function updateRemainDisplay() {
+            remainCount.textContent = TOTAL_TRIALS - trialInPhase;
+        }
+        
+        function getInterpretation(neutralPctHigh, highPctHigh, lowPctLow) {
+            const EXPECTED = 50;
+            let html = '<p><strong>Анализ результатов:</strong></p>';
+            
+            // Контроль
+            html += `<p>🧘 <strong>Контроль (без мыслей):</strong> ${neutralPctHigh}% чисел выше 50. `;
+            const neutralDiff = neutralPctHigh - EXPECTED;
+            if (Math.abs(neutralDiff) <= 5) html += 'В пределах статистической нормы (45-55%).</p>';
+            else if (neutralDiff > 0) html += `Чуть выше нормы (+${neutralDiff}%). Возможно, случайная флуктуация.</p>`;
+            else html += `Чуть ниже нормы (${neutralDiff}%). Возможно, случайная флуктуация.</p>`;
+            
+            // Мысли «Выше 50»
+            html += `<p>⬆️ <strong>Мысли «Выше 50»:</strong> ${highPctHigh}% чисел выше 50. `;
+            const highDiff = highPctHigh - EXPECTED;
+            if (Math.abs(highDiff) <= 5) html += 'Отклонение в пределах статистической нормы. Эффект не обнаружен.</p>';
+            else if (highDiff > 0) html += `<span style="color:#ffb74d;">Значительное отклонение! Ваше намерение, возможно, повлияло на ГСЧ (+${highDiff}%).</span></p>`;
+            else html += `<span style="color:#e3b87c;">Значительная инверсия (${highDiff}%)! Возможно, сработал «закон подлости» (§77) — слишком сильное желание вызвало противоположный результат.</span></p>`;
+            
+            // Мысли «Ниже 50» — теперь анализируем процент чисел ниже 50
+            html += `<p>⬇️ <strong>Мысли «Ниже 50»:</strong> ${lowPctLow}% чисел ниже 50. `;
+            const lowDiff = lowPctLow - EXPECTED;
+            if (Math.abs(lowDiff) <= 5) html += 'Отклонение в пределах статистической нормы. Эффект не обнаружен.</p>';
+            else if (lowDiff > 0) html += `<span style="color:#64b5f6;">Значительное отклонение! Ваше намерение, возможно, повлияло на ГСЧ (+${lowDiff}% чисел ниже 50).</span></p>`;
+            else html += `<span style="color:#e3b87c;">Значительная инверсия (${lowDiff}%)! Возможно, сработал «закон подлости» (§77).</span></p>`;
+            
+            html += '<p style="margin-top:1rem;font-style:italic;color:#a09080;">Помните: для статистической значимости нужно 1000+ попыток. Этот тест — лишь индикатор, а не строгое доказательство.</p>';
+            return html;
+        }
+        
+        function showResults() {
+            phaseScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            
+            // Для контроля и «Выше 50» — процент чисел ВЫШЕ 50
+            const neutralPctHigh = results.neutral.total > 0 ? Math.round((results.neutral.high / results.neutral.total) * 100) : 0;
+            const highPctHigh = results.high.total > 0 ? Math.round((results.high.high / results.high.total) * 100) : 0;
+            
+            // Для «Ниже 50» — процент чисел НИЖЕ 50
+            const lowPctLow = results.low.total > 0 ? Math.round((results.low.low / results.low.total) * 100) : 0;
+            
+            document.getElementById('resultNeutral').textContent = neutralPctHigh + '%';
+            document.getElementById('resultHigh').textContent = highPctHigh + '%';
+            document.getElementById('resultLow').textContent = lowPctLow + '%';
+            
+            document.getElementById('interpretation').innerHTML = getInterpretation(neutralPctHigh, highPctHigh, lowPctLow);
+        }
+        
+        document.getElementById('startBtn').addEventListener('click', startExperiment);
+        document.getElementById('restartBtn').addEventListener('click', startExperiment);
+        rollBtn.addEventListener('click', () => { if (!rollBtn.disabled) roll(); });
+        document.addEventListener('keydown', (e) => {
+            if ((e.code === 'Space' || e.code === 'Enter') && !phaseScreen.classList.contains('hidden') && !rollBtn.disabled) {
+                e.preventDefault(); roll();
+            }
+        });
+    })();
+</script>
+</body>
+</html>

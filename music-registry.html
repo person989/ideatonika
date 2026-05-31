@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реестр музыкальных произведений • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container {
+            max-width: 1300px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.75); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3); border-radius: 24px;
+            padding: 2.5rem; box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; letter-spacing: 3px; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 1.5rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        
+        .button-group { display: flex; justify-content: center; gap: 20px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .btn {
+            padding: 10px 25px; background: #3b2a1f; color: white; border: none; border-radius: 30px;
+            font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;
+        }
+        .btn:hover { background: #5d4037; transform: scale(1.02); }
+        .btn-secondary { background: #5d4037; }
+        .btn-secondary:hover { background: #3b2a1f; }
+        .sort-indicator { text-align: center; font-size: 0.9rem; color: #c0b090; margin-bottom: 1rem; font-style: italic; }
+        
+        .table-wrapper { overflow-x: auto; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1px; margin-bottom: 1.5rem; }
+        .music-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; background: transparent; min-width: 1100px; }
+        .music-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px 6px; font-weight: bold; text-align: center; border: 1px solid #5d4a3a; font-size: 0.8rem; }
+        .music-table td { border: 1px solid #5d4a3a; padding: 10px 6px; vertical-align: middle; color: #d0c8b8; }
+        .music-table tr:nth-child(even) { background: rgba(0,0,0,0.1); }
+        
+        /* Цвета по рангу */
+        .rank-p8 { background: linear-gradient(135deg, rgba(255,248,225,0.2), rgba(255,236,179,0.1)); }
+        .rank-p7 { background: linear-gradient(135deg, rgba(255,236,179,0.18), rgba(255,224,130,0.1)); }
+        .rank-p6 { background: linear-gradient(135deg, rgba(232,245,233,0.15), rgba(200,230,201,0.08)); }
+        .rank-p5 { background: linear-gradient(135deg, rgba(227,242,253,0.15), rgba(187,222,251,0.08)); }
+        .rank-p4 { background: linear-gradient(135deg, rgba(232,234,246,0.12), rgba(197,202,233,0.06)); }
+        .rank-p3 { background: linear-gradient(135deg, rgba(224,224,224,0.1), rgba(238,238,238,0.05)); }
+        .rank-p2 { background: linear-gradient(135deg, rgba(245,245,245,0.08), rgba(224,224,224,0.04)); }
+        .rank-p1 { background: linear-gradient(135deg, rgba(250,250,250,0.05), rgba(245,245,245,0.03)); }
+        .rank-0 { background: linear-gradient(135deg, rgba(239,235,233,0.1), rgba(215,204,200,0.05)); }
+        .rank-m1 { background: linear-gradient(135deg, rgba(215,204,200,0.12), rgba(188,170,164,0.06)); }
+        .rank-m2 { background: linear-gradient(135deg, rgba(255,204,188,0.12), rgba(255,171,145,0.06)); }
+        .rank-m3 { background: linear-gradient(135deg, rgba(176,190,197,0.12), rgba(144,164,174,0.06)); }
+        
+        .badge {
+            display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.65rem; font-weight: bold; white-space: nowrap;
+        }
+        .badge-calm { background: #81c784; color: #1b5e20; }
+        .badge-energy { background: #ffb74d; color: #e65100; }
+        .badge-focus { background: #64b5f6; color: #0d47a1; }
+        .badge-sleep { background: #9575cd; color: #311b92; }
+        .badge-heal { background: #e57373; color: #b71c1c; }
+        .badge-neutral { background: #9e9e9e; color: white; }
+        
+        .legend { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; font-size: 0.8rem; margin: 1.5rem 0; }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        
+        .back-link {
+            display: inline-block; margin-top: 1.5rem; color: #81c784; text-decoration: none;
+            border: 1px solid #81c784; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s;
+        }
+        .back-link:hover { background: #81c784; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🎵 РЕЕСТР МУЗЫКАЛЬНЫХ ПРОИЗВЕДЕНИЙ</h1>
+    <div class="subtitle">Каталог произведений с семантическими рангами и эффектами</div>
+    
+    <div class="button-group">
+        <button id="sortByRankBtn" class="btn">📊 По РАНГУ (от высшего к низшему)</button>
+        <button id="sortByNameBtn" class="btn btn-secondary">🔤 По НАЗВАНИЮ (А → Я)</button>
+    </div>
+    <p id="currentSortIndicator" class="sort-indicator">Текущая сортировка: по РАНГУ</p>
+    
+    <div class="legend">
+        <div class="legend-item"><span class="badge badge-calm">Успокаивающее</span></div>
+        <div class="legend-item"><span class="badge badge-energy">Энергия</span></div>
+        <div class="legend-item"><span class="badge badge-focus">Концентрация</span></div>
+        <div class="legend-item"><span class="badge badge-sleep">Сон</span></div>
+        <div class="legend-item"><span class="badge badge-heal">Исцеление</span></div>
+        <div class="legend-item"><span class="badge badge-neutral">Нейтральное</span></div>
+    </div>
+    
+    <div class="table-wrapper">
+        <table class="music-table" id="musicTable">
+            <thead>
+                <tr>
+                    <th>Произведение</th>
+                    <th>Композитор / Автор</th>
+                    <th>Категория</th>
+                    <th>Частота / Тональность</th>
+                    <th>Эффект</th>
+                    <th>Применение</th>
+                    <th>Ранг</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- JS заполнит -->
+            </tbody>
+        </table>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="прикладная-идеатоника.html?page=76" class="back-link">← Вернуться к Учебнику</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Реестр музыкальных произведений</p>
+        <p>✧ «Музыка — это акустическая семантическая инженерия» ✧</p>
+    </div>
+
+</div>
+
+<script>
+(function() {
+    const musicData = [
+        { name: "Григорианский хорал (432 Гц)", author: "Средневековые монахи", category: "Исцеление", freq: "432 Гц, монофония", effect: "Глубокое успокоение, снижение Tₛ, синхронизация с резонансом Шумана", application: "Медитация, молитва, восстановление после стресса", rank: 8, catClass: "badge-heal" },
+        { name: "Реквием (Lacrimosa)", author: "В. А. Моцарт", category: "Исцеление", freq: "Ре минор, 60 BPM", effect: "Катарсис, проживание горя, очищение через слёзы", application: "Психотерапия, работа с утратой", rank: 7, catClass: "badge-heal" },
+        { name: "Адажио соль минор", author: "Т. Альбинони", category: "Успокаивающее", freq: "Соль минор, 40 BPM", effect: "Глубокое расслабление, снижение Tₛ до оптимума, Cₛ ↑", application: "Вечерняя релаксация, подготовка ко сну", rank: 7, catClass: "badge-calm" },
+        { name: "Лунная соната (1 часть)", author: "Л. ван Бетховен", category: "Успокаивающее", freq: "До-диез минор, 50 BPM", effect: "Успокоение ума, снижение S_noise, лёгкая меланхолия", application: "Чтение, размышление, тихий вечер", rank: 6, catClass: "badge-calm" },
+        { name: "Канон Ре мажор", author: "И. Пахельбель", category: "Успокаивающее", freq: "Ре мажор, 52 BPM", effect: "Гармонизация, ощущение порядка и красоты, Cₛ ↑", application: "Уютный вечер, работа с документами", rank: 6, catClass: "badge-calm" },
+        { name: "Времена года. Весна (1 часть)", author: "А. Вивальди", category: "Энергия", freq: "Ми мажор, 90 BPM", effect: "Пробуждение, радость, прилив энергии, Qₛ ↑", application: "Утро, начало дня, весеннее настроение", rank: 6, catClass: "badge-energy" },
+        { name: "Симфония №5 (1 часть)", author: "Л. ван Бетховен", category: "Энергия", freq: "До минор → До мажор, 100 BPM", effect: "Мобилизация, преодоление, «от тьмы к свету»", application: "Спорт, подготовка к экзамену, преодоление трудностей", rank: 6, catClass: "badge-energy" },
+        { name: "Прелюдия №1 До мажор (ХТК I)", author: "И. С. Бах", category: "Концентрация", freq: "До мажор, 70 BPM", effect: "Ясность ума, структурирование мыслей, Cₛ ↑", application: "Учёба, работа, программирование", rank: 7, catClass: "badge-focus" },
+        { name: "Гольдберг-вариации (Ария)", author: "И. С. Бах", category: "Концентрация", freq: "Соль мажор, 60 BPM", effect: "Глубокая концентрация, «поток», Cₛ до 0.8", application: "Интенсивная умственная работа", rank: 7, catClass: "badge-focus" },
+        { name: "Ария из оркестровой сюиты №3", author: "И. С. Бах", category: "Успокаивающее", freq: "Ре мажор, 40 BPM", effect: "Умиротворение, ощущение «всё правильно», Tₛ ↓", application: "Медитация, отдых после работы", rank: 7, catClass: "badge-calm" },
+        { name: "Ноктюрн №2 Ми-бемоль мажор", author: "Ф. Шопен", category: "Успокаивающее", freq: "Ми-бемоль мажор, 50 BPM", effect: "Нежное успокоение, романтическое настроение, Tₛ ↓", application: "Вечер при свечах, творчество", rank: 6, catClass: "badge-calm" },
+        { name: "Вальс №2 (из Джазовой сюиты)", author: "Д. Шостакович", category: "Энергия", freq: "До минор, 180 BPM", effect: "Лёгкость, игривость, повышение Tₛ (умеренное)", application: "Танцы, поднятие настроения", rank: 5, catClass: "badge-energy" },
+        { name: "Clair de Lune", author: "К. Дебюсси", category: "Сон", freq: "Ре-бемоль мажор, 50 BPM", effect: "Подготовка ко сну, снижение Tₛ до 3-4, S_noise ↓", application: "За час до сна, ритуал отхода ко сну", rank: 7, catClass: "badge-sleep" },
+        { name: "Gymnopédie №1", author: "Э. Сати", category: "Сон", freq: "Ре мажор, 40 BPM", effect: "Минимализм, «заземление», замедление τ", application: "Глубокий сон, восстановление", rank: 6, catClass: "badge-sleep" },
+        { name: "Spiegel im Spiegel", author: "А. Пярт", category: "Сон", freq: "Фа мажор, 40 BPM", effect: "Предельная простота, «семантическая тишина», Tₛ → 3", application: "Медитация при бессоннице", rank: 7, catClass: "badge-sleep" },
+        { name: "Ода к радости (Симфония №9)", author: "Л. ван Бетховен", category: "Энергия", freq: "Ре мажор, 80 BPM", effect: "Эйфория, единство, Qₛ ↑ до +7", application: "Праздники, коллективные мероприятия", rank: 8, catClass: "badge-energy" },
+        { name: "Реквием по мечте (Lux Aeterna)", author: "К. Мэнселл", category: "Энергия", freq: "Ми минор, 60 BPM", effect: "Интенсивные эмоции, тревога, Tₛ ↑", application: "Саундтрек к драматическим моментам (не для релаксации!)", rank: -1, catClass: "badge-neutral" },
+        { name: "Heavy Metal (средний жанр)", author: "Разные", category: "Энергия", freq: "Ми-фа, 140+ BPM", effect: "Мощный выброс Qₛ (может быть как +, так и -), Tₛ ↑↑", application: "Спорт, сброс агрессии (но не перед сном!)", rank: 0, catClass: "badge-neutral" },
+        { name: "Pop Music (мейнстрим, 120 BPM)", author: "Разные", category: "Нейтральное", freq: "Разные, 110-130 BPM", effect: "Развлечение, отвлечение, Qₛ около 0", application: "Фон для вечеринки, дорога (не для концентрации)", rank: -1, catClass: "badge-neutral" },
+        { name: "Звуки природы (лес, ручей, дождь)", author: "Природа", category: "Успокаивающее", freq: "Широкий спектр (розовый шум)", effect: "Заземление, синхронизация с природой, Tₛ → оптимум", application: "Сон, отдых, восстановление", rank: 6, catClass: "badge-calm" },
+        { name: "Мантра «Ом» (136.1 Гц)", author: "Ведическая традиция", category: "Исцеление", freq: "136.1 Гц", effect: "Связь с космосом, гармонизация, Cₛ ↑, Tₛ ↓", application: "Медитация, молитва", rank: 7, catClass: "badge-heal" },
+        { name: "Колокольный звон (православный)", author: "Русская традиция", category: "Исцеление", freq: "Широкий спектр, богат обертонами", effect: "Очищение пространства, структурирование Qₛ, изгнание негатива", application: "Очищение дома, после ссоры", rank: 8, catClass: "badge-heal" },
+        { name: "Симфония №6 «Пасторальная» (1 часть)", author: "Л. ван Бетховен", category: "Успокаивающее", freq: "Фа мажор, 60 BPM", effect: "Связь с природой, заземление, ощущение покоя и простора", application: "Прогулка, отдых на природе, снятие стресса", rank: 7, catClass: "badge-calm" },
+{ name: "Концерт для фортепиано №21 (2 часть)", author: "В. А. Моцарт", category: "Успокаивающее", freq: "Фа мажор, 50 BPM", effect: "Нежность, утешение, Cₛ ↑, Tₛ ↓ до 4.5", application: "Восстановление после эмоционального потрясения", rank: 7, catClass: "badge-calm" },
+{ name: "Симфония №3 «Героическая» (2 часть, похоронный марш)", author: "Л. ван Бетховен", category: "Исцеление", freq: "До минор, 40 BPM", effect: "Проживание скорби, катарсис, очищение через слёзы", application: "Психотерапия утраты, траур", rank: 6, catClass: "badge-heal" },
+{ name: "Времена года. Зима (2 часть)", author: "А. Вивальди", category: "Успокаивающее", freq: "Ми-бемоль мажор, 50 BPM", effect: "Уют, тепло, защищённость, образ «дома в непогоду»", application: "Зимний вечер у камина, чтение", rank: 6, catClass: "badge-calm" },
+{ name: "Времена года. Лето (3 часть, гроза)", author: "А. Вивальди", category: "Энергия", freq: "Соль минор, 140 BPM", effect: "Мощный выброс Qₛ, имитация грозы, Tₛ ↑ (кратковременно)", application: "Встряска, пробуждение, выход из апатии", rank: 5, catClass: "badge-energy" },
+{ name: "Времена года. Осень (1 часть)", author: "А. Вивальди", category: "Энергия", freq: "Фа мажор, 90 BPM", effect: "Радость, изобилие, праздник урожая, Qₛ ↑", application: "Осеннее утро, поднятие настроения", rank: 5, catClass: "badge-energy" },
+{ name: "Аве Мария", author: "Ф. Шуберт", category: "Исцеление", freq: "Си-бемоль мажор, 50 BPM", effect: "Молитвенное состояние, надежда, ощущение присутствия Высшего", application: "Молитва, медитация, восстановление веры", rank: 8, catClass: "badge-heal" },
+{ name: "Серенада №13 «Маленькая ночная музыка» (1 часть)", author: "В. А. Моцарт", category: "Энергия", freq: "Соль мажор, 120 BPM", effect: "Лёгкость, изящество, радость, Qₛ ↑ до +5", application: "Утро, завтрак, начало дня", rank: 6, catClass: "badge-energy" },
+{ name: "Свадебный марш", author: "Ф. Мендельсон", category: "Энергия", freq: "До мажор, 100 BPM", effect: "Торжество, радость, архетип «Союз», C_collective ↑", application: "Свадьбы, праздники, коллективные торжества", rank: 7, catClass: "badge-energy" },
+{ name: "Ноктюрн №1 Си-бемоль минор", author: "Ф. Шопен", category: "Успокаивающее", freq: "Си-бемоль минор, 45 BPM", effect: "Меланхолия, глубокая рефлексия, Tₛ ↓", application: "Размышление, дневник, работа с воспоминаниями", rank: 5, catClass: "badge-calm" },
+{ name: "Этюд №3 Ми мажор (Tristesse)", author: "Ф. Шопен", category: "Исцеление", freq: "Ми мажор, 60 BPM", effect: "Светлая грусть, принятие, исцеление душевных ран", application: "Психотерапия, прощение, работа с прошлым", rank: 7, catClass: "badge-heal" },
+{ name: "Этюд №12 До минор (Революционный)", author: "Ф. Шопен", category: "Энергия", freq: "До минор, 160 BPM", effect: "Гнев, протест, мобилизация, Tₛ ↑↑", application: "Сброс агрессии, спорт, политические митинги", rank: 3, catClass: "badge-energy" },
+{ name: "Полонез №6 «Героический»", author: "Ф. Шопен", category: "Энергия", freq: "Ля-бемоль мажор, 90 BPM", effect: "Гордость, сила, национальный дух, Qₛ ↑", application: "Патриотические мероприятия, поднятие боевого духа", rank: 6, catClass: "badge-energy" },
+{ name: "Лебедь (из Карнавала животных)", author: "К. Сен-Санс", category: "Успокаивающее", freq: "Соль мажор, 40 BPM", effect: "Грация, чистота, ощущение парения, Tₛ ↓ до 3", application: "Медитация, релаксация, подготовка ко сну", rank: 6, catClass: "badge-calm" },
+{ name: "Танец феи Драже (из Щелкунчика)", author: "П. И. Чайковский", category: "Энергия", freq: "Ми минор, 100 BPM", effect: "Сказочность, волшебство, радость, Qₛ ↑", application: "Новогодние праздники, детские утренники", rank: 5, catClass: "badge-energy" },
+{ name: "Вальс цветов (из Щелкунчика)", author: "П. И. Чайковский", category: "Успокаивающее", freq: "Ре мажор, 70 BPM", effect: "Красота, гармония, ощущение расцвета, Cₛ ↑", application: "Творчество, рисование, рукоделие", rank: 6, catClass: "badge-calm" },
+{ name: "Симфония №6 «Патетическая» (4 часть)", author: "П. И. Чайковский", category: "Исцеление", freq: "Си минор, 40 BPM", effect: "Трагедия, скорбь, катарсис, глубокое очищение", application: "Психотерапия тяжёлых утрат (только с подготовкой!)", rank: 4, catClass: "badge-heal" },
+{ name: "Концерт для фортепиано №1 (1 часть)", author: "П. И. Чайковский", category: "Энергия", freq: "Си-бемоль минор → мажор, 80 BPM", effect: "Мощь, страсть, торжество, Qₛ ↑ до +6", application: "Важные события, презентации, экзамены", rank: 7, catClass: "badge-energy" },
+{ name: "Болеро", author: "М. Равель", category: "Концентрация", freq: "До мажор, 72 BPM", effect: "Градуальное нарастание, гипнотический эффект, Cₛ ↑ до 0.8", application: "Монотонная работа, спорт, гипноз", rank: 6, catClass: "badge-focus" },
+{ name: "Павана на смерть инфанты", author: "М. Равель", category: "Успокаивающее", freq: "Соль мажор, 50 BPM", effect: "Нежная печаль, утончённость, Tₛ ↓ до 4", application: "Тихий вечер, чтение поэзии", rank: 5, catClass: "badge-calm" },
+{ name: "Весна священная (Вступление)", author: "И. Стравинский", category: "Энергия", freq: "Политональность, 50 BPM (начало)", effect: "Первобытная мощь, пробуждение, хаос → порядок", application: "Ритуалы, шаманские практики, глубокая трансформация", rank: 5, catClass: "badge-energy" },
+{ name: "Жар-птица (Финал)", author: "И. Стравинский", category: "Энергия", freq: "Си мажор, 80 BPM", effect: "Триумф Света над Тьмой, Qₛ ↑ до +7, Cₛ ↑", application: "Праздники, финалы проектов, победа", rank: 7, catClass: "badge-energy" },
+{ name: "Петрушка (Русская)", author: "И. Стравинский", category: "Энергия", freq: "До мажор, 120 BPM", effect: "Ярмарка, веселье, хаотичная радость, Tₛ ↑", application: "Массовые гуляния, танцы", rank: 4, catClass: "badge-energy" },
+{ name: "Симфония №5 (Адажиетто)", author: "Г. Малер", category: "Успокаивающее", freq: "Фа мажор, 50 BPM", effect: "Нежность, любовь, глубокая эмпатия, Cₛ ↑", application: "Романтический вечер, медитация на любовь", rank: 7, catClass: "badge-calm" },
+{ name: "Симфония №2 «Воскресение» (Финал)", author: "Г. Малер", category: "Исцеление", freq: "Ми-бемоль мажор, 80 BPM", effect: "Воскресение, надежда, грандиозный Qₛ, Cₛ → 1", application: "Пасха, духовные праздники, исцеление от отчаяния", rank: 9, catClass: "badge-heal" },
+{ name: "Море (1 часть: От зари до полудня)", author: "К. Дебюсси", category: "Успокаивающее", freq: "Си минор, 60 BPM", effect: "Ощущение простора, бесконечности, Tₛ ↓, S_noise ↓", application: "Медитация, релаксация, засыпание", rank: 6, catClass: "badge-calm" },
+{ name: "Финляндия", author: "Я. Сибелиус", category: "Энергия", freq: "Ля-бемоль мажор, 70 BPM", effect: "Патриотизм, сила духа, единство народа, Q_collective ↑", application: "Национальные праздники, митинги", rank: 6, catClass: "badge-energy" },
+{ name: "Грустный вальс", author: "Я. Сибелиус", category: "Успокаивающее", freq: "Соль минор, 50 BPM", effect: "Светлая меланхолия, принятие, Tₛ ↓", application: "Осенний вечер, размышления", rank: 5, catClass: "badge-calm" },
+{ name: "Концерт для фортепиано соль мажор (2 часть)", author: "М. Равель", category: "Успокаивающее", freq: "Ми мажор, 40 BPM", effect: "Предельная нежность, «остановка времени», τ ↓↓", application: "Глубокая медитация, восстановление", rank: 7, catClass: "badge-calm" },
+{ name: "Фанданго (из Сюиты для оркестра №1)", author: "Л. Боккерини", category: "Энергия", freq: "Ре мажор, 110 BPM", effect: "Радость, танец, энергия, Qₛ ↑", application: "Утро, зарядка, бодрость", rank: 5, catClass: "badge-energy" },
+{ name: "Аллилуйя (из Оратории «Мессия»)", author: "Г. Ф. Гендель", category: "Исцеление", freq: "Ре мажор, 90 BPM", effect: "Ликование, благодарность, Qₛ ↑ до +8, C_collective ↑", application: "Рождество, Пасха, хоровое пение", rank: 9, catClass: "badge-heal" },
+{ name: "Прибытие царицы Савской", author: "Г. Ф. Гендель", category: "Энергия", freq: "Си-бемоль мажор, 120 BPM", effect: "Торжественность, величие, Qₛ ↑", application: "Церемонии, награждения, важные встречи", rank: 6, catClass: "badge-energy" },
+{ name: "Сарабанда (из Сюиты №4)", author: "Г. Ф. Гендель", category: "Успокаивающее", freq: "Ре минор, 40 BPM", effect: "Достоинство, покой, принятие, Tₛ ↓", application: "Траур, прощание, тихая скорбь", rank: 6, catClass: "badge-calm" },
+{ name: "Stabat Mater (1 часть)", author: "Дж. Б. Перголези", category: "Исцеление", freq: "Фа минор, 50 BPM", effect: "Сострадание, скорбь Богоматери, катарсис", application: "Великий пост, покаяние, очищение", rank: 7, catClass: "badge-heal" },
+{ name: "Miserere (Псалом 51)", author: "Г. Аллегри", category: "Исцеление", freq: "Соль минор, 40 BPM", effect: "Покаяние, прощение, очищение души, Qₛ ↑ до +8", application: "Исповедь, Великий пост, глубокая молитва", rank: 9, catClass: "badge-heal" },
+{ name: "Реквием (Introit)", author: "Г. Форе", category: "Успокаивающее", freq: "Ре минор, 40 BPM", effect: "Мир, покой, «смерть как утешение», Tₛ ↓ до 2", application: "Траур, прощание, хоспис", rank: 7, catClass: "badge-calm" },
+{ name: "Павана", author: "Г. Форе", category: "Успокаивающее", freq: "Фа-диез минор, 50 BPM", effect: "Утончённая нежность, ностальгия, Tₛ ↓", application: "Тихий вечер, воспоминания", rank: 5, catClass: "badge-calm" },
+{ name: "Кармина Бурана (O Fortuna)", author: "К. Орф", category: "Энергия", freq: "Ре минор, 130 BPM", effect: "Мощь рока, интенсивные эмоции, Tₛ ↑↑, Qₛ ±5", application: "Эпические моменты, спорт (не для релаксации!)", rank: 3, catClass: "badge-energy" },
+{ name: "Интермеццо (из Кавалерии рустикана)", author: "П. Масканьи", category: "Успокаивающее", freq: "Фа мажор, 50 BPM", effect: "Светлая грусть, покой, умиротворение", application: "Воскресное утро, отдых", rank: 6, catClass: "badge-calm" },
+{ name: "Танец с саблями", author: "А. Хачатурян", category: "Энергия", freq: "Соль мажор, 180 BPM", effect: "Дикая энергия, агрессия (спортивная), Tₛ ↑↑", application: "Спорт, танцы, сброс адреналина", rank: 3, catClass: "badge-energy" },
+{ name: "Адажио из балета «Спартак»", author: "А. Хачатурян", category: "Успокаивающее", freq: "Ми-бемоль мажор, 40 BPM", effect: "Героическая скорбь, величие, Cₛ ↑", application: "Патриотические мероприятия, память героев", rank: 6, catClass: "badge-calm" },
+{ name: "Вокализ", author: "С. Рахманинов", category: "Успокаивающее", freq: "До-диез минор, 40 BPM", effect: "Бессловесная молитва, глубокая печаль, очищение", application: "Медитация, работа с грустью", rank: 7, catClass: "badge-calm" },
+{ name: "Концерт для фортепиано №2 (1 часть)", author: "С. Рахманинов", category: "Энергия", freq: "До минор → мажор, 70 BPM", effect: "Мощь, страсть, преодоление, Qₛ ↑ до +7", application: "Важные жизненные переходы, экзамены", rank: 7, catClass: "badge-energy" },
+{ name: "Концерт для фортепиано №3 (1 часть)", author: "С. Рахманинов", category: "Энергия", freq: "Ре минор, 80 BPM", effect: "Виртуозность, интенсивная работа, Cₛ ↑ до 0.85", application: "Интенсивная работа, спорт, вызов", rank: 6, catClass: "badge-energy" },
+{ name: "Симфонические танцы (1 часть)", author: "С. Рахманинов", category: "Энергия", freq: "До минор, 100 BPM", effect: "Энергия, ритм, жизнь, Qₛ ↑", application: "Утро, пробуждение, активность", rank: 5, catClass: "badge-energy" },
+{ name: "Всенощное бдение (Богородице Дево, радуйся)", author: "С. Рахманинов", category: "Исцеление", freq: "Ля мажор, 60 BPM", effect: "Молитвенный восторг, благодать, Cₛ → 0.9, Qₛ ↑ до +9", application: "Молитва, духовное пение, богослужение", rank: 8, catClass: "badge-heal" },
+{ name: "Половецкие пляски (из Князя Игоря)", author: "А. Бородин", category: "Энергия", freq: "Ля мажор, 100 BPM", effect: "Экзотика, страсть, энергия, Qₛ ↑", application: "Праздники, танцы, веселье", rank: 5, catClass: "badge-energy" },
+{ name: "Рассвет на Москве-реке", author: "М. Мусоргский", category: "Успокаивающее", freq: "Ми мажор, 50 BPM", effect: "Пробуждение мира, надежда, Cₛ ↑, Tₛ → оптимум", application: "Раннее утро, медитация на рассвете", rank: 7, catClass: "badge-calm" },
+{ name: "Картинки с выставки (Богатырские ворота)", author: "М. Мусоргский", category: "Энергия", freq: "Ми-бемоль мажор, 80 BPM", effect: "Торжество, мощь, величие, Qₛ ↑", application: "Праздники, финалы, триумф", rank: 7, catClass: "badge-energy" },
+{ name: "Песня Сольвейг (из Пер Гюнта)", author: "Э. Григ", category: "Успокаивающее", freq: "Ля минор, 50 BPM", effect: "Верность, надежда, тихая радость, Tₛ ↓", application: "Вечер, ожидание, медитация на верность", rank: 6, catClass: "badge-calm" },
+{ name: "Утро (из Пер Гюнта)", author: "Э. Григ", category: "Успокаивающее", freq: "Ми мажор, 60 BPM", effect: "Восход солнца, пробуждение природы, Qₛ ↑, Cₛ ↑", application: "Утро, начало дня, йога", rank: 7, catClass: "badge-calm" },
+{ name: "В пещере горного короля (из Пер Гюнта)", author: "Э. Григ", category: "Энергия", freq: "Си минор, 120→200 BPM", effect: "Нарастающая тревога, паника, Tₛ ↑↑, S_noise ↑", application: "Саундтрек к погоне (не для релаксации!)", rank: -1, catClass: "badge-neutral" },
+{ name: "Славянский марш", author: "П. И. Чайковский", category: "Энергия", freq: "Си-бемоль минор → мажор, 100 BPM", effect: "Патриотизм, единство, сила, Q_collective ↑", application: "Национальные праздники, митинги", rank: 6, catClass: "badge-energy" },
+{ name: "Увертюра 1812 год", author: "П. И. Чайковский", category: "Энергия", freq: "Ми-бемоль мажор, 100 BPM", effect: "Триумф, победа, колокольный звон, Qₛ ↑ до +8", application: "День Победы, праздники, фейерверки", rank: 8, catClass: "badge-energy" },
+{ name: "Танец маленьких лебедей", author: "П. И. Чайковский", category: "Энергия", freq: "Фа-диез минор, 140 BPM", effect: "Грация, лёгкость, радость, Qₛ ↑", application: "Балет, утро, зарядка", rank: 4, catClass: "badge-energy" },
+{ name: "Сентиментальный вальс", author: "П. И. Чайковский", category: "Успокаивающее", freq: "Фа минор, 60 BPM", effect: "Ностальгия, светлая грусть, Tₛ ↓", application: "Осенний вечер, воспоминания", rank: 5, catClass: "badge-calm" },
+{ name: "Медитация (из оперы Таис)", author: "Ж. Массне", category: "Успокаивающее", freq: "Ре мажор, 50 BPM", effect: "Молитвенное созерцание, Cₛ ↑ до 0.85, Tₛ → 4", application: "Медитация, йога, духовные практики", rank: 8, catClass: "badge-calm" },
+{ name: "Колыбельная", author: "И. Брамс", category: "Сон", freq: "Ми-бемоль мажор, 40 BPM", effect: "Засыпание, чувство безопасности, Tₛ ↓ до 2", application: "Укладывание детей, подготовка ко сну", rank: 6, catClass: "badge-sleep" },
+{ name: "Венгерский танец №5", author: "И. Брамс", category: "Энергия", freq: "Соль минор, 140 BPM", effect: "Страсть, огонь, энергия, Tₛ ↑", application: "Танцы, вечеринка, поднятие настроения", rank: 4, catClass: "badge-energy" },
+{ name: "Симфония №9 «Из Нового Света» (2 часть, Largo)", author: "А. Дворжак", category: "Успокаивающее", freq: "Ре-бемоль мажор, 40 BPM", effect: "Ностальгия, тоска по Родине, глубокая эмпатия, Tₛ ↓", application: "Тихий вечер, воспоминания, работа с тоской", rank: 7, catClass: "badge-calm" },
+{ name: "Славянский танец №8", author: "А. Дворжак", category: "Энергия", freq: "Соль минор, 120 BPM", effect: "Радость, танец, энергия, Qₛ ↑", application: "Праздники, веселье", rank: 5, catClass: "badge-energy" },
+{ name: "The Blue Danube (На прекрасном голубом Дунае)", author: "И. Штраус-сын", category: "Энергия", freq: "Ре мажор, 90 BPM", effect: "Грация, элегантность, радость, Qₛ ↑", application: "Балы, Новый год, танцы", rank: 5, catClass: "badge-energy" },
+{ name: "Сказки Венского леса", author: "И. Штраус-сын", category: "Успокаивающее", freq: "До мажор, 60 BPM", effect: "Природа, покой, гармония, Tₛ ↓", application: "Прогулка, отдых на природе", rank: 5, catClass: "badge-calm" },
+{ name: "Полёт шмеля", author: "Н. Римский-Корсаков", category: "Энергия", freq: "До мажор, 180 BPM", effect: "Суета, спешка, Tₛ ↑, S_noise ↑", application: "Саундтрек к суете (не для релаксации!)", rank: 1, catClass: "badge-neutral" },
+{ name: "Шехеразада (1 часть: Море и корабль Синдбада)", author: "Н. Римский-Корсаков", category: "Успокаивающее", freq: "Ми мажор, 60 BPM", effect: "Сказка, путешествие, простор, Cₛ ↑", application: "Чтение, творчество, воображение", rank: 6, catClass: "badge-calm" },
+{ name: "Шехеразада (3 часть: Царевич и царевна)", author: "Н. Римский-Корсаков", category: "Успокаивающее", freq: "Соль мажор, 50 BPM", effect: "Любовь, нежность, красота, Cₛ ↑", application: "Романтический вечер, свидание", rank: 6, catClass: "badge-calm" },
+{ name: "Прометей (Поэма огня)", author: "А. Скрябин", category: "Концентрация", freq: "Атональная, 70 BPM", effect: "Трансценденция, выход за пределы, «световая симфония»", application: "Глубокая медитация, мистический опыт", rank: 7, catClass: "badge-focus" },
+{ name: "Этюд №12 (Революционный)", author: "А. Скрябин", category: "Энергия", freq: "Ре-диез минор, 100 BPM", effect: "Экстаз, страсть, прорыв, Qₛ ↑↑, Tₛ ↑", application: "Творческий прорыв, вдохновение", rank: 5, catClass: "badge-energy" },
+{ name: "Prelude to the Afternoon of a Faun", author: "К. Дебюсси", category: "Успокаивающее", freq: "Хроматическая, 50 BPM", effect: "Грёзы, полудрёма, «семантический импрессионизм», Tₛ ↓", application: "Послеобеденный отдых, сиеста", rank: 6, catClass: "badge-calm" }
+    ];
+
+    let currentSortMode = 'rank';
+    const tbody = document.getElementById('tableBody');
+    const indicator = document.getElementById('currentSortIndicator');
+    const rankBtn = document.getElementById('sortByRankBtn');
+    const nameBtn = document.getElementById('sortByNameBtn');
+
+    function getRankClass(rank) {
+        if (rank >= 8) return 'rank-p8';
+        if (rank >= 7) return 'rank-p7';
+        if (rank >= 6) return 'rank-p6';
+        if (rank >= 5) return 'rank-p5';
+        if (rank >= 4) return 'rank-p4';
+        if (rank >= 3) return 'rank-p3';
+        if (rank >= 2) return 'rank-p2';
+        if (rank >= 1) return 'rank-p1';
+        if (rank >= 0) return 'rank-0';
+        if (rank >= -1) return 'rank-m1';
+        if (rank >= -2) return 'rank-m2';
+        return 'rank-m3';
+    }
+
+    function renderTable() {
+        const sorted = [...musicData].sort((a, b) => {
+            if (currentSortMode === 'rank') return b.rank - a.rank;
+            return a.name.localeCompare(b.name, 'ru');
+        });
+
+        let html = '';
+        sorted.forEach(m => {
+            html += `<tr class="${getRankClass(m.rank)}">`;
+            html += `<td><strong>${m.name}</strong></td>`;
+            html += `<td>${m.author}</td>`;
+            html += `<td><span class="badge ${m.catClass}">${m.category}</span></td>`;
+            html += `<td style="text-align:center;">${m.freq}</td>`;
+            html += `<td>${m.effect}</td>`;
+            html += `<td>${m.application}</td>`;
+            html += `<td style="text-align:center; font-weight:bold; font-size:1.1rem;">${m.rank >= 0 ? '+' : ''}${m.rank}</td>`;
+            html += '</tr>';
+        });
+        tbody.innerHTML = html;
+        indicator.textContent = `Текущая сортировка: ${currentSortMode === 'rank' ? 'по РАНГУ (от высшего к низшему)' : 'по НАЗВАНИЮ (А → Я)'}`;
+    }
+
+    rankBtn.addEventListener('click', () => { currentSortMode = 'rank'; renderTable(); });
+    nameBtn.addEventListener('click', () => { currentSortMode = 'name'; renderTable(); });
+    renderTable();
+})();
+</script>
+
+</body>
+</html>

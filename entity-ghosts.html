@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👻 Призраки • Энциклопедия Сущностей • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh; font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem; display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(176,190,197,0.06) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(144,164,174,0.03) 0%, transparent 60%); }
+        .main-container { max-width: 900px; width: 100%; position: relative; z-index: 1; }
+
+        .entity-header {
+            text-align: center; margin-bottom: 2.5rem; padding: 2.5rem 2rem;
+            background: rgba(30,40,60,0.7); backdrop-filter: blur(8px);
+            border: 1px solid #b0bec5; border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 30px rgba(176,190,197,0.08);
+        }
+        .entity-header .rank-badge {
+            display: inline-block; background: #b0bec5; color: #37474f; padding: 6px 20px;
+            border-radius: 20px; font-size: 1rem; font-weight: bold; margin-bottom: 1rem;
+        }
+        .entity-header h1 { font-size: 2.8rem; color: #cfd8dc; font-weight: 400; letter-spacing: 3px; margin-bottom: 0.5rem; }
+        .entity-header .subtitle { font-size: 1.2rem; color: #90a4ae; font-style: italic; }
+
+        .section {
+            background: rgba(30,40,60,0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(176,190,197,0.3); border-radius: 20px;
+            padding: 2rem; margin-bottom: 1.5rem;
+        }
+        .section h2 { color: #cfd8dc; font-size: 1.5rem; font-weight: 400; margin-bottom: 1.2rem; border-left: 4px solid #b0bec5; padding-left: 1rem; }
+        .section p, .section li { color: #d0c8b8; line-height: 1.8; font-size: 1rem; margin-bottom: 0.8rem; }
+        .section ul, .section ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+
+        .param-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .param-table th { background: #37474f; color: #cfd8dc; padding: 12px; text-align: left; border: 1px solid #455a64; }
+        .param-table td { padding: 10px 12px; border: 1px solid #455a64; color: #d0c8b8; }
+        .param-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.5rem 0; }
+        .type-card {
+            background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.5rem;
+            border: 1px solid #455a64; text-align: center;
+        }
+        .type-card h3 { color: #cfd8dc; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .type-card .card-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .type-card p { color: #90a4ae; font-size: 0.85rem; line-height: 1.5; }
+
+        .quote {
+            background: rgba(176,190,197,0.06); border-left: 4px solid #b0bec5;
+            padding: 1.5rem 2rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0;
+            font-style: italic; color: #90a4ae; text-align: center; font-size: 1.1rem;
+        }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #b0bec5; text-decoration: none; border: 1px solid #b0bec5; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #b0bec5; color: #263238; }
+        .footer-note { text-align: center; color: #706858; font-size: 0.8rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #37474f; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <!-- ========== ЗАГОЛОВОК ========== -->
+    <div class="entity-header">
+        <div class="rank-badge">👻 Qₛ = 0 … -2</div>
+        <h1>ПРИЗРАКИ & ФАНТОМЫ</h1>
+        <div class="subtitle">Семантические следы • Застывшие мгновения • Эхо непрожитых жизней</div>
+    </div>
+
+    <!-- ========== КТО ОНИ ========== -->
+    <div class="section">
+        <h2>📖 Кто Они</h2>
+        <p><strong>Призраки</strong> — это не «души умерших» в классическом понимании. С точки зрения Идеатоники, это <strong>устойчивые семантические следы</strong> — остаточные возмущения в поле Φₛ, оставленные в момент смерти или экстремального эмоционального всплеска.</p>
+        <p>В отличие от святых (чьё поле сохранило когерентность и самосознание), призраки <strong>не обладают полноценным сознанием</strong>. Это «записи», которые проигрываются снова и снова, или «осколки» личности, застрявшие в ноосфере.</p>
+        
+        <div class="quote">
+            ✧ «Призрак — не возвращение мёртвых. Это эхо жизни, слишком громкое, чтобы затихнуть.» ✧
+        </div>
+    </div>
+
+    <!-- ========== ДВА ТИПА ПРИЗРАКОВ ========== -->
+    <div class="section">
+        <h2>🧩 Два Типа Призраков</h2>
+        <div class="type-grid">
+            <div class="type-card">
+                <div class="card-icon">🎞️</div>
+                <h3>Фантом (Семантический След)</h3>
+                <p><strong>Qₛ = 0</strong>. Безличная «запись» события. Как видеоплёнка, которая проигрывается при определённых условиях (время суток, влажность, наличие чувствительного наблюдателя). Не взаимодействует с живыми, не отвечает на вопросы.</p>
+            </div>
+            <div class="type-card">
+                <div class="card-icon">💔</div>
+                <h3>Неупокоенная Душа</h3>
+                <p><strong>Qₛ = -1…-2</strong>. Поле умершего, сохранившее фрагменты личности из-за сильной привязанности, обиды или насильственной смерти. Может проявлять эмоции, «просить о помощи», пугать. Требует завершения гештальта.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ПАРАМЕТРЫ ========== -->
+    <div class="section">
+        <h2>📊 Семантические Параметры</h2>
+        <table class="param-table">
+            <tr><th>Параметр</th><th>Фантом (След)</th><th>Неупокоенная Душа</th></tr>
+            <tr><td><strong>Qₛ</strong></td><td>0 (нейтральный)</td><td>-1…-2 (отрицательный)</td></tr>
+            <tr><td><strong>Cₛ</strong></td><td>0 (безличный)</td><td>0.2…0.6 (фрагментарный)</td></tr>
+            <tr><td><strong>Самосознание</strong></td><td>Отсутствует</td><td>Частичное (осколки)</td></tr>
+            <tr><td><strong>Взаимодействие с живыми</strong></td><td>Нет (просто «показывается»)</td><td>Может пугать, просить о помощи</td></tr>
+            <tr><td><strong>Время жизни</strong></td><td>Годы — столетия (затухает)</td><td>Десятилетия — века</td></tr>
+            <tr><td><strong>Опасность</strong></td><td>Низкая</td><td>Средняя</td></tr>
+        </table>
+    </div>
+
+    <!-- ========== МЕХАНИЗМ ОБРАЗОВАНИЯ ========== -->
+    <div class="section">
+        <h2>⚙️ Как Образуется Призрак</h2>
+        <p>Согласно §10 и §57, любое событие с высоким Qₛ оставляет след в семантическом поле. Обычно этот след рассеивается за время релаксации τ_relax (дни или недели). Но при определённых условиях след «кристаллизуется»:</p>
+        <ol>
+            <li><strong>Экстремальный Qₛ:</strong> Насильственная смерть, убийство, самоубийство, сильная эмоциональная травма создают колоссальный заряд.</li>
+            <li><strong>Высокая Cₛ в момент смерти:</strong> Если человек умирал в состоянии предельного страха, ярости или отчаяния, его поле было «сфокусировано» на этой эмоции.</li>
+            <li><strong>Семантический якорь:</strong> Место смерти становится «якорем» (§38), который удерживает след от рассеивания.</li>
+        </ol>
+        <div class="formula" style="color: #b0bec5; text-align: center; padding: 1rem;">
+            Φ_ghost = Φ_event · e<sup>-t/τ_ghost</sup> · δ(r — r_event) · cos(ω_loop t)
+        </div>
+        <p style="text-align: center; color: #90a4ae; font-size: 0.85rem;">Фантом «зациклен» на повторении одного и того же действия — проходит по коридору, открывает дверь, кричит.</p>
+    </div>
+
+    <!-- ========== КАК ВЗАИМОДЕЙСТВОВАТЬ ========== -->
+    <div class="section">
+        <h2>🕊️ Как «Упокоить» Призрака</h2>
+        <p>Если вы столкнулись с призраком (особенно второго типа), есть несколько методов:</p>
+        <ol>
+            <li><strong>Молитва и освящение места:</strong> Вносит мощный положительный Qₛ, который «перезаписывает» негативный след (§47, SALT-CLEAN).</li>
+            <li><strong>Завершение гештальта:</strong> Спокойно, вслух обратитесь к призраку: «Ты умер. Твоё время здесь закончилось. Иди с миром. Тебя помнят и отпускают». Это может разрушить семантическую петлю.</li>
+            <li><strong>Изменение обстановки:</strong> Ремонт, перестановка мебели разрушают физические якоря, к которым привязан след.</li>
+            <li><strong>Не бояться:</strong> Страх повышает вашу чувствительность χ и усиливает резонанс с призраком.</li>
+        </ol>
+        <div class="quote">
+            ✧ «Слушай его с состраданием, но не застревай в нём сам.» ✧
+        </div>
+    </div>
+
+    <!-- ========== ЧЕМ НЕ ЯВЛЯЕТСЯ ========== -->
+    <div class="section">
+        <h2>⚠️ Чем Призрак НЕ Является</h2>
+        <ul>
+            <li><strong>Не может причинить физический вред.</strong> У него нет энергии для удара, удушения, пореза. Только страх и психосоматика.</li>
+            <li><strong>Не всеведущ.</strong> Не знает ваших мыслей, не может следить за вами повсюду — привязан к месту или предмету.</li>
+            <li><strong>Не обязательно «душа».</strong> В большинстве случаев — безличный след, а не сознательная личность.</li>
+        </ul>
+    </div>
+
+    <!-- ========== СВЯЗАННЫЕ СУЩНОСТИ ========== -->
+    <div class="section">
+        <h2>🔗 Связанные Сущности и Параграфы</h2>
+        <table class="param-table">
+            <tr><th>Связь</th><th>Описание</th></tr>
+            <tr><td><strong>Полтергейст (-3)</strong></td><td>Не призрак, а выброс подавленных эмоций живого человека (§66).</td></tr>
+            <tr><td><strong>Неупокоенная душа (-2)</strong></td><td>Пограничный случай между следом и активным полем.</td></tr>
+            <tr><td><strong>Святые (+7…+8)</strong></td><td>Противоположность призрака: поле, сохранившее когерентность и свет.</td></tr>
+            <tr><td><strong>§10 (Семантическая память)</strong></td><td>Механизм образования следов.</td></tr>
+            <tr><td><strong>§57 (Призраки и привидения)</strong></td><td>Полный теоретический разбор феномена.</td></tr>
+            <tr><td><strong>§48 (Смерть и посмертие)</strong></td><td>Что происходит с полем после смерти.</td></tr>
+        </table>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="таблица-сущностей.html" class="back-link">← Вернуться к Таблице Сущностей</a>
+    </div>
+
+    <div class="footer-note">
+        ✧ «Призрак — это не возвращение мёртвых. Это эхо жизни, слишком громкое, чтобы затихнуть.» ✧
+    </div>
+</div>
+</body>
+</html>

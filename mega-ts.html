@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мега-тест Tₛ • Архив Ноосферы</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+            transition: background 0.5s ease;
+        }
+        .cosmic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .test-container {
+            max-width: 750px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            transition: border-color 0.3s ease;
+        }
+        .test-header { text-align: center; margin-bottom: 2rem; }
+        .test-header h1 {
+            font-size: 2.5rem; color: #f3e7c0; margin-bottom: 0.5rem;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1.5rem 0; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #42a5f5, #ef5350); border-radius: 3px; width: 0%; transition: width 0.3s ease; }
+        .progress-text { text-align: right; color: #a09080; font-size: 0.8rem; margin-top: 0.3rem; }
+        .question-box { margin-bottom: 2rem; }
+        .question-text { color: #f3e7c0; font-size: 1.3rem; margin-bottom: 1.5rem; line-height: 1.5; }
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option {
+            background: rgba(0,0,0,0.2); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1rem 1.5rem; cursor: pointer; transition: all 0.2s ease;
+            color: #d0c8b8; display: flex; align-items: center; gap: 15px;
+        }
+        .option:hover { background: rgba(239,83,80,0.15); border-color: #ef5350; }
+        .option.selected { background: rgba(239,83,80,0.25); border-color: #ef5350; color: #f3e7c0; }
+        .option-marker {
+            width: 28px; height: 28px; border-radius: 50%; border: 2px solid #5d4a3a;
+            display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0;
+        }
+        .option.selected .option-marker { border-color: #ef5350; background: #ef5350; box-shadow: 0 0 10px #ef5350; }
+        .option.selected .option-marker::after { content: "✓"; color: #1a1a2e; font-weight: bold; }
+        .option-text { flex: 1; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; gap: 15px; }
+        .btn {
+            background: transparent; border: 1.5px solid #ef5350; color: #ef5350;
+            padding: 0.8rem 1.8rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit;
+        }
+        .btn:hover { background: #ef5350; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-secondary { border-color: #5d4a3a; color: #a09080; }
+        .btn-secondary:hover { background: #5d4a3a; color: #d0c8b8; }
+        .result-container { text-align: center; }
+        .result-score { font-size: 6rem; font-weight: bold; margin: 1rem 0; line-height: 1; }
+        .result-scale { font-size: 1.2rem; margin-bottom: 1.5rem; }
+        .result-comment {
+            background: rgba(0,0,0,0.2); border-radius: 20px; padding: 1.5rem;
+            margin: 1.5rem 0; line-height: 1.6;
+        }
+        .result-advice {
+            padding: 1.2rem 1.5rem; border-radius: 0 12px 12px 0; text-align: left;
+            margin-top: 1.5rem;
+        }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ef5350; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body id="mainBody">
+<div class="cosmic-bg"></div>
+<div class="test-container" id="testContainer">
+
+    <div class="test-header">
+        <h1><span>🌡️</span><span id="testTitle">Мега-тест Tₛ</span><span>🌡️</span></h1>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="progress-text" id="progressText">Вопрос 1 из 30</div>
+    </div>
+
+    <div id="questionContainer"></div>
+
+    <div class="nav-buttons">
+        <button class="btn btn-secondary" id="prevBtn" disabled>← Назад</button>
+        <button class="btn btn-secondary" id="exitBtn">🚪 Выйти</button>
+        <button class="btn" id="nextBtn">Далее →</button>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="hidden-tests.html" class="back-link">← Вернуться к списку тестов</a>
+    </div>
+</div>
+
+<script>
+    (function() {
+        const questions = [
+            // 30 вопросов, каждый ровно с 10 вариантами ответа (значения от 1 до 10)
+            { text: "Вы внезапно слышите громкий, резкий звук. Ваша первая реакция?", options: [
+                { text: "Замираю, не могу пошевелиться несколько секунд.", value: 1 },
+                { text: "Сильно вздрагиваю, чувствую холод по телу.", value: 2 },
+                { text: "Вздрагиваю, сердце на секунду замирает.", value: 3 },
+                { text: "Вздрагиваю, но быстро успокаиваюсь.", value: 4 },
+                { text: "Спокойно оцениваю источник звука.", value: 5 },
+                { text: "Чувствую лёгкий всплеск адреналина, интерес.", value: 6 },
+                { text: "Сердце начинает колотиться, готов(а) действовать.", value: 7 },
+                { text: "Чувствую прилив энергии, хочется разобраться.", value: 8 },
+                { text: "Мгновенно вскипаю, могу накричать в ответ.", value: 9 },
+                { text: "Взрываюсь эмоциями, долго не могу успокоиться.", value: 10 }
+            ]},
+            { text: "Вам предстоит важное событие. Что вы чувствуете за час до него?", options: [
+                { text: "Оцепенение, пустоту в голове, хочется спрятаться.", value: 1 },
+                { text: "Холодные руки, дрожь, тошноту.", value: 2 },
+                { text: "Лёгкое волнение, но оно скорее сковывает.", value: 3 },
+                { text: "Волнение, которое собирает меня в тонус.", value: 4 },
+                { text: "Спокойную уверенность, я готов(а).", value: 5 },
+                { text: "Энергичное возбуждение, желание поскорее начать.", value: 6 },
+                { text: "Сильное сердцебиение, мысли скачут, трудно усидеть.", value: 7 },
+                { text: "Я на взводе, всё раздражает.", value: 8 },
+                { text: "Могу сорваться на близких от напряжения.", value: 9 },
+                { text: "Я как огненный шар, эмоции захлёстывают полностью.", value: 10 }
+            ]},
+            { text: "Как вы обычно ведёте себя в конфликтной ситуации?", options: [
+                { text: "Замыкаюсь, ухожу в глухую оборону, молчу.", value: 1 },
+                { text: "Чувствую себя подавленно, хочется плакать.", value: 2 },
+                { text: "Стараюсь сгладить углы, уйти от конфликта.", value: 3 },
+                { text: "Спокойно, но твёрдо отстаиваю свою позицию.", value: 4 },
+                { text: "Активно спорю, но контролирую эмоции.", value: 5 },
+                { text: "Спорю с жаром, но без перехода на личности.", value: 6 },
+                { text: "Повышаю голос, эмоции зашкаливают.", value: 7 },
+                { text: "Кричу, перебиваю, не могу остановиться.", value: 8 },
+                { text: "Взрываюсь, могу наговорить лишнего, потом жалею.", value: 9 },
+                { text: "Впадаю в неконтролируемую ярость, могу разбить что-то.", value: 10 }
+            ]},
+            { text: "Вечером, ложась спать, вы прокручиваете прошедший день. Какие эмоции преобладают?", options: [
+                { text: "Апатия, пустота, день прошёл зря.", value: 1 },
+                { text: "Грусть, сожаление о сделанном или несделанном.", value: 2 },
+                { text: "Лёгкая усталость, но в целом нормально.", value: 3 },
+                { text: "Спокойное принятие дня, всё как обычно.", value: 4 },
+                { text: "Удовлетворение от сделанного, приятная усталость.", value: 5 },
+                { text: "Радость от приятных моментов, предвкушение завтра.", value: 6 },
+                { text: "Мысли скачут, мозг кипит, трудно выключиться.", value: 7 },
+                { text: "Раздражение, злость на себя или других.", value: 8 },
+                { text: "Не могу уснуть от перевозбуждения.", value: 9 },
+                { text: "Эмоциональный шторм, слёзы или агрессия перед сном.", value: 10 }
+            ]},
+            { text: "Представьте, что ваш рейс задерживают на неопределённое время. Ваша реакция?", options: [
+                { text: "Впадаю в ступор, не знаю, что делать.", value: 1 },
+                { text: "Чувствую себя беспомощным и подавленным.", value: 2 },
+                { text: "Расстраиваюсь, но молча жду.", value: 3 },
+                { text: "Спокойно принимаю ситуацию, читаю книгу.", value: 4 },
+                { text: "Активно ищу пути решения, общаюсь с персоналом.", value: 5 },
+                { text: "Начинаю нервничать, хожу туда-сюда.", value: 6 },
+                { text: "Громко возмущаюсь, требую информации.", value: 7 },
+                { text: "Ругаюсь с сотрудниками, требую компенсацию.", value: 8 },
+                { text: "Взрываюсь, кричу, угрожаю жалобами.", value: 9 },
+                { text: "Устраиваю скандал, меня трясёт от злости.", value: 10 }
+            ]},
+            { text: "Как часто вы чувствуете, что вас переполняют эмоции и вы не можете их контролировать?", options: [
+                { text: "Никогда. Я вообще мало что чувствую.", value: 1 },
+                { text: "Очень редко. Я скорее склонен подавлять эмоции.", value: 2 },
+                { text: "Редко. Обычно я держу себя в руках.", value: 3 },
+                { text: "Иногда, в особо стрессовых ситуациях.", value: 4 },
+                { text: "Периодически, но я быстро восстанавливаюсь.", value: 5 },
+                { text: "Часто. Эмоции сильные, но я справляюсь.", value: 6 },
+                { text: "Очень часто. Эмоции захлёстывают, я как вулкан.", value: 7 },
+                { text: "Постоянно. Я живу на эмоциональных качелях.", value: 8 },
+                { text: "Я не контролирую эмоции, они управляют мной.", value: 9 },
+                { text: "Я — чистый хаос эмоций, сжигаю себя и других.", value: 10 }
+            ]},
+            { text: "Какое утверждение лучше всего описывает ваше типичное состояние в течение дня?", options: [
+                { text: "Я как будто в анабиозе, холод и отстранённость.", value: 1 },
+                { text: "Я часто чувствую себя замёрзшим и медлительным.", value: 2 },
+                { text: "Я спокоен, но иногда бывает лёгкая прохлада.", value: 3 },
+                { text: "Я в балансе, мне комфортно.", value: 4 },
+                { text: "Я энергичен, чувствую приятное тепло и драйв.", value: 5 },
+                { text: "Я часто чувствую жар, суету, внутри всё кипит.", value: 6 },
+                { text: "Я как огненный шар, легко выхожу из себя.", value: 7 },
+                { text: "Я сгораю от эмоций, это истощает.", value: 8 },
+                { text: "Я в постоянном огне, это разрушает меня.", value: 9 },
+                { text: "Я — пламя, которое сжигает всё вокруг.", value: 10 }
+            ]},
+            { text: "Как вы реагируете на критику в свой адрес?", options: [
+                { text: "Никак. Мне всё равно.", value: 1 },
+                { text: "Замыкаюсь в себе, холодно молчу.", value: 2 },
+                { text: "Спокойно выслушиваю, но внутри неприятно.", value: 3 },
+                { text: "Анализирую: может, в критике есть правда.", value: 4 },
+                { text: "Обсуждаю, задаю уточняющие вопросы.", value: 5 },
+                { text: "Спорю, отстаиваю свою точку зрения.", value: 6 },
+                { text: "Повышаю голос, защищаюсь активно.", value: 7 },
+                { text: "Сильно обижаюсь, долго переживаю.", value: 8 },
+                { text: "Впадаю в гнев, кричу в ответ.", value: 9 },
+                { text: "Впадаю в ярость, могу разорвать отношения.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда вас кто-то перебивает?", options: [
+                { text: "Ничего, я привык(ла) быть невидимкой.", value: 1 },
+                { text: "Лёгкую досаду, но молчу.", value: 2 },
+                { text: "Неприятно, но я промолчу.", value: 3 },
+                { text: "Спокойно попрошу дать мне закончить.", value: 4 },
+                { text: "Сделаю замечание, но без агрессии.", value: 5 },
+                { text: "Повышу голос, чтобы меня услышали.", value: 6 },
+                { text: "Раздражаюсь, могу резко ответить.", value: 7 },
+                { text: "Сильно злюсь, перестаю говорить вообще.", value: 8 },
+                { text: "Взрываюсь, кричу: «Не перебивай меня!»", value: 9 },
+                { text: "Прихожу в бешенство, могу нагрубить или уйти.", value: 10 }
+            ]},
+            { text: "Как вы обычно реагируете на похвалу?", options: [
+                { text: "Никак не реагирую, мне всё равно.", value: 1 },
+                { text: "Смущаюсь, отвожу глаза, молчу.", value: 2 },
+                { text: "Тихо говорю спасибо, но внутри неловко.", value: 3 },
+                { text: "Спокойно благодарю.", value: 4 },
+                { text: "Искренне радуюсь, благодарю в ответ.", value: 5 },
+                { text: "Улыбаюсь, мне приятно, я оживляюсь.", value: 6 },
+                { text: "Сильно радуюсь, могу обнять человека.", value: 7 },
+                { text: "Возбуждаюсь, начинаю много говорить.", value: 8 },
+                { text: "Перевозбуждаюсь, не могу остановиться.", value: 9 },
+                { text: "Эйфория, меня переполняют эмоции.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда видите, как кто-то плачет?", options: [
+                { text: "Ничего, это меня не трогает.", value: 1 },
+                { text: "Лёгкую неловкость, хочется уйти.", value: 2 },
+                { text: "Сочувствие, но стараюсь не вмешиваться.", value: 3 },
+                { text: "Подойду и спрошу, чем могу помочь.", value: 4 },
+                { text: "Обниму или поддержу словом.", value: 5 },
+                { text: "Я чувствую их боль, это трогает меня.", value: 6 },
+                { text: "У меня самой(ого) наворачиваются слёзы.", value: 7 },
+                { text: "Сильно переживаю, долго не могу отпустить.", value: 8 },
+                { text: "Меня захлёстывают эмоции, я плачу вместе с ними.", value: 9 },
+                { text: "Впадаю в истерику, меня трясёт от чужой боли.", value: 10 }
+            ]},
+            { text: "Как вы ведёте себя в очереди, которая движется слишком медленно?", options: [
+                { text: "Стою неподвижно, погружён(а) в себя.", value: 1 },
+                { text: "Терпеливо жду, никуда не тороплюсь.", value: 2 },
+                { text: "Слегка раздражаюсь, но молчу.", value: 3 },
+                { text: "Спокойно жду, занимаюсь своими мыслями.", value: 4 },
+                { text: "Начинаю нервничать, переминаюсь с ноги на ногу.", value: 5 },
+                { text: "Громко вздыхаю, показываю недовольство.", value: 6 },
+                { text: "Делаю замечания, тороплю персонал.", value: 7 },
+                { text: "Ругаюсь, требую позвать администратора.", value: 8 },
+                { text: "Кричу, скандалю, размахиваю руками.", value: 9 },
+                { text: "Устраиваю безобразную сцену, меня трясёт.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда вас будят посреди ночи?", options: [
+                { text: "Ничего, я как в тумане.", value: 1 },
+                { text: "С трудом просыпаюсь, медленно соображаю.", value: 2 },
+                { text: "Лёгкое недовольство, но терпимо.", value: 3 },
+                { text: "Спокойно выясняю, что случилось.", value: 4 },
+                { text: "Быстро прихожу в себя, готов(а) действовать.", value: 5 },
+                { text: "Недоволен(а), ворчу.", value: 6 },
+                { text: "Раздражаюсь, могу нагрубить.", value: 7 },
+                { text: "Злюсь, кричу: «Какого чёрта?!»", value: 8 },
+                { text: "Взрываюсь гневом, долго не могу уснуть потом.", value: 9 },
+                { text: "Впадаю в ярость, могу швырнуть подушку.", value: 10 }
+            ]},
+            { text: "Как вы реагируете на неожиданный сюрприз или подарок?", options: [
+                { text: "Никак, я не люблю сюрпризы.", value: 1 },
+                { text: "Сдержанно благодарю, без эмоций.", value: 2 },
+                { text: "Улыбаюсь, говорю спасибо.", value: 3 },
+                { text: "Искренне радуюсь, мне приятно.", value: 4 },
+                { text: "Оживляюсь, радостно благодарю.", value: 5 },
+                { text: "Сильно радуюсь, могу обнять дарителя.", value: 6 },
+                { text: "Прыгаю от радости, громко благодарю.", value: 7 },
+                { text: "Эмоции захлёстывают, я в восторге.", value: 8 },
+                { text: "Не могу сдержать слёз радости.", value: 9 },
+                { text: "Впадаю в эйфорию, кричу от счастья.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете перед сном, когда завтра важный день?", options: [
+                { text: "Ничего особенного, просто ложусь спать.", value: 1 },
+                { text: "Лёгкую отстранённость, мысли где-то далеко.", value: 2 },
+                { text: "Лёгкое волнение, но оно не мешает уснуть.", value: 3 },
+                { text: "Спокойно обдумываю план на завтра.", value: 4 },
+                { text: "Приятное возбуждение, предвкушение.", value: 5 },
+                { text: "Мысли скачут, но засыпаю нормально.", value: 6 },
+                { text: "Не могу уснуть от возбуждения.", value: 7 },
+                { text: "Тревожусь, ворочаюсь часами.", value: 8 },
+                { text: "Сильно нервничаю, могу не спать всю ночь.", value: 9 },
+                { text: "Паникую, меня трясёт от страха и напряжения.", value: 10 }
+            ]},
+            { text: "Как вы реагируете, когда вас несправедливо обвиняют?", options: [
+                { text: "Молчу, мне всё равно.", value: 1 },
+                { text: "Замыкаюсь в себе, чувствую холод внутри.", value: 2 },
+                { text: "Спокойно пытаюсь объяснить ситуацию.", value: 3 },
+                { text: "Аргументированно защищаюсь, без эмоций.", value: 4 },
+                { text: "Защищаюсь с жаром, но контролирую себя.", value: 5 },
+                { text: "Повышаю голос, возмущаюсь.", value: 6 },
+                { text: "Кричу, что это несправедливо.", value: 7 },
+                { text: "Рыдаю от обиды и несправедливости.", value: 8 },
+                { text: "Взрываюсь гневом, могу наговорить лишнего.", value: 9 },
+                { text: "Впадаю в ярость, могу разбить что-то или уйти, хлопнув дверью.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда слушаете громкую, ритмичную музыку?", options: [
+                { text: "Ничего, музыка меня не трогает.", value: 1 },
+                { text: "Лёгкое покачивание в такт.", value: 2 },
+                { text: "Начинаю притопывать ногой.", value: 3 },
+                { text: "Двигаюсь в ритме, мне нравится.", value: 4 },
+                { text: "Активно танцую, заряжаюсь энергией.", value: 5 },
+                { text: "Чувствую прилив адреналина, хочется двигаться.", value: 6 },
+                { text: "Сердце бьётся чаще, я вся(весь) в музыке.", value: 7 },
+                { text: "Возбуждаюсь, могу танцевать до упаду.", value: 8 },
+                { text: "Перевозбуждаюсь, не могу остановиться.", value: 9 },
+                { text: "Впадаю в экстаз, полностью теряю контроль.", value: 10 }
+            ]},
+            { text: "Как вы реагируете, когда кто-то из близких опаздывает на важную встречу?", options: [
+                { text: "Никак, я привык(ла) ждать.", value: 1 },
+                { text: "Спокойно жду, никуда не тороплюсь.", value: 2 },
+                { text: "Лёгкое беспокойство, но без паники.", value: 3 },
+                { text: "Звоню, спокойно спрашиваю, где они.", value: 4 },
+                { text: "Начинаю нервничать, но держу себя в руках.", value: 5 },
+                { text: "Хожу туда-сюда, поглядываю на часы.", value: 6 },
+                { text: "Звоню несколько раз, голос повышен.", value: 7 },
+                { text: "Злюсь, высказываю недовольство при встрече.", value: 8 },
+                { text: "Кричу в трубку, что они безответственны.", value: 9 },
+                { text: "Взрываюсь гневом, могу отменить встречу вообще.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда видите красивый закат?", options: [
+                { text: "Ничего, просто смена времени суток.", value: 1 },
+                { text: "Лёгкое удовлетворение, красиво.", value: 2 },
+                { text: "Останавливаюсь на секунду посмотреть.", value: 3 },
+                { text: "Фотографирую, чтобы сохранить момент.", value: 4 },
+                { text: "Любуюсь с тихой радостью.", value: 5 },
+                { text: "Чувствую прилив вдохновения.", value: 6 },
+                { text: "Меня переполняет восторг, хочется петь.", value: 7 },
+                { text: "Эмоции захлёстывают, слёзы на глазах.", value: 8 },
+                { text: "Кричу от красоты, не могу сдержаться.", value: 9 },
+                { text: "Впадаю в экстатическое состояние единства с миром.", value: 10 }
+            ]},
+            { text: "Как вы реагируете на проигрыш в игре или соревновании?", options: [
+                { text: "Никак, мне всё равно.", value: 1 },
+                { text: "Лёгкая досада, но быстро забываю.", value: 2 },
+                { text: "Анализирую ошибки, чтобы в следующий раз выиграть.", value: 3 },
+                { text: "Принимаю поражение спокойно, это опыт.", value: 4 },
+                { text: "Немного расстраиваюсь, но виду не подаю.", value: 5 },
+                { text: "Расстраиваюсь всерьёз, но сдерживаюсь.", value: 6 },
+                { text: "Злюсь на себя или соперников.", value: 7 },
+                { text: "Кричу, бросаю контроллер или ухожу из игры.", value: 8 },
+                { text: "Впадаю в ярость, обвиняю всех вокруг.", value: 9 },
+                { text: "Разрушаю что-нибудь от злости и бессилия.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда долго находитесь в тишине?", options: [
+                { text: "Ничего, тишина как тишина.", value: 1 },
+                { text: "Спокойствие, умиротворение.", value: 2 },
+                { text: "Лёгкую сонливость, расслабление.", value: 3 },
+                { text: "Комфорт, я люблю тишину.", value: 4 },
+                { text: "Ясность мыслей, концентрацию.", value: 5 },
+                { text: "Лёгкое беспокойство, хочется звуков.", value: 6 },
+                { text: "Тревогу, надо чем-то заполнить паузу.", value: 7 },
+                { text: "Сильный дискомфорт, включаю музыку или ТВ.", value: 8 },
+                { text: "Панику, тишина давит на меня.", value: 9 },
+                { text: "Невыносимую тревогу, готов(а) кричать.", value: 10 }
+            ]},
+            { text: "Как вы реагируете, когда видите паука или насекомое в комнате?", options: [
+                { text: "Никак, прохожу мимо.", value: 1 },
+                { text: "Спокойно убираю его или выпускаю на улицу.", value: 2 },
+                { text: "Слегка вздрагиваю, но быстро беру себя в руки.", value: 3 },
+                { text: "Зову кого-то, чтобы убрали.", value: 4 },
+                { text: "Немного боюсь, но могу справиться сам(а).", value: 5 },
+                { text: "Вскрикиваю от неожиданности.", value: 6 },
+                { text: "Сильно пугаюсь, сердце колотится.", value: 7 },
+                { text: "Кричу, запрыгиваю на стул.", value: 8 },
+                { text: "Впадаю в панику, не могу находиться в комнате.", value: 9 },
+                { text: "Истерика, пока кто-то не уберёт насекомое.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда получаете неожиданное сообщение от старого друга?", options: [
+                { text: "Ничего, просто текст.", value: 1 },
+                { text: "Лёгкое любопытство.", value: 2 },
+                { text: "Приятно, улыбаюсь.", value: 3 },
+                { text: "Радуюсь, сразу отвечаю.", value: 4 },
+                { text: "Оживляюсь, пишу развёрнутый ответ.", value: 5 },
+                { text: "Звоню ему, чтобы услышать голос.", value: 6 },
+                { text: "Сильно радуюсь, хочется встретиться немедленно.", value: 7 },
+                { text: "Эмоции переполняют, могу заплакать от радости.", value: 8 },
+                { text: "Кричу от радости, все вокруг узнают новость.", value: 9 },
+                { text: "Впадаю в эйфорию, весь день под впечатлением.", value: 10 }
+            ]},
+            { text: "Как вы реагируете на отключение интернета в самый неподходящий момент?", options: [
+                { text: "Никак, пойду займусь другими делами.", value: 1 },
+                { text: "Лёгкое недовольство, но быстро переключаюсь.", value: 2 },
+                { text: "Спокойно жду, пока починят.", value: 3 },
+                { text: "Начинаю нервничать, проверяю настройки.", value: 4 },
+                { text: "Раздражаюсь, звоню провайдеру.", value: 5 },
+                { text: "Злюсь, ругаюсь на технику.", value: 6 },
+                { text: "Кричу на роутер, стучу по нему.", value: 7 },
+                { text: "Впадаю в ярость, могу швырнуть телефон.", value: 8 },
+                { text: "Устраиваю скандал провайдеру по телефону.", value: 9 },
+                { text: "Меня трясёт от злости, день испорчен полностью.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда находитесь в шумной толпе?", options: [
+                { text: "Ничего, толпа как толпа.", value: 1 },
+                { text: "Спокойно, я не обращаю внимания.", value: 2 },
+                { text: "Лёгкое возбуждение, энергия толпы передаётся.", value: 3 },
+                { text: "Комфортно, я люблю быть среди людей.", value: 4 },
+                { text: "Заряжаюсь энергией, мне весело.", value: 5 },
+                { text: "Начинаю уставать от шума.", value: 6 },
+                { text: "Раздражаюсь, хочется уйти в тишину.", value: 7 },
+                { text: "Сильный дискомфорт, голова болит.", value: 8 },
+                { text: "Паникую, не могу находиться в толпе.", value: 9 },
+                { text: "Истерика, пробираюсь к выходу в ужасе.", value: 10 }
+            ]},
+            { text: "Как вы реагируете, когда вас хвалят при всех?", options: [
+                { text: "Никак, похвала для меня пустой звук.", value: 1 },
+                { text: "Смущаюсь, краснею, молчу.", value: 2 },
+                { text: "Тихо благодарю, мне неловко.", value: 3 },
+                { text: "Спокойно благодарю, мне приятно.", value: 4 },
+                { text: "Улыбаюсь, радуюсь вниманию.", value: 5 },
+                { text: "Оживляюсь, начинаю больше говорить.", value: 6 },
+                { text: "Сильно радуюсь, это поднимает настроение.", value: 7 },
+                { text: "Восторг, я на седьмом небе от счастья.", value: 8 },
+                { text: "Эйфория, готов(а) обнять всех вокруг.", value: 9 },
+                { text: "Эмоции захлёстывают, могу заплакать от радости.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда видите, как кто-то мучает животное?", options: [
+                { text: "Ничего, это не моё дело.", value: 1 },
+                { text: "Лёгкое неодобрение, но молчу.", value: 2 },
+                { text: "Неприятно, но я не вмешиваюсь.", value: 3 },
+                { text: "Сделаю замечание, если это безопасно.", value: 4 },
+                { text: "Возмущаюсь, требую прекратить.", value: 5 },
+                { text: "Злюсь, могу вызвать полицию.", value: 6 },
+                { text: "Кричу на мучителя, защищаю животное.", value: 7 },
+                { text: "Впадаю в ярость, могу ударить обидчика.", value: 8 },
+                { text: "Меня трясёт от гнева и бессилия.", value: 9 },
+                { text: "Взрыв ярости, готов(а) убить за животное.", value: 10 }
+            ]},
+            { text: "Как вы реагируете на потерю важной вещи?", options: [
+                { text: "Никак, вещи приходят и уходят.", value: 1 },
+                { text: "Лёгкое сожаление, но быстро забываю.", value: 2 },
+                { text: "Расстраиваюсь, но не показываю виду.", value: 3 },
+                { text: "Ищу, но без паники.", value: 4 },
+                { text: "Немного нервничаю, ищу тщательно.", value: 5 },
+                { text: "Сильно расстраиваюсь, это портит настроение.", value: 6 },
+                { text: "Злюсь на себя за невнимательность.", value: 7 },
+                { text: "Кричу: «Куда я её дел(а)?!», обыскиваю всё.", value: 8 },
+                { text: "Впадаю в панику, вещь жизненно необходима.", value: 9 },
+                { text: "Истерика, слёзы, мир рухнул без этой вещи.", value: 10 }
+            ]},
+            { text: "Что вы чувствуете, когда просыпаетесь от солнечного света в выходной?", options: [
+                { text: "Ничего, просто утро.", value: 1 },
+                { text: "Лёгкое удовольствие, можно ещё поспать.", value: 2 },
+                { text: "Приятно, поворачиваюсь на другой бок.", value: 3 },
+                { text: "Улыбаюсь, хорошее начало дня.", value: 4 },
+                { text: "Радуюсь, встаю в хорошем настроении.", value: 5 },
+                { text: "Чувствую прилив энергии, хочется гулять.", value: 6 },
+                { text: "Восторг, день обещает быть прекрасным.", value: 7 },
+                { text: "Прыгаю от радости, планирую приключения.", value: 8 },
+                { text: "Эйфория, кричу: «Ура, выходной!»", value: 9 },
+                { text: "Эмоции переполняют, обнимаю подушку от счастья.", value: 10 }
+            ]},
+            { text: "Как вы реагируете, когда кто-то грызёт ногти или щёлкает ручкой рядом?", options: [
+                { text: "Не замечаю.", value: 1 },
+                { text: "Слегка отвлекаюсь, но терпимо.", value: 2 },
+                { text: "Вежливо прошу перестать.", value: 3 },
+                { text: "Терплю, но внутри раздражение.", value: 4 },
+                { text: "Раздражаюсь, делаю замечание.", value: 5 },
+                { text: "Злюсь, могу резко попросить замолчать.", value: 6 },
+                { text: "Кричу: «Хватит! Невозможно слушать!»", value: 7 },
+                { text: "Выхожу из комнаты, не могу терпеть.", value: 8 },
+                { text: "Впадаю в ярость, могу накричать на человека.", value: 9 },
+                { text: "Меня трясёт от злости, готов(а) ударить.", value: 10 }
+            ]}
+        ];
+
+        const totalQuestions = questions.length;
+        let currentIndex = 0;
+        let answers = new Array(totalQuestions).fill(null);
+
+        const questionContainer = document.getElementById('questionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const exitBtn = document.getElementById('exitBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const testContainer = document.getElementById('testContainer');
+        const mainBody = document.getElementById('mainBody');
+        const testTitle = document.getElementById('testTitle');
+        let isResultMode = false;
+
+        function renderQuestion(index) {
+            const q = questions[index];
+            let html = `<div class="question-box">`;
+            html += `<div class="question-text">${index + 1}. ${q.text}</div>`;
+            html += `<div class="options">`;
+
+            q.options.forEach((opt) => {
+                const isSelected = answers[index] === opt.value;
+                html += `<div class="option ${isSelected ? 'selected' : ''}" data-value="${opt.value}">
+                    <div class="option-marker"></div>
+                    <div class="option-text">${opt.text}</div>
+                </div>`;
+            });
+
+            html += `</div></div>`;
+            questionContainer.innerHTML = html;
+
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.addEventListener('click', () => {
+                    const value = parseInt(opt.dataset.value);
+                    answers[index] = value;
+                    renderQuestion(index);
+                });
+            });
+
+            const progress = ((index + 1) / totalQuestions) * 100;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = `Вопрос ${index + 1} из ${totalQuestions}`;
+            prevBtn.disabled = index === 0;
+            if (index === totalQuestions - 1) { nextBtn.textContent = '🎉 Завершить'; }
+            else { nextBtn.textContent = 'Далее →'; }
+        }
+
+        function calculateResult() {
+            const sum = answers.reduce((acc, val) => acc + val, 0);
+            const raw = sum / totalQuestions;
+            return Math.round(raw * 10) / 10;
+        }
+
+        function getResultStyle(ts) {
+            if (ts >= 9.0) return { color: '#b71c1c', borderColor: '#b71c1c', bg: 'rgba(183,28,28,0.1)', label: '🌋 ПЕРЕГРЕВ' };
+            if (ts >= 7.5) return { color: '#ef5350', borderColor: '#ef5350', bg: 'rgba(239,83,80,0.1)', label: '🔥 ПЛАМЯ' };
+            if (ts >= 6.0) return { color: '#ffb74d', borderColor: '#ffb74d', bg: 'rgba(255,183,77,0.1)', label: '☀️ ТЕПЛО' };
+            if (ts >= 4.0) return { color: '#81c784', borderColor: '#81c784', bg: 'rgba(129,199,132,0.1)', label: '🌿 ОПТИМУМ' };
+            if (ts >= 3.0) return { color: '#b0bec5', borderColor: '#b0bec5', bg: 'rgba(176,190,197,0.1)', label: '❄️ ПРОХЛАДА' };
+            if (ts >= 2.0) return { color: '#90caf9', borderColor: '#90caf9', bg: 'rgba(144,202,249,0.1)', label: '🧊 ХОЛОД' };
+            return { color: '#42a5f5', borderColor: '#42a5f5', bg: 'rgba(66,165,245,0.1)', label: '🧊 ЛЁД' };
+        }
+
+        function getResultComment(ts) {
+            if (ts >= 9.5) return "Вы в состоянии перегрева. Ваши эмоции вышли из-под контроля, и это разрушительно как для вас, так и для окружающих. Срочно требуется семантическое охлаждение.";
+            if (ts >= 8.0) return "Вы — Пламя. Эмоции бьют через край. Вы часто срываетесь, кричите или впадаёте в истерику. Вам нужно учиться остывать.";
+            if (ts >= 7.0) return "Вы — Горячий. Энергичны, страстны, но иногда эмоции захлёстывают. Учитесь управлять огнём, а не тушить его.";
+            if (ts >= 5.5) return "Вы — в Тепле. Оптимальный баланс между спокойствием и энергией. Вы умеете радоваться, но не перегораете.";
+            if (ts >= 4.5) return "Вы — Оптимум. Идеальный баланс. Спокойны, но не холодны, энергичны, но не суетливы.";
+            if (ts >= 3.5) return "Вы — Прохлада. Спокойны, рассудительны, но иногда вам не хватает огня и страсти.";
+            if (ts >= 2.5) return "Вы — Холод. Вам трудно выражать эмоции, вы часто подавляете их. Окружающие могут считать вас бесчувственным.";
+            if (ts >= 1.5) return "Вы — Лёд. Эмоции почти не проявляются. Вы замкнуты и отстранены. Вам нужно размораживаться.";
+            return "Вы — Вечная Мерзлота. Полное отсутствие эмоций, глубокая депрессия или травма. Срочно обратитесь за помощью.";
+        }
+
+        function getResultAdvice(ts) {
+            if (ts >= 7.0) return "💧 Совет: Учитесь остывать. Практикуйте дыхание с длинным выдохом. Исключите стимуляторы — кофеин, алкоголь, острые специи. Принимайте прохладный душ. Гуляйте у воды. Слушайте спокойную музыку (432 Гц).";
+            if (ts >= 4.5) return "⚖️ Совет: Вы в балансе. Поддерживайте его. Регулярно практикуйте медитацию и осознанность. Избегайте крайностей.";
+            if (ts >= 2.0) return "🔥 Совет: Вам нужно разогреться. Займитесь активным спортом (бег, танцы), слушайте энергичную музыку, добавьте в рацион согревающие специи. Общайтесь с горячими людьми.";
+            return "🆘 Совет: Вам срочно нужна помощь. Обратитесь к психологу или психотерапевту. Ваше поле заморожено, и это может быть симптомом депрессии. Начните с малого — прогулки на солнце, тёплая еда, общение с животными.";
+        }
+
+        function showResult() {
+            isResultMode = true;
+            const ts = calculateResult();
+            const style = getResultStyle(ts);
+            const comment = getResultComment(ts);
+            const advice = getResultAdvice(ts);
+
+            mainBody.style.background = `linear-gradient(145deg, ${style.color}20 0%, #16213e 100%)`;
+            testContainer.style.borderColor = style.borderColor;
+
+            let html = `<div class="result-container">`;
+            html += `<h2 style="color: ${style.color};">${style.label}</h2>`;
+            html += `<div class="result-score" style="color: ${style.color};">${ts.toFixed(1)}</div>`;
+            html += `<div class="result-scale">по шкале Tₛ (от 1 до 10, оптимум ~5)</div>`;
+            html += `<div class="result-comment" style="color: #d0c8b8; background: ${style.bg};">${comment}</div>`;
+            html += `<div class="result-advice" style="color: #d0c8b8; background: ${style.bg}; border-left: 4px solid ${style.borderColor};">${advice}</div>`;
+            html += `<p style="margin-top: 1.5rem; color: #a09080; font-style: italic;">Помните: Tₛ можно регулировать. Ваша задача — стремиться к зелёной зоне (4-6).</p>`;
+            html += `</div>`;
+
+            questionContainer.innerHTML = html;
+            prevBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            exitBtn.textContent = '🔄 Пройти заново';
+            exitBtn.classList.remove('btn-secondary');
+            exitBtn.classList.add('btn');
+            testTitle.textContent = `Результат: Tₛ = ${ts.toFixed(1)}`;
+            progressText.textContent = `Тест завершён`;
+            
+            // --- СОХРАНЕНИЕ В УЛЬТРА-ПАСПОРТ ---
+setTimeout(function() {
+    const passportBtn = document.createElement('button');
+    passportBtn.textContent = '💾 Сохранить результат в Ультра-Паспорт';
+    passportBtn.style.cssText = 'display: block; margin: 2rem auto; padding: 1rem 2rem; background: #81c784; color: #1a1a2e; border: none; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s;';
+    passportBtn.onmouseover = () => passportBtn.style.background = '#4caf50';
+    passportBtn.onmouseout = () => passportBtn.style.background = '#81c784';
+
+    passportBtn.addEventListener('click', function() {
+        // Ищем результат на странице
+        const scoreElement = document.querySelector('.result-score');
+        if (scoreElement) {
+            const resultValue = parseFloat(scoreElement.textContent);
+            if (!isNaN(resultValue)) {
+                // Ключ: ideatonika_deep_qs (НЕ пересекается с обычным ideatonika_test_qs)
+                localStorage.setItem('ideatonika_deep_ts', resultValue);
+                passportBtn.textContent = '✅ Сохранено в Ультра-Паспорт!';
+                passportBtn.style.background = '#388e3c';
+                passportBtn.style.color = 'white';
+                passportBtn.disabled = true;
+            }
+        }
+    });
+
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(passportBtn);
+    }
+}, 100);
+
+// ========== КНОПКА "ПОДЕЛИТЬСЯ РЕЗУЛЬТАТОМ" ==========
+setTimeout(function() {
+    const shareContainer = document.createElement('div');
+    shareContainer.style.cssText = 'text-align: center; margin-top: 1.5rem;';
+
+    const shareBtn = document.createElement('button');
+    shareBtn.textContent = '📤 Поделиться результатом';
+    shareBtn.style.cssText = 'display: block; margin: 0 auto 0.8rem auto; padding: 0.8rem 2rem; background: transparent; color: #81c784; border: 1.5px solid #81c784; border-radius: 40px; font-size: 1rem; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: Georgia, serif;';
+    shareBtn.onmouseover = () => shareBtn.style.background = '#81c784';
+    shareBtn.onmouseout = () => shareBtn.style.background = 'transparent';
+    shareBtn.onmouseover = () => shareBtn.style.color = '#1a1a2e';
+    shareBtn.onmouseout = () => shareBtn.style.color = '#81c784';
+
+    shareBtn.addEventListener('click', function() {
+        // Получаем название теста из заголовка страницы
+        const testName = document.title.replace(' • Идеатоника', '').trim();
+        
+        // Получаем результат из элемента .result-score
+        const scoreElement = document.querySelector('.result-score');
+        let resultText = '';
+        if (scoreElement) {
+            resultText = scoreElement.textContent.trim();
+        }
+        
+        // Получаем комментарий из элемента .result-comment или .result-interpretation
+        const commentElement = document.querySelector('.result-comment') || document.querySelector('.result-interpretation');
+        let commentText = '';
+        if (commentElement) {
+            commentText = commentElement.textContent.trim();
+        }
+        
+        // Формируем текст для отправки
+        const shareText = `🧪 Я прошёл тест «${testName}» на портале Идеатоника!\n\n` +
+            `📊 Мой результат: ${resultText}\n` +
+            `💬 ${commentText}\n\n` +
+            `🎯 А какой результат у тебя?\n` +
+            `👉 Пройти тест: ${window.location.href}\n\n` +
+            `🌌 Идеатоника — физика смысла.`;
+        
+        // Пытаемся использовать Web Share API (мобильные устройства)
+        if (navigator.share) {
+            navigator.share({
+                title: `Мой результат теста «${testName}»`,
+                text: shareText,
+                url: window.location.href
+            }).catch(() => {
+                // Если не получилось — копируем в буфер
+                copyToClipboard(shareText);
+            });
+        } else {
+            // Если Web Share API не поддерживается — копируем в буфер
+            copyToClipboard(shareText);
+        }
+    });
+
+    function copyToClipboard(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = shareBtn.textContent;
+                shareBtn.textContent = '✅ Скопировано! Отправь другу';
+                shareBtn.style.borderColor = '#ffd54f';
+                shareBtn.style.color = '#ffd54f';
+                setTimeout(() => {
+                    shareBtn.textContent = originalText;
+                    shareBtn.style.borderColor = '#81c784';
+                    shareBtn.style.color = '#81c784';
+                }, 2500);
+            }).catch(() => {
+                fallbackCopy(text);
+            });
+        } else {
+            fallbackCopy(text);
+        }
+    }
+
+    function fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            const originalText = shareBtn.textContent;
+            shareBtn.textContent = '✅ Скопировано! Отправь другу';
+            shareBtn.style.borderColor = '#ffd54f';
+            shareBtn.style.color = '#ffd54f';
+            setTimeout(() => {
+                shareBtn.textContent = originalText;
+                shareBtn.style.borderColor = '#81c784';
+                shareBtn.style.color = '#81c784';
+            }, 2500);
+        } catch(e) {
+            shareBtn.textContent = '❌ Не удалось скопировать';
+            shareBtn.style.borderColor = '#ef5350';
+            shareBtn.style.color = '#ef5350';
+        }
+        document.body.removeChild(textarea);
+    }
+
+    // Добавляем подсказку
+    const hint = document.createElement('div');
+    hint.style.cssText = 'color: #a09080; font-size: 0.8rem; font-style: italic;';
+    hint.textContent = 'Нажмите, чтобы скопировать результат и отправить другу';
+    shareContainer.appendChild(shareBtn);
+    shareContainer.appendChild(hint);
+
+    // Ищем контейнер с результатом
+    const container = document.querySelector('.result-container') || document.getElementById('questionContainer');
+    if (container) {
+        container.appendChild(shareContainer);
+    }
+}, 100);
+
+        }
+
+        function resetTest() {
+            isResultMode = false;
+            currentIndex = 0;
+            answers = new Array(totalQuestions).fill(null);
+            mainBody.style.background = '';
+            testContainer.style.borderColor = '';
+            testTitle.textContent = 'Мега-тест Tₛ';
+            prevBtn.classList.remove('hidden');
+            nextBtn.classList.remove('hidden');
+            exitBtn.textContent = '🚪 Выйти';
+            exitBtn.classList.add('btn-secondary');
+            renderQuestion(0);
+        }
+
+        prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; renderQuestion(currentIndex); } });
+        nextBtn.addEventListener('click', () => {
+            if (answers[currentIndex] === null) { alert('Пожалуйста, выберите один из вариантов ответа.'); return; }
+            if (currentIndex < totalQuestions - 1) { currentIndex++; renderQuestion(currentIndex); }
+            else { if (!answers.includes(null)) showResult(); else alert('Пожалуйста, ответьте на все вопросы.'); }
+        });
+        exitBtn.addEventListener('click', () => { if (isResultMode) resetTest(); else { if (confirm('Вы уверены, что хотите выйти? Прогресс будет потерян.')) window.location.href = 'hidden-tests.html'; } });
+
+        renderQuestion(0);
+    })();
+</script>
+
+</body>
+</html>

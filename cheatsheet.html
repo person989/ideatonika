@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шпаргалка по величинам • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 1000px; width: 100%; position: relative; z-index: 1; }
+        .hero { text-align: center; margin-bottom: 2.5rem; }
+        .hero h1 { font-size: 3rem; font-weight: 400; letter-spacing: 4px; color: #ffd54f; text-shadow: 0 0 20px rgba(255,215,80,0.3); margin-bottom: 0.5rem; }
+        .hero .subtitle { font-size: 1.1rem; color: #c0b090; font-style: italic; }
+
+        /* Сетка карточек */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+
+        .card {
+            background: rgba(30,40,60,0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(227,184,124,0.3); border-radius: 16px;
+            padding: 1.3rem; transition: 0.2s;
+        }
+        .card:hover { border-color: #ffd54f; }
+        .card-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem; }
+        .symbol {
+            font-size: 1.8rem; font-weight: bold; color: #ffd54f;
+            min-width: 70px; text-align: center; font-family: 'Courier New', monospace;
+        }
+        .name { font-size: 1.1rem; color: #f3e7c0; font-weight: bold; }
+        .definition { color: #d0c8b8; font-size: 0.9rem; line-height: 1.5; margin-bottom: 0.5rem; }
+        .meta { color: #a09080; font-size: 0.8rem; font-style: italic; }
+        .meta a { color: #ffd54f; text-decoration: none; border-bottom: 1px dotted #ffd54f; }
+        .meta a:hover { border-bottom-style: solid; }
+
+        .back-link { display: inline-block; margin-top: 2rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .footer { margin-top: 3rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>📋 Шпаргалка по величинам</h1>
+        <div class="subtitle">Краткий справочник всех семантических параметров</div>
+    </div>
+
+    <!-- ===== ОСНОВНЫЕ ВЕЛИЧИНЫ ===== -->
+    <div class="section-title">🔹 Основные величины</div>
+    <div class="grid" id="basicGrid"></div>
+
+    <!-- ===== ЭЛЕКТРОТЕХНИКА ===== -->
+    <div class="section-title">🔹 Семантическая электротехника</div>
+    <div class="grid" id="electroGrid"></div>
+
+    <!-- ===== ГИДРОДИНАМИКА И ТЕРМОДИНАМИКА ===== -->
+    <div class="section-title">🔹 Гидродинамика и термодинамика</div>
+    <div class="grid" id="hydroGrid"></div>
+
+    <!-- ===== КВАНТОВАЯ СЕМАНТИКА ===== -->
+    <div class="section-title">🔹 Квантовая семантика</div>
+    <div class="grid" id="quantumGrid"></div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Шпаргалка по величинам</p>
+        <p>✧ «Не помнишь формулу — загляни в шпаргалку.» ✧</p>
+    </div>
+
+</div>
+
+<script>
+(function() {
+    const data = {
+        basic: [
+            { symbol: 'Φₛ', name: 'Семантическое поле', def: 'Фундаментальная субстанция, «океан смыслов», предшествующий материи.', meta: '§1. Единицы: условные.' },
+            { symbol: 'Qₛ', name: 'Семантический заряд', def: 'Мера «количества смысла». От -10 (Абсолютная Тьма) до +10 (Абсолютный Свет).', meta: '§1, §60. Единицы: усл. ед.' },
+            { symbol: 'Cₛ', name: 'Когерентность', def: 'Степень сфокусированности поля. 0 — хаос (лампочка), 1 — лазер.', meta: '§2, §108. Диапазон: 0…1.' },
+            { symbol: 'Tₛ', name: 'Семантическая температура', def: 'Мера хаотичности поля. Низкая — «кристаллизация» (страх), высокая — хаос (паника).', meta: '§2. Оптимум: ~5.0.' },
+            { symbol: 'θₜ', name: 'Вектор внимания', def: 'Направление семантического потока. 0 — в будущее, π/2 — в настоящее, π — в прошлое.', meta: '§2, §13. Влияет на восприятие времени.' },
+            { symbol: 'χ', name: 'Семантическая чувствительность', def: 'Способность воспринимать внешние Qₛ-сигналы. Высокая у детей, эмпатов, животных.', meta: '§27, §55. Диапазон: 0…10.' },
+            { symbol: 'τ', name: 'Семантическое время', def: 'Субъективное переживание длительности. Может течь быстрее или медленнее физического t.', meta: '§13. Формула: dτ/dt = 1 + κ·(dI/dt)·cos θₜ.' },
+            { symbol: 'λₛ', name: 'Длина семантической когерентности', def: 'Расстояние, на котором смыслы сохраняют связь. У святых — тысячи км.', meta: '§34, §54.' }
+        ],
+        electro: [
+            { symbol: 'C_sense', name: 'Смыслоёмкость', def: 'Способность материала накапливать и удерживать Qₛ. Аналог электрической ёмкости.', meta: '§80. Единицы: Фарад смысла.' },
+            { symbol: 'σ_sense', name: 'Смыслопроводимость', def: 'Способность материала передавать Qₛ. Аналог электропроводности.', meta: '§81. Единицы: Сименс смысла.' },
+            { symbol: 'R_sense', name: 'Семантическое сопротивление', def: 'Мера противодействия среды прохождению Qₛ. R = 1/σ для единичного куба.', meta: '§83. Единицы: Ом смысла (Ω_sense).' },
+            { symbol: 'L_sense', name: 'Семантическая индуктивность', def: '«Память» среды, способность долго удерживать заряд. Высокая у гранита, низкая у пластика.', meta: '§84. Единицы: Генри смысла (H_sense).' },
+            { symbol: 'Z_sense', name: 'Семантический импеданс', def: 'Полное сопротивление переменному потоку Qₛ. Зависит от частоты ω.', meta: '§87. Z = √(R² + (ωL — 1/ωC)²).' },
+            { symbol: 'Q_factor', name: 'Семантическая добротность', def: 'Мера «чистоты» резонанса. Q = (1/R)·√(L/C). Чем выше, тем дольше «звучит» смысл.', meta: '§88. Безразмерная.' },
+            { symbol: 'U_sense', name: 'Семантическое напряжение', def: 'Разность потенциалов. Движущая сила Qₛ. U = ΔΦ.', meta: '§85. Единицы: Вольт смысла (V_sense).' },
+            { symbol: 'I_Q', name: 'Семантический ток', def: 'Поток Qₛ. I = U / R (закон Ома для семантики).', meta: '§83. Единицы: Ампер смысла (A_sense).' },
+            { symbol: 'P_sense', name: 'Семантическая мощность', def: 'Сила воздействия. P = U·I = U²/R = I²·R.', meta: '§86. Единицы: Ватт смысла (W_sense).' },
+            { symbol: 'J_sense', name: 'Семантический импульс', def: 'Энергия, переданная за время. J = ∫ P dt.', meta: '§94. Единицы: Джоуль смысла (J_sense).' }
+        ],
+        hydro: [
+            { symbol: 'P_sense_mech', name: 'Семантическое давление', def: 'Концентрированность Qₛ. P = Q / V. Чем выше Cₛ, тем выше давление.', meta: '§109. Единицы: Паскаль смысла (Pa_sense).' },
+            { symbol: 'η_sense', name: 'Семантическая вязкость', def: 'Внутреннее трение в потоке Qₛ. η = R · τ_relax.', meta: '§110. Единицы: Па·с смысла.' },
+            { symbol: 'Re_sense', name: 'Число Рейнольдса', def: 'Критерий турбулентности. Re = (ρ·v·L) / η. Re < 2000 — ламинарный.', meta: '§111. Безразмерное.' },
+            { symbol: 'M_sense', name: 'Число Маха', def: 'Отношение скорости Qₛ к «скорости звука» в среде. M > 1 — ударная волна.', meta: '§118. Безразмерное.' },
+            { symbol: 'c_sense', name: 'Скорость звука в среде', def: 'Максимальная скорость распространения малых возмущений Qₛ. В храме — высокая.', meta: '§118. Единицы: м/с (условные).' },
+            { symbol: 'D_sense', name: 'Коэффициент диффузии', def: 'Скорость самопроизвольного выравнивания концентрации Qₛ.', meta: '§120. Единицы: м²/с.' },
+            { symbol: 'k_sense', name: 'Теплопроводность', def: 'Способность передавать «тепло» Tₛ. Закон Фурье: J = -k·∇T.', meta: '§113. Единицы: W_sense/(м·K).' },
+            { symbol: 'c_sense_heat', name: 'Теплоёмкость', def: 'Способность поглощать Qₛ без роста Tₛ. Высокая у воды и гранита.', meta: '§112. Единицы: J_sense/(м³·K).' },
+            { symbol: 'S_sense', name: 'Семантическая энтропия', def: 'Мера хаоса, неупорядоченности поля. S = -k Σ p ln p.', meta: '§101. Единицы: J_sense/K или биты.' },
+            { symbol: 'F_sense', name: 'Свободная энергия', def: 'Часть Qₛ, доступная для работы. F = U — T·S.', meta: '§103. Единицы: Джоуль смысла.' },
+            { symbol: 'H_sense', name: 'Энтальпия', def: 'Полная энергия системы. H = U + P·V.', meta: '§102. Единицы: Джоуль смысла.' }
+        ],
+        quantum: [
+            { symbol: 'Θ', name: 'Идеатон', def: 'Элементарная частица поля, квант смысла. Не имеет массы, но обладает Qₛ.', meta: '§1, §34.' },
+            { symbol: '∇Φ', name: 'Семантический градиент', def: 'Вектор наискорейшего роста Φ. Показывает, куда «течёт» смысл.', meta: '§97.' },
+            { symbol: '∇·Φ', name: 'Семантическая дивергенция', def: 'Мера «источников» (>0) и «стоков» (<0) Qₛ в точке.', meta: '§98.' },
+            { symbol: '∇×Φ', name: 'Семантический ротор', def: 'Мера «завихрённости» поля. Вихри смысла.', meta: '§99.' },
+            { symbol: 'Φ_egregor', name: 'Поле эгрегора', def: 'Коллективное семантическое поле группы людей.', meta: '§79. Φ = ΣΦᵢ + ΣVᵢⱼΦᵢΦⱼ.' },
+            { symbol: 'K_ent', name: 'Коэффициент запутанности', def: 'Сила нелокальной связи между полями. От 0 (нет) до 10 (мать-младенец).', meta: '§104.' }
+        ]
+    };
+
+    function renderGrid(containerId, items) {
+        const container = document.getElementById(containerId);
+        let html = '';
+        items.forEach(item => {
+            html += '<div class="card">';
+            html += '<div class="card-header">';
+            html += '<div class="symbol">' + item.symbol + '</div>';
+            html += '<div class="name">' + item.name + '</div>';
+            html += '</div>';
+            html += '<div class="definition">' + item.def + '</div>';
+            html += '<div class="meta">' + item.meta + '</div>';
+            html += '</div>';
+        });
+        container.innerHTML = html;
+    }
+
+    renderGrid('basicGrid', data.basic);
+    renderGrid('electroGrid', data.electro);
+    renderGrid('hydroGrid', data.hydro);
+    renderGrid('quantumGrid', data.quantum);
+})();
+</script>
+
+</body>
+</html>

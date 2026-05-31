@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека Формул • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%); }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        .section { margin-top: 2.5rem; }
+        .section-title { font-size: 1.6rem; color: #ffd54f; margin-bottom: 1.2rem; border-left: 4px solid #ffd54f; padding-left: 1rem; }
+        .formula-block {
+            background: rgba(0,0,0,0.25); border-left: 3px solid #ffd54f;
+            padding: 0.8rem 1.2rem; margin: 0.6rem 0; border-radius: 0 10px 10px 0;
+            font-family: 'Courier New', monospace; font-size: 0.95rem; color: #f3e7c0;
+            word-break: break-word;
+        }
+        .formula-block .desc { display: block; font-family: 'Georgia', serif; font-size: 0.85rem; color: #a09080; margin-top: 0.3rem; font-style: italic; }
+
+        .back-link { display: inline-block; margin-top: 2rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>📐 БИБЛИОТЕКА ФОРМУЛ</h1>
+    <div class="subtitle">Полный свод уравнений Идеатоники • 500+ формул</div>
+
+    <div class="section">
+        <div class="section-title">🔹 Фундаментальные величины</div>
+        <div class="formula-block">Qₛ = Q₀ · (1 + αEₒₚₜ) · e⁻ᵞˢᶠᵉᵃʳ<span class="desc">Семантический заряд — мера «количества смысла» (§1, §60)</span></div>
+        <div class="formula-block">Cₛ = |⟨Φₛ⟩|² / ⟨|Φₛ|²⟩<span class="desc">Когерентность — степень сфокусированности мысли (§2, §108)</span></div>
+        <div class="formula-block">Tₛ = (∂Uₛ/∂Sₛ)ᵥ<span class="desc">Семантическая температура — мера хаотичности поля (§2)</span></div>
+        <div class="formula-block">νₜ = dτ/dt = 1 + κ·(dI/dt)·cos θₜ<span class="desc">Вектор внимания и темп семантического времени (§2, §13)</span></div>
+        <div class="formula-block">χ = (P_эксп — P_случ) / (Qₛ · Cₛ)<span class="desc">Семантическая чувствительность (§27, §55)</span></div>
+        <div class="formula-block">λₛ — длина семантической когерентности<span class="desc">Расстояние, на котором смыслы сохраняют связь (§34)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Четыре закона идеатоники</div>
+        <div class="formula-block">Φₛᵗᵒᵗ = Φₛᵐʸˢˡ + Φₛᵉᵐᵒᶜⁱᵃ + Φₛᵈᵉⁱˢᵗᵛⁱᵉ + Φₛᵗᵉᵖˡᵒ<span class="desc">I закон: Сохранения смысла (§3)</span></div>
+        <div class="formula-block">Pₐᵢᵧᵧⁱᵉ = η · Qₛ · Cₛ · Pₚₕᵧ<span class="desc">II закон: Когерентного влияния (§3, §33)</span></div>
+        <div class="formula-block">Qₛ(t) = Qₛ(0)·e⁻ᵗ/ᵗʳᵉˡᵃˣ<span class="desc">III закон: Семантической инерции (§3, §31)</span></div>
+        <div class="formula-block">Φₛᵒᵇᵗ = ΣΦₛⁱ + ΣVᵢⱼΦₛⁱΦₛʲ<span class="desc">IV закон: Резонанса (§3, §14)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая электротехника</div>
+        <div class="formula-block">I_Q = U_sense / R_sense<span class="desc">Закон Ома (§83)</span></div>
+        <div class="formula-block">U_sense = ΔΦ = Φ_A — Φ_B<span class="desc">Семантическое напряжение (§85)</span></div>
+        <div class="formula-block">P_sense = U_sense · I_Q = I_Q² · R_sense = U_sense² / R_sense<span class="desc">Мощность (§86)</span></div>
+        <div class="formula-block">J_sense = ∫ P_sense dt<span class="desc">Импульс (энергия) (§94)</span></div>
+        <div class="formula-block">C_sense = ΔQₛ / ΔΦ<span class="desc">Смыслоёмкость (§80)</span></div>
+        <div class="formula-block">σ_sense = 1 / ρ_sense<span class="desc">Смыслопроводимость (§81)</span></div>
+        <div class="formula-block">R_sense = (1 / σ_sense) · (L / S)<span class="desc">Сопротивление (§83)</span></div>
+        <div class="formula-block">L_sense — мера инерции поля<span class="desc">Индуктивность (§84)</span></div>
+        <div class="formula-block">Z_sense = √(R_sense² + (ω·L_sense — 1/(ω·C_sense))²)<span class="desc">Импеданс (§87)</span></div>
+        <div class="formula-block">Q_factor = (1 / R_sense) · √(L_sense / C_sense) = ω_res · τ_relax / 2<span class="desc">Добротность (§88)</span></div>
+        <div class="formula-block">τ_relax = L_sense / R_sense<span class="desc">Время релаксации (§84)</span></div>
+        <div class="formula-block">j_Q = — (1 / R_sense) · ∇Φ<span class="desc">Плотность тока (§97)</span></div>
+        <div class="formula-block">∂ρ_Q/∂t + ∇·J_Q = S_Q<span class="desc">Уравнение непрерывности (§98, §100)</span></div>
+        <div class="formula-block">R_total = R₁ + R₂ + R₃<span class="desc">Последовательное соединение (§83)</span></div>
+        <div class="formula-block">1/R_total = 1/R₁ + 1/R₂ + 1/R₃<span class="desc">Параллельное соединение (§83)</span></div>
+        <div class="formula-block">Q_накоп = C_sense · U_sense<span class="desc">Заряд конденсатора (§80)</span></div>
+        <div class="formula-block">E = C_sense · U_sense² / 2<span class="desc">Энергия конденсатора (§86)</span></div>
+        <div class="formula-block">Φ_инерции = — L_sense · dI_Q / dt<span class="desc">Индуктивная ЭДС (§84)</span></div>
+        <div class="formula-block">f_res = 1 / (2π√(L_sense · C_sense))<span class="desc">Резонансная частота (Томсон) (§87, §96)</span></div>
+        <div class="formula-block">Δω = ω_res / Q_factor<span class="desc">Полоса пропускания (§88)</span></div>
+        <div class="formula-block">α = R_sense / (2 · L_sense)<span class="desc">Коэффициент затухания (§84, §88)</span></div>
+        <div class="formula-block">φ_sense — сдвиг относительно начала отсчёта<span class="desc">Фаза колебаний (§95)</span></div>
+        <div class="formula-block">Δφ = φ₁ — φ₂ — определяет результат интерференции<span class="desc">Разность фаз (§92, §95)</span></div>
+        <div class="formula-block">Семантический диод — пропускает Qₛ только в одном направлении<span class="desc">Аналог полупроводника (§83)</span></div>
+        <div class="formula-block">Семантический транзистор — усиление слабого Qₛ-сигнала<span class="desc">Аналог усилителя (§86)</span></div>
+        <div class="formula-block">η = P_полезная / P_полная = R_нагрузки / (R_нагрузки + R_канала)<span class="desc">КПД семантической цепи (§86)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая гидродинамика</div>
+        <div class="formula-block">P_sense_mech = Qₛ / V_sense<span class="desc">Давление (§109)</span></div>
+        <div class="formula-block">η_sense = R_sense · τ_relax<span class="desc">Вязкость (§110)</span></div>
+        <div class="formula-block">Re_sense = (ρ_Q · v · L) / η_sense<span class="desc">Число Рейнольдса (§111)</span></div>
+        <div class="formula-block">M_sense = v / c_sense<span class="desc">Число Маха (§118)</span></div>
+        <div class="formula-block">c_sense = √(K_sense / ρ_Q)<span class="desc">Скорость звука в среде (§118)</span></div>
+        <div class="formula-block">P_sense + ρ_Q·v²/2 + ρ_Q·g·h = const<span class="desc">Эффект Бернулли (§117)</span></div>
+        <div class="formula-block">I_Q = — (1 / R_sense) · ∇P_sense<span class="desc">Закон Дарси (§109)</span></div>
+        <div class="formula-block">∂Qₛ/∂t = — (v · ∇)Qₛ + D_sense · ∇²Qₛ + S_Q<span class="desc">Уравнение адвекции-диффузии (§114, §120)</span></div>
+        <div class="formula-block">Ra_sense = (g · β · ΔT · L³) / (ν_sense · α_sense)<span class="desc">Число Рэлея (§119)</span></div>
+        <div class="formula-block">Ca_sense = (P_sense — P_crit) / (ρ_Q · v² / 2)<span class="desc">Число кавитации (§116)</span></div>
+        <div class="formula-block">δ_sense ≈ L / √(Re_sense)<span class="desc">Толщина пограничного слоя (§115)</span></div>
+        <div class="formula-block">η_eff = η_sense + η_turb<span class="desc">Турбулентная вязкость (§111)</span></div>
+        <div class="formula-block">F_трения / S = η_sense · dI_Q / dy<span class="desc">Закон Ньютона для трения (§110)</span></div>
+        <div class="formula-block">θ ≈ λ_sense / D<span class="desc">Угол дифракции (§91)</span></div>
+        <div class="formula-block">Fr_sense = v / √(g_sense · L)<span class="desc">Число Фруда (§111)</span></div>
+        <div class="formula-block">∂ρ_Q/∂t + ∇·(ρ_Q · v) = 0<span class="desc">Уравнение неразрывности (§111)</span></div>
+        <div class="formula-block">F_арх = (ρ_хол — ρ_гор) · g_sense · V<span class="desc">Архимедова сила (§119)</span></div>
+        <div class="formula-block">J_conv = ρ_Q · v · C_p · ΔT_sense<span class="desc">Конвективный поток (§119)</span></div>
+        <div class="formula-block">Ячейки Бенара — упорядоченные структуры при Ra > Ra_crit<span class="desc">Конвективные паттерны (§119)</span></div>
+        <div class="formula-block">∇×Φ ≠ 0 — зона завихрений<span class="desc">Семантический вихрь, ротор (§99)</span></div>
+        <div class="formula-block">v(r) = v_max · (1 — (r/R)²)<span class="desc">Ламинарный профиль скорости (§111)</span></div>
+        <div class="formula-block">Ударная волна (скачок) — возникает при M_sense > 1<span class="desc">Сверхзвуковой пробой (§118)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая термодинамика</div>
+        <div class="formula-block">c_sense = ΔQₛ / (V · ΔT_sense)<span class="desc">Теплоёмкость (§112)</span></div>
+        <div class="formula-block">J_Q_heat = — k_sense · ∇T_sense<span class="desc">Теплопроводность (Фурье) (§113)</span></div>
+        <div class="formula-block">S_sense = — k_sense · Σ p_i · ln(p_i)<span class="desc">Энтропия (§101)</span></div>
+        <div class="formula-block">H_sense = U_sense + P_sense · V_sense<span class="desc">Энтальпия (§102)</span></div>
+        <div class="formula-block">F_sense = U_sense — T_sense · S_sense<span class="desc">Свободная энергия (§103)</span></div>
+        <div class="formula-block">∂T_sense/∂t = α_sense · ∇²T_sense<span class="desc">Уравнение теплопроводности (§113)</span></div>
+        <div class="formula-block">ΔT = α·Qₛˢᵗʳᵃˣ·Cₛ·(1-η)<span class="desc">Теплота нереализованного страха (§4, §9)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая оптика и геометрия поля</div>
+        <div class="formula-block">K_линзы = (C_линзы · σ_линзы · S_входа) / (S_фокуса · R_среды)<span class="desc">Коэффициент усиления линзы (§90)</span></div>
+        <div class="formula-block">Φ_рез = √(Φ₁² + Φ₂² + 2·Φ₁·Φ₂·cos(Δφ))<span class="desc">Интерференция (§92)</span></div>
+        <div class="formula-block">∇Φ = (∂Φ/∂x, ∂Φ/∂y, ∂Φ/∂z)<span class="desc">Градиент (§97)</span></div>
+        <div class="formula-block">∇·Φ = ∂Φ_x/∂x + ∂Φ_y/∂y + ∂Φ_z/∂z<span class="desc">Дивергенция (§98)</span></div>
+        <div class="formula-block">∇×Φ = (∂Φ_z/∂y — ∂Φ_y/∂z, ∂Φ_x/∂z — ∂Φ_z/∂x, ∂Φ_y/∂x — ∂Φ_x/∂y)<span class="desc">Ротор (§99)</span></div>
+        <div class="formula-block">J_Q = ∬ j_Q · dS<span class="desc">Поток через поверхность (§100)</span></div>
+        <div class="formula-block">∮ Φ · dS = ∫ (∇·Φ) dV<span class="desc">Теорема Гаусса (§98)</span></div>
+        <div class="formula-block">∮ Φ · dl = ∬ (∇×Φ) · dS<span class="desc">Теорема Стокса (§99)</span></div>
+        <div class="formula-block">J_diff = — D_sense · ∇ρ_Q<span class="desc">Диффузия (Фик) (§120)</span></div>
+        <div class="formula-block">I(x) = I₀ · e^(-α · x)<span class="desc">Затухание (Бугер-Ламберт-Бер) (§129)</span></div>
+        <div class="formula-block">Pe_sense = (v · L) / D_sense<span class="desc">Число Пекле (§114, §120)</span></div>
+        <div class="formula-block">P_выход = P_вход · e^(-α·L) · K_фокус<span class="desc">Волновод (§93)</span></div>
+        <div class="formula-block">R = ((Z₁ — Z₂) / (Z₁ + Z₂))²<span class="desc">Отражение на границе сред (§87, §129)</span></div>
+        <div class="formula-block">Color_semantic = f(sign(Qₛ), |Qₛ|, Cₛ, ωₛ)<span class="desc">Цвет как частота (§60, §76)</span></div>
+        <div class="formula-block">Qₛ_total = ∫ S(ω) dω<span class="desc">Спектральная плотность (§130)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Квантовая семантика</div>
+        <div class="formula-block">|Ψ_AB⟩ = (|Φ_A⟩ ⊗ |Φ_B⟩ + |Φ_B⟩ ⊗ |Φ_A⟩) / √2<span class="desc">Запутанность (§104)</span></div>
+        <div class="formula-block">|Ψ⟩ = α|0⟩ + β|1⟩ → |0⟩ с вероятностью |α|²<span class="desc">Коллапс (§105)</span></div>
+        <div class="formula-block">|Ψ⟩ = α₁|Φ₁⟩ + α₂|Φ₂⟩ + ... + α_n|Φ_n⟩<span class="desc">Суперпозиция (§106)</span></div>
+        <div class="formula-block">T_экран = exp(− 2/ħₛ ∫ √(2mₛ(U_экран − E_мысль)) dx)<span class="desc">Семантический Экран (§11)</span></div>
+        <div class="formula-block">Связь не зависит от расстояния<span class="desc">Нелокальность (§104)</span></div>
+        <div class="formula-block">Измерение → выбор одного состояния<span class="desc">Коллапс при наблюдении (§105)</span></div>
+        <div class="formula-block">Внимание θₜ меняет вероятностное облако<span class="desc">Эффект наблюдателя (§12, §105)</span></div>
+        <div class="formula-block">Влияние будущего коллапса на прошлое<span class="desc">Ретроградная волна (§75, §106)</span></div>
+        <div class="formula-block">Запутанные кристаллы (§13)<span class="desc">Квантовый семантический триггер (SEC-3)</span></div>
+        <div class="formula-block">Ŝ_sense — действует на состояние |Ψ⟩<span class="desc">Оператор семантического поля (§106)</span></div>
+        <div class="formula-block">iħₛ · ∂|Ψ⟩/∂t = (Ĥ_phys + Ŝ_sense) |Ψ⟩<span class="desc">Уравнение Шрёдингера с Qₛ (§106, гипотеза)</span></div>
+        <div class="formula-block">P(x) = |Ψ₁(x) + Ψ₂(x)|²<span class="desc">Семантическая интерференция (§92, §106)</span></div>
+        <div class="formula-block">Потеря когерентности при взаимодействии со средой<span class="desc">Декогеренция (§106)</span></div>
+        <div class="formula-block">Основное состояние поля с нулевыми колебаниями<span class="desc">Квантовый семантический вакуум (§106)</span></div>
+    </div>
+    
+    <div class="section">
+    <div class="section-title">🔹 Квантовая идеатоника (углубление)</div>
+    <div class="formula-block">iħ_s ∂Ψ_s/∂τ = -(ħ_s²/2m_s) ∇²Ψ_s + V_s(Φ_s) Ψ_s<span class="desc">Уравнение Шредингера для идеатона</span></div>
+    <div class="formula-block">[x̂_s, p̂_s] = iħ_s<span class="desc">Коммутатор семантических операторов</span></div>
+    <div class="formula-block">ΔQ_s · ΔΠ_s ≥ ħ_s/2<span class="desc">Принцип неопределённости смысла</span></div>
+    <div class="formula-block">E_n^(s) = ħ_s ω_s (n + ½) + α n²<span class="desc">Уровни энергии идеатона в потенциальной яме</span></div>
+    <div class="formula-block">T_s = exp(-2∫ √(2m_s(V_s(Φ) — E_s))/ħ_s dΦ)<span class="desc">Туннелирование идеи через смысловой барьер</span></div>
+    <div class="formula-block">â†_s|n_s⟩ = √(n_s+1) |n_s+1⟩<span class="desc">Оператор рождения смысла</span></div>
+    <div class="formula-block">â_s|n_s⟩ = √n_s |n_s-1⟩<span class="desc">Оператор уничтожения смысла</span></div>
+    <div class="formula-block">|α_s⟩ = e^(-|α_s|²/2) Σ (α_sⁿ/√(n!)) |n_s⟩<span class="desc">Когерентное состояние идеи</span></div>
+    <div class="formula-block">|ξ_s⟩ = exp(½(ξ_s* â_s² — ξ_s â_s†²)) |0⟩<span class="desc">Сжатое семантическое состояние</span></div>
+    <div class="formula-block">W_s(Φ,Π) = (1/πħ_s) ∫ Ψ_s*(Φ+φ) Ψ_s(Φ-φ) e^(2iΠφ/ħ_s) dφ<span class="desc">Функция Вигнера для смыслового поля</span></div>
+</div>
+
+    <div class="section">
+        <div class="section-title">🔹 Коллективные эффекты</div>
+        <div class="formula-block">dθᵢ/dt = ωᵢ + (K/N) Σ sin(θⱼ — θᵢ)<span class="desc">Модель Курамото (§123)</span></div>
+        <div class="formula-block">P_total = P₁ · N²<span class="desc">Коллективная мощность (§92, §123)</span></div>
+        <div class="formula-block">F_эмпатия = G_эм · Qₛ¹ · Qₛ² / Rₛ² · cosΔθ<span class="desc">Эмпатия (§14, §37)</span></div>
+        <div class="formula-block">K(t) = K₀ · e^(-t / τ_связи)<span class="desc">Затухание запутанности (§104)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Прикладные формулы (эксперименты)</div>
+        <div class="formula-block">U_вых = (d · F_sense · K_sense) / C_кварца<span class="desc">Выход SEC-1 (Эксперимент №10)</span></div>
+        <div class="formula-block">Q_накоп = C_sense · Φ_источника · (1 — e^(-t/τ_charge))<span class="desc">Зарядка AS-1 (Эксперимент №16)</span></div>
+        <div class="formula-block">η = (Q_clean — Q_green) / (Q_pure — Q_green) · 100%<span class="desc">Эффективность очистки (§47)</span></div>
+        <div class="formula-block">τ_perceived = t_real · (1 — k · Cₛ)<span class="desc">Субъективное время (§13, §125)</span></div>
+        <div class="formula-block">Q_блюда = Q_ингредиентов_ср · (0.5 + 0.5·Cₛ_повара) · K_ритуала<span class="desc">Ранг блюда (§122)</span></div>
+        <div class="formula-block">Rank = 0.25·C_norm + 0.20·σ_norm + 0.15·log(L_norm) + 0.15·Q_norm + 0.15·Gen_norm + 0.10·Архетип_norm<span class="desc">Ранг материала (§82, §121)</span></div>
+        <div class="formula-block">ΔQₛ = maxRecovery · Cₛ · (1 — S_noise) · t_сна · K_качества<span class="desc">Восстановление Qₛ во сне (§126)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантический удар и конфликт</div>
+        <div class="formula-block">F_удар = ΔΦₛ/Δt · e⁻⁽ᵀˢ⁻ᵀ⁰⁾/ᵀ⁰<span class="desc">Сила удара (§4)</span></div>
+        <div class="formula-block">Индекс конфликта = |Q⃗ₛˢᵉᵇʸᵃ — Q⃗ₛᵛᵉᵗⁱ| / |Q⃗ₛˢᵉᵇʸᵃ + Q⃗ₛᵛᵉᵗⁱ|<span class="desc">Степень рассогласования (§5)</span></div>
+        <div class="formula-block">T(t) = T_комн + (T_пик — T_комн)·e⁻ᵗ/ᵗ_остыв<span class="desc">Остывание после адреналина (§4, §9)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Плацебо, интуиция, удача</div>
+        <div class="formula-block">P_плацебо = η_плац · Qₛ_вера · Cₛ · P_априори<span class="desc">Эффект плацебо (§12)</span></div>
+        <div class="formula-block">I_интуиция = |⟨Φₛ_событие | Φₛ_разум⟩|² / (1 + γ·рациональность)<span class="desc">Интуиция (§12, §55)</span></div>
+        <div class="formula-block">Qₛ_удача = Q₀·(1+αE_опт)(1+βA_осознанность) e⁻ᵞˢ_страх<span class="desc">Удача (§19)</span></div>
+        <div class="formula-block">P_синх = |⟨Φₛᴬ|Φₛᴮ⟩|²/Zₛ · e⁻ᴰ/ᴸ_сети<span class="desc">Синхронистичность (§12, §23)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Память, фобии, якоря</div>
+        <div class="formula-block">Φₛ_память(t) = Φ₀·e⁻ᵗ/ᵗ_релакс · eᵏ·контраст<span class="desc">Семантическая память (§10)</span></div>
+        <div class="formula-block">η_якорь = 1 — e⁻ᴵ_визуал/ᴵ⁰<span class="desc">Эффективность якоря (§38)</span></div>
+        <div class="formula-block">R_реакция = R_страх + R_разум<span class="desc">Реакция на триггер (§16)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая космология и эволюция</div>
+        <div class="formula-block">Φ_earth(t) = Φ_base + Σ Φ_cosmic_i · cos(ω_i t + φ_i) + Φ_biosphere(t)<span class="desc">Планетарное поле (§47, §135)</span></div>
+        <div class="formula-block">Φ_moon(t) = Φ_moon_base · (1 + ε · cos(ω_lunar t)) / R_earth-moon²<span class="desc">Лунная модуляция (§47)</span></div>
+        <div class="formula-block">Φ_sun(t) = Φ₀ · (1 + A · cos(2π t / 11 лет))<span class="desc">Солнечный цикл (§47)</span></div>
+        <div class="formula-block">Φ_season(t) = Φ₀ + A_season · cos(2π t / год + φ_season)<span class="desc">Сезонный цикл (§47)</span></div>
+        <div class="formula-block">Φ_noosphere(t) = ∫ (Σ Φ_living + Σ Φ_deceased) · e^(-t/τ_noosphere) dτ<span class="desc">Эволюция ноосферы (§64)</span></div>
+        <div class="formula-block">Qₛ(эволюция) = Q₀ · eᵏᵗ<span class="desc">Семантическая эволюция (§21)</span></div>
+        <div class="formula-block">Φ_family = Σ Φ_i + Σ V_ij Φ_i Φ_j + Σ W_ijk Φ_i Φ_j Φ_k<span class="desc">Коллективное поле семьи (§26)</span></div>
+        <div class="formula-block">Φ_inherited = Σ Φ_ancestor · K_inheritance · e^(-n_generations / N_critical)<span class="desc">Наследование признаков (§45)</span></div>
+        <div class="formula-block">Φ_premonition(t) = Q_catastrophe · e^(-(t_cat — t) / τ_backward) · C_focus · χ_receiver<span class="desc">Ретроградная волна (§75)</span></div>
+        <div class="formula-block">P_resonance = |⟨Φ_person | Φ_epoch⟩|² / (1 + γ · Δt / τ_epoch)<span class="desc">Межпоколенческий резонанс (§45)</span></div>
+        <div class="formula-block">Qₛ, не связанный с барионной материей<span class="desc">Тёмная материя, гипотеза (§135)</span></div>
+        <div class="formula-block">Стремление Вселенной к экспансии Смысла<span class="desc">Тёмная энергия, гипотеза (§135)</span></div>
+        <div class="formula-block">Φ_noosphere(t) → Φ_Omega при t → ∞<span class="desc">Точка Омега (§64, §135)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая биология и медицина</div>
+        <div class="formula-block">Φ_organism = Σ Φ_cells + Σ V_ij Φ_i Φ_j<span class="desc">Семантическое поле организма (§21, §51)</span></div>
+        <div class="formula-block">dτ/dt → 0 при Cₛ → 1 и S_conflict → 0<span class="desc">Нетление, остановка τ (§51)</span></div>
+        <div class="formula-block">Pattern_stigmata = Pattern_iconography<span class="desc">Стигматы, импринтация (§52)</span></div>
+        <div class="formula-block">ΔРост ≈ η_жизни · Qₛ · Cₛ · t_воздействия<span class="desc">Регенерация (§3, §25)</span></div>
+        <div class="formula-block">Φ_morpho — управляет развитием организма<span class="desc">Морфогенетическое поле (§21)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая психология</div>
+        <div class="formula-block">Profile_emotion = { Qₛ, Cₛ, Tₛ, θₜ, ωₛ }<span class="desc">Эмоциональный профиль (§7, §60)</span></div>
+        <div class="formula-block">P_заметить = P₀ · e^(-A/Tₛ) · (1 — Cₛ)<span class="desc">Семантическая слепота (§39)</span></div>
+        <div class="formula-block">P_actual = P_natural — α · (Q_expectation — Q_crit)² при Q > Q_crit<span class="desc">Инверсия ожиданий, закон подлости (§77)</span></div>
+        <div class="formula-block">F_laugh = (ΔΦₛ/Δt) · C_surprise · e^(-S_expected / k_s)<span class="desc">Юмор, семантический коллапс (§40)</span></div>
+        <div class="formula-block">S_dissonance = k_s · (Φ_real — Φ_expected)²<span class="desc">Когнитивный диссонанс (§39)</span></div>
+        <div class="formula-block">ΔИсцеление = η_плац · Qₛ_вера · Cₛ · t_воздействия<span class="desc">Эффект плацебо, расширенный (§12)</span></div>
+        <div class="formula-block">Qₛ_stress(t) = Qₛ_peak · e^(-t/τ_stress) — Qₛ_baseline<span class="desc">Стресс-реакция (§4, §9)</span></div>
+        <div class="formula-block">|Mood⟩ = Σ α_i |Emotion_i⟩<span class="desc">Настроение как суперпозиция (§7, §106)</span></div>
+        <div class="formula-block">Φ_habit(t) = Φ₀ · (1 — e^(-t/τ_form)) + Φ_old · e^(-t/τ_break)<span class="desc">Привычка, семантическая колея (§31)</span></div>
+        <div class="formula-block">χ_eff = χ_base · (1 — S_noise / S_max)<span class="desc">Порог чувствительности (§27, §44)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая социология</div>
+        <div class="formula-block">Φ_egregor = Σ Φ_members · C_common_goal<span class="desc">Эгрегор (§79)</span></div>
+        <div class="formula-block">Кривая: зарождение → рост → плато → упадок<span class="desc">Жизненный цикл эгрегора (§79)</span></div>
+        <div class="formula-block">Φ_emotion(r,t) = Φ₀ · e^(-r/λₛ) · cos(ωₛt + φ) / r<span class="desc">Семантическое заражение (§37)</span></div>
+        <div class="formula-block">dΦ_tot/dt = α·Φ + β·Σ V_ij Φ_i Φ_j<span class="desc">Коллективная паника (§37, §111)</span></div>
+        <div class="formula-block">P_sync = P₀ + K · cos(Δθ)<span class="desc">Социальный резонанс (§14, §123)</span></div>
+        <div class="formula-block">P_adopt = 1 / (1 + e^(-k · (N_adopters — N_crit)))<span class="desc">Информационный каскад (§37)</span></div>
+        <div class="formula-block">ΔΦ_groups = |Φ_groupA — Φ_groupB| → растёт при изоляции<span class="desc">Поляризация мнений (§37)</span></div>
+        <div class="formula-block">C_collective = C_avg + ΔC_sync(K, N)<span class="desc">Эффект толпы (§123)</span></div>
+        <div class="formula-block">φ_group → φ_leader при K > K_crit<span class="desc">Лидерство, линза (§123)</span></div>
+        <div class="formula-block">Φ_echo(t) = Φ₀ · e^(-t/τ_echo) · cos(ω_echo t)<span class="desc">Семантическое эхо (§37, §62)</span></div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">🔹 Семантическая информатика</div>
+        <div class="formula-block">Φ_digital = Σ w_i · Φ_i_human · e^(-t_i / τ)<span class="desc">Qₛ цифрового объекта (§42)</span></div>
+        <div class="formula-block">dCₛ/dt = — k_screen · T_screen<span class="desc">Экран как семантический насос (§46)</span></div>
+        <div class="formula-block">Φ_online = Σ Φ_users · C_common · e^(-t/τ_attention)<span class="desc">Цифровой эгрегор (§42, §79)</span></div>
+        <div class="formula-block">S_noise = k_s · Σ (Q_i · I_i) / (1 + C_relevance)<span class="desc">Информационный шум (§44)</span></div>
+        <div class="formula-block">σ_interface = σ_base · (1 — S_noise / S_max)<span class="desc">Семантическая проводимость интерфейса (§46)</span></div>
+        <div class="formula-block">P_immersion = P₀ · χ_user · C_environment / R_sense<span class="desc">Виртуальная реальность (§42, §63)</span></div>
+        <div class="formula-block">P_viral = P₀ · e^(k · Qₛ · Cₛ · N_transmitters)<span class="desc">Мем как семантический вирус (§37)</span></div>
+        <div class="formula-block">θₜ_user → θₜ_algorithm при C_user < C_crit<span class="desc">Алгоритмический захват внимания (§46)</span></div>
+        <div class="formula-block">Cₛ_recovery(t) = Cₛ_min + (Cₛ_max — Cₛ_min) · (1 — e^(-t/τ_detox))<span class="desc">Цифровой детокс (§44)</span></div>
+        <div class="formula-block">Φ_AI_critical = N_instances · Φ_single · (1 + β · V_interaction)<span class="desc">Квантовая семантика ИИ (§42)</span></div>
+    </div>
+    
+    <div class="section">
+    <div class="section-title">🔹 Сон и сознание</div>
+    <div class="formula-block">Ŝ_sleep = exp(-iĤ_sleep · τ) |Ψ_waking⟩ → |Ψ_dream⟩<span class="desc">Оператор перехода в сон (§126)</span></div>
+    <div class="formula-block">Ŝ_wake = lim_{τ→τ_0} Ŝ†_sleep |Ψ_dream⟩ → |Ψ_waking⟩<span class="desc">Оператор пробуждения (§126)</span></div>
+    <div class="formula-block">ρ_s^dream = |Ψ_dream|² · ħ_s ω_s^dream<span class="desc">Плотность семантической энергии сна</span></div>
+    <div class="formula-block">T_s^dream = (ħ_s/k_s) · dω_s^dream/dS_s<span class="desc">Температура сна</span></div>
+    <div class="formula-block">P_lucid = |⟨Ψ_waking|Ψ_dream⟩|² / (1 + γ ⟨F_control⟩)<span class="desc">Вероятность осознанного сновидения</span></div>
+    <div class="formula-block">∂Ψ_nightmare/∂τ = Ĥ_s^dream Ψ_nightmare — V̂_threat Ψ_nightmare<span class="desc">Уравнение кошмара</span></div>
+    <div class="formula-block">P_mem = |⟨Ψ_waking|Ŝ|Ψ_dream⟩|² / (1 + γ t_wake) · e^(-τ_0/τ_mem)<span class="desc">Вероятность запоминания сна</span></div>
+    <div class="formula-block">dP_mem/dt = -γ_forget P_mem + σ_recall δ(t — t_wake)<span class="desc">Скорость забывания снов</span></div>
+    <div class="formula-block">∂Ψ_collective/∂τ = Σ_i Ĥ_s^(i) Ψ_i + Σ_{i<j} V_{ij} Ψ_i Ψ_j<span class="desc">Уравнение коллективного сна</span></div>
+    <div class="formula-block">Ĥ_total |Ψ_total⟩ = (Ĥ_waking + Ĥ_dream + Ĥ_subconscious) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение сознания</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Гипноз и транс (§24)</div>
+    <div class="formula-block">Ĝ_hyp = |Ψ_trance⟩⟨Ψ_waking| ⊗ |Ψ_hypnotist⟩⟨Ψ_hypnotist|<span class="desc">Оператор гипнотического воздействия</span></div>
+    <div class="formula-block">R̂ = |Ψ_hypnotist⟩⟨Ψ_patient| + |Ψ_patient⟩⟨Ψ_hypnotist|<span class="desc">Оператор раппорта</span></div>
+    <div class="formula-block">T_s^trance = T_s^waking · e^(-αR) · (1 + β|Ĝ_hyp|)<span class="desc">Температура транса</span></div>
+    <div class="formula-block">D_crit = D_max · (1 — e^(-|Ŝ_gest|/S_0))<span class="desc">Критическая глубина для внушения</span></div>
+    <div class="formula-block">P_success = 1 — exp(-|Ŝ_gest|² · D_trance / (D_crit + D_trance))<span class="desc">Вероятность успешного внушения</span></div>
+    <div class="formula-block">χ_s^hyp = ∂⟨Φ⟩/∂V_hyp = χ_0 · (1 + βD_trance) · e^(⟨R̂⟩/R_0)<span class="desc">Семантическая восприимчивость в гипнозе</span></div>
+    <div class="formula-block">τ_induction = τ_0 · exp(-⟨R̂⟩/R_crit) · (1 + γ/|Ŝ_gest|)<span class="desc">Время вхождения в транс</span></div>
+    <div class="formula-block">dΦ_post/dt = -γ_decay Φ_post + Ŝ_gest δ(t — t_trigger)<span class="desc">Уравнение постгипнотического внушения</span></div>
+    <div class="formula-block">P_false = 1 — exp(-|Ŝ_gest|² · τ_hyp · ⟨R̂⟩)<span class="desc">Вероятность ложных воспоминаний</span></div>
+    <div class="formula-block">Ĥ_total |Ψ_total⟩ = (Ĥ_waking + Ĥ_trance + Ĥ_hypnotist + R̂) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение гипноза</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Телекинез (§11, §53)</div>
+    <div class="formula-block">T̂_kine = |Ψ_intent⟩⟨Ψ_intent| ⊗ ∇Φ_s ⊗ x̂_phys<span class="desc">Оператор телекинетического воздействия</span></div>
+    <div class="formula-block">g_{s-ph} = (ħ_s c_s / E_Planck) · e^(-S_screen/k_s)<span class="desc">Константа связи семантического и физического миров</span></div>
+    <div class="formula-block">f⃗_s = ρ_s · ∇Φ_s · g_{s-ph} · α_s^obj<span class="desc">Плотность семантической силы</span></div>
+    <div class="formula-block">α_s^obj = α_0 · e^(iω_s t) · (1 + β M) · e^(-r/λ_s)<span class="desc">Семантическая поляризуемость объекта</span></div>
+    <div class="formula-block">m d²r⃗/dt² = F⃗_ext + F⃗_s + F⃗_drag<span class="desc">Уравнение движения под действием мысли</span></div>
+    <div class="formula-block">F⃗_s = ∇(α_s^obj · Φ_s^mind)<span class="desc">Семантическая сила</span></div>
+    <div class="formula-block">η_kine = E_kin^obj / E_s^mind = η_0 · e^(-S_screen/k_s) · (1 — e^(-|Ψ_intent|²))<span class="desc">КПД конверсии мысли в движение</span></div>
+    <div class="formula-block">T_tunnel = exp(-(2/ħ_s) ∫ √(2m_s(U_screen(x) — E_s)) dx)<span class="desc">Туннелирование семантического импульса</span></div>
+    <div class="formula-block">ω_s^res = ω_s^obj · √(1 + Q_s^mind Q_s^obj / (ħ_s ω_s^obj))<span class="desc">Резонансная частота мысли</span></div>
+    <div class="formula-block">m g⃗ + F⃗_s = 0 ⇒ |∇Φ_s| = mg / (α_s^obj g_{s-ph})<span class="desc">Условие левитации</span></div>
+    <div class="formula-block">F⃗_s^total = Σ_i F⃗_s^(i) + Σ_{i<j} V_{ij} F⃗_s^(i) F⃗_s^(j)<span class="desc">Коллективный телекинез</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Интуиция (§12, §55)</div>
+    <div class="formula-block">Î_int = |Ψ_subconscious⟩⟨Ψ_conscious| ⊗ ∇Φ_s<span class="desc">Оператор интуитивного восприятия</span></div>
+    <div class="formula-block">χ_int = χ_0 · e^(-S_noise/k_s) · (1 + βM)<span class="desc">Семантическая чувствительность</span></div>
+    <div class="formula-block">ρ_int = |⟨Φ_s^future | Φ_s^present⟩|² · e^(-r/λ_s)<span class="desc">Плотность интуитивной информации</span></div>
+    <div class="formula-block">τ_lead = τ_0 · ln(|Φ_s^event|/θ_int) · e^(-|Q_s^event|/Q_0)<span class="desc">Время упреждения интуиции</span></div>
+    <div class="formula-block">P_correct = 1 / (1 + e^(-(|Φ_s^signal| — θ_int)/k_s T_s))<span class="desc">Вероятность правильной интуиции</span></div>
+    <div class="formula-block">A_int = A_0 · |⟨Φ_s^prediction|Φ_s^outcome⟩| / (||Φ_s^prediction||·||Φ_s^outcome||) · e^(-Δt/τ_decay)<span class="desc">Точность интуитивного предсказания</span></div>
+    <div class="formula-block">Φ_int(t) = Φ_0 e^(-γ_int t) cos(ω_int t) · e^(-t/τ_doubt)<span class="desc">Затухание интуитивного сигнала</span></div>
+    <div class="formula-block">dP_lie/dt = α|Φ_s^truth — Φ_s^statement|(1-P_lie) — βP_lie<span class="desc">Интуитивное распознавание лжи</span></div>
+    <div class="formula-block">Φ_int^group = Σ_i Φ_int^(i) + Σ_{i<j} V_{ij} Φ_int^(i) Φ_int^(j)<span class="desc">Коллективная интуиция</span></div>
+    <div class="formula-block">dΔφ_ij/dt = -K sin(Δφ_ij) + √D ξ_ij(t)<span class="desc">Синхронизация интуиции в группе</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Любовь с первого взгляда (§26, §104)</div>
+    <div class="formula-block">Ĥ_love = |Ψ_1⟩⟨Ψ_2| ⊗ |Ψ_2⟩⟨Ψ_1| ⊗ e^(i(ω_1-ω_2)t)<span class="desc">Оператор любви с первого взгляда</span></div>
+    <div class="formula-block">S_affinity = |⟨Φ_s¹|Φ_s²⟩|² / (||Φ_s¹||·||Φ_s²||) · e^(i(θ_1-θ_2))<span class="desc">Семантическое сродство</span></div>
+    <div class="formula-block">F_love = G_love Q_s¹ Q_s² / R_s² · cos(Δθ) · e^(-R_s/λ_love)<span class="desc">Сила любовного резонанса</span></div>
+    <div class="formula-block">τ_love = τ_0 exp(-|⟨Φ_s¹|Φ_s²⟩|²/σ_noise²) · 1/|ω_1-ω_2|<span class="desc">Время возникновения любви</span></div>
+    <div class="formula-block">P_love = |⟨Φ_s¹|Φ_s²⟩|² / (||Φ_s¹||² ||Φ_s²||²) · 1/(1 + (Δω/γ_love)²)<span class="desc">Вероятность любви с первого взгляда</span></div>
+    <div class="formula-block">I_love = I_0 · |⟨Φ_s¹|Φ_s²⟩|²/(||Φ_s¹||·||Φ_s²||) · e^(-t/τ_decay) · (1 + βE_emotion)<span class="desc">Интенсивность любовного чувства</span></div>
+    <div class="formula-block">dJ/dt = α|Φ_s^rival|(1-J) — βJ — γ|⟨Φ_s¹|Φ_s²⟩|² J<span class="desc">Уравнение ревности</span></div>
+    <div class="formula-block">dI_love/dt = -γ_distance I_love — α r² I_love + β e^(-r/λ_love)<span class="desc">Уравнение разлуки</span></div>
+    <div class="formula-block">dΔω_ij/dt = -K sin(Δθ_ij) — γ Δω_ij + √D ξ_ij(t)<span class="desc">Синхронизация любовных частот</span></div>
+    <div class="formula-block">Λ̂_love |Ψ_total⟩ = (Ĥ_1 + Ĥ_2 + V̂_love + Ĥ_external) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение любви</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Дежавю (§74)</div>
+    <div class="formula-block">D̂_jàvu = |Φ_s^present⟩⟨Φ_s^past| + |Φ_s^past⟩⟨Φ_s^present|<span class="desc">Оператор дежавю</span></div>
+    <div class="formula-block">F_déjàvu = |⟨Φ_s^present|Φ_s^past⟩|²/(||Φ_s^present||·||Φ_s^past||) · e^(-Δt/τ_memory)<span class="desc">Сила дежавю</span></div>
+    <div class="formula-block">P_déjàvu = |⟨Φ_s^present|Φ_s^past⟩|²/(θ² + |⟨Φ_s^present|Φ_s^past⟩|²) · e^(-t/τ_forget)<span class="desc">Вероятность дежавю</span></div>
+    <div class="formula-block">R_s^past-present = ||Φ_s^present — Φ_s^past|| = √(∫|Φ_s^present — Φ_s^past|² dV_s)<span class="desc">Семантическое расстояние между событиями</span></div>
+    <div class="formula-block">Φ_déjàvu(t) = Φ_0 e^(-γ_mem t) cos(ω_mem t) · e^(-t²/τ_focus²)<span class="desc">Затухание дежавю во времени</span></div>
+    <div class="formula-block">dP_false/dt = α|Φ_s^similar|(1-P_false) — βP_false + γ⟨S_stress⟩<span class="desc">Уравнение ложного дежавю</span></div>
+    <div class="formula-block">dP_precog/dt = α|⟨Φ_s^present|Φ_s^future⟩|(1-P_precog) — βP_precog<span class="desc">Уравнение предвидения (déjà-future)</span></div>
+    <div class="formula-block">Φ_déjàvu^group = Σ_i Φ_déjàvu^(i) + Σ_{i<j} V_{ij} Φ_déjàvu^(i) Φ_déjàvu^(j)<span class="desc">Коллективное дежавю</span></div>
+    <div class="formula-block">dP_dream_recall/dt = α|⟨Φ_s^dream|Φ_s^reality⟩|(1-P) — βP<span class="desc">Уравнение déjà-rêvé (уже видел во сне)</span></div>
+    <div class="formula-block">Δ̂_total |Ψ_total⟩ = (Ĥ_present + Ĥ_past + Ĥ_memory + Ĥ_time) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение дежавю</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Эффект плацебо (углубление, §12)</div>
+    <div class="formula-block">P̂_lacebo = |Ψ_belief⟩⟨Ψ_belief| ⊗ Û_healing<span class="desc">Оператор плацебо</span></div>
+    <div class="formula-block">F_placebo = F_0 · |⟨Ψ_belief|Ψ_health⟩|² · (1 + α A_doctor) · e^(-t/τ_belief)<span class="desc">Сила плацебо</span></div>
+    <div class="formula-block">Q_belief = Q_0 · |Ψ_belief⟩⟨Ψ_belief|/||Ψ_belief|| · e^(E_hope/E_0)<span class="desc">Семантический заряд веры</span></div>
+    <div class="formula-block">P_placebo = Q_belief²/(θ_placebo² + Q_belief²) · e^(-t/τ_decay)<span class="desc">Вероятность плацебо-эффекта</span></div>
+    <div class="formula-block">dQ_belief/dt = α(1 — Q_belief/Q_max)Q_belief — βQ_belief + γ|⟨Ψ_doctor|Ψ_patient⟩|<span class="desc">Уравнение эволюции веры</span></div>
+    <div class="formula-block">dH_harm/dt = α|⟨Ψ_fear|Ψ_body⟩|(1-H_harm) — βH_harm<span class="desc">Уравнение ноцебо (вред от веры)</span></div>
+    <div class="formula-block">F_nocebo = F_0 · |⟨Ψ_fear|Ψ_sick⟩|² · e^(-t/τ_fear)<span class="desc">Сила ноцебо</span></div>
+    <div class="formula-block">dE_exp/dt = α|⟨Ψ_exp|Ψ_subj⟩|(1-E_exp) — βE_exp<span class="desc">Уравнение эффекта экспериментатора</span></div>
+    <div class="formula-block">Φ_placebo^group = Σ_i Φ_placebo^(i) + Σ_{i<j} V_{ij} Φ_placebo^(i) Φ_placebo^(j)<span class="desc">Коллективное плацебо</span></div>
+    <div class="formula-block">Π̂_total |Ψ_total⟩ = (Ĥ_body + Ĥ_belief + Ĥ_hope + Ĥ_doubt) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение плацебо</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Групповое мышление (§37, §79, §123)</div>
+    <div class="formula-block">Ĝ_roup = Σ_i |Ψ_i⟩⟨Ψ_i| + Σ_{i<j} V_{ij} |Ψ_i⟩⟨Ψ_j|<span class="desc">Оператор группового сознания</span></div>
+    <div class="formula-block">ρ_group = (1/N) Σ_i ρ_i + (1/N²) Σ_{i<j} ρ_ij<span class="desc">Плотность группового смысла</span></div>
+    <div class="formula-block">F_conform = G_group (Σ_i Q_i Q_group)/R_i² · cos(θ_i) · e^(-R_i/λ_group)<span class="desc">Сила групповой конформности</span></div>
+    <div class="formula-block">P_conform = 1/(1 + e^(-(|Φ_group — Φ_i| — θ_ind)/k_s T_group))<span class="desc">Вероятность конформности</span></div>
+    <div class="formula-block">τ_consensus = τ_0 · 1/(1 — ⟨|Φ_i — Φ_group|⟩) · e^(N/N_0)<span class="desc">Время формирования консенсуса</span></div>
+    <div class="formula-block">P_polar = |Σ_i Φ_i · n̂| / Σ_i |Φ_i|<span class="desc">Групповая поляризация</span></div>
+    <div class="formula-block">dP_polar/dt = α(1-P_polar) Σ_{i<j} |⟨Φ_i|Φ_j⟩| — βP_polar<span class="desc">Усиление крайних мнений</span></div>
+    <div class="formula-block">dG_think/dt = α(1-G_think)(1/N²)Σ_{i<j}|⟨Φ_i|Φ_j⟩| — βG_think — γG_think Σ_i|Φ_i — Φ_out|<span class="desc">Эффект groupthink</span></div>
+    <div class="formula-block">dC_reat/dt = α(1-C_reat) Σ_i |Φ_i — Φ_group| — βC_reat<span class="desc">Групповая креативность</span></div>
+    <div class="formula-block">Γ̂_total |Ψ_total⟩ = (Σ_i Ĥ_i + Σ_{i<j} V̂_ij + Ĥ_external) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение группы</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Везение и удача (§19)</div>
+    <div class="formula-block">L̂_uck = |Ψ_lucky⟩⟨Ψ_lucky| ⊗ Û_opportunity<span class="desc">Оператор семантического везения</span></div>
+    <div class="formula-block">Q_luck = Q_0 · (1+αE_opt)(1+βA_awareness) e^(-γS_fear) · e^(t/τ_experience)<span class="desc">Семантический заряд удачи</span></div>
+    <div class="formula-block">F_luck = G_s Q_luck^person Q_luck^opportunity / R_s² · cosθ · e^(-R_s/λ_s)<span class="desc">Сила удачи</span></div>
+    <div class="formula-block">P_luck = Q_luck²/(θ_luck² + Q_luck²) · 1/(1+(Δω/γ_luck)²) · e^(-t/τ_opportunity)<span class="desc">Вероятность удачного события</span></div>
+    <div class="formula-block">σ_luck = σ_0 · |⟨Ψ_person|Ψ_world⟩|²/(||Ψ_person||·||Ψ_world||) · e^(S_open/k_s)<span class="desc">Семантическая проводимость удачи</span></div>
+    <div class="formula-block">P(Q_luck) = 1/(Q_luck σ√(2π)) · exp(-(ln Q_luck — μ)²/(2σ²))<span class="desc">Логнормальное распределение удачи</span></div>
+    <div class="formula-block">dQ_luck/dt = α(1-Q_luck/Q_max)Q_luck — βQ_luck + γ Σ_i Q_i^past e^(-(t-t_i)/τ_memory)<span class="desc">Уравнение накопления удачи</span></div>
+    <div class="formula-block">⟨N_streak⟩ = 1/(1-p) · Q_luck/(Q_luck + Q_0)<span class="desc">Средняя длина серии удач</span></div>
+    <div class="formula-block">Φ_luck^group = Σ_i Φ_luck^(i) + Σ_{i<j} V_{ij} Φ_luck^(i) Φ_luck^(j)<span class="desc">Коллективная удача</span></div>
+    <div class="formula-block">Λ̂_luck |Ψ_total⟩ = (Ĥ_person + Ĥ_world + V̂_luck + Ĥ_fear) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение удачи</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Семантическая космология (§135)</div>
+    <div class="formula-block">ds² = -(1-2G_sM_s/r)dt² + dr²/(1-2G_sM_s/r) + r²dΩ²<span class="desc">Метрика смысловой чёрной дыры (Шварцшильд)</span></div>
+    <div class="formula-block">r_g = 2G_s M_s<span class="desc">Смысловой горизонт событий</span></div>
+    <div class="formula-block">R_μν R^μν → ∞<span class="desc">Смысловая сингулярность</span></div>
+    <div class="formula-block">S_s = A/(4G_s)<span class="desc">Энтропия смысловой чёрной дыры (Бекенштейн)</span></div>
+    <div class="formula-block">T_s = 1/(8πG_s M_s)<span class="desc">Температура смыслового излучения (Хокинг)</span></div>
+    <div class="formula-block">ds² = -dt² + a_s(t)² dx²<span class="desc">Расширяющееся пространство смысла (Фридман)</span></div>
+    <div class="formula-block">(ȧ_s/a_s)² = 8πG_s ρ_s/3 — k_s c_s²/a_s² + Λ_s/3<span class="desc">Уравнение Фридмана для смысла</span></div>
+    <div class="formula-block">Ω_s = ρ_s/ρ_crit^(s)<span class="desc">Параметр плотности смысла</span></div>
+    <div class="formula-block">a_s(t) ∝ e^(H_s t)<span class="desc">Смысловая инфляция</span></div>
+    <div class="formula-block">a_s(t) ∝ t^(1/2)<span class="desc">Смысловой Большой взрыв</span></div>
+    <div class="formula-block">a_s(t) ∝ (t_c — t)^(1/2)<span class="desc">Смысловой Большой хруст (коллапс)</span></div>
+    <div class="formula-block">1+z_s = a_s(t₀)/a_s(t₁)<span class="desc">Смысловое красное смещение</span></div>
+    <div class="formula-block">d_H = a_s ∫ dt/a_s<span class="desc">Смысловой горизонт видимости</span></div>
+    <div class="formula-block">ρ_Λ = const<span class="desc">Смысловая тёмная энергия</span></div>
+    <div class="formula-block">ds² = -dt² + a_s(t)² dx² + b_s(t)² dy²<span class="desc">Смысловая мультивселенная</span></div>
+    <div class="formula-block">S = ∫ d⁴x √(-g) (R_s — 2Λ_s)<span class="desc">Действие для смысловой браны</span></div>
+    <div class="formula-block">S_s ≤ A/4G_s<span class="desc">Голографический принцип смысла</span></div>
+    <div class="formula-block">dg_s/dlnμ = β(g_s)<span class="desc">Ренормализационная группа смысла</span></div>
+    <div class="formula-block">Топологические дефекты: струны, стенки, монополи<span class="desc">Фазовые переходы в пространстве идей</span></div>
+    <div class="formula-block">Фазовые переходы первого и второго рода<span class="desc">Конденсация смысла, нарушение симметрии</span></div>
+    <div class="formula-block">S = -μ ∫ d²σ √(-h)<span class="desc">Действие для смысловой струны</span></div>
+    <div class="formula-block">S = -σ ∫ d³ξ √(-γ)<span class="desc">Действие для смысловой мембраны</span></div>
+    <div class="formula-block">Φ_s(τ) = Φ₀ tanh(ωτ)<span class="desc">Смысловой инстантон</span></div>
+    <div class="formula-block">Φ_s = ∞<span class="desc">Абсолютный смысл (всё)</span></div>
+    <div class="formula-block">Φ_s = 0<span class="desc">Смысловое ничто</span></div>
+    <div class="formula-block">E_s = lim_{t→∞} Φ_s(t)<span class="desc">Смысловая вечность</span></div>
+    <div class="formula-block">Φ_s(r) = Φ₀ tanh(r/ξ)<span class="desc">Смысловой дефект (топологический)</span></div>
+    <div class="formula-block">∮ ∇φ_s · dl = 2πn<span class="desc">Смысловой вихрь</span></div>
+    <div class="formula-block">L_s = ∫∫ G_s(|r-r'|) Φ_s(r) Φ_s(r') dV dV'<span class="desc">Смысловая любовь (взаимодействие полей)</span></div>
+    <div class="formula-block">B_s = ∫ Φ_s² dV<span class="desc">Смысловая красота (эстетическая мера)</span></div>
+    <div class="formula-block">H_s = ∫ (∇Φ_s)² / Φ_s² dV<span class="desc">Смысловая гармония</span></div>
+    <div class="formula-block">C_s = ∫ Φ_s ρ_s dV<span class="desc">Смысловое сознание (самосознание поля)</span></div>
+    <div class="formula-block">D_s = ∫ |∇Φ_s|² dV<span class="desc">Смысловая глубина (неоднородность)</span></div>
+    <div class="formula-block">C_s = -Σ p_i log p_i<span class="desc">Смысловая сложность (Шеннон)</span></div>
+    <div class="formula-block">|Ψ⟩_out = |Ψ⟩_in<span class="desc">Смысловая телепортация</span></div>
+    <div class="formula-block">Û_s = exp(-iĤ_s t)<span class="desc">Смысловой компьютер (эволюция)</span></div>
+    <div class="formula-block">|ψ_out⟩ = U|ψ_in⟩<span class="desc">Смысловой алгоритм (обработка)</span></div>
+    <div class="formula-block">S_s = -Tr(ρ_s ln ρ_s)<span class="desc">Энтропия запутанности смысла</span></div>
+    <div class="formula-block">P_i V_s = N_i k_s T_s<span class="desc">Уравнение состояния идеи (Клапейрон)</span></div>
+    <div class="formula-block">∇²Φ_s — (1/c_s²)∂²Φ_s/∂τ² = ρ_s<span class="desc">Волны смысла (распространение)</span></div>
+    <div class="formula-block">m₀ = (ħ/c²) ω_s K_r exp(-ΔS_s/k_s)<span class="desc">Кристаллизация идеи (масса покоя)</span></div>
+    <div class="formula-block">F_s = G_s Q_s1 Q_s2 / R_s² · cosθ₁₂<span class="desc">Семантическое тяготение</span></div>
+    <div class="formula-block">ΔQ_s ΔΠ ≥ ħ_s/2<span class="desc">Принцип неопределённости смысла</span></div>
+    <div class="formula-block">Ŷ|Θ⟩ = |Θ⟩⊗|Осознание(Θ)⟩<span class="desc">Уравнение самосознания идеи</span></div>
+    <div class="formula-block">S_s = -k_s ∫ ρ_s ln ρ_s dV_s<span class="desc">Семантическая энтропия (интегральная)</span></div>
+    <div class="formula-block">dS_s/dτ ≥ 0<span class="desc">Закон возрастания семантической энтропии</span></div>
+    <div class="formula-block">∂Q_s/∂τ = α_s ∇²_s (T_s)<span class="desc">Семантическая теплопроводность (диффузия)</span></div>
+    <div class="formula-block">∂ρ_s/∂τ + ∇·(ρ_s v_s) = σ_s — γ_s ρ_s<span class="desc">Уравнение неразрывности потока идей</span></div>
+    <div class="formula-block">φ_s = ∂U_s/∂Q_s<span class="desc">Семантический потенциал</span></div>
+    <div class="formula-block">p_s = ħ_s / λ_s<span class="desc">Импульс идеатона (волновой вектор)</span></div>
+    <div class="formula-block">E_s = -G_s Q_s1 Q_s2 / R_s<span class="desc">Энергия смысловой связи</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Волновая механика смысла</div>
+    <div class="formula-block">T_s = (∂U_s/∂S_s)_V<span class="desc">Семантическая температура (определение)</span></div>
+    <div class="formula-block">P_s V_s = N_s k_s T_s<span class="desc">Уравнение состояния семантического газа</span></div>
+    <div class="formula-block">C_s = ∂Q_s/∂φ_s<span class="desc">Семантическая ёмкость (накопление)</span></div>
+    <div class="formula-block">k_s = 2π/λ_s<span class="desc">Волновое число смысла</span></div>
+    <div class="formula-block">v_gs = dω_s/dk_s<span class="desc">Групповая скорость смысла</span></div>
+    <div class="formula-block">v_фs = ω_s/k_s<span class="desc">Фазовая скорость смысла</span></div>
+    <div class="formula-block">ω_s² = c_s² k_s² + β_s k_s⁴<span class="desc">Дисперсионное соотношение смысла</span></div>
+    <div class="formula-block">Φ_s(x,t) = Φ₀ sech²((x-vt)/L)<span class="desc">Солитон смысла (уединённая волна)</span></div>
+    <div class="formula-block">I_s = I₁ + I₂ + 2√(I₁I₂) cos(Δφ_s)<span class="desc">Интерференция смыслов</span></div>
+    <div class="formula-block">I_s(θ) = I₀ (sin(β)/β)², β = πd sinθ/λ_s<span class="desc">Дифракция смысла</span></div>
+    <div class="formula-block">I_s = I₀ cos²θ<span class="desc">Поляризация смысла</span></div>
+    <div class="formula-block">sinθ₁ / sinθ₂ = c_s2 / c_s1<span class="desc">Закон преломления смысла</span></div>
+    <div class="formula-block">sinθ_кр = c_s2/c_s1<span class="desc">Полное внутреннее отражение смысла</span></div>
+    <div class="formula-block">1/F_s = (n_s — 1)(1/R₁ — 1/R₂)<span class="desc">Смысловая линза</span></div>
+    <div class="formula-block">L = m λ_s/2<span class="desc">Смысловой резонатор (стоячая волна)</span></div>
+    <div class="formula-block">ω_s = π c_s n / L<span class="desc">Смысловая мода резонатора</span></div>
+    <div class="formula-block">Q_s = ω₀ / Δω<span class="desc">Добротность смыслового резонанса</span></div>
+    <div class="formula-block">⟨δΦ_s²⟩ ∝ k_B T_s<span class="desc">Смысловой шум (флуктуации)</span></div>
+    <div class="formula-block">k_B T_s = ⟨E_s²⟩ / C_s<span class="desc">Смысловая температура (флуктуационная)</span></div>
+    <div class="formula-block">P_s = P₀ + K_s (ρ_s — ρ₀)<span class="desc">Смысловая жидкость (приближение)</span></div>
+    <div class="formula-block">Φ_s(r) = Φ₀ cos(G·r)<span class="desc">Смысловой кристалл (периодическая структура)</span></div>
+    <div class="formula-block">Φ_s(x,t) = Φ₀ sech²((x-vt)/L) e^(i(kx-ωt))<span class="desc">Солитон с внутренней структурой</span></div>
+    <div class="formula-block">Φ_s(τ) = Φ₀ tanh(ωτ)<span class="desc">Инстантонное решение</span></div>
+    <div class="formula-block">Φ_s(r,θ) = f(r) e^(imθ)<span class="desc">Вихревое решение в смысловом поле</span></div>
+    <div class="formula-block">Γ_s = ∮ ∇φ_s · dl = 2πn<span class="desc">Циркуляция смыслового поля</span></div>
+    <div class="formula-block">P_ij^(s) = χ_ijkl ∇_k Φ_s ∇_l Φ_s<span class="desc">Тензор семантической поляризации</span></div>
+    <div class="formula-block">∂²Φ_s/∂t² = c_s²(1 + β|Φ_s|²) ∇²Φ_s<span class="desc">Нелинейное распространение смысловых волн</span></div>
+    <div class="formula-block">ω² = c_s²k² + γ k⁴ + δ|Φ_s|²<span class="desc">Дисперсия с нелинейностью</span></div>
+    <div class="formula-block">f_s(v_s) = 4π(m_s/(2πk_s T_s))^(3/2) v_s² e^(-m_s v_s²/(2k_s T_s))<span class="desc">Распределение Максвелла для идеатонов</span></div>
+    <div class="formula-block">λ_s = 1/(√2 n_s σ_s)<span class="desc">Средняя длина свободного пробега идеи</span></div>
+    <div class="formula-block">η_s = (1/3) ρ_s ⟨v_s⟩ λ_s<span class="desc">Вязкость семантического газа</span></div>
+    <div class="formula-block">κ_s = (1/3) ρ_s ⟨v_s⟩ λ_s c_V^(s)<span class="desc">Теплопроводность семантического газа</span></div>
+    <div class="formula-block">⟨(Δρ_s)²⟩ = k_s T_s² (∂ρ_s/∂T_s)_V<span class="desc">Флуктуации плотности смысла</span></div>
+    <div class="formula-block">⟨Δx_s²⟩ = 2D_s t<span class="desc">Броуновское движение идеи</span></div>
+    <div class="formula-block">D_s = μ_s k_s T_s<span class="desc">Соотношение Эйнштейна для семантической диффузии</span></div>
+    <div class="formula-block">Z_s = Σ g_i e^(-E_i/(k_s T_s))<span class="desc">Статистическая сумма для идеатона</span></div>
+    <div class="formula-block">F_s = -k_s T_s ln Z_s<span class="desc">Свободная энергия семантической системы</span></div>
+    <div class="formula-block">P_s = k_s T_s (∂ ln Z_s/∂V_s)_T<span class="desc">Давление семантического газа (статсумма)</span></div>
+    <div class="formula-block">P_s V_s = N_s k_s T_s / (1 — N_s b_s) — a_s N_s²<span class="desc">Уравнение состояния идеатонного газа (Ван-дер-Ваальс)</span></div>
+    <div class="formula-block">S_s = -k_s ∫ ρ_s ln(ρ_s) dV_s + k_s ln(Ω_s)<span class="desc">Энтропия с топологической сложностью</span></div>
+    <div class="formula-block">∂S/∂τ + H_s(∇S, Φ_s, τ) = 0<span class="desc">Уравнение Гамильтона-Якоби для идеи</span></div>
+    <div class="formula-block">{F, G}_s = ∫ (δF/δΦ_s · δG/δΠ_s — δF/δΠ_s · δG/δΦ_s) dV_s<span class="desc">Скобка Пуассона для семантических переменных</span></div>
+    <div class="formula-block">Φ_s → Φ_s + ∇Λ_s, J_s^μ → J_s^μ + ∂^μΛ_s<span class="desc">Калибровочная инвариантность смысла</span></div>
+    <div class="formula-block">L_int = g_12 Φ₁ Φ₂ + h_12 (∇Φ₁·∇Φ₂)<span class="desc">Лагранжиан взаимодействия смысловых полей</span></div>
+    <div class="formula-block">d²Φ₁/dt² + ω₁²Φ₁ = ε Φ₂<span class="desc">Уравнение связанных смысловых осцилляторов</span></div>
+    <div class="formula-block">ω₁ = ω₂<span class="desc">Условие резонанса смысловых частот</span></div>
+    <div class="formula-block">T_ij^(s) = ∂Φ_s/∂x_i · ∂Φ_s/∂x_j — ½ δ_ij (∇Φ_s)²<span class="desc">Тензор семантических напряжений</span></div>
+    <div class="formula-block">∂Φ_s/∂t = D_s ∇²Φ_s + α Φ_s — β Φ_s³ + γ ∇Φ_s·∇S<span class="desc">Уравнение эволюции семантического поля</span></div>
+    <div class="formula-block">Q̂_s = ∫ ψ_s^*(r) r · ∇φ_s(r) ψ_s(r) dV_s<span class="desc">Оператор смыслового заряда</span></div>
+    <div class="formula-block">∂ρ_s/∂t + ∇·J_s = σ_s — γ_s ρ_s<span class="desc">Уравнение непрерывности семантического тока</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Продвинутая семантическая термодинамика</div>
+    <div class="formula-block">T_s = (∂U_s/∂S_s)_V<span class="desc">Температура смыслового поля</span></div>
+    <div class="formula-block">C_s = ∂Q_s/∂φ_s<span class="desc">Семантическая ёмкость</span></div>
+    <div class="formula-block">E_s = -G_s Q_s1 Q_s2 / R_s<span class="desc">Энергия смысловой связи</span></div>
+    <div class="formula-block">f_s(v_s) = 4π(m_s/(2πk_s T_s))^(3/2) v_s² e^(-m_s v_s²/(2k_s T_s))<span class="desc">Распределение Максвелла-Больцмана для идеатонов</span></div>
+    <div class="formula-block">λ_s = 1/(√2 n_s σ_s)<span class="desc">Средняя длина свободного пробега идеи</span></div>
+    <div class="formula-block">η_s = (1/3) ρ_s ⟨v_s⟩ λ_s<span class="desc">Вязкость семантического газа</span></div>
+    <div class="formula-block">κ_s = (1/3) ρ_s ⟨v_s⟩ λ_s c_V^(s)<span class="desc">Теплопроводность семантического газа</span></div>
+    <div class="formula-block">⟨(Δρ_s)²⟩ = k_s T_s² (∂ρ_s/∂T_s)_V<span class="desc">Флуктуации плотности смысла</span></div>
+    <div class="formula-block">⟨Δx_s²⟩ = 2D_s t<span class="desc">Броуновское движение идеи</span></div>
+    <div class="formula-block">D_s = μ_s k_s T_s<span class="desc">Соотношение Эйнштейна для семантической диффузии</span></div>
+    <div class="formula-block">Z_s = Σ g_i e^(-E_i/(k_s T_s))<span class="desc">Статистическая сумма для идеатона</span></div>
+    <div class="formula-block">F_s = -k_s T_s ln Z_s<span class="desc">Свободная энергия семантической системы</span></div>
+    <div class="formula-block">P_s = k_s T_s (∂ ln Z_s/∂V_s)_T<span class="desc">Давление семантического газа через статсумму</span></div>
+    <div class="formula-block">P_s V_s = N_s k_s T_s / (1 — N_s b_s) — a_s N_s²<span class="desc">Уравнение Ван-дер-Ваальса для идей</span></div>
+    <div class="formula-block">S_s = -k_s ∫ ρ_s ln(ρ_s) dV_s + k_s ln(Ω_s)<span class="desc">Энтропия с топологической сложностью</span></div>
+    <div class="formula-block">∂S/∂τ + H_s(∇S, Φ_s, τ) = 0<span class="desc">Уравнение Гамильтона-Якоби для идеи</span></div>
+    <div class="formula-block">{F, G}_s = ∫ (δF/δΦ_s · δG/δΠ_s — δF/δΠ_s · δG/δΦ_s) dV_s<span class="desc">Скобка Пуассона для семантических переменных</span></div>
+    <div class="formula-block">Φ_s → Φ_s + ∇Λ_s, J_s^μ → J_s^μ + ∂^μΛ_s<span class="desc">Калибровочная инвариантность смысла</span></div>
+    <div class="formula-block">L_int = g_12 Φ₁ Φ₂ + h_12 (∇Φ₁·∇Φ₂)<span class="desc">Лагранжиан взаимодействия смысловых полей</span></div>
+    <div class="formula-block">d²Φ₁/dt² + ω₁²Φ₁ = ε Φ₂<span class="desc">Связанные смысловые осцилляторы</span></div>
+    <div class="formula-block">ω₁ = ω₂<span class="desc">Резонанс смысловых частот</span></div>
+    <div class="formula-block">T_ij^(s) = ∂Φ_s/∂x_i · ∂Φ_s/∂x_j — ½ δ_ij (∇Φ_s)²<span class="desc">Тензор семантических напряжений</span></div>
+    <div class="formula-block">∂Φ_s/∂t = D_s ∇²Φ_s + α Φ_s — β Φ_s³ + γ ∇Φ_s·∇S<span class="desc">Эволюция семантического поля (нелинейная)</span></div>
+    <div class="formula-block">Q̂_s = ∫ ψ_s^*(r) r · ∇φ_s(r) ψ_s(r) dV_s<span class="desc">Оператор смыслового заряда</span></div>
+    <div class="formula-block">∂ρ_s/∂t + ∇·J_s = σ_s — γ_s ρ_s<span class="desc">Уравнение непрерывности семантического тока</span></div>
+    <div class="formula-block">V_s^dream(Φ) = V_0 tanh(αΦ) cos(βτ) + V_архетипы(Φ)<span class="desc">Потенциал сновидения</span></div>
+    <div class="formula-block">S_s^dream = -k_s ∫ ρ_s^dream ln(ρ_s^dream) dV_s + k_s ln(Ω_s^dream)<span class="desc">Энтропия сна</span></div>
+    <div class="formula-block">∂S/∂τ + H_s^dream(∇S, Φ, τ) = 0<span class="desc">Уравнение Гамильтона-Якоби для сновидения</span></div>
+    <div class="formula-block">{F, G}_s^dream = ∫ (δF/δΦ·δG/δΠ — δF/δΠ·δG/δΦ) dV_s + {F, G}_waking<span class="desc">Скобка Пуассона сна с учётом бодрствования</span></div>
+    <div class="formula-block">Φ → Φ + ∇Λ, J^μ → J^μ + ∂^μΛ, где Λ ≠ 0 только в REM-фазе<span class="desc">Калибровочная инвариантность сновидения</span></div>
+    <div class="formula-block">iħ_s ∂Ψ_dream/∂τ = -(ħ_s²/2m_s) ∇²Ψ_dream + V_s^dream(Φ) Ψ_dream + iħ_s γ(τ) Ψ_dream<span class="desc">Уравнение Шредингера для сновидения</span></div>
+    <div class="formula-block">[Â_dream, B̂_dream] = iħ_s δ_αβ + C_waking<span class="desc">Коммутатор операторов сна</span></div>
+    <div class="formula-block">ΔΦ · ΔΠ ≥ ħ_s/2 · (1 — |⟨Ψ_waking|Ψ_dream⟩|²)<span class="desc">Неопределённость для сна</span></div>
+    <div class="formula-block">E_n^dream = ħ_s ω_s (n + ½) + α n² + E_0^dream<span class="desc">Уровни энергии сновидения</span></div>
+    <div class="formula-block">T_scene = exp(-2∫ √(2m_s(V_s(Φ)-E_s))/ħ_s dΦ) · P_REM<span class="desc">Туннелирование между сценами сна</span></div>
+    <div class="formula-block">â†_dream|n_dream⟩ = √(n_dream+1) |n_dream+1⟩<span class="desc">Оператор рождения образа во сне</span></div>
+    <div class="formula-block">â_dream|n_dream⟩ = √n_dream |n_dream-1⟩<span class="desc">Оператор уничтожения образа</span></div>
+    <div class="formula-block">|α_dream⟩ = e^(-|α_dream|²/2) Σ (α_dreamⁿ/√(n!)) |n_dream⟩<span class="desc">Когерентное состояние сна</span></div>
+    <div class="formula-block">|ξ_dream⟩ = exp(½(ξ_dream* â_dream² — ξ_dream â_dream†²)) |0_dream⟩<span class="desc">Сжатое состояние сновидения</span></div>
+    <div class="formula-block">W_dream(Φ,Π) = (1/πħ_s) ∫ Ψ_dream*(Φ+φ) Ψ_dream(Φ-φ) e^(2iΠφ/ħ_s) dφ + W_waking<span class="desc">Функция Вигнера для сновидения</span></div>
+    <div class="formula-block">L_scene = g_ij Φ_i Φ_j δ(τ_i-τ_j) + h_ij (∇Φ_i·∇Φ_j) Θ(τ-τ_REM)<span class="desc">Лагранжиан взаимодействия сцен сна</span></div>
+    <div class="formula-block">d²Φ_i/dτ² + ω_i²Φ_i = Σ ε_ij Φ_j + η_i(τ)<span class="desc">Связанные сцены сновидений</span></div>
+    <div class="formula-block">ω_i = ω_j<span class="desc">Резонанс сцен сна</span></div>
+    <div class="formula-block">Φ_dream(x,τ) = Φ₀ sech²((x-vτ)/L) e^(i(kx-ωτ)) + Φ_background<span class="desc">Солитон в сновидении</span></div>
+    <div class="formula-block">Φ_dream(τ) = Φ₀ tanh(ω(τ-τ₀)) e^(-γτ)<span class="desc">Инстантон сна</span></div>
+    <div class="formula-block">Φ_dream(r,θ,τ) = f(r) e^(imθ) e^(iωτ) e^(-r/ξ)<span class="desc">Вихрь в сновидении</span></div>
+    <div class="formula-block">Γ_dream = ∮ ∇φ_dream · dl = 2πn ħ_s / m_s + Γ_waking<span class="desc">Циркуляция смысла во сне</span></div>
+    <div class="formula-block">P_ij^dream = χ_ijkl ∇_k Φ_dream ∇_l Φ_dream + η_ij |Φ_dream|²<span class="desc">Тензор поляризации сновидения</span></div>
+    <div class="formula-block">∂²Φ_dream/∂τ² = c_s²(1+β|Φ_dream|²)∇²Φ_dream + λ Φ_dream δ(τ-τ_REM)<span class="desc">Волны сна с REM-источником</span></div>
+    <div class="formula-block">ω² = c_s²k² + γ k⁴ + δ|Φ_dream|² + ε ω k P_REM<span class="desc">Дисперсия волн сна</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Специальные состояния сознания</div>
+    <div class="formula-block">P(τ_scene) = λ e^(-λτ_scene) (1 — e^(-μτ_scene))<span class="desc">Распределение длительности сцен сна</span></div>
+    <div class="formula-block">⟨τ_dream⟩ = ∫ τ P(τ) dτ = τ_NREM + τ_REM · N_cycles<span class="desc">Средняя длина сновидения</span></div>
+    <div class="formula-block">f_image(k) = A k^(-α) e^(-k/k₀)<span class="desc">Степенной спектр образов сна</span></div>
+    <div class="formula-block">T_s^REM = (ħ_s ω_s^REM) / (k_s ln(2)) · P_REM<span class="desc">Температура REM-фазы</span></div>
+    <div class="formula-block">⟨(ΔI_dream)²⟩ = I₀² (k_s T_s^dream / E₀)<span class="desc">Флуктуации интенсивности сна</span></div>
+    <div class="formula-block">⟨ΔΦ²⟩ = 2D_s^dream τ<span class="desc">Броуновское движение во сне</span></div>
+    <div class="formula-block">η_s^dream = (1/3) ρ_s^dream ⟨v_s⟩ λ_s^dream<span class="desc">Вязкость семантического потока сна</span></div>
+    <div class="formula-block">Z_dream = Σ g_i e^(-E_i/(k_s T_s^dream)) + Z_waking e^(-τ/τ₀)<span class="desc">Статсумма для сна</span></div>
+    <div class="formula-block">F_dream = -k_s T_s^dream ln Z_dream<span class="desc">Свободная энергия сна</span></div>
+    <div class="formula-block">P_s^dream = k_s T_s^dream (∂ ln Z_dream/∂V_s)_T<span class="desc">Давление семантического газа во сне</span></div>
+    <div class="formula-block">iħ_s ∂Ψ_lucid/∂τ = Ĥ_s^dream Ψ_lucid + F̂_control Ψ_lucid<span class="desc">Уравнение осознанного сновидения</span></div>
+    <div class="formula-block">P_lucid = |⟨Ψ_waking|Ψ_dream⟩|² / (1 + γ ⟨F̂_control⟩)<span class="desc">Вероятность осознанности</span></div>
+    <div class="formula-block">∂Ψ_nightmare/∂τ = Ĥ_s^dream Ψ_nightmare — V̂_threat Ψ_nightmare<span class="desc">Уравнение кошмара</span></div>
+    <div class="formula-block">|V̂_threat| > |Ĥ_s^dream| + E_0^dream<span class="desc">Порог кошмара</span></div>
+    <div class="formula-block">P_mem = |⟨Ψ_waking|Ŝ|Ψ_dream⟩|²/(1+γ t_wake) · e^(-τ₀/τ_mem)<span class="desc">Вероятность запоминания сна</span></div>
+    <div class="formula-block">∂Ψ_sleepwalk/∂τ = Ĥ_s^dream Ψ_sleepwalk + T̂_motor Ψ_sleepwalk<span class="desc">Уравнение лунатизма</span></div>
+    <div class="formula-block">C_dream = log₂(Σ_n g_n e^(-E_n/(k_s T_s^dream)))<span class="desc">Семантическая ёмкость памяти снов</span></div>
+    <div class="formula-block">dP_mem/dt = -γ_forget P_mem + σ_recall δ(t — t_wake)<span class="desc">Скорость забывания снов</span></div>
+    <div class="formula-block">∂Ψ_collective/∂τ = Σ_i Ĥ_s^(i) Ψ_i + Σ_{i<j} V_ij Ψ_i Ψ_j<span class="desc">Коллективный сон</span></div>
+    <div class="formula-block">Ξ̂ |Ψ_total⟩ = (Ĥ_waking + Ĥ_dream + Ĥ_subconscious) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение сознания</span></div>
+    <div class="formula-block">Ĝ_hyp = |Ψ_trance⟩⟨Ψ_waking| ⊗ |Ψ_hypnotist⟩⟨Ψ_hypnotist|<span class="desc">Оператор гипнотического воздействия</span></div>
+    <div class="formula-block">R̂ = |Ψ_hypnotist⟩⟨Ψ_patient| + |Ψ_patient⟩⟨Ψ_hypnotist|<span class="desc">Оператор раппорта</span></div>
+    <div class="formula-block">ρ_s^trance = |Ψ_trance|² · ħ_s ω_s^trance · (1 — |⟨Ψ_waking|Ψ_trance⟩|²)<span class="desc">Плотность энергии транса</span></div>
+    <div class="formula-block">T_s^trance = T_s^waking · e^(-αR) · (1 + β|Ĝ_hyp|)<span class="desc">Температура транса</span></div>
+    <div class="formula-block">∂ρ_s^trance/∂t + ∇·J_s^trance = σ_s^hyp — γ_s ρ_s^trance + ⟨R̂⟩<span class="desc">Непрерывность потока в трансе</span></div>
+    <div class="formula-block">V_s^hyp(Φ) = V₀ cos(ω_hyp t) e^(-r/R₀) + V_rapport(Φ)<span class="desc">Потенциал гипнотического воздействия</span></div>
+    <div class="formula-block">S_s^trance = -k_s ∫ ρ_s^trance ln(ρ_s^trance) dV_s + k_s ln(Ω_s^trance) — S_rapport<span class="desc">Энтропия транса</span></div>
+    <div class="formula-block">∂S/∂t + H_s^hyp(∇S, Φ, t) = 0, где H_s^hyp = H₀ + ⟨R̂⟩V_hyp<span class="desc">Уравнение Гамильтона-Якоби для гипноза</span></div>
+    <div class="formula-block">{F, G}_s^trance = ∫ (δF/δΦ·δG/δΠ — δF/δΠ·δG/δΦ) dV_s + {F, G}_hypnotist<span class="desc">Скобка Пуассона транса</span></div>
+    <div class="formula-block">Φ → Φ + ∇Λ, J^μ → J^μ + ∂^μΛ, где Λ = Λ_hyp только при R̂ > R_crit<span class="desc">Калибровочная инвариантность гипноза</span></div>
+    <div class="formula-block">iħ_s ∂Ψ_trance/∂t = -(ħ_s²/2m_s)∇²Ψ_trance + V_s^hyp(Φ)Ψ_trance + iħ_s γ(t)Ψ_trance + R̂ Ψ_waking<span class="desc">Уравнение Шредингера для транса</span></div>
+    <div class="formula-block">[Â_trance, B̂_trance] = iħ_s δ_αβ · (1 — |⟨Ψ_hypnotist|Ψ_patient⟩|²)<span class="desc">Коммутатор операторов транса</span></div>
+    <div class="formula-block">ΔΦ · ΔΠ ≥ ħ_s/2 · (1 — |⟨Ψ_waking|Ψ_trance⟩|²)⁻¹<span class="desc">Неопределённость для гипноза</span></div>
+    <div class="formula-block">E_n^trance = ħ_s ω_s (n + ½) + α n² — β⟨R̂⟩²<span class="desc">Уровни энергии транса</span></div>
+    <div class="formula-block">T_crit = exp(-2∫ √(2m_s(V_s(Φ)-E_s))/ħ_s dΦ) · (1 — ⟨R̂⟩)<span class="desc">Туннелирование через критическое мышление</span></div>
+    <div class="formula-block">Ŝ_gest = â†_gest|n_trance⟩⟨n_trance| â_gest<span class="desc">Оператор внушения</span></div>
+    <div class="formula-block">R̂_resist = |Ψ_resist⟩⟨Ψ_resist| ⊗ (1 — |⟨Ψ_hypnotist|Ψ_patient⟩|²)<span class="desc">Оператор сопротивления гипнозу</span></div>
+    <div class="formula-block">|α_trance⟩ = e^(-|α|²/2) Σ (αⁿ/√(n!)) |n_trance⟩ ⊗ |Ψ_hypnotist⟩<span class="desc">Когерентное состояние транса</span></div>
+    <div class="formula-block">|ξ_trance⟩ = exp(½(ξ* â² — ξ â†²)) |0_trance⟩ ⊗ |Ψ_hypnotist⟩<span class="desc">Сжатое состояние транса</span></div>
+    <div class="formula-block">W_trance(Φ,Π) = (1/πħ_s) ∫ Ψ_trance*(Φ+φ) Ψ_trance(Φ-φ) e^(2iΠφ/ħ_s) dφ + W_hyp<span class="desc">Функция Вигнера для транса</span></div>
+    <div class="formula-block">dD_trance/dt = α(1-D_trance/D_max)⟨R̂⟩ — βD_trance + γ|Ŝ_gest|²<span class="desc">Уравнение глубины транса</span></div>
+    <div class="formula-block">D_crit = D_max · (1 — e^(-|Ŝ_gest|/S₀))<span class="desc">Критическая глубина для внушения</span></div>
+    <div class="formula-block">P_success = 1 — exp(-|Ŝ_gest|² · D_trance/(D_crit + D_trance))<span class="desc">Вероятность успешного внушения</span></div>
+    <div class="formula-block">χ_s^hyp = χ₀ · (1 + βD_trance) · e^(⟨R̂⟩/R₀)<span class="desc">Семантическая восприимчивость в гипнозе</span></div>
+    <div class="formula-block">V_threshold = V₀/(1 + ⟨R̂⟩) · ln(1/χ_s^hyp)<span class="desc">Порог внушаемости</span></div>
+    <div class="formula-block">τ_induction = τ₀ · exp(-⟨R̂⟩/R_crit) · (1 + γ/|Ŝ_gest|)<span class="desc">Время вхождения в транс</span></div>
+    <div class="formula-block">dΦ_post/dt = -γ_decay Φ_post + Ŝ_gest δ(t — t_trigger)<span class="desc">Постгипнотическое внушение</span></div>
+    <div class="formula-block">F_trigger = F₀ · |⟨Φ_trigger|Φ_post⟩|² · e^(-(t-t_trigger)/τ_mem)<span class="desc">Сила постгипнотического триггера</span></div>
+    <div class="formula-block">P_false = 1 — exp(-|Ŝ_gest|² · τ_hyp · ⟨R̂⟩)<span class="desc">Вероятность ложных воспоминаний</span></div>
+    <div class="formula-block">Ĥ_total |Ψ_total⟩ = (Ĥ_waking + Ĥ_trance + Ĥ_hypnotist + R̂) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение гипноза</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Телекинез и психокинез (§11, §53)</div>
+    <div class="formula-block">T̂_kine = |Ψ_intent⟩⟨Ψ_intent| ⊗ ∇Φ_s ⊗ x̂_phys<span class="desc">Оператор телекинетического воздействия</span></div>
+    <div class="formula-block">g_{s-ph} = (ħ_s c_s / E_Planck) · e^(-S_screen/k_s)<span class="desc">Константа связи семантического и физического миров</span></div>
+    <div class="formula-block">f⃗_s = ρ_s · ∇Φ_s · g_{s-ph} · α_s^obj<span class="desc">Плотность семантической силы</span></div>
+    <div class="formula-block">α_s^obj = α₀ · e^(iω_s t) · (1 + β M) · e^(-r/λ_s)<span class="desc">Семантическая поляризуемость объекта</span></div>
+    <div class="formula-block">m d²r⃗/dt² = F⃗_ext + F⃗_s + F⃗_drag<span class="desc">Уравнение движения под действием мысли</span></div>
+    <div class="formula-block">F⃗_s = ∇(α_s^obj · Φ_s^mind)<span class="desc">Семантическая сила (градиент)</span></div>
+    <div class="formula-block">V_kine(r) = -G_s Q_s^mind Q_s^obj / r · e^(-r/λ_s) (1 — e^(-r/r₀))<span class="desc">Потенциал телекинетического воздействия</span></div>
+    <div class="formula-block">E_s^mind = ½ ∫ (|∇Φ_s|² + (ω_s²/c_s²)|Φ_s|²) dV_s<span class="desc">Энергия семантического поля мысли</span></div>
+    <div class="formula-block">η_kine = E_kin^obj / E_s^mind = η₀ · e^(-S_screen/k_s) · (1 — e^(-|Ψ_intent|²))<span class="desc">КПД конверсии мысли в движение</span></div>
+    <div class="formula-block">∂ρ_s/∂t + ∇·J⃗_s = -σ_conv J⃗_s · v⃗_obj — γ_s ρ_s<span class="desc">Непрерывность потока при телекинезе</span></div>
+    <div class="formula-block">iħ_s ∂Ψ_kine/∂t = (Ĥ_s + Ĥ_int + Ĥ_obj) Ψ_kine<span class="desc">Уравнение Шредингера для телекинеза</span></div>
+    <div class="formula-block">Ĥ_int = g_{s-ph} (â_s† â_obj + â_s â_obj†)<span class="desc">Гамильтониан взаимодействия мысли и объекта</span></div>
+    <div class="formula-block">[x̂_phys, p̂_s] = iħ_s g_{s-ph} δ_ij<span class="desc">Коммутатор физических и семантических операторов</span></div>
+    <div class="formula-block">Δx_phys · Δp_s ≥ (ħ_s/2) g_{s-ph}<span class="desc">Неопределённость для телекинеза</span></div>
+    <div class="formula-block">P_kine = |⟨Ψ_obj|Û_kine|Ψ_mind⟩|² = P₀ · e^(-S_action/ħ_s)<span class="desc">Вероятность телекинетического события</span></div>
+    <div class="formula-block">p̂_kine† |n_mind⟩ = √(n_mind+1) |n_mind+1⟩ ⊗ |p_obj⟩<span class="desc">Оператор рождения телекинетического импульса</span></div>
+    <div class="formula-block">p̂_kine |n_mind⟩ = √n_mind |n_mind-1⟩<span class="desc">Оператор уничтожения импульса</span></div>
+    <div class="formula-block">|α_kine⟩ = e^(-|α|²/2) Σ (αⁿ/√(n!)) |n_mind⟩ ⊗ |0_obj⟩<span class="desc">Когерентное состояние телекинеза</span></div>
+    <div class="formula-block">W_kine(x,p) = (1/πħ_s) ∫ Ψ_kine*(x+y) Ψ_kine(x-y) e^(2ipy/ħ_s) dy<span class="desc">Функция Вигнера для телекинеза</span></div>
+    <div class="formula-block">T_tunnel = exp(-(2/ħ_s) ∫ √(2m_s(U_screen(x)-E_s)) dx)<span class="desc">Туннелирование семантического импульса</span></div>
+    <div class="formula-block">U_screen = U₀ · (1 + S_screen/k_s) · e^(R_doubt/R₀)<span class="desc">Высота семантического экрана</span></div>
+    <div class="formula-block">ω_s^res = ω_s^obj · √(1 + Q_s^mind Q_s^obj/(ħ_s ω_s^obj))<span class="desc">Резонансная частота мысли</span></div>
+    <div class="formula-block">|ω_s — ω_s^obj| < (γ_s/2) · e^(-|Q_s^mind — Q_s^obj|/Q₀)<span class="desc">Условие резонанса для телекинеза</span></div>
+    <div class="formula-block">Q_res = ω_s^res/γ_s = Q₀ · |Q_s^mind Q_s^obj|/(ħ_s γ_s)<span class="desc">Добротность семантического резонанса</span></div>
+    <div class="formula-block">χ_s(ω) = χ₀/(1 — (ω/ω_s^res)² — iγ_s ω/ω_s^res)<span class="desc">Семантическая восприимчивость на частоте ω</span></div>
+    <div class="formula-block">v⃗_drift = μ_s F⃗_s, μ_s = (τ_relax/m) · 1/(1 + iωτ_relax)<span class="desc">Скорость дрейфа под действием мысли</span></div>
+    <div class="formula-block">⟨(Δr)²⟩ = 2D_s t + (2F_s²/(m²γ_s⁴))(e^(-γ_s t) — 1 + γ_s t)<span class="desc">Диффузия объекта под семантическим шумом</span></div>
+    <div class="formula-block">P_trap = 1 — exp(-(U₀ — E_s)/(k_s T_s)) · e^(-r/R₀)<span class="desc">Вероятность удержания в семантической ловушке</span></div>
+    <div class="formula-block">τ_trap = τ₀ exp((U₀ — E_s)/(k_s T_s)) · 1/(1 — v/v_esc)<span class="desc">Время удержания объекта</span></div>
+    <div class="formula-block">P(v) = (4πv²/(2πkT_s/m)^(3/2)) e^(-mv²/(2kT_s)) · (1 + α F_s v τ)<span class="desc">Распределение скоростей при телекинезе</span></div>
+    <div class="formula-block">⟨v⟩ = (F_s τ/m) · 1/(1 + (ωτ)²)<span class="desc">Средняя скорость под действием мысли</span></div>
+    <div class="formula-block">⟨(Δv)²⟩ = kT_s/m + (F_s²τ²/m²) · 1/(1 + (ωτ)²)<span class="desc">Флуктуации скорости</span></div>
+    <div class="formula-block">T_obj = T₀ + (F_s²τ/(m γ k)) · (1 — e^(-γ t))<span class="desc">Нагрев объекта от семантического трения</span></div>
+    <div class="formula-block">S_total = -k_s ∫ ρ_s ln ρ_s dV_s — k ∫ ρ_obj ln ρ_obj dV + S_corr<span class="desc">Энтропия системы мысль-объект</span></div>
+    <div class="formula-block">Z_kine = Z_s Z_obj exp((g_{s-ph}²/(ħ_s ω_s)) ⟨n_s n_obj⟩)<span class="desc">Статсумма для телекинеза</span></div>
+    <div class="formula-block">F_kine = -k_s T_s ln Z_kine — k T_obj ln Z_obj — g_{s-ph} ⟨x̂_phys p̂_s⟩<span class="desc">Свободная энергия телекинеза</span></div>
+    <div class="formula-block">P_s = ⅓ ⟨|∇Φ_s|²⟩ — ½ g_{s-ph} ⟨ρ_s ρ_obj⟩<span class="desc">Давление семантического поля</span></div>
+    <div class="formula-block">Фазовый переход: при F_s > F_crit и T_s < T_crit → макроскопическое движение<span class="desc">Критические параметры телекинеза</span></div>
+    <div class="formula-block">η_kine = ⟨v̂_obj⟩ / v_max<span class="desc">Параметр порядка телекинеза</span></div>
+    <div class="formula-block">m g⃗ + F⃗_s = 0 ⇒ |∇Φ_s| = mg/(α_s^obj g_{s-ph})<span class="desc">Условие левитации</span></div>
+    <div class="formula-block">h_lev = λ_s ln(α_s^obj g_{s-ph} |∇Φ_s(0)|/(mg))<span class="desc">Высота левитации</span></div>
+    <div class="formula-block">I dω⃗/dt = τ⃗_s = r⃗ × F⃗_s<span class="desc">Вращательный момент от мысли</span></div>
+    <div class="formula-block">ω = ω₀ · (α_s^obj g_{s-ph} |∇Φ_s| τ / I) · sinθ<span class="desc">Угловая скорость вращения</span></div>
+    <div class="formula-block">∂²u⃗/∂t² = c_s² ∇²u⃗ + (1/ρ) f⃗_s<span class="desc">Уравнение деформации объекта</span></div>
+    <div class="formula-block">ε = |u⃗|/L = α_s^obj g_{s-ph} |∇Φ_s|/(E Y)<span class="desc">Степень деформации</span></div>
+    <div class="formula-block">dQ/dt = γ_s m ⟨v²⟩ = γ_s k T_obj<span class="desc">Нагрев трением</span></div>
+    <div class="formula-block">τ_cool = (m c_V/γ_s) ln((T_max — T₀)/(T — T₀))<span class="desc">Время остывания после воздействия</span></div>
+    <div class="formula-block">F⃗_s^total = Σ_i F⃗_s^(i) + Σ_{i<j} V_ij F⃗_s^(i) F⃗_s^(j)<span class="desc">Коллективный телекинез</span></div>
+    <div class="formula-block">Θ̂_kine |Ψ_total⟩ = (Ĥ_mind + Ĥ_obj + Ĥ_int + Ĥ_noise) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение телекинеза</span></div>
+    <div class="formula-block">dP_pain/dt = -γ_pain P_pain — α⟨R̂⟩P_pain + β|Ŝ_gest|²<span class="desc">Уравнение гипнотической анальгезии</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Интуиция, дежавю, любовь, плацебо (углубление)</div>
+    <div class="formula-block">P_pain^crit = P₀ · e^(-⟨R̂⟩/R₀) · (1 + |Ŝ_gest|/S₀)⁻¹<span class="desc">Порог гипнотической анальгезии</span></div>
+    <div class="formula-block">A_reg = A₀ · e^(-Δt/τ_decay) · (1 — e^(-|Ŝ_gest|/S₀))<span class="desc">Точность возрастной регрессии</span></div>
+    <div class="formula-block">dM_motor/dt = -γ_motor M_motor + α⟨R̂⟩(M₀ — M_motor)<span class="desc">Уравнение гипнотической каталепсии</span></div>
+    <div class="formula-block">C_catalepsy = 1 — M_motor/M₀ = 1 — e^(-α⟨R̂⟩t)<span class="desc">Степень каталепсии</span></div>
+    <div class="formula-block">∂Φ_halluc/∂t = D_s ∇²Φ_halluc + Ŝ_gest Φ_expected — γ Φ_halluc<span class="desc">Уравнение гипнотической галлюцинации</span></div>
+    <div class="formula-block">I_halluc = I₀ · |Ŝ_gest|² · (1 — e^(-t/τ_build)) · e^(-t/τ_decay)<span class="desc">Яркость галлюцинации</span></div>
+    <div class="formula-block">∂Ψ_group/∂t = Σ_i Ĥ_s^(i) Ψ_i + Σ_{i<j} R̂_ij Ψ_i Ψ_j<span class="desc">Уравнение коллективного гипноза</span></div>
+    <div class="formula-block">P(D) = (1/Z) D^(α-1) e^(-βD) (1 + γ⟨R̂⟩D)<span class="desc">Распределение глубин транса</span></div>
+    <div class="formula-block">⟨D⟩ = ∫ D P(D) dD = D₀ · (1 + α⟨R̂⟩)<span class="desc">Средняя глубина транса</span></div>
+    <div class="formula-block">⟨(ΔD)²⟩ = ⟨D²⟩ — ⟨D⟩² = σ₀² · (1 + β⟨R̂⟩²)<span class="desc">Флуктуации глубины транса</span></div>
+    <div class="formula-block">C_V^trance = C₀ + α⟨R̂⟩²<span class="desc">Теплоёмкость транса</span></div>
+    <div class="formula-block">C_p^hyp = C_V^trance + T_s^trance (∂⟨R̂⟩/∂T_s^trance)_p<span class="desc">Полная теплоёмкость гипноза</span></div>
+    <div class="formula-block">Фазовый переход: T_s < T_crit и R̂ > R_crit → транс<span class="desc">Критические параметры</span></div>
+    <div class="formula-block">η_trance = ⟨Ψ_trance|Ψ_waking⟩<span class="desc">Параметр порядка транса</span></div>
+    <div class="formula-block">η_trance ∼ |T_s — T_crit|^β · |R̂ — R_crit|^γ<span class="desc">Критический показатель транса</span></div>
+    <div class="formula-block">Z_trance = Σ g_i e^(-E_i/(k_s T_s^trance)) + Z_waking e^(-R̂/R₀)<span class="desc">Статсумма для транса</span></div>
+    <div class="formula-block">F_trance = -k_s T_s^trance ln Z_trance<span class="desc">Свободная энергия транса</span></div>
+    <div class="formula-block">F_s = G_s Q_s1 Q_s2 / R_s² · cosθ₁₂<span class="desc">Семантическое тяготение</span></div>
+    <div class="formula-block">P_i V_s = N_i k_s T_s<span class="desc">Уравнение состояния идеи</span></div>
+    <div class="formula-block">∇²Φ_s — (1/c_s²)∂²Φ_s/∂τ² = ρ_s<span class="desc">Волны смысла</span></div>
+    <div class="formula-block">m₀ = (ħ/c²) ω_s K_r exp(-ΔS_s/k_s)<span class="desc">Кристаллизация идеи</span></div>
+    <div class="formula-block">Ŷ|Θ⟩ = |Θ⟩⊗|Осознание(Θ)⟩<span class="desc">Уравнение самосознания идеи</span></div>
+    <div class="formula-block">dS_s/dτ ≥ 0<span class="desc">Закон возрастания семантической энтропии</span></div>
+    <div class="formula-block">∂Q_s/∂τ = α_s ∇²_s (T_s)<span class="desc">Семантическая теплопроводность</span></div>
+    <div class="formula-block">∂ρ_s/∂τ + ∇·(ρ_s v_s) = σ_s — γ_s ρ_s<span class="desc">Уравнение неразрывности</span></div>
+    <div class="formula-block">φ_s = ∂U_s/∂Q_s<span class="desc">Семантический потенциал</span></div>
+    <div class="formula-block">p_s = ħ_s / λ_s<span class="desc">Импульс идеатона</span></div>
+    <div class="formula-block">E_s = -G_s Q_s1 Q_s2 / R_s<span class="desc">Энергия смысловой связи</span></div>
+    <div class="formula-block">T_s = (∂U_s/∂S_s)_V<span class="desc">Семантическая температура</span></div>
+    <div class="formula-block">P_s V_s = N_s k_s T_s<span class="desc">Семантический газ</span></div>
+    <div class="formula-block">C_s = ∂Q_s/∂φ_s<span class="desc">Семантическая ёмкость</span></div>
+    <div class="formula-block">k_s = 2π/λ_s<span class="desc">Волновое число смысла</span></div>
+    <div class="formula-block">v_gs = dω_s/dk_s<span class="desc">Групповая скорость смысла</span></div>
+    <div class="formula-block">v_фs = ω_s/k_s<span class="desc">Фазовая скорость смысла</span></div>
+    <div class="formula-block">ω_s² = c_s² k_s² + β_s k_s⁴<span class="desc">Дисперсионное соотношение</span></div>
+    <div class="formula-block">Φ_s(x,t) = Φ₀ sech²((x-vt)/L)<span class="desc">Солитон смысла</span></div>
+    <div class="formula-block">I_s = I₁ + I₂ + 2√(I₁I₂) cos(Δφ_s)<span class="desc">Интерференция смыслов</span></div>
+    <div class="formula-block">I_s(θ) = I₀ (sin(β)/β)²<span class="desc">Дифракция смысла</span></div>
+    <div class="formula-block">I_s = I₀ cos²θ<span class="desc">Поляризация смысла</span></div>
+    <div class="formula-block">sinθ₁ / sinθ₂ = c_s2 / c_s1<span class="desc">Преломление смысла</span></div>
+    <div class="formula-block">sinθ_кр = c_s2/c_s1<span class="desc">Полное внутреннее отражение</span></div>
+    <div class="formula-block">1/F_s = (n_s — 1)(1/R₁ — 1/R₂)<span class="desc">Смысловая линза</span></div>
+    <div class="formula-block">L = m λ_s/2<span class="desc">Смысловой резонатор</span></div>
+    <div class="formula-block">ω_s = π c_s n / L<span class="desc">Смысловая мода</span></div>
+    <div class="formula-block">Q_s = ω₀ / Δω<span class="desc">Добротность смысла</span></div>
+    <div class="formula-block">⟨δΦ_s²⟩ ∝ k_B T_s<span class="desc">Смысловой шум</span></div>
+    <div class="formula-block">k_B T_s = ⟨E_s²⟩ / C_s<span class="desc">Флуктуационная температура</span></div>
+    <div class="formula-block">Φ_s(r) = Φ₀ cos(G·r)<span class="desc">Смысловой кристалл</span></div>
+    <div class="formula-block">Φ_s(r) = Φ₀ tanh(r/ξ)<span class="desc">Смысловой дефект</span></div>
+    <div class="formula-block">∮ ∇φ_s · dl = 2πn<span class="desc">Смысловой вихрь</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Статистика, эволюция и финальные уравнения</div>
+    <div class="formula-block">Φ_s(τ) = Φ₀ tanh(ωτ)<span class="desc">Смысловой инстантон</span></div>
+    <div class="formula-block">S = -μ ∫ d²σ √(-h)<span class="desc">Действие смысловой струны</span></div>
+    <div class="formula-block">S = -σ ∫ d³ξ √(-γ)<span class="desc">Действие смысловой мембраны</span></div>
+    <div class="formula-block">ds² = -(1-2G_sM_s/r)dt² + dr²/(1-2G_sM_s/r) + r²dΩ²<span class="desc">Метрика смысловой ЧД</span></div>
+    <div class="formula-block">r_g = 2G_s M_s<span class="desc">Смысловой горизонт</span></div>
+    <div class="formula-block">R_μν R^μν → ∞<span class="desc">Смысловая сингулярность</span></div>
+    <div class="formula-block">S_s = A/(4G_s)<span class="desc">Энтропия ЧД Бекенштейна</span></div>
+    <div class="formula-block">T_s = 1/(8πG_s M_s)<span class="desc">Излучение Хокинга смысла</span></div>
+    <div class="formula-block">ds² = -dt² + a_s(t)² dx²<span class="desc">Космология смысла</span></div>
+    <div class="formula-block">(ȧ_s/a_s)² = 8πG_s ρ_s/3 — k_s c_s²/a_s² + Λ_s/3<span class="desc">Уравнение Фридмана</span></div>
+    <div class="formula-block">Ω_s = ρ_s/ρ_crit^(s)<span class="desc">Параметр плотности</span></div>
+    <div class="formula-block">a_s(t) ∝ e^(H_s t)<span class="desc">Смысловая инфляция</span></div>
+    <div class="formula-block">a_s(t) ∝ t^(1/2)<span class="desc">Большой взрыв смысла</span></div>
+    <div class="formula-block">a_s(t) ∝ (t_c — t)^(1/2)<span class="desc">Большой хруст смысла</span></div>
+    <div class="formula-block">1+z_s = a_s(t₀)/a_s(t₁)<span class="desc">Красное смещение смысла</span></div>
+    <div class="formula-block">d_H = a_s ∫ dt/a_s<span class="desc">Горизонт видимости</span></div>
+    <div class="formula-block">ρ_Λ = const<span class="desc">Тёмная энергия смысла</span></div>
+    <div class="formula-block">ds² = -dt² + a_s(t)² dx² + b_s(t)² dy²<span class="desc">Мультивселенная смысла</span></div>
+    <div class="formula-block">S = ∫ d⁴x √(-g) (R_s — 2Λ_s)<span class="desc">Действие смысловой браны</span></div>
+    <div class="formula-block">S_s ≤ A/4G_s<span class="desc">Голографический принцип</span></div>
+    <div class="formula-block">dg_s/dlnμ = β(g_s)<span class="desc">Ренормализационная группа</span></div>
+    <div class="formula-block">S_s = -Tr(ρ_s ln ρ_s)<span class="desc">Энтропия запутанности</span></div>
+    <div class="formula-block">|Ψ⟩_out = |Ψ⟩_in<span class="desc">Смысловая телепортация</span></div>
+    <div class="formula-block">Û_s = exp(-iĤ_s t)<span class="desc">Смысловой компьютер</span></div>
+    <div class="formula-block">|ψ_out⟩ = U|ψ_in⟩<span class="desc">Смысловой алгоритм</span></div>
+    <div class="formula-block">C_s = -Σ p_i log p_i<span class="desc">Смысловая сложность</span></div>
+    <div class="formula-block">D_s = ∫ |∇Φ_s|² dV<span class="desc">Смысловая глубина</span></div>
+    <div class="formula-block">B_s = ∫ Φ_s² dV<span class="desc">Смысловая красота</span></div>
+    <div class="formula-block">H_s = ∫ (∇Φ_s)² / Φ_s² dV<span class="desc">Смысловая гармония</span></div>
+    <div class="formula-block">C_s = ∫ Φ_s ρ_s dV<span class="desc">Смысловое сознание</span></div>
+    <div class="formula-block">L_s = ∫∫ G_s(|r-r'|) Φ_s(r) Φ_s(r') dV dV'<span class="desc">Смысловая любовь</span></div>
+    <div class="formula-block">E_s = lim_{t→∞} Φ_s(t)<span class="desc">Смысловая вечность</span></div>
+    <div class="formula-block">Φ_s = 0<span class="desc">Смысловое ничто</span></div>
+    <div class="formula-block">Φ_s = ∞<span class="desc">Смысловое всё</span></div>
+    <div class="formula-block">H_s = -Σ p_i log p_i<span class="desc">Энтропия Шеннона смысла</span></div>
+    <div class="formula-block">P(v) = (4πv²/(2πkT_s/m)^(3/2)) e^(-mv²/(2kT_s)) · (1 + α F_s v τ)<span class="desc">Распределение скоростей</span></div>
+    <div class="formula-block">P_placebo = Q_belief²/(θ_placebo² + Q_belief²) · e^(-t/τ_decay)<span class="desc">Вероятность плацебо</span></div>
+    <div class="formula-block">P_luck = Q_luck²/(θ_luck² + Q_luck²) · 1/(1+(Δω/γ_luck)²) · e^(-t/τ_opportunity)<span class="desc">Вероятность удачи</span></div>
+    <div class="formula-block">P_déjàvu = |⟨Φ_s^present|Φ_s^past⟩|²/(θ² + |⟨Φ_s^present|Φ_s^past⟩|²) · e^(-t/τ_forget)<span class="desc">Вероятность дежавю</span></div>
+    <div class="formula-block">P_love = |⟨Φ_s¹|Φ_s²⟩|²/(||Φ_s¹||² ||Φ_s²||²) · 1/(1+(Δω/γ_love)²)<span class="desc">Вероятность любви с первого взгляда</span></div>
+    <div class="formula-block">P_correct = 1/(1 + e^(-(|Φ_s^signal|-θ_int)/k_s T_s))<span class="desc">Вероятность правильной интуиции</span></div>
+    <div class="formula-block">P_conform = 1/(1 + e^(-(|Φ_group — Φ_i|-θ_ind)/k_s T_group))<span class="desc">Вероятность конформности</span></div>
+    <div class="formula-block">P_kine = |⟨Ψ_obj|Û_kine|Ψ_mind⟩|² = P₀ · e^(-S_action/ħ_s)<span class="desc">Вероятность телекинеза</span></div>
+    <div class="formula-block">P_lucid = |⟨Ψ_waking|Ψ_dream⟩|²/(1 + γ ⟨F̂_control⟩)<span class="desc">Вероятность осознанного сна</span></div>
+    <div class="formula-block">P_mem = |⟨Ψ_waking|Ŝ|Ψ_dream⟩|²/(1+γ t_wake) · e^(-τ₀/τ_mem)<span class="desc">Вероятность запоминания сна</span></div>
+    <div class="formula-block">P_success = 1 — exp(-|Ŝ_gest|² · D_trance/(D_crit + D_trance))<span class="desc">Вероятность успешного внушения</span></div>
+    <div class="formula-block">P_false = 1 — exp(-|Ŝ_gest|² · τ_hyp · ⟨R̂⟩)<span class="desc">Вероятность ложных воспоминаний</span></div>
+    <div class="formula-block">P_trap = 1 — exp(-(U₀ — E_s)/(k_s T_s)) · e^(-r/R₀)<span class="desc">Вероятность удержания в ловушке</span></div>
+    <div class="formula-block">P(Q_luck) = 1/(Q_luck σ√(2π)) · exp(-(ln Q_luck — μ)²/(2σ²))<span class="desc">Логнормальное распределение удачи</span></div>
+    <div class="formula-block">P(τ) = (1/⟨τ⟩) e^(-τ/⟨τ⟩) · (1 + β|⟨Φ_s¹|Φ_s²⟩|²)<span class="desc">Распределение длительности любви</span></div>
+</div>
+
+<div class="section">
+    <div class="section-title">🔹 Финальные уравнения феноменов (Гамильтонианы)</div>
+    <div class="formula-block">Ξ̂ |Ψ_total⟩ = (Ĥ_waking + Ĥ_dream + Ĥ_subconscious) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение сознания</span></div>
+    <div class="formula-block">Ĥ_total |Ψ_total⟩ = (Ĥ_waking + Ĥ_trance + Ĥ_hypnotist + R̂) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение гипноза</span></div>
+    <div class="formula-block">Θ̂_kine |Ψ_total⟩ = (Ĥ_mind + Ĥ_obj + Ĥ_int + Ĥ_noise) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение телекинеза</span></div>
+    <div class="formula-block">Î_total |Ψ_total⟩ = (Ĥ_subconscious + Ĥ_conscious + Ĥ_int + Ĥ_noise) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение интуиции</span></div>
+    <div class="formula-block">Λ̂_love |Ψ_total⟩ = (Ĥ_1 + Ĥ_2 + V̂_love + Ĥ_external) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение любви</span></div>
+    <div class="formula-block">Δ̂_total |Ψ_total⟩ = (Ĥ_present + Ĥ_past + Ĥ_memory + Ĥ_time) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение дежавю</span></div>
+    <div class="formula-block">Π̂_total |Ψ_total⟩ = (Ĥ_body + Ĥ_belief + Ĥ_hope + Ĥ_doubt) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение плацебо</span></div>
+    <div class="formula-block">Γ̂_total |Ψ_total⟩ = (Σ_i Ĥ_i + Σ_{i<j} V̂_ij + Ĥ_external) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение группы</span></div>
+    <div class="formula-block">Λ̂_luck |Ψ_total⟩ = (Ĥ_person + Ĥ_world + V̂_luck + Ĥ_fear) |Ψ_total⟩ = E_total |Ψ_total⟩<span class="desc">Финальное уравнение удачи</span></div>
+    <div class="formula-block">Ŷ|Θ⟩ = |Θ⟩⊗|Осознание(Θ)⟩<span class="desc">Финальное уравнение самосознания идеи</span></div>
+    <div class="formula-block">iħ_s ∂|Ψ⟩/∂t = (Ĥ_phys + Ŝ_sense) |Ψ⟩<span class="desc">Уравнение Шредингера с семантической поправкой</span></div>
+    <div class="formula-block">P(x) = |Ψ₁(x) + Ψ₂(x)|²<span class="desc">Семантическая интерференция вероятностей</span></div>
+    <div class="formula-block">∂ρ_Q/∂t + ∇·J_Q = S_Q<span class="desc">Уравнение непрерывности (общее)</span></div>
+    <div class="formula-block">Φ_total = Φ_мысль + Φ_эмоция + Φ_действие + Φ_тепло<span class="desc">I закон: Сохранение смысла</span></div>
+    <div class="formula-block">P_влияние = η · Qₛ · Cₛ · P_phys<span class="desc">II закон: Когерентное влияние</span></div>
+    <div class="formula-block">Qₛ(t) = Qₛ(0) · e^(-t/τ_relax)<span class="desc">III закон: Семантическая инерция</span></div>
+    <div class="formula-block">Φ_общ = Σ Φ_i + Σ V_ij Φ_i Φ_j<span class="desc">IV закон: Коллективный резонанс</span></div>
+    <div class="formula-block">Cₛ = |⟨Φ⟩|² / ⟨|Φ|²⟩<span class="desc">Определение когерентности</span></div>
+    <div class="formula-block">νₜ = dτ/dt = 1 + κ·(dI/dt)·cos θₜ<span class="desc">Темп семантического времени</span></div>
+    <div class="formula-block">Qₛ = Q₀ · (1 + αE_опт) · e^(-γS_страх)<span class="desc">Семантический заряд</span></div>
+</div>
+
+
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+</div>
+</body>
+</html>

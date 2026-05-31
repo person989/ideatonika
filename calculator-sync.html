@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Коллективной Мощности • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-comparison { color: #a09080; font-size: 0.9rem; margin-top: 0.5rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>👥 Коллективная Мощность</h1>
+    <div class="subtitle">Калькулятор синергии группы (§92, §123, Эксперимент SYNC-TEST)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры группы</div>
+
+        <!-- Количество участников -->
+        <div class="input-group">
+            <label>👤 Количество участников (N): <span id="nValue">3</span></label>
+            <input type="range" id="nSlider" min="1" max="100" value="3" step="1">
+            <div class="range-labels"><span>1 (одиночка)</span><span>10</span><span>100 (собор)</span></div>
+        </div>
+
+        <!-- Средний Cₛ группы -->
+        <div class="input-group">
+            <label>🎯 Средняя когерентность группы (Cₛ): <span id="csValue">0.6</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (толпа)</span><span>1.0 (монахи в экстазе)</span></div>
+        </div>
+
+        <!-- Тип синхронизации -->
+        <div class="input-group">
+            <label>🔄 Тип синхронизации:</label>
+            <select id="syncSelect">
+                <option value="1.8">Идеальная (общий ритм, молитва, метроном) — k≈1.8</option>
+                <option value="1.5" selected>Хорошая (общая цель, но без ритма) — k≈1.5</option>
+                <option value="1.2">Средняя (знакомые люди, похожие мысли) — k≈1.2</option>
+                <option value="1.0">Слабая (незнакомцы, каждый о своём) — k≈1.0</option>
+            </select>
+        </div>
+
+        <!-- Мощность одного -->
+        <div class="input-group">
+            <label>⚡ Мощность одного человека (P₁): <span id="p1Value">10</span> Вт смысла</label>
+            <input type="range" id="p1Slider" min="1" max="50" value="10" step="1">
+            <div class="range-labels"><span>1 (новичок)</span><span>50 (мастер)</span></div>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Коллективная мощность</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-comparison" id="resultComparison"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const nSlider = document.getElementById('nSlider');
+    const csSlider = document.getElementById('csSlider');
+    const syncSelect = document.getElementById('syncSelect');
+    const p1Slider = document.getElementById('p1Slider');
+    const nValue = document.getElementById('nValue');
+    const csValue = document.getElementById('csValue');
+    const p1Value = document.getElementById('p1Value');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultComparison = document.getElementById('resultComparison');
+    const resultFormula = document.getElementById('resultFormula');
+
+    nSlider.addEventListener('input', () => { nValue.textContent = parseInt(nSlider.value); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    syncSelect.addEventListener('change', calculate);
+    p1Slider.addEventListener('input', () => { p1Value.textContent = parseInt(p1Slider.value); calculate(); });
+
+    function calculate() {
+        const N = parseInt(nSlider.value);
+        const C = parseFloat(csSlider.value);
+        const baseK = parseFloat(syncSelect.value);
+        const P1 = parseInt(p1Slider.value);
+
+        // Коэффициент синергии: чем выше Cₛ, тем ближе k к базовому значению
+        const k = 1 + (baseK - 1) * C;
+        
+        // P_total = P₁ · Nᵏ
+        const Ptotal = P1 * Math.pow(N, k);
+        
+        // Для сравнения: сумма без синергии
+        const Psum = P1 * N;
+        const gain = Ptotal / Psum;
+
+        resultNumber.textContent = Ptotal.toFixed(0) + ' Вт';
+        resultLabel.textContent = 'Коллективная мощность';
+
+        let extra = '';
+        if (gain >= 5) extra = '🚀 Колоссальная синергия! Группа работает как единый лазер.';
+        else if (gain >= 2) extra = '✨ Отличная синергия! Эффект значительно выше суммы индивидуальных усилий.';
+        else if (gain >= 1.3) extra = '👍 Хорошая синергия. Группа работает слаженно.';
+        else extra = '🟰 Слабая синергия. Люди не синхронизированы, эффект почти как сумма.';
+        resultExtra.textContent = extra;
+
+        const syncName = syncSelect.options[syncSelect.selectedIndex].text.split(' —')[0];
+        resultComparison.textContent = `Для сравнения: простая сумма мощностей = ${Psum.toFixed(0)} Вт. Усиление в ${gain.toFixed(1)} раза. (Синхронизация: ${syncName})`;
+
+        resultFormula.textContent = `k = 1 + (${baseK.toFixed(1)} — 1) · ${C.toFixed(2)} = ${k.toFixed(3)} | P_total = ${P1} · ${N}^${k.toFixed(3)} = ${Ptotal.toFixed(0)} Вт`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

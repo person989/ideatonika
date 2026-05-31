@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сила молитвы • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30,40,60,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🙏 Сила молитвы</h1>
+    <div class="subtitle">Калькулятор эффективности молитвы (§30, §45, §92)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваши параметры</div>
+
+        <!-- Qₛ -->
+        <div class="input-group">
+            <label>🌟 Семантический заряд (Qₛ): <span id="qsValue">5</span> / 10</label>
+            <input type="range" id="qsSlider" min="0" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>0 (пустота)</span><span>5 (искренне)</span><span>10 (экстаз)</span></div>
+        </div>
+
+        <!-- Cₛ -->
+        <div class="input-group">
+            <label>🎯 Когерентность (Cₛ): <span id="csValue">0.70</span></label>
+            <input type="range" id="csSlider" min="0" max="1" value="0.7" step="0.01">
+            <div class="range-labels"><span>0 (рассеян)</span><span>0.5 (спокоен)</span><span>1 (абсолют)</span></div>
+        </div>
+
+        <!-- Тип молитвы -->
+        <div class="input-group">
+            <label>📿 Тип молитвы:</label>
+            <select id="typeSelect">
+                <option value="1.0">Просьба (обычная)</option>
+                <option value="1.3">Благодарность</option>
+                <option value="1.5" selected>Иисусова молитва (непрестанная)</option>
+                <option value="1.6">«Отче наш» (осознанно)</option>
+                <option value="2.0">Литургия / соборная молитва</option>
+                <option value="2.5">Молитва святого</option>
+            </select>
+        </div>
+
+        <!-- Место -->
+        <div class="input-group">
+            <label>⛪ Место молитвы:</label>
+            <select id="placeSelect">
+                <option value="0.5">Бетонная комната, офис</option>
+                <option value="1.0" selected>Дома, обычная комната</option>
+                <option value="1.3">На природе (лес, горы, море)</option>
+                <option value="1.8">Храм (рядовой)</option>
+                <option value="3.0">Храм (праздничная служба)</option>
+                <option value="5.0">Святое место (Афон, Иерусалим)</option>
+            </select>
+        </div>
+
+        <!-- Коллективность -->
+        <div class="input-group">
+            <label>👥 Сколько людей молится вместе с вами? <span id="nValue">1</span></label>
+            <input type="range" id="nSlider" min="1" max="1000" value="1" step="1">
+            <div class="range-labels"><span>1 (один)</span><span>10</span><span>100</span><span>1000 (собор)</span></div>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Сила молитвы</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const qsSlider = document.getElementById('qsSlider');
+    const csSlider = document.getElementById('csSlider');
+    const typeSelect = document.getElementById('typeSelect');
+    const placeSelect = document.getElementById('placeSelect');
+    const nSlider = document.getElementById('nSlider');
+    const qsValue = document.getElementById('qsValue');
+    const csValue = document.getElementById('csValue');
+    const nValue = document.getElementById('nValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    qsSlider.addEventListener('input', () => { qsValue.textContent = parseFloat(qsSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    typeSelect.addEventListener('change', calculate);
+    placeSelect.addEventListener('change', calculate);
+    nSlider.addEventListener('input', () => { nValue.textContent = parseInt(nSlider.value); calculate(); });
+
+    function calculate() {
+        const Q = parseFloat(qsSlider.value);
+        const C = parseFloat(csSlider.value);
+        const typeK = parseFloat(typeSelect.value);
+        const placeK = parseFloat(placeSelect.value);
+        const N = parseInt(nSlider.value);
+
+        // Индивидуальная сила: P₁ = Q · C · typeK · placeK
+        const P1 = Q * C * typeK * placeK;
+
+        // Коэффициент синергии (для группы)
+        const k = 1.5; // средний коэффициент
+        const Ptotal = P1 * Math.pow(N, k);
+
+        // Приводим к шкале 0-100 для наглядности
+        const maxPossible = 10 * 1 * 2.5 * 5 * Math.pow(1000, 1.5); // теоретический максимум
+        const normalizedScore = Math.min(100, Math.round((Ptotal / maxPossible) * 100 * 100) / 100);
+
+        resultNumber.textContent = Ptotal.toFixed(1) + ' Вт';
+        resultLabel.textContent = 'Мощность молитвы';
+
+        let extra = '';
+        if (Ptotal >= 1000) extra = '🌟 Соборная молитва в святом месте! Эффект колоссальный. Возможны чудеса.';
+        else if (Ptotal >= 100) extra = '🔥 Очень сильная молитва. Высока вероятность реального влияния на событие.';
+        else if (Ptotal >= 10) extra = '🙏 Хорошая молитва. Ваше намерение будет «услышано» и повлияет на вероятности.';
+        else if (Ptotal >= 1) extra = '📿 Умеренная молитва. Эффект есть, но слабый. Попробуйте повысить Cₛ или пойти в храм.';
+        else extra = '💫 Слабая молитва. Возможно, вы рассеяны или находитесь в бетонной коробке. Попробуйте на природе.';
+        resultExtra.textContent = extra;
+
+        const typeName = typeSelect.options[typeSelect.selectedIndex].text.split(' (')[0];
+        const placeName = placeSelect.options[placeSelect.selectedIndex].text.split(' (')[0];
+        resultFormula.textContent = `P = ${Q.toFixed(1)} · ${C.toFixed(2)} · ${typeK} · ${placeK} · ${N}^${k} = ${Ptotal.toFixed(1)} Вт | Тип: ${typeName} | Место: ${placeName}`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

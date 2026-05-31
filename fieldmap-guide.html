@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗺️ Подробная сборка FIELD-MAP • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); margin-bottom: 2rem;
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        h2 { font-size: 1.6rem; color: #64b5f6; margin: 2.5rem 0 1rem; border-left: 4px solid #64b5f6; padding-left: 1rem; }
+        h3 { font-size: 1.3rem; color: #90caf9; margin: 1.5rem 0 0.8rem; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+
+        p, li { color: #d0c8b8; line-height: 1.7; margin-bottom: 0.8rem; }
+        ul, ol { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+        strong { color: #90caf9; }
+
+        .materials-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .materials-table th { background: #2a2a4a; color: #f3e7c0; padding: 12px; text-align: left; border: 1px solid #5d4a3a; }
+        .materials-table td { padding: 12px; border: 1px solid #5d4a3a; color: #d0c8b8; }
+        .materials-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .scheme-box { background: #1a1a2e; border: 1px solid #64b5f6; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; }
+        .scheme-box pre { color: #81c784; font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.3; }
+
+        .tip-box { background: rgba(100,181,246,0.1); border-left: 4px solid #64b5f6; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .tip-box p { color: #90caf9; margin: 0; }
+
+        .warning-box { background: rgba(244,67,54,0.1); border-left: 4px solid #f44336; padding: 1rem 1.5rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0; }
+        .warning-box p { color: #ef9a9a; margin: 0; }
+
+        .step-number { display: inline-block; background: #64b5f6; color: #1a1a2e; width: 30px; height: 30px; border-radius: 50%; text-align: center; line-height: 30px; font-weight: bold; margin-right: 10px; }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #64b5f6; text-decoration: none; border: 1px solid #64b5f6; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #64b5f6; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🗺️ FIELD-MAP: ПОДРОБНАЯ СБОРКА</h1>
+    <div class="subtitle">Пошаговое руководство • 3D-сканер семантического поля</div>
+
+    <!-- ВВЕДЕНИЕ -->
+    <h2>📖 Что такое FIELD-MAP и зачем его строить?</h2>
+    <p>FIELD-MAP — это устройство, которое <strong>сканирует комнату в трёх измерениях</strong> и строит карту распределения Qₛ, Cₛ, Tₛ и Re_sense. Представьте тепловизор, который показывает не температуру, а <strong>«семантическую температуру»</strong>: где в комнате «жарко» от ссор, где «холодно» от страха, а где — благодатный покой.</p>
+    <p>Это самый сложный, но и самый впечатляющий проект в нашем Практикуме. Если SEC-1 — это микроскоп для точки, то FIELD-MAP — это <strong>МРТ для всей комнаты</strong>. С его помощью вы сможете:</p>
+    <ul>
+        <li>Найти «проклятый угол» в квартире и очистить его.</li>
+        <li>Определить лучшее место для алтаря, кровати или рабочего стола.</li>
+        <li>Увидеть, как движется Qₛ: от иконы к окну, через дверные проёмы, закручиваясь в вихри.</li>
+    </ul>
+
+    <!-- МАТЕРИАЛЫ -->
+    <h2>🛒 Что нужно купить (или найти)</h2>
+    <table class="materials-table">
+        <thead>
+            <tr><th>Материал</th><th>Где взять</th><th>Примерная стоимость</th><th>Назначение</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Детектор SEC-mini</strong> (кварц + усилитель)</td><td>Собрать по инструкции SEC-1</td><td>~300 ₽</td><td>Датчик Qₛ</td></tr>
+            <tr><td><strong>Шаговые двигатели</strong> (3 шт., от старых принтеров)</td><td>Разборка старых струйных принтеров, барахолка</td><td>0-500 ₽</td><td>Перемещение датчика по X, Y, Z</td></tr>
+            <tr><td><strong>Драйверы шаговых двигателей</strong> (A4988 или DRV8825, 3 шт.)</td><td>Радиомагазин, AliExpress</td><td>~300 ₽</td><td>Управление двигателями</td></tr>
+            <tr><td><strong>Микроконтроллер</strong> (Arduino Uno или ESP32)</td><td>Радиомагазин</td><td>~500 ₽</td><td>Мозг системы</td></tr>
+            <tr><td><strong>Направляющие</strong> (3 шт., от старых принтеров/сканеров)</td><td>Разборка оргтехники</td><td>0 ₽</td><td>Рельсы для движения по осям</td></tr>
+            <tr><td><strong>Ремни или винтовые передачи</strong></td><td>Оттуда же</td><td>0 ₽</td><td>Передача движения</td></tr>
+            <tr><td><strong>Фанера для основания</strong></td><td>Строймагазин</td><td>200 ₽</td><td>Станина плоттера</td></tr>
+            <tr><td><strong>Ноутбук или ПК</strong></td><td>Ваш</td><td>0 ₽</td><td>Управление и визуализация</td></tr>
+        </tbody>
+    </table>
+    <div class="tip-box"><p><strong>💡 Главный секрет экономии:</strong> Почти все механические детали можно взять из <strong>трёх старых струйных принтеров или сканеров</strong>. В каждом принтере есть шаговый двигатель, направляющая и ремень. Попросите у друзей или найдите на свалке.</p></div>
+
+    <!-- МЕХАНИКА -->
+    <h2>🔧 Этап 1: Строительство 3D-плоттера (механика)</h2>
+
+    <h3><span class="step-number">1</span> Разборка принтеров и извлечение деталей</h3>
+    <p><strong>Что нам нужно из каждого принтера:</strong></p>
+    <ol>
+        <li><strong>Шаговый двигатель.</strong> Обычно их два: один двигает каретку, второй — бумагу. Забираем оба.</li>
+        <li><strong>Направляющая (ось).</strong> Металлический стержень, по которому скользит каретка.</li>
+        <li><strong>Ремень или винт.</strong> То, что соединяет двигатель с кареткой.</li>
+        <li><strong>Концевики (опционально).</strong> Маленькие кнопки, которые срабатывают, когда каретка доходит до края.</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Осторожно:</strong> В принтерах могут быть острые края и высоковольтные конденсаторы (даже в выключенном). Работайте в перчатках. Не касайтесь платы питания.</p></div>
+
+    <h3><span class="step-number">2</span> Сборка осей X и Y (горизонтальная плоскость)</h3>
+    <p><strong>Что мы строим:</strong> Прямоугольную раму, по которой датчик будет двигаться влево-вправо (X) и вперёд-назад (Y).</p>
+    <ol>
+        <li><strong>Основание.</strong> Выпилите из фанеры прямоугольник примерно 50×50 см. Это будет «пол» нашего сканера.</li>
+        <li><strong>Ось Y (вперёд-назад).</strong> Вдоль двух противоположных краёв основания закрепите две направляющие. На них установите каретку (мостик), который будет двигаться по Y.</li>
+        <li><strong>Ось X (влево-вправо).</strong> На этом мостике закрепите третью направляющую и каретку для движения по X.</li>
+        <li><strong>Двигатели.</strong> Один двигатель двигает мостик по Y, второй — каретку по X. Соедините их ремнями или винтами.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Упрощение:</strong> Если возиться с двумя осями сложно, начните с <strong>одной оси</strong>. Закрепите датчик на каретке, которая движется только по X. Измерьте поле вдоль линии. Потом передвиньте всю конструкцию на 10 см и повторите. Это дольше, но проще механически.</p></div>
+
+    <h3><span class="step-number">3</span> Сборка оси Z (вертикаль)</h3>
+    <p>Ось Z поднимает и опускает датчик, чтобы сканировать на разной высоте.</p>
+    <ol>
+        <li>На каретке оси X закрепите вертикальную направляющую с двигателем.</li>
+        <li>На ней установите держатель для датчика SEC-mini.</li>
+        <li>Датчик должен смотреть <strong>вперёд</strong> (или вниз, если вы сканируете пол).</li>
+    </ol>
+
+    <!-- ЭЛЕКТРОНИКА -->
+    <h2>⚡ Этап 2: Подключение электроники</h2>
+
+    <h3><span class="step-number">4</span> Подключение драйверов и двигателей к Arduino</h3>
+    <p><strong>Схема подключения одного двигателя (повторить для трёх):</strong></p>
+    <ol>
+        <li>Драйвер A4988 вставьте в макетную плату.</li>
+        <li>Пины <strong>STEP</strong> и <strong>DIR</strong> подключите к любым цифровым пинам Arduino (например, 2 и 5 для оси X).</li>
+        <li>Пины <strong>2B, 2A, 1A, 1B</strong> — к четырём проводам шагового двигателя.</li>
+        <li>Пины <strong>VMOT</strong> и <strong>GND</strong> — к внешнему источнику питания 12V (старый блок питания от принтера).</li>
+    </ol>
+    <div class="warning-box"><p><strong>⚠️ Важно:</strong> Не подключайте двигатели напрямую к Arduino! Они потребляют большой ток и сожгут плату. Всегда используйте драйверы (A4988) и отдельный источник питания 12V.</p></div>
+
+        <h3><span class="step-number">5</span> Прошивка Arduino (полный профессиональный код)</h3>
+    <p>Этот код управляет тремя шаговыми двигателями, принимает команды от компьютера по USB, поддерживает <strong>концевые выключатели</strong> для калибровки и реализует <strong>плавный разгон</strong> (acceleration), чтобы датчик не дёргался рывками.</p>
+    <p><strong>Как загрузить код:</strong></p>
+    <ol>
+        <li>Установите <strong>Arduino IDE</strong> (бесплатно с arduino.cc).</li>
+        <li>Подключите Arduino к компьютеру через USB.</li>
+        <li>Скопируйте код ниже, вставьте в Arduino IDE.</li>
+        <li>Установите библиотеку <strong>AccelStepper</strong>: Инструменты → Управлять библиотеками → вбить «AccelStepper» → Установить.</li>
+        <li>Нажмите кнопку «Загрузить» (стрелка вправо).</li>
+    </ol>
+    <div class="scheme-box"><pre>
+/*
+ * =============================================
+ * FIELD-MAP: Прошивка для Arduino (3 оси)
+ * Управление 3D-сканером семантического поля
+ * Версия 2.0 — профессиональная
+ * =============================================
+ */
+
+#include &lt;AccelStepper.h&gt;
+
+// ==================== НАСТРОЙКИ ПИНОВ ====================
+// Ось X (влево-вправо)
+#define X_STEP_PIN      2
+#define X_DIR_PIN       5
+#define X_ENABLE_PIN    8
+#define X_ENDSTOP_PIN   11    // Концевой выключатель X (опционально)
+
+// Ось Y (вперёд-назад)
+#define Y_STEP_PIN      3
+#define Y_DIR_PIN       6
+#define Y_ENABLE_PIN    9
+#define Y_ENDSTOP_PIN   12
+
+// Ось Z (вверх-вниз)
+#define Z_STEP_PIN      4
+#define Z_DIR_PIN       7
+#define Z_ENABLE_PIN    10
+#define Z_ENDSTOP_PIN   13
+
+// ==================== НАСТРОЙКИ ДВИЖЕНИЯ ====================
+#define STEPS_PER_MM_X  80      // Шагов на 1 мм (зависит от механики)
+#define STEPS_PER_MM_Y  80
+#define STEPS_PER_MM_Z  200     // По Z обычно выше точность
+
+#define MAX_SPEED_X     400     // Макс. скорость (шагов/сек)
+#define MAX_SPEED_Y     400
+#define MAX_SPEED_Z     200
+
+#define ACCELERATION_X  200     // Ускорение (шагов/сек²)
+#define ACCELERATION_Y  200
+#define ACCELERATION_Z  100
+
+// ==================== ОБЪЕКТЫ ДВИГАТЕЛЕЙ ====================
+AccelStepper stepperX(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
+AccelStepper stepperY(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
+AccelStepper stepperZ(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
+
+// ==================== ПЕРЕМЕННЫЕ ====================
+long targetX = 0, targetY = 0, targetZ = 0;
+bool moving = false;
+String inputBuffer = "";
+
+// ==================== НАСТРОЙКА ====================
+void setup() {
+    Serial.begin(115200);       // Скорость связи с компьютером
+    Serial.println("FIELD-MAP v2.0 Ready");
+    Serial.println("Команды: GOTO X Y Z | HOME | STOP | STATUS");
+
+    // Настройка пинов концевиков
+    pinMode(X_ENDSTOP_PIN, INPUT_PULLUP);
+    pinMode(Y_ENDSTOP_PIN, INPUT_PULLUP);
+    pinMode(Z_ENDSTOP_PIN, INPUT_PULLUP);
+
+    // Настройка пинов разрешения (ENABLE)
+    pinMode(X_ENABLE_PIN, OUTPUT);
+    pinMode(Y_ENABLE_PIN, OUTPUT);
+    pinMode(Z_ENABLE_PIN, OUTPUT);
+    digitalWrite(X_ENABLE_PIN, LOW);  // Включаем двигатели
+    digitalWrite(Y_ENABLE_PIN, LOW);
+    digitalWrite(Z_ENABLE_PIN, LOW);
+
+    // Настройка параметров двигателей
+    stepperX.setMaxSpeed(MAX_SPEED_X);
+    stepperX.setAcceleration(ACCELERATION_X);
+    stepperY.setMaxSpeed(MAX_SPEED_Y);
+    stepperY.setAcceleration(ACCELERATION_Y);
+    stepperZ.setMaxSpeed(MAX_SPEED_Z);
+    stepperZ.setAcceleration(ACCELERATION_Z);
+}
+
+// ==================== ОСНОВНОЙ ЦИКЛ ====================
+void loop() {
+    // Чтение команд из Serial
+    while (Serial.available() > 0) {
+        char c = Serial.read();
+        if (c == '\n') {
+            processCommand(inputBuffer);
+            inputBuffer = "";
+        } else {
+            inputBuffer += c;
+        }
+    }
+
+    // Плавное движение всех осей
+    if (moving) {
+        stepperX.run();
+        stepperY.run();
+        stepperZ.run();
+
+        // Проверка, достигли ли цели
+        if (stepperX.distanceToGo() == 0 && 
+            stepperY.distanceToGo() == 0 && 
+            stepperZ.distanceToGo() == 0) {
+            moving = false;
+            Serial.println("DONE");  // Сигнал компьютеру: позиция достигнута
+        }
+    }
+
+    // Аварийная проверка концевиков (если подключены)
+    if (digitalRead(X_ENDSTOP_PIN) == LOW) {
+        stepperX.stop();
+        Serial.println("ALERT:X endstop hit!");
+    }
+}
+
+// ==================== ОБРАБОТКА КОМАНД ====================
+void processCommand(String cmd) {
+    cmd.trim();
+    cmd.toUpperCase();
+
+    if (cmd == "HOME") {
+        // Калибровка: едем в нулевую точку до срабатывания концевиков
+        homeAllAxes();
+    }
+    else if (cmd == "STOP") {
+        stopAllAxes();
+        Serial.println("STOPPED");
+    }
+    else if (cmd == "STATUS") {
+        Serial.print("POS: X=");
+        Serial.print(stepperX.currentPosition());
+        Serial.print(" Y=");
+        Serial.print(stepperY.currentPosition());
+        Serial.print(" Z=");
+        Serial.println(stepperZ.currentPosition());
+    }
+    else if (cmd.startsWith("GOTO")) {
+        // Формат команды: GOTO X Y Z (например, GOTO 500 300 100)
+        int firstSpace = cmd.indexOf(' ');
+        int secondSpace = cmd.indexOf(' ', firstSpace + 1);
+        int thirdSpace = cmd.indexOf(' ', secondSpace + 1);
+
+        if (firstSpace > 0 && secondSpace > 0 && thirdSpace > 0) {
+            targetX = cmd.substring(firstSpace + 1, secondSpace).toInt();
+            targetY = cmd.substring(secondSpace + 1, thirdSpace).toInt();
+            targetZ = cmd.substring(thirdSpace + 1).toInt();
+
+            // Переводим мм в шаги
+            stepperX.moveTo(targetX * STEPS_PER_MM_X);
+            stepperY.moveTo(targetY * STEPS_PER_MM_Y);
+            stepperZ.moveTo(targetZ * STEPS_PER_MM_Z);
+
+            moving = true;
+            Serial.print("MOVING to X=");
+            Serial.print(targetX);
+            Serial.print(" Y=");
+            Serial.print(targetY);
+            Serial.print(" Z=");
+            Serial.println(targetZ);
+        } else {
+            Serial.println("ERROR: Bad format. Use: GOTO X Y Z");
+        }
+    }
+    else {
+        Serial.println("ERROR: Unknown command. Use: GOTO, HOME, STOP, STATUS");
+    }
+}
+
+// ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+void stopAllAxes() {
+    stepperX.stop();
+    stepperY.stop();
+    stepperZ.stop();
+    moving = false;
+}
+
+void homeAllAxes() {
+    Serial.println("HOMING...");
+
+    // Ось X
+    stepperX.setSpeed(-200);
+    while (digitalRead(X_ENDSTOP_PIN) == HIGH) { stepperX.runSpeed(); }
+    stepperX.setCurrentPosition(0);
+    stepperX.setSpeed(100);
+    stepperX.moveTo(50);  // Отъезжаем чуть вперёд
+    while (stepperX.distanceToGo() != 0) { stepperX.run(); }
+
+    // Ось Y
+    stepperY.setSpeed(-200);
+    while (digitalRead(Y_ENDSTOP_PIN) == HIGH) { stepperY.runSpeed(); }
+    stepperY.setCurrentPosition(0);
+    stepperY.setSpeed(100);
+    stepperY.moveTo(50);
+    while (stepperY.distanceToGo() != 0) { stepperY.run(); }
+
+    // Ось Z
+    stepperZ.setSpeed(-200);
+    while (digitalRead(Z_ENDSTOP_PIN) == HIGH) { stepperZ.runSpeed(); }
+    stepperZ.setCurrentPosition(0);
+    stepperZ.setSpeed(100);
+    stepperZ.moveTo(50);
+    while (stepperZ.distanceToGo() != 0) { stepperZ.run(); }
+
+    Serial.println("HOME DONE. Position: 0, 0, 0");
+}
+    </pre></div>
+
+    <p><strong>Как управлять плоттером с компьютера:</strong></p>
+    <ol>
+        <li>Откройте <strong>Монитор порта</strong> в Arduino IDE (Инструменты → Монитор порта, скорость 115200).</li>
+        <li>Введите команду <strong>HOME</strong> — плоттер откалибруется и встанет в нулевую точку.</li>
+        <li>Введите <strong>GOTO 500 300 100</strong> — плоттер поедет в точку X=500 мм, Y=300 мм, Z=100 мм.</li>
+        <li>Когда плоттер приедет, он отправит <strong>DONE</strong> — можно снимать показания датчика.</li>
+        <li><strong>STATUS</strong> покажет текущие координаты.</li>
+        <li><strong>STOP</strong> — экстренная остановка.</li>
+    </ol>
+    <div class="tip-box"><p><strong>💡 Для автоматизации:</strong> Напишите Python-скрипт, который по очереди отправляет команды GOTO для всех точек сетки и после каждого DONE записывает данные с датчика в CSV. Это полностью автоматизирует сканирование!</p></div>
+    <div class="warning-box"><p><strong>⚠️ Важно:</strong> Если концевики не подключены, не используйте команду HOME — двигатель будет бесконечно упираться в стену и может сгореть. Просто вручную поставьте каретку в угол и используйте GOTO относительно этой точки.</p></div>
+
+    <!-- ДАТЧИК -->
+    <h2>🎛️ Этап 3: Подготовка датчика SEC-mini</h2>
+    <p>Датчик — это тот же кварцевый детектор, что и в SEC-1, но <strong>без источников Qₛ</strong> (икона и шунгит не нужны). Он пассивно слушает «семантический шум» комнаты.</p>
+    <ol>
+        <li>Соберите SEC-1 (спичечный коробок + кварц + фольга).</li>
+        <li><strong>Не ставьте икону и шунгит.</strong> Датчик должен быть пассивным.</li>
+        <li>Подключите выход кварца ко <strong>второму каналу осциллографа</strong> (или ко входу звуковой карты).</li>
+        <li>Убедитесь, что в тихой комнате датчик выдаёт стабильный фон (мало всплесков).</li>
+    </ol>
+
+    <!-- СКАНИРОВАНИЕ -->
+    <h2>🔍 Этап 4: Сканирование комнаты</h2>
+
+    <h3><span class="step-number">6</span> Определение сетки сканирования</h3>
+    <p>Разбейте комнату на <strong>узлы сетки</strong>. Например:</p>
+    <ul>
+        <li><strong>По X (длина комнаты):</strong> 10 точек с шагом 50 см (для комнаты 5 метров).</li>
+        <li><strong>По Y (ширина):</strong> 8 точек с шагом 50 см (для комнаты 4 метра).</li>
+        <li><strong>По Z (высота):</strong> 3 уровня: 20 см от пола, 100 см, 180 см.</li>
+    </ul>
+    <p>Итого: 10 × 8 × 3 = <strong>240 точек</strong>. Если на каждую точку тратить 10 секунд — сканирование займёт <strong>40 минут</strong>.</p>
+
+    <h3><span class="step-number">7</span> Запуск сканирования</h3>
+    <ol>
+        <li>Установите плоттер в комнате. Привяжите систему координат к углам.</li>
+        <li>Запустите программу на ноутбуке, которая последовательно отправляет координаты на Arduino.</li>
+        <li>В каждой точке плоттер останавливается на 10 секунд. Датчик записывает Qₛ, Cₛ, Tₛ, Re_sense.</li>
+        <li>Данные сохраняются в CSV-файл: <strong>x, y, z, Q, C, T, Re</strong>.</li>
+    </ol>
+
+    <!-- ВИЗУАЛИЗАЦИЯ -->
+        <!-- ВИЗУАЛИЗАЦИЯ -->
+    <h2>🖥️ Этап 5: Построение профессиональных 3D-карт в Python</h2>
+    <p>CSV-файл с данными — это ещё не результат. Чтобы увидеть «ауру комнаты», нам нужно превратить столбцы цифр в <strong>цветные карты</strong>. Мы напишем скрипт на Python, который сделает всё автоматически: загрузит данные, проверит на ошибки, построит 2D-срезы, 3D-визуализацию и векторное поле потоков Qₛ.</p>
+
+    <h3><span class="step-number">8</span> Установка необходимых библиотек</h3>
+    <p>Откройте терминал (командную строку) и выполните:</p>
+    <div class="scheme-box"><pre>pip install pandas matplotlib numpy scipy</pre></div>
+    <p>Если вы используете Anaconda, эти библиотеки уже установлены.</p>
+
+    <h3><span class="step-number">9</span> Полный скрипт визуализации</h3>
+    <p>Сохраните этот код в файл <strong>fieldmap_visualizer.py</strong> и поместите его в ту же папку, что и CSV-файл с данными.</p>
+    <div class="scheme-box"><pre>
+"""
+============================================================
+FIELD-MAP VISUALIZER v1.0
+Профессиональная визуализация семантического поля
+Построение 2D-срезов, 3D-карт и векторных полей
+============================================================
+Требования: pandas, matplotlib, numpy, scipy
+Входной файл: fieldmap_data.csv
+Столбцы: x, y, z, Q, C, T, Re
+============================================================
+"""
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.interpolate import griddata
+from mpl_toolkits.mplot3d import Axes3D
+import os
+import sys
+
+# ========== НАСТРОЙКИ ==========
+INPUT_FILE = 'fieldmap_data.csv'
+OUTPUT_DIR = 'fieldmap_output'
+COLORMAP = 'hot'          # Цветовая схема: 'hot', 'jet', 'plasma', 'viridis'
+DPI = 150                 # Разрешение картинок (150 — хорошее, 300 — печатное)
+
+# ========== ЗАГРУЗКА ДАННЫХ ==========
+def load_data(filename):
+    """Загружает CSV и проверяет его на корректность."""
+    if not os.path.exists(filename):
+        print(f'❌ Файл {filename} не найден!')
+        sys.exit(1)
+
+    df = pd.read_csv(filename)
+
+    required_columns = ['x', 'y', 'z', 'Q', 'C', 'T', 'Re']
+    missing = [col for col in required_columns if col not in df.columns]
+    if missing:
+        print(f'❌ В файле отсутствуют столбцы: {missing}')
+        sys.exit(1)
+
+    # Удаляем строки с пропущенными значениями
+    df = df.dropna()
+    if len(df) == 0:
+        print('❌ После удаления пропусков не осталось данных!')
+        sys.exit(1)
+
+    print(f'✅ Загружено {len(df)} точек данных.')
+    print(f'   Диапазон X: {df["x"].min():.1f} — {df["x"].max():.1f} см')
+    print(f'   Диапазон Y: {df["y"].min():.1f} — {df["y"].max():.1f} см')
+    print(f'   Диапазон Z: {df["z"].min():.1f} — {df["z"].max():.1f} см')
+    print(f'   Qₛ: от {df["Q"].min():.1f} до {df["Q"].max():.1f}')
+    print(f'   Cₛ: от {df["C"].min():.2f} до {df["C"].max():.2f}')
+    print(f'   Tₛ: от {df["T"].min():.1f} до {df["T"].max():.1f}')
+
+    return df
+
+# ========== ИНТЕРПОЛЯЦИЯ НА РЕГУЛЯРНУЮ СЕТКУ ==========
+def interpolate_grid(df, z_level, parameter='Q', resolution=100):
+    """Создаёт регулярную сетку из разрозненных точек."""
+    slice_data = df[df['z'] == z_level].copy()
+    if len(slice_data) < 4:
+        print(f'⚠️ Слишком мало точек на высоте Z={z_level} см. Пропускаем.')
+        return None, None, None
+
+    xi = np.linspace(slice_data['x'].min(), slice_data['x'].max(), resolution)
+    yi = np.linspace(slice_data['y'].min(), slice_data['y'].max(), resolution)
+    xi_mesh, yi_mesh = np.meshgrid(xi, yi)
+
+    zi = griddata(
+        (slice_data['x'], slice_data['y']),
+        slice_data[parameter],
+        (xi_mesh, yi_mesh),
+        method='cubic'
+    )
+    return xi_mesh, yi_mesh, zi
+
+# ========== ПОСТРОЕНИЕ 2D-СРЕЗА ==========
+def plot_2d_slice(df, z_level, parameter='Q', title_prefix=''):
+    """Строит 2D-тепловую карту для заданной высоты."""
+    xi, yi, zi = interpolate_grid(df, z_level, parameter)
+    if xi is None:
+        return
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    im = ax.contourf(xi, yi, zi, levels=20, cmap=COLORMAP)
+    ax.scatter(df[df['z'] == z_level]['x'], df[df['z'] == z_level]['y'],
+               c='cyan', s=10, alpha=0.5, label='Точки измерений')
+    ax.set_xlabel('X (см)', fontsize=12)
+    ax.set_ylabel('Y (см)', fontsize=12)
+    ax.set_title(f'{title_prefix}{parameter} — Срез на высоте Z={z_level} см', fontsize=14)
+    ax.legend()
+    ax.set_aspect('equal')
+    cbar = fig.colorbar(im, ax=ax, label=f'{parameter} (усл. ед.)')
+    fig.tight_layout()
+
+    filename = f'{OUTPUT_DIR}/{parameter}_Z{z_level}_slice.png'
+    fig.savefig(filename, dpi=DPI)
+    plt.close(fig)
+    print(f'   ✅ Срез сохранён: {filename}')
+
+# ========== ПОСТРОЕНИЕ 3D-КАРТЫ ==========
+def plot_3d_scatter(df, parameter='Q', title_prefix=''):
+    """Строит 3D-точечную карту всего объёма."""
+    fig = plt.figure(figsize=(12, 10))
+    ax = fig.add_subplot(111, projection='3d')
+
+    sc = ax.scatter(
+        df['x'], df['y'], df['z'],
+        c=df[parameter], cmap=COLORMAP, s=30, alpha=0.7
+    )
+    ax.set_xlabel('X (см)', fontsize=10)
+    ax.set_ylabel('Y (см)', fontsize=10)
+    ax.set_zlabel('Z (см)', fontsize=10)
+    ax.set_title(f'{title_prefix}{parameter} — 3D-карта помещения', fontsize=14)
+    cbar = fig.colorbar(sc, ax=ax, label=f'{parameter} (усл. ед.)', shrink=0.6)
+    fig.tight_layout()
+
+    filename = f'{OUTPUT_DIR}/{parameter}_3D_scatter.png'
+    fig.savefig(filename, dpi=DPI)
+    plt.close(fig)
+    print(f'   ✅ 3D-карта сохранена: {filename}')
+
+# ========== ПОСТРОЕНИЕ ВЕКТОРНОГО ПОЛЯ ПОТОКОВ ==========
+def plot_vector_field(df, z_level):
+    """Строит векторное поле градиентов Qₛ (показывает, куда течёт смысл)."""
+    xi, yi, zi = interpolate_grid(df, z_level, 'Q', resolution=40)
+    if xi is None:
+        return
+
+    # Расчёт градиентов
+    gy, gx = np.gradient(zi, yi[0, :], xi[:, 0])
+
+    # Усредняем градиенты для стрелок
+    skip = 2
+    xi_small = xi[::skip, ::skip]
+    yi_small = yi[::skip, ::skip]
+    gx_small = gx[::skip, ::skip]
+    gy_small = gy[::skip, ::skip]
+
+    # Длина стрелок
+    magnitude = np.sqrt(gx_small**2 + gy_small**2)
+    if magnitude.max() > 0:
+        gx_small = gx_small / magnitude.max()
+        gy_small = gy_small / magnitude.max()
+
+    fig, ax = plt.subplots(figsize=(10, 8))
+    im = ax.contourf(xi, yi, zi, levels=20, cmap=COLORMAP, alpha=0.7)
+    ax.quiver(xi_small, yi_small, -gx_small, -gy_small,
+              color='white', alpha=0.8, width=0.003, scale=30,
+              label='Поток Qₛ')
+    ax.set_xlabel('X (см)', fontsize=12)
+    ax.set_ylabel('Y (см)', fontsize=12)
+    ax.set_title(f'Векторное поле потоков Qₛ — Срез на высоте Z={z_level} см', fontsize=14)
+    ax.legend()
+    ax.set_aspect('equal')
+    cbar = fig.colorbar(im, ax=ax, label='Qₛ (усл. ед.)')
+    fig.tight_layout()
+
+    filename = f'{OUTPUT_DIR}/Q_Z{z_level}_vector_field.png'
+    fig.savefig(filename, dpi=DPI)
+    plt.close(fig)
+    print(f'   ✅ Векторное поле сохранено: {filename}')
+
+# ========== ГЛАВНАЯ ФУНКЦИЯ ==========
+def main():
+    print('=' * 50)
+    print('  FIELD-MAP VISUALIZER v1.0')
+    print('=' * 50)
+
+    # Создаём папку для вывода
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+        print(f'📁 Создана папка: {OUTPUT_DIR}')
+
+    # Загружаем данные
+    df = load_data(INPUT_FILE)
+
+    # Список параметров для визуализации
+    parameters = [
+        ('Q', 'Qₛ — Семантический заряд'),
+        ('C', 'Cₛ — Когерентность'),
+        ('T', 'Tₛ — Семантическая температура'),
+        ('Re', 'Re_sense — Турбулентность')
+    ]
+
+    # Список высот для срезов
+    z_levels = sorted(df['z'].unique())
+    print(f'\n📏 Найдено {len(z_levels)} уровней по высоте: {z_levels}\n')
+
+    # Для каждой высоты и каждого параметра строим 2D-срез
+    print('🔍 Построение 2D-срезов...')
+    for z in z_levels:
+        for param, param_title in parameters:
+            plot_2d_slice(df, z, param, title_prefix=f'{param_title}\n')
+
+    # Для каждого параметра строим 3D-карту
+    print('\n🌐 Построение 3D-карт...')
+    for param, param_title in parameters:
+        plot_3d_scatter(df, param, title_prefix=f'{param_title}\n')
+
+    # Для Qₛ строим векторное поле на каждой высоте
+    print('\n🧭 Построение векторных полей потоков...')
+    for z in z_levels:
+        plot_vector_field(df, z)
+
+    print('\n' + '=' * 50)
+    print(f'  ✅ ВСЕ КАРТЫ ПОСТРОЕНЫ!')
+    print(f'  📁 Результаты в папке: {OUTPUT_DIR}/')
+    print('=' * 50)
+    print('\n📂 Список созданных файлов:')
+    for f in sorted(os.listdir(OUTPUT_DIR)):
+        print(f'   • {f}')
+
+if __name__ == '__main__':
+    main()
+    </pre></div>
+
+    <h3><span class="step-number">10</span> Запуск визуализации</h3>
+    <p>Поместите ваш CSV-файл с именем <strong>fieldmap_data.csv</strong> в ту же папку, что и скрипт, и выполните в терминале:</p>
+    <div class="scheme-box"><pre>python fieldmap_visualizer.py</pre></div>
+    <p>Скрипт создаст папку <strong>fieldmap_output/</strong> и наполнит её картами:</p>
+    <ul>
+        <li><strong>Q_Z20_slice.png</strong> — 2D-срез Qₛ на высоте 20 см.</li>
+        <li><strong>Q_3D_scatter.png</strong> — 3D-карта Qₛ всего помещения.</li>
+        <li><strong>Q_Z20_vector_field.png</strong> — векторное поле: стрелки показывают, куда «течёт» Qₛ.</li>
+        <li>... и так для каждого параметра и каждой высоты.</li>
+    </ul>
+    
+    <p><strong>Результат:</strong> Красные зоны — высокий Qₛ («святые» места). Синие зоны — низкий Qₛ («проклятые» углы).</p>
+
+    <div class="tip-box"><p><strong>💡 Как интерпретировать векторное поле:</strong> Стрелки показывают направление <strong>семантического ветра</strong>. Если стрелки сходятся в одну точку — там «сток» Qₛ (негатив). Если расходятся — «источник» (икона, алтарь). Если закручиваются в спираль — там вихрь (турбулентность, зона конфликта).</p></div>
+
+    
+
+    <!-- ССЫЛКА НАЗАД -->
+    <div style="text-align: center;">
+        <a href="практикум-идеатоники.html?page=25" class="back-link">← Вернуться к Практикуму</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Подробная инструкция FIELD-MAP v1.0</p>
+        <p>✧ «Увидеть невидимое — первый шаг к управлению им» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

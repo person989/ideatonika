@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>GSP-Монитор • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30,40,60,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.4); border-radius: 32px;
+            padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2rem; color: #f3e7c0; text-align: center; margin-bottom: 0.3rem; font-weight: 400; letter-spacing: 2px; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .status-bar {
+            text-align: center; margin-bottom: 1rem; padding: 0.5rem;
+            background: rgba(0,0,0,0.3); border-radius: 20px; font-size: 0.9rem;
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+        .status-dot.live { background: #4caf50; box-shadow: 0 0 8px #4caf50; animation: pulse 1.5s infinite; }
+        .status-dot.paused { background: #ef5350; }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+        .stream-box {
+            background: rgba(0,0,0,0.4); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 0.8rem 1.2rem; margin-bottom: 1.5rem; text-align: center;
+            font-family: 'Courier New', monospace; font-size: 1.3rem;
+            min-height: 3.5rem; display: flex; align-items: center; justify-content: center;
+            flex-wrap: wrap; gap: 2px; overflow-x: auto;
+        }
+        .bit-0 { color: #64b5f6; }
+        .bit-1 { color: #ffb74d; }
+
+        /* ГРАФИК ОТКЛОНЕНИЙ */
+        .graph-wrapper {
+            position: relative; width: 100%; background: rgba(0,0,0,0.4);
+            border: 1px solid #5d4a3a; border-radius: 16px;
+            margin-bottom: 1.5rem; overflow: hidden;
+        }
+        canvas { display: block; width: 100%; height: auto; }
+
+        .stats-row { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; justify-content: center; }
+        .stat-card {
+            background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1.2rem 1.8rem;
+            text-align: center; flex: 1; min-width: 120px;
+        }
+        .stat-label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .stat-value { font-size: 2rem; font-weight: bold; }
+        .stat-percent { font-size: 0.9rem; color: #a09080; margin-top: 0.2rem; }
+
+        .console-box {
+            background: rgba(0,0,0,0.5); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1rem 1.5rem; margin-bottom: 1.5rem; max-height: 200px; overflow-y: auto;
+            font-family: 'Courier New', monospace; font-size: 0.85rem; color: #c0b090;
+        }
+        .console-line { margin-bottom: 0.3rem; padding: 0.2rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .console-line .time-stamp { color: #a09080; margin-right: 1rem; }
+        .console-line .alert-spike { color: #ef5350; font-weight: bold; }
+
+        .archive-box {
+            background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 16px;
+            padding: 1rem 1.5rem; max-height: 250px; overflow-y: auto; margin-bottom: 1.5rem;
+        }
+        .archive-title { color: #ffd54f; font-size: 1rem; margin-bottom: 0.8rem; text-align: center; }
+        .archive-row { display: flex; justify-content: space-between; align-items: center; padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.85rem; color: #d0c8b8; }
+        .archive-row .arch-date { color: #a09080; }
+        .archive-row .arch-spike { color: #ef5350; font-weight: bold; }
+        .archive-row .del-btn {
+            background: transparent; border: 1px solid #ef5350; color: #ef5350;
+            padding: 2px 10px; border-radius: 15px; cursor: pointer; font-size: 0.75rem;
+            font-family: inherit; transition: 0.2s; margin-left: 0.5rem;
+        }
+        .archive-row .del-btn:hover { background: #ef5350; color: white; }
+
+        .btn-row { text-align: center; margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            background: transparent; border: 1px solid #e3b87c; color: #e3b87c;
+            padding: 0.5rem 1.5rem; border-radius: 30px; cursor: pointer;
+            font-family: inherit; font-size: 0.9rem; transition: 0.2s;
+        }
+        .btn:hover { background: #e3b87c; color: #1a1a2e; }
+        .emergency-row {
+            display: flex; justify-content: flex-end; margin-top: 0.5rem; margin-bottom: 0.5rem;
+        }
+        .btn-danger {
+            border-color: #ef5350; color: #ef5350; font-weight: bold;
+            padding: 0.3rem 1rem; font-size: 0.75rem;
+        }
+        .btn-danger:hover { background: #b71c1c; color: white; border-color: #b71c1c; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #e3b87c; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+
+        .hidden { display: none !important; }
+
+        @media (max-width: 600px) {
+            .main-container { padding: 1rem; }
+            .stream-box { font-size: 1rem; }
+            .stat-value { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>📡 GSP-МОНИТОР</h1>
+    <div class="subtitle">Глобальный Семантический Проект • Персональный детектор всплесков Qₛ</div>
+
+    <!-- Статус-бар -->
+    <div class="status-bar">
+        <span class="status-dot live" id="statusDot"></span>
+        <span style="color:#c0b090;" id="statusText">🟢 АКТИВЕН • Генерация идёт</span>
+    </div>
+
+    <!-- Кнопка аварийной остановки -->
+    <div class="emergency-row">
+        <button class="btn btn-danger" id="emergencyStopBtn">🛑 АВАРИЙНАЯ ОСТАНОВКА</button>
+    </div>
+
+    <!-- Поток битов -->
+    <div class="stream-box" id="streamBox">
+        <span style="color:#706858;">Запуск генератора...</span>
+    </div>
+
+    <!-- ГРАФИК ОТКЛОНЕНИЙ -->
+    <div class="graph-wrapper" id="graphWrapper">
+        <canvas id="deviationCanvas"></canvas>
+    </div>
+    
+    <!-- Индикатор числа Рейнольдса -->
+<div style="text-align: center; margin: 0.5rem 0 1rem 0; padding: 0.6rem 1rem; 
+    background: rgba(0,0,0,0.3); border-radius: 20px; display: flex; 
+    align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+    
+    <span style="color: #a09080; font-size: 0.9rem;">🌊 Число Рейнольдса:</span>
+    <span id="reValue" style="font-size: 1.8rem; font-weight: bold; color: #ffd54f; 
+        font-family: 'Courier New', monospace;">Re = —</span>
+    
+    <span id="reLabel" style="font-size: 0.9rem; padding: 0.3rem 1rem; 
+        border-radius: 20px; font-weight: bold;"></span>
+    
+    <span id="reHint" style="color: #706858; font-size: 0.8rem; font-style: italic;"></span>
+</div>
+
+    <!-- Статистика -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-label">🔵 Нулей (0)</div>
+            <div class="stat-value" style="color:#64b5f6;" id="countZeros">0</div>
+            <div class="stat-percent" id="pctZeros">0%</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">🟠 Единиц (1)</div>
+            <div class="stat-value" style="color:#ffb74d;" id="countOnes">0</div>
+            <div class="stat-percent" id="pctOnes">0%</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">📊 Всего</div>
+            <div class="stat-value" style="color:#f3e7c0;" id="countTotal">0</div>
+            <div class="stat-percent">бит</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">⚡ Отклонение</div>
+            <div class="stat-value" style="color:#ffd54f;" id="deviation">0%</div>
+            <div class="stat-percent">от 50%</div>
+        </div>
+    </div>
+
+    <!-- Консоль -->
+    <div class="console-box" id="consoleBox">
+        <div class="console-line"><span class="time-stamp">[--:--:--]</span> 🟢 Монитор запущен. Ожидание данных...</div>
+    </div>
+
+    <!-- Кнопки -->
+    <div class="btn-row">
+        <button class="btn" id="resetBtn">🔄 Сбросить статистику</button>
+        <button class="btn" id="archiveBtn">📋 Показать архив всплесков</button>
+        <button class="btn" id="exportBtn">📄 Экспорт отчёта</button>
+        <a href="about-gsp.html" class="btn" style="text-decoration:none;">📖 Что это такое?</a>
+    </div>
+
+    <!-- Архив -->
+    <div class="archive-box hidden" id="archiveBox">
+        <div class="archive-title">📋 АРХИВ ЗНАЧИТЕЛЬНЫХ ОТКЛОНЕНИЙ (отклонение > 7%)</div>
+        <div id="archiveContent">
+            <p style="color:#706858;text-align:center;">Пока нет записей...</p>
+        </div>
+    </div>
+
+    <div style="text-align:center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+</div>
+
+<script>
+(function() {
+    const STREAM_SIZE = 120;
+    const SPIKE_THRESHOLD = 6.0;  //ПОРОГ УВЕДОМЛЕНИЯ В КОНСОЛЬ
+    const ARCHIVE_THRESHOLD = 7.0;  //ПОРОГ ЗАПИСИ В АРХИВ
+    const BATCH_SIZE = 1000;
+    const GRAPH_MAX_POINTS = 300;
+
+    let stream = [];
+    let totalZeros = 0, totalOnes = 0;
+    const ROLLING_WINDOW = 1000; // Сколько последних битов хранить !!!ПАМЯТЬ КОНСОЛИ!!!
+let rollingBits = []; // Массив последних битов
+    let paused = false;
+    let intervalId = null;
+    let archive = JSON.parse(localStorage.getItem('gsp_archive') || '[]');
+    let graphData = [];
+
+    const streamBox = document.getElementById('streamBox');
+    const countZeros = document.getElementById('countZeros');
+    const countOnes = document.getElementById('countOnes');
+    const pctZeros = document.getElementById('pctZeros');
+    const pctOnes = document.getElementById('pctOnes');
+    const countTotal = document.getElementById('countTotal');
+    const deviation = document.getElementById('deviation');
+    const consoleBox = document.getElementById('consoleBox');
+    const archiveBox = document.getElementById('archiveBox');
+    const archiveContent = document.getElementById('archiveContent');
+    const resetBtn = document.getElementById('resetBtn');
+    const archiveBtn = document.getElementById('archiveBtn');
+    const emergencyStopBtn = document.getElementById('emergencyStopBtn');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+
+    // ========== ГРАФИК ==========
+    const canvas = document.getElementById('deviationCanvas');
+    const ctx = canvas.getContext('2d');
+    const graphWrapper = document.getElementById('graphWrapper');
+    let animId;
+    let needsRedraw = true;
+
+    function resizeCanvas() {
+        const rect = graphWrapper.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = 180;
+        graphWrapper.style.height = canvas.height + 'px';
+        needsRedraw = true;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function drawGraph() {
+        if (!needsRedraw) return;
+        needsRedraw = false;
+        
+        const w = canvas.width;
+        const h = canvas.height;
+        const midY = h / 2;
+
+        ctx.fillStyle = '#0a0e14';
+        ctx.fillRect(0, 0, w, h);
+
+        // Сетка
+        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.lineWidth = 1;
+        const levels = [-20, -10, 0, 10, 20];
+        levels.forEach(level => {
+            const y = midY - (level / 25) * midY;
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(w, y);
+            ctx.stroke();
+            ctx.fillStyle = 'rgba(255,255,255,0.2)';
+            ctx.font = '10px monospace';
+            ctx.textAlign = 'left';
+            ctx.fillText((level >= 0 ? '+' : '') + level + '%', 5, y - 3);
+        });
+
+        // Центральная линия
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, midY);
+        ctx.lineTo(w, midY);
+        ctx.stroke();
+
+        if (graphData.length < 2) return;
+
+        const maxDisplay = 25;
+        const stepX = w / Math.max(graphData.length - 1, 1);
+
+        // Заливка
+        ctx.beginPath();
+        ctx.moveTo(0, midY);
+        for (let i = 0; i < graphData.length; i++) {
+            const x = i * stepX;
+            const clampedDev = Math.max(-maxDisplay, Math.min(maxDisplay, graphData[i].dev));
+            const y = midY - (clampedDev / maxDisplay) * midY;
+            ctx.lineTo(x, y);
+        }
+        ctx.lineTo(w, midY);
+        ctx.closePath();
+        
+        const gradient = ctx.createLinearGradient(0, 0, 0, h);
+        gradient.addColorStop(0, 'rgba(255,180,80,0.15)');
+        gradient.addColorStop(0.5, 'rgba(255,255,255,0.02)');
+        gradient.addColorStop(1, 'rgba(100,180,255,0.15)');
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Линия
+        ctx.beginPath();
+        ctx.strokeStyle = '#ffd54f';
+        ctx.lineWidth = 2;
+        ctx.shadowColor = '#ffd54f';
+        ctx.shadowBlur = 6;
+        for (let i = 0; i < graphData.length; i++) {
+            const x = i * stepX;
+            const clampedDev = Math.max(-maxDisplay, Math.min(maxDisplay, graphData[i].dev));
+            const y = midY - (clampedDev / maxDisplay) * midY;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+
+        // Точка текущего значения
+        if (graphData.length > 0) {
+            const last = graphData[graphData.length - 1];
+            const lastX = (graphData.length - 1) * stepX;
+            const lastClamped = Math.max(-maxDisplay, Math.min(maxDisplay, last.dev));
+            const lastY = midY - (lastClamped / maxDisplay) * midY;
+            ctx.fillStyle = '#ffd54f';
+            ctx.beginPath();
+            ctx.arc(lastX, lastY, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#ffd54f';
+            ctx.font = 'bold 12px monospace';
+            ctx.textAlign = 'left';
+            const sign = last.dev >= 0 ? '+' : '';
+            ctx.fillText(`${sign}${last.dev.toFixed(1)}%`, Math.min(lastX + 10, w - 80), lastY - 8);
+        }
+    }
+
+    function updateGraph() {
+        const total = totalZeros + totalOnes;
+        if (total === 0) return;
+        const onePct = (totalOnes / total) * 100;
+        const signedDev = onePct - 50;
+        
+        graphData.push({ dev: signedDev, batch: graphData.length });
+        if (graphData.length > GRAPH_MAX_POINTS) graphData.shift();
+        needsRedraw = true;
+    }
+    
+    function calculateReynolds() {
+    const total = totalZeros + totalOnes;
+    if (total < 100) {
+        document.getElementById('reValue').textContent = 'Re = —';
+        document.getElementById('reLabel').textContent = '';
+        document.getElementById('reLabel').style.background = 'transparent';
+        document.getElementById('reHint').textContent = 'Недостаточно данных';
+        return;
+    }
+    
+    // Берём последние 20 точек графика (20 батчей по 1000 битов)
+    if (graphData.length < 20) {
+        document.getElementById('reValue').textContent = 'Re = —';
+        document.getElementById('reLabel').textContent = '';
+        document.getElementById('reLabel').style.background = 'transparent';
+        document.getElementById('reHint').textContent = 'Недостаточно данных для анализа';
+        return;
+    }
+    
+    const recentPoints = graphData.slice(-20);
+    
+    // 1. СКОРОСТЬ ИЗМЕНЕНИЯ (v): среднее абсолютное изменение отклонения между соседними точками
+    let totalChange = 0;
+    for (let i = 1; i < recentPoints.length; i++) {
+        totalChange += Math.abs(recentPoints[i].dev - recentPoints[i-1].dev);
+    }
+    const v = totalChange / (recentPoints.length - 1); // Среднее изменение в % за батч
+    
+    // 2. ПЛАВНОСТЬ (вязкость η): насколько отклонение «гладкое»
+    // Считаем, сколько раз направление менялось (росло → падало или наоборот)
+    let directionChanges = 0;
+    for (let i = 2; i < recentPoints.length; i++) {
+        const diff1 = recentPoints[i-1].dev - recentPoints[i-2].dev;
+        const diff2 = recentPoints[i].dev - recentPoints[i-1].dev;
+        if ((diff1 > 0 && diff2 < 0) || (diff1 < 0 && diff2 > 0)) {
+            directionChanges++;
+        }
+    }
+    // Нормализуем: 0 = идеально плавно, 1 = постоянно дёргается
+    const roughness = directionChanges / (recentPoints.length - 2);
+    
+    // Вязкость обратна шероховатости
+    const eta = 1 - roughness + 0.05; // 0.05 (очень дёрганое) ... 1.05 (очень плавное)
+    
+    // 3. ПЛОТНОСТЬ ρ = const = 1
+    const rho = 1;
+    const L = 1;
+    
+    // 4. ФОРМУЛА Re = (ρ · v · L) / η
+    const baseRe = (rho * v * L) / eta;
+    
+    // 5. Масштабирование
+    const SCALE_FACTOR = 500;
+    const Re = baseRe * SCALE_FACTOR;
+    
+    // 6. Сглаживание
+    if (typeof calculateReynolds.batchHistory === 'undefined') {
+        calculateReynolds.batchHistory = [];
+    }
+    calculateReynolds.batchHistory.push(Re);
+    if (calculateReynolds.batchHistory.length > 10) {
+        calculateReynolds.batchHistory.shift();
+    }
+    
+    const avgRe = calculateReynolds.batchHistory.reduce((a,b) => a+b, 0) / calculateReynolds.batchHistory.length;
+    const roundedRe = Math.min(5000, Math.round(avgRe));
+    
+    // Обновляем DOM
+    const reValueEl = document.getElementById('reValue');
+    const reLabelEl = document.getElementById('reLabel');
+    const reHintEl = document.getElementById('reHint');
+    
+    reValueEl.textContent = 'Re = ' + roundedRe;
+    
+    if (roundedRe < 500) {
+        reLabelEl.textContent = '🌊 ЛАМИНАРНЫЙ';
+        reLabelEl.style.background = 'rgba(100,180,255,0.3)';
+        reLabelEl.style.color = '#64b5f6';
+        reHintEl.textContent = 'Плавное, медленное изменение';
+    } else if (roundedRe < 2000) {
+        reLabelEl.textContent = '🌊 Ламинарный';
+        reLabelEl.style.background = 'rgba(100,180,255,0.2)';
+        reLabelEl.style.color = '#90caf9';
+        reHintEl.textContent = 'Умеренные колебания';
+    } else if (roundedRe < 4000) {
+        reLabelEl.textContent = '🌫️ ПЕРЕХОДНЫЙ';
+        reLabelEl.style.background = 'rgba(255,180,80,0.3)';
+        reLabelEl.style.color = '#ffb74d';
+        reHintEl.textContent = 'Частые смены направления';
+    } else {
+        reLabelEl.textContent = '🌪️ ТУРБУЛЕНТНЫЙ';
+        reLabelEl.style.background = 'rgba(239,83,80,0.3)';
+        reLabelEl.style.color = '#ef5350';
+        reHintEl.textContent = 'Резкие, хаотичные скачки';
+    }
+    // ========== УВЕДОМЛЕНИЯ В ТЕРМИНАЛЕ ==========
+// Отслеживаем пересечение порога 500
+if (typeof calculateReynolds.lastAlert === 'undefined') {
+    calculateReynolds.lastAlert = 0; // 0 = ниже порога, 1 = выше порога
+}
+
+const now = new Date();
+const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+if (roundedRe >= 500 && calculateReynolds.lastAlert === 0) {
+    // ПЕРЕСЕЧЕНИЕ ПОРОГА ВВЕРХ
+    calculateReynolds.lastAlert = 1;
+    const message = `🌪️ ПРЕВЫШЕНИЕ ПОРОГА! Re = ${roundedRe} — поток стал турбулентным!`;
+    logToConsole(message, true);
+    
+    // Дополнительная информация
+    const onePct = totalOnes / total * 100;
+    const dev = Math.abs(50 - onePct).toFixed(2);
+    const totalFormatted = total.toLocaleString();
+    logToConsole(`   📊 Статистика: ${totalFormatted} битов | Отклонение: ${dev}% | Направление: ${onePct >= 50 ? 'единиц (1)' : 'нулей (0)'}`, false);
+    
+} else if (roundedRe < 500 && calculateReynolds.lastAlert === 1) {
+    // ВОЗВРАТ НИЖЕ ПОРОГА
+    calculateReynolds.lastAlert = 0;
+    const message = `🌊 Возврат в ламинарный режим. Re = ${roundedRe}`;
+    logToConsole(message, false);
+}
+}
+
+    function animate() {
+        drawGraph();
+        animId = requestAnimationFrame(animate);
+    }
+    animate();
+
+    // ========== ОСНОВНАЯ ЛОГИКА ==========
+
+    function generateBit() {
+        return Math.random() < 0.5 ? 0 : 1;
+    }
+
+    function updateStream() {
+        let html = '';
+        for (let i = 0; i < stream.length; i++) {
+            const bit = stream[i];
+            const cls = bit === 0 ? 'bit-0' : 'bit-1';
+            html += `<span class="${cls}">${bit}</span>`;
+        }
+        streamBox.innerHTML = html || '<span style="color:#706858;">Ожидание данных...</span>';
+    }
+
+    function updateStats() {
+        const total = totalZeros + totalOnes;
+        countZeros.textContent = totalZeros;
+        countOnes.textContent = totalOnes;
+        countTotal.textContent = total;
+        if (total > 0) {
+            const zeroPct = (totalZeros / total * 100).toFixed(2);
+            const onePct = (totalOnes / total * 100).toFixed(2);
+            pctZeros.textContent = zeroPct + '%';
+            pctOnes.textContent = onePct + '%';
+            const dev = Math.abs(50 - onePct).toFixed(2);
+            deviation.textContent = dev + '%';   
+            calculateReynolds();         
+        }
+        
+    }
+
+    function logToConsole(message, isSpike = false) {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const line = document.createElement('div');
+        line.className = 'console-line';
+        let cls = '';
+        if (isSpike) cls = 'alert-spike';
+        line.innerHTML = `<span class="time-stamp">[${timeStr}]</span> <span class="${cls}">${message}</span>`;
+        consoleBox.appendChild(line);
+        consoleBox.scrollTop = consoleBox.scrollHeight;
+    }
+
+    function saveArchive() {
+        localStorage.setItem('gsp_archive', JSON.stringify(archive));
+    }
+
+    function addToArchive(dev, batchNum) {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('ru-RU');
+        const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        const entry = {
+            id: Date.now(),
+            date: dateStr,
+            time: timeStr,
+            deviation: parseFloat(dev),
+            batch: batchNum,
+            timestamp: now.getTime()
+        };
+        archive.unshift(entry);
+        if (archive.length > 100) archive.pop();
+        saveArchive();
+    }
+
+    function renderArchive() {
+    archiveContent.innerHTML = '';
+    
+    if (archive.length === 0) {
+        archiveContent.innerHTML = '<p style="color:#706858;text-align:center;">Пока нет записей...</p>';
+        return;
+    }
+    
+    for (let i = 0; i < archive.length; i++) {
+        const entry = archive[i];
+        
+        const row = document.createElement('div');
+        row.className = 'archive-row';
+        row.style.cssText = 'flex-direction: column; align-items: flex-start; padding: 0.8rem 0;';
+        row.innerHTML = `
+            <div style="display:flex; justify-content:space-between; width:100%; margin-bottom:0.3rem;">
+                <span class="arch-date">📅 ${entry.date} ${entry.startTime} — ${entry.endTime}</span>
+                <span style="font-weight:bold;">⚡ Пик: ${entry.maxDeviation}%</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; width:100%; font-size:0.8rem; color:#a09080;">
+                <span>⏱️ Длительность: ${entry.duration || 'неизвестно'} | Направление: ${entry.direction}</span>
+                <span>📊 Батчи #${entry.startBatch}–#${entry.endBatch || '?'}</span>
+            </div>
+            <div style="margin-top:0.3rem; display:flex; justify-content:flex-end; width:100%;">
+                <button class="del-btn" style="font-size:0.7rem;">✕ Удалить</button>
+            </div>
+        `;
+        
+        const btn = row.querySelector('.del-btn');
+        btn.onclick = function() {
+            if (confirm('Удалить эту запись из архива?')) {
+                archive.splice(i, 1);
+                saveArchive();
+                renderArchive();
+            }
+        };
+        
+        archiveContent.appendChild(row);
+    }
+}
+
+    let activeSpike = null; // Текущая активная сессия всплеска
+
+function checkForSpike() {
+    const total = totalZeros + totalOnes;
+    if (total < 1000) return;
+    
+    const onePct = (totalOnes / total * 100);
+    const dev = parseFloat(Math.abs(50 - onePct).toFixed(2));
+    const now = new Date();
+    
+    if (dev >= SPIKE_THRESHOLD && dev < ARCHIVE_THRESHOLD) {
+    logToConsole(`📡 Отклонение ${dev}%`);
+}
+    
+    // === ВХОД В ЗОНУ ВСПЛЕСКА ===
+    if (dev >= ARCHIVE_THRESHOLD) {
+        if (!activeSpike) {
+            // Начинаем новую сессию
+            activeSpike = {
+                startTime: now,
+                startDate: now.toLocaleDateString('ru-RU'),
+                startTimeStr: now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                maxDeviation: dev,
+                maxDeviationTime: now,
+                maxDeviationTimeStr: now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+                direction: onePct > 50 ? 'единиц (1)' : 'нулей (0)',
+                startBatch: Math.floor(total / BATCH_SIZE)
+            };
+            logToConsole(`⚡ НАЧАЛО ВСПЛЕСКА! Отклонение ${dev}% — перекос в сторону ${activeSpike.direction}`, true);
+        } else {
+            // Обновляем пик если вырос
+            if (dev > activeSpike.maxDeviation) {
+                activeSpike.maxDeviation = dev;
+                activeSpike.maxDeviationTime = now;
+                activeSpike.maxDeviationTimeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                logToConsole(`⚡ ПИК ВСПЛЕСКА! Отклонение достигло ${dev}%`, true);
+            }
+        }
+    }
+    
+    // === ВЫХОД ИЗ ЗОНЫ ВСПЛЕСКА ===
+    if (activeSpike && dev < ARCHIVE_THRESHOLD) {
+        const endTime = new Date();
+        const durationMs = endTime - activeSpike.startTime;
+        const durationMin = Math.floor(durationMs / 60000);
+        const durationSec = Math.floor((durationMs % 60000) / 1000);
+        const durationStr = durationMin > 0 
+            ? `${durationMin} мин ${durationSec} сек` 
+            : `${durationSec} сек`;
+        
+        const entry = {
+            id: Date.now(),
+            date: activeSpike.startDate,
+            startTime: activeSpike.startTimeStr,
+            endTime: endTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+            duration: durationStr,
+            durationMs: durationMs,
+            maxDeviation: activeSpike.maxDeviation,
+            maxDeviationTime: activeSpike.maxDeviationTimeStr,
+            direction: activeSpike.direction,
+            startBatch: activeSpike.startBatch,
+            endBatch: Math.floor(total / BATCH_SIZE),
+            timestamp: Date.now()
+        };
+        
+        archive.unshift(entry);
+        if (archive.length > 100) archive.pop();
+        saveArchive();
+        
+        logToConsole(`✅ ВСПЛЕСК ЗАВЕРШЁН. Длительность: ${durationStr}. Пик: ${activeSpike.maxDeviation}%`, true);
+        
+        if (!archiveBox.classList.contains('hidden')) {
+            renderArchive();
+        }
+        
+        activeSpike = null; // Сбрасываем сессию
+    }
+    
+    // Периодический статус
+    if (total % (BATCH_SIZE * 50) === 0) {
+        logToConsole(`🟢 Статус: ${total.toLocaleString()} битов, отклонение ${dev}%`);
+    }
+}
+
+    let tickCounter = 0;
+
+function tick() {
+    if (paused) return;
+    
+    // Генерируем 10 битов за раз
+    for (let i = 0; i < 10; i++) {
+        const bit = generateBit();
+        
+        // Добавляем в скользящее окно
+        rollingBits.push(bit);
+        if (rollingBits.length > ROLLING_WINDOW) {
+            rollingBits.shift(); // Удаляем самый старый бит
+        }
+        
+        stream.push(bit);
+        if (stream.length > STREAM_SIZE) stream.shift();
+        tickCounter++;
+    }
+    
+    // Пересчитываем статистику из скользящего окна
+    totalZeros = rollingBits.filter(b => b === 0).length;
+    totalOnes = rollingBits.filter(b => b === 1).length;
+    
+    updateStream();
+    updateStats();
+    updateGraph();
+    
+    const total = totalZeros + totalOnes;
+    if (total % BATCH_SIZE === 0) {
+        checkForSpike();
+    }
+}
+
+// Сохраняем ВСЁ перед закрытием
+window.addEventListener('beforeunload', function() {
+    const state = {
+        totalZeros: totalZeros,
+        totalOnes: totalOnes,
+        rollingBits: rollingBits,
+        tickCounter: tickCounter
+    };
+    localStorage.setItem('gsp_session', JSON.stringify(state));
+});
+
+// Восстанавливаем ВСЁ при загрузке
+(function restoreSession() {
+    const saved = localStorage.getItem('gsp_session');
+    if (saved) {
+        try {
+            const state = JSON.parse(saved);
+            if (state.rollingBits && state.rollingBits.length > 0) {
+                rollingBits = state.rollingBits;
+                totalZeros = state.totalZeros;
+                totalOnes = state.totalOnes;
+                tickCounter = state.tickCounter || 0;
+                const total = totalZeros + totalOnes;
+                logToConsole('📂 Восстановлена предыдущая сессия: ' + total + ' битов в окне');
+                updateStats();
+                updateGraph();
+            }
+        } catch(e) {
+            // Если данные повреждены — просто игнорируем
+        }
+    }
+})();
+
+    function startGenerator() {
+    logToConsole('🟢 Монитор запущен. Генерация битов...');
+    function loop() {
+        if (!paused) {
+            tick();
+        }
+        intervalId = setTimeout(loop, 200); // 5 раз в секунду × 10 битов = 50 битов/сек
+    }
+    loop();
+}
+
+    function stopGenerator() {
+    if (intervalId) {
+        clearTimeout(intervalId);
+        intervalId = null;
+    }
+    paused = true;
+    statusDot.classList.remove('live');
+    statusDot.classList.add('paused');
+    statusText.innerHTML = '🔴 ОСТАНОВЛЕН • Генерация прекращена';
+    logToConsole('🔴 АВАРИЙНАЯ ОСТАНОВКА! Генератор остановлен.');
+}
+
+    resetBtn.addEventListener('click', () => {
+    if (confirm('Сбросить всю статистику? Архив сохранится.')) {
+        totalZeros = 0;
+        totalOnes = 0;
+        stream = [];
+        rollingBits = []; // ← Добавьте эту строку
+        graphData = [];
+        tickCounter = 0;
+        needsRedraw = true;
+        updateStream();
+        updateStats();
+        logToConsole('🔄 Статистика сброшена.');
+        document.getElementById('reValue').textContent = 'Re = —';
+document.getElementById('reLabel').textContent = '';
+document.getElementById('reLabel').style.background = 'transparent';
+document.getElementById('reHint').textContent = 'Недостаточно данных';
+    }
+});
+
+    archiveBtn.addEventListener('click', () => {
+        archiveBox.classList.toggle('hidden');
+        archiveBtn.textContent = archiveBox.classList.contains('hidden') ? '📋 Показать архив всплесков' : '📋 Скрыть архив';
+        if (!archiveBox.classList.contains('hidden')) {
+            renderArchive();
+        }
+    });
+    
+    // Экспорт отчёта
+document.getElementById('exportBtn').addEventListener('click', function() {
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ru-RU');
+    const timeStr = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    
+    const total = totalZeros + totalOnes;
+    const onePct = total > 0 ? (totalOnes / total * 100).toFixed(2) : '0.00';
+    const dev = total > 0 ? Math.abs(50 - onePct).toFixed(2) : '0.00';
+    const direction = onePct >= 50 ? 'единиц (1)' : 'нулей (0)';
+    
+    // Собираем архивные данные
+let archiveInfo = '';
+if (archive.length === 0) {
+    archiveInfo = 'Нет записей';
+} else {
+    archiveInfo = `${archive.length} записей:\n`;
+    for (let i = 0; i < Math.min(archive.length, 10); i++) {
+        const a = archive[i];
+        archiveInfo += `  ${i+1}. ${a.date} ${a.startTime}–${a.endTime} | пик ${a.maxDeviation}% | ${a.duration} | ${a.direction}\n`;
+    }
+    if (archive.length > 10) {
+        archiveInfo += `  ... и ещё ${archive.length - 10} записей`;
+    }
+}
+    
+    const report = `GSP-Монитор • Отчёт • ${dateStr} ${timeStr}
+==========================================
+Всего битов: ${total.toLocaleString()}
+Нулей: ${totalZeros.toLocaleString()} (${total > 0 ? (totalZeros/total*100).toFixed(1) : 0}%)
+Единиц: ${totalOnes.toLocaleString()} (${total > 0 ? (totalOnes/total*100).toFixed(1) : 0}%)
+Текущее отклонение: ${dev}% (в сторону ${direction})
+Архив всплесков: ${archiveInfo}
+==========================================
+Сгенерировано прибором GSP-Монитор (Идеатоника, 2026)
+`;
+    
+    // Скачивание
+    const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `GSP-Report_${dateStr.replace(/\./g, '-')}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    // Сообщение в консоль
+    logToConsole('📄 Отчёт экспортирован: GSP-Report_' + dateStr.replace(/\./g, '-') + '.txt');
+});
+
+    emergencyStopBtn.addEventListener('click', () => {
+        if (confirm('ВЫ УВЕРЕНЫ? Генерация битов будет полностью остановлена. Перезапуск — только перезагрузкой страницы.')) {
+            stopGenerator();
+            emergencyStopBtn.disabled = true;
+            emergencyStopBtn.textContent = ' 🛑 ГЕНЕРАТОР ОСТАНОВЛЕН';
+            emergencyStopBtn.style.opacity = '0.5';
+        }
+    });
+
+    
+    // Инициализация
+    archiveBox.classList.add('hidden');
+    archiveBtn.textContent = '📋 Показать архив всплесков';
+    renderArchive();
+    startGenerator();
+})();
+</script>
+</body>
+</html>

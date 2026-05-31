@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Путь Воина Света • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 900px; width: 100%; position: relative; z-index: 1; }
+
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .hero h1 { font-size: 3rem; font-weight: 400; letter-spacing: 4px; color: #ffd54f; text-shadow: 0 0 20px rgba(255,215,80,0.3); margin-bottom: 0.5rem; }
+        .hero .subtitle { font-size: 1.2rem; color: #c0b090; font-style: italic; }
+        .hero .epigraph { margin-top: 1.5rem; color: #a09080; font-size: 1rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+
+        /* Шаги */
+        /* Шаги — теперь это сетка */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+.step {
+    background: rgba(30,40,60,0.7); backdrop-filter: blur(8px);
+    border: 1px solid rgba(227,184,124,0.3); border-radius: 24px;
+    padding: 2rem;
+    display: flex; gap: 1.5rem; align-items: flex-start;
+    transition: transform 0.2s, border-color 0.3s;
+}
+.step:hover { transform: translateY(-3px); border-color: #ffd54f; }
+        .step:hover { transform: translateX(5px); border-color: #ffd54f; }
+        .step-number {
+            font-size: 2.5rem; font-weight: bold; color: #ffd54f;
+            min-width: 50px; text-align: center; line-height: 1;
+        }
+        .step-content { flex: 1; }
+        .step-content h2 { color: #ffd54f; font-size: 1.5rem; margin-bottom: 0.8rem; font-weight: 400; }
+        .step-content p { color: #d0c8b8; line-height: 1.6; margin-bottom: 1rem; }
+        .step-links { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .step-link {
+            display: inline-block; color: #ffd54f; text-decoration: none;
+            border: 1px solid #ffd54f; padding: 0.5rem 1.2rem; border-radius: 20px;
+            font-size: 0.85rem; transition: 0.2s;
+        }
+        .step-link:hover { background: #ffd54f; color: #1a1a2e; }
+
+        .final-quote {
+            text-align: center; margin-top: 3rem; padding: 2rem;
+            background: rgba(255,215,80,0.08);
+            border: 1px solid #ffd54f; border-radius: 20px;
+            color: #c0b090; font-style: italic; font-size: 1.1rem; line-height: 1.8;
+        }
+
+        .back-link { display: inline-block; margin-top: 2rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+        .footer { margin-top: 2rem; text-align: center; color: #706858; font-size: 0.8rem; border-top: 1px solid #3a3a4a; padding-top: 2rem; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <div class="hero">
+        <h1>⚔️ ПУТЬ ВОИНА СВЕТА</h1>
+        <div class="subtitle">Пять шагов к семантическому совершенству</div>
+        <div class="epigraph">
+            ✧ «Не важно, сколько в тебе Света. Важно, насколько он сфокусирован. Лазер из слабого диода режет сталь. Прожектор из тысяч ламп лишь греет воздух.» ✧
+        </div>
+    </div>
+
+    <div class="steps-grid">
+
+    <!-- Шаг 1: Повысить Qₛ -->
+    <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+            <h2>☀️ Повысить семантический заряд Qₛ</h2>
+            <p><strong>Qₛ</strong> — это ваша «батарейка Света». Чем он выше, тем больше позитива вы излучаете и тем сильнее ваше влияние на мир. Низкий Qₛ — вы «пустой», высокий — вы «заряжаете» других.</p>
+            <p><strong>Как повысить:</strong> Практикуйте благодарность, медитируйте на свет, окружайте себя живой природой и намоленными предметами, слушайте музыку 432 Гц.</p>
+            <div class="step-links">
+                <a href="test-qs.html" class="step-link">🧪 Тест: Ваш Qₛ</a>
+                <a href="учебник-идеатоники.html?page=60" class="step-link">📖 §60. Спектр Света и Тьмы</a>
+                <a href="calculator-material.html" class="step-link">🧮 Калькулятор Материалов</a>
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <a href="guide-qs.html" style="
+                    display: inline-block;
+                    background: #ffd54f;
+                    color: #1a1a2e;
+                    padding: 0.6rem 2rem;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-decoration: none;
+                    border-radius: 30px;
+                    transition: 0.2s;
+                    box-shadow: 0 2px 8px rgba(255,215,80,0.3);
+                " onmouseover="this.style.background='#ffc107';" onmouseout="this.style.background='#ffd54f';">
+                    🩺 Диагностика
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Шаг 2: Повысить Cₛ -->
+    <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+            <h2>🎯 Повысить когерентность Cₛ</h2>
+            <p><strong>Cₛ</strong> — это фокус вашего луча. Можно иметь огромный Qₛ, но если он рассеян — вы просто «тёплая лампочка». Высокая Cₛ превращает вас в лазер, способный «пробить» реальность.</p>
+            <p><strong>Как повысить:</strong> Медитация, однозадачность, цифровой детокс, практика «потока» (спорт, творчество), дыхательные упражнения.</p>
+            <div class="step-links">
+                <a href="test-cs.html" class="step-link">🧪 Тест: Ваш Cₛ</a>
+                <a href="учебник-идеатоники.html?page=108" class="step-link">📖 §108. Когерентность</a>
+                <a href="учебник-идеатоники.html?page=44" class="step-link">📖 §44. Семантическая диета</a>
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <a href="guide-cs.html" style="
+                    display: inline-block;
+                    background: #ffd54f;
+                    color: #1a1a2e;
+                    padding: 0.6rem 2rem;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-decoration: none;
+                    border-radius: 30px;
+                    transition: 0.2s;
+                    box-shadow: 0 2px 8px rgba(255,215,80,0.3);
+                " onmouseover="this.style.background='#ffc107';" onmouseout="this.style.background='#ffd54f';">
+                    🩺 Диагностика
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Шаг 3: Удерживать Tₛ в норме -->
+    <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+            <h2>🌡️ Удерживать температуру Tₛ в оптимуме</h2>
+            <p><strong>Tₛ</strong> — это ваше «семантическое тепло». Слишком высокая — тревога, паника, гнев. Слишком низкая — апатия, ступор, «заморозка». Оптимум — спокойная концентрация, как у мастера перед работой.</p>
+            <p><strong>Как удерживать:</strong> Дыхание 4-7-8, контакт с природой, избегание «перегрева» от соцсетей и новостей, тёплые ванны при «заморозке».</p>
+            <div class="step-links">
+                <a href="test-ts.html" class="step-link">🧪 Тест: Ваш Tₛ</a>
+                <a href="учебник-идеатоники.html?page=2" class="step-link">📖 §2. Базовые величины</a>
+                <a href="calculator-sleep.html" class="step-link">😴 Калькулятор Сна</a>
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <a href="guide-ts.html" style="
+                    display: inline-block;
+                    background: #ffd54f;
+                    color: #1a1a2e;
+                    padding: 0.6rem 2rem;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-decoration: none;
+                    border-radius: 30px;
+                    transition: 0.2s;
+                    box-shadow: 0 2px 8px rgba(255,215,80,0.3);
+                " onmouseover="this.style.background='#ffc107';" onmouseout="this.style.background='#ffd54f';">
+                    🩺 Диагностика
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Шаг 4: Повысить χ -->
+    <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+            <h2>🔮 Развить чувствительность χ</h2>
+            <p><strong>χ (хи)</strong> — это ваша интуиция, «семантический слух». Высокая χ позволяет чувствовать настроение людей, ауру мест, предвидеть события. Это дар, который можно тренировать.</p>
+            <p><strong>Как развить:</strong> Ведение дневника снов, практика «угадывания» (кто звонит, какое число выпадет), медитация на «третий глаз», тишина.</p>
+            <div class="step-links">
+                <a href="test-chi.html" class="step-link">🧪 Тест: Ваш χ</a>
+                <a href="учебник-идеатоники.html?page=55" class="step-link">📖 §55. Телепатия</a>
+                <a href="учебник-идеатоники.html?page=126" class="step-link">📖 §126. Онейросемантика</a>
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <a href="guide-chi.html" style="
+                    display: inline-block;
+                    background: #ffd54f;
+                    color: #1a1a2e;
+                    padding: 0.6rem 2rem;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-decoration: none;
+                    border-radius: 30px;
+                    transition: 0.2s;
+                    box-shadow: 0 2px 8px rgba(255,215,80,0.3);
+                " onmouseover="this.style.background='#ffc107';" onmouseout="this.style.background='#ffd54f';">
+                    🩺 Диагностика
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Шаг 5: Понизить S_noise -->
+    <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+            <h2>🔇 Понизить семантический шум S<sub>noise</sub></h2>
+            <p><strong>S<sub>noise</sub></strong> — это «мусор» в вашем поле. Обрывки чужих мыслей, тревожные новости, фоновая реклама, внутренний диалог. Высокий шум заглушает интуицию, снижает Cₛ и истощает Qₛ.</p>
+            <p><strong>Как понизить:</strong> Информационный детокс, прогулки без телефона, тишина перед сном, уборка в доме (внешний порядок = внутренний порядок).</p>
+            <div class="step-links">
+                <a href="test-env.html" class="step-link">🏠 Тест: Ранг Окружения</a>
+                <a href="учебник-идеатоники.html?page=44" class="step-link">📖 §44. Семантическая диета</a>
+                <a href="calculator-environment.html" class="step-link">🧮 Калькулятор Окружения</a>
+            </div>
+            <div style="margin-top: 1rem; text-align: center;">
+                <a href="guide-env.html" style="
+                    display: inline-block;
+                    background: #ffd54f;
+                    color: #1a1a2e;
+                    padding: 0.6rem 2rem;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-decoration: none;
+                    border-radius: 30px;
+                    transition: 0.2s;
+                    box-shadow: 0 2px 8px rgba(255,215,80,0.3);
+                " onmouseover="this.style.background='#ffc107';" onmouseout="this.style.background='#ffd54f';">
+                    🩺 Диагностика
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <div class="final-quote">
+        ✧ «Путь в тысячу ли начинается с первого шага. Путь Воина Света начинается с первого вопроса: "Как стать лучше?" Ты уже задал его. Теперь — иди.» ✧
+    </div>
+
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 Идеатоника • Путь Воина Света</p>
+        <p>✧ «Смысл первичен. Материя — его проявление.» ✧</p>
+    </div>
+
+</div>
+</body>
+</html>

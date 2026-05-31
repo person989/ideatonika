@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Семантического Времени • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-interpretation { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>⏳ Семантическое Время</h1>
+    <div class="subtitle">Калькулятор субъективного восприятия времени (§13, §62, §125)</div>
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры восприятия</div>
+        <div class="input-group">
+            <label>🎯 Когерентность (Cₛ): <span id="csValue">0.70</span></label>
+            <input type="range" id="csSlider" min="0" max="1" value="0.7" step="0.01">
+            <div class="range-labels"><span>0 (хаос)</span><span>1 (лазер)</span></div>
+        </div>
+        <div class="input-group">
+            <label>📊 Поток информации (dI/dt): <span id="infoValue">Средний</span></label>
+            <input type="range" id="infoSlider" min="0" max="3" value="1" step="1">
+            <div class="range-labels"><span>0 (скука)</span><span>1 (рутина)</span><span>2 (поток)</span><span>3 (стресс)</span></div>
+        </div>
+        <div class="input-group">
+            <label>🧭 Вектор внимания (θₜ): <span id="thetaValue">В будущее (0°)</span></label>
+            <input type="range" id="thetaSlider" min="0" max="2" value="0" step="1">
+            <div class="range-labels"><span>0° (будущее)</span><span>90° (настоящее)</span><span>180° (прошлое)</span></div>
+        </div>
+        <div class="input-group">
+            <label>⏱️ Физическое время (t): <span id="tValue">60 мин</span></label>
+            <input type="range" id="tSlider" min="1" max="120" value="60" step="1">
+            <div class="range-labels"><span>1 мин</span><span>120 мин</span></div>
+        </div>
+    </div>
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Субъективная длительность</div>
+        <div class="result-interpretation" id="resultInterpretation"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+</div>
+<script>
+    const csSlider = document.getElementById('csSlider');
+    const infoSlider = document.getElementById('infoSlider');
+    const thetaSlider = document.getElementById('thetaSlider');
+    const tSlider = document.getElementById('tSlider');
+    const csValue = document.getElementById('csValue');
+    const infoValue = document.getElementById('infoValue');
+    const thetaValue = document.getElementById('thetaValue');
+    const tValue = document.getElementById('tValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultInterpretation = document.getElementById('resultInterpretation');
+    const resultFormula = document.getElementById('resultFormula');
+    const infoLabels = ['Скука', 'Рутина', 'Поток', 'Стресс'];
+    const thetaLabels = ['В будущее (0°)', 'В настоящее (90°)', 'В прошлое (180°)'];
+
+    csSlider.addEventListener('input', () => csValue.textContent = parseFloat(csSlider.value).toFixed(2));
+    infoSlider.addEventListener('input', () => infoValue.textContent = infoLabels[parseInt(infoSlider.value)]);
+    thetaSlider.addEventListener('input', () => thetaValue.textContent = thetaLabels[parseInt(thetaSlider.value)]);
+    tSlider.addEventListener('input', () => tValue.textContent = parseInt(tSlider.value) + ' мин');
+
+    function calculate() {
+        const C = parseFloat(csSlider.value);
+        const infoLevel = parseInt(infoSlider.value);
+        const thetaLevel = parseInt(thetaSlider.value);
+        const t = parseInt(tSlider.value);
+        const dIdt = infoLevel;
+        const kappa = 0.5;
+        let cosTheta;
+        if (thetaLevel === 0) cosTheta = 1;       // будущее
+        else if (thetaLevel === 1) cosTheta = 0;   // настоящее
+        else cosTheta = -1;                        // прошлое
+        let dTau_dt = 1 + kappa * C * dIdt * cosTheta;
+        if (dTau_dt < 0.01) dTau_dt = 0.01;
+        const tau = t * dTau_dt;
+
+        resultNumber.textContent = tau.toFixed(0) + ' мин';
+        resultFormula.textContent = `dτ/dt = 1 + 0.5 · ${C.toFixed(2)} · ${dIdt} · ${cosTheta} = ${dTau_dt.toFixed(3)} → τ = ${t} · ${dTau_dt.toFixed(3)} = ${tau.toFixed(0)} мин`;
+
+        // ОКОНЧАТЕЛЬНАЯ ЛОГИКА:
+        // tau > t (dτ/dt > 1) → время ТЯНЕТСЯ
+        // tau < t (dτ/dt < 1) → время ЛЕТИТ
+        if (tau > t * 1.5) {
+            resultLabel.textContent = 'Время «тянется» (субъективно дольше)';
+            resultInterpretation.textContent = '🐌 Время тянется мучительно долго. Как на скучной лекции или в ступоре.';
+        } else if (tau > t * 1.2) {
+            resultLabel.textContent = 'Время «тянется» (субъективно дольше)';
+            resultInterpretation.textContent = '🕰️ Время течёт немного медленнее обычного.';
+        } else if (tau < t * 0.5) {
+            resultLabel.textContent = 'Время «пролетело» (субъективно быстрее)';
+            resultInterpretation.textContent = '🚀 Время пролетело незаметно! Вы были в глубоком потоке.';
+        } else if (tau < t * 0.8) {
+            resultLabel.textContent = 'Время «пролетело» (субъективно быстрее)';
+            resultInterpretation.textContent = '⏩ Время слегка ускорилось. Вы увлечены.';
+        } else {
+            resultLabel.textContent = 'Время идёт как обычно';
+            resultInterpretation.textContent = '🟰 Время идёт своим чередом.';
+        }
+    }
+
+    csSlider.addEventListener('input', calculate);
+    infoSlider.addEventListener('input', calculate);
+    thetaSlider.addEventListener('input', calculate);
+    tSlider.addEventListener('input', calculate);
+    calculate();
+</script>
+</body>
+</html>

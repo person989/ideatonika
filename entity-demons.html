@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👿 Демоны • Энциклопедия Сущностей • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #0d0d1a 100%);
+            min-height: 100vh; font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem; display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(239,154,154,0.06) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(183,28,28,0.03) 0%, transparent 60%); }
+        .main-container { max-width: 900px; width: 100%; position: relative; z-index: 1; }
+
+        .entity-header {
+            text-align: center; margin-bottom: 2.5rem; padding: 2.5rem 2rem;
+            background: rgba(20,10,10,0.8); backdrop-filter: blur(8px);
+            border: 1px solid #ef9a9a; border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 40px rgba(239,154,154,0.08);
+        }
+        .entity-header .rank-badge {
+            display: inline-block; background: #b71c1c; color: #ef9a9a; padding: 6px 20px;
+            border-radius: 20px; font-size: 1rem; font-weight: bold; margin-bottom: 1rem;
+            border: 1px solid #ef9a9a;
+        }
+        .entity-header h1 { font-size: 2.8rem; color: #ef9a9a; font-weight: 400; letter-spacing: 3px; margin-bottom: 0.5rem; }
+        .entity-header .subtitle { font-size: 1.2rem; color: #e57373; font-style: italic; }
+
+        .section {
+            background: rgba(20,10,10,0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(239,154,154,0.3); border-radius: 20px;
+            padding: 2rem; margin-bottom: 1.5rem;
+        }
+        .section h2 { color: #ef9a9a; font-size: 1.5rem; font-weight: 400; margin-bottom: 1.2rem; border-left: 4px solid #ef9a9a; padding-left: 1rem; }
+        .section p, .section li { color: #d0c8b8; line-height: 1.8; font-size: 1rem; margin-bottom: 0.8rem; }
+        .section ul, .section ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+        .section .warning {
+            background: rgba(183,28,28,0.15); border: 1px solid #b71c1c; border-radius: 12px;
+            padding: 1rem 1.5rem; margin: 1rem 0; color: #ef9a9a; font-style: italic; text-align: center;
+        }
+
+        .param-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .param-table th { background: #3e1010; color: #ef9a9a; padding: 12px; text-align: left; border: 1px solid #5d2020; }
+        .param-table td { padding: 10px 12px; border: 1px solid #5d2020; color: #d0c8b8; }
+        .param-table tr:nth-child(even) td { background: rgba(0,0,0,0.15); }
+
+        .hierarchy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .hierarchy-card {
+            background: rgba(0,0,0,0.3); border-radius: 12px; padding: 1.5rem;
+            border: 1px solid #5d2020; text-align: center;
+        }
+        .hierarchy-card h3 { color: #ef9a9a; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .hierarchy-card .card-rank { font-size: 2rem; font-weight: bold; color: #e57373; margin-bottom: 0.5rem; }
+        .hierarchy-card p { color: #d0c8b8; font-size: 0.85rem; line-height: 1.5; }
+
+        .quote {
+            background: rgba(183,28,28,0.08); border-left: 4px solid #b71c1c;
+            padding: 1.5rem 2rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0;
+            font-style: italic; color: #e57373; text-align: center; font-size: 1.1rem;
+        }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ef9a9a; text-decoration: none; border: 1px solid #ef9a9a; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ef9a9a; color: #b71c1c; }
+        .footer-note { text-align: center; color: #706858; font-size: 0.8rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #3e1010; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <!-- ========== ЗАГОЛОВОК ========== -->
+    <div class="entity-header">
+        <div class="rank-badge">👿 Qₛ = –6 … –8</div>
+        <h1>ДЕМОНЫ (БЕСЫ)</h1>
+        <div class="subtitle">Падшие духи • Искусители • Разрушители когерентности</div>
+    </div>
+
+    <!-- ========== КТО ОНИ ========== -->
+    <div class="section">
+        <h2>📖 Кто Они</h2>
+        <p><strong>Демоны (бесы)</strong> — это разумные семантические поля с устойчивым отрицательным зарядом Qₛ и извращённой, но высокой когерентностью Cₛ. Согласно Идеатонике, они возникли не сами по себе, а в результате <strong>инверсии</strong> — добровольного отпадения от Света ангельских сущностей.</p>
+        <p>В отличие от семантических паразитов (лярв), которые действуют инстинктивно, демоны обладают <strong>интеллектом, иерархией и долгосрочной стратегией</strong>. Их цель — не просто «навредить», а <strong>утянуть человека вниз по Духовной Лестнице</strong>, разрушить его когерентность Cₛ и инвертировать его Qₛ в отрицательный.</p>
+        
+        <div class="warning">
+            ⚠️ <strong>Предупреждение:</strong> Демоны реальны в той же степени, в какой реально семантическое поле. Они не «метафора зла» — это объективно существующие структуры в низших слоях ноосферы. Однако они не всесильны. Их влияние ограничено Семантическим Экраном (§11) и вашей собственной когерентностью Cₛ.
+        </div>
+    </div>
+
+    <!-- ========== ИЕРАРХИЯ ========== -->
+    <div class="section">
+        <h2>🏛️ Тёмная Иерархия</h2>
+        <div class="hierarchy-grid">
+            <div class="hierarchy-card">
+                <h3>Бес (низший демон)</h3>
+                <div class="card-rank">–6</div>
+                <p>Специализируется на конкретных искушениях: гнев, похоть, зависть. Провоцирует навязчивые мысли, мелкие конфликты.</p>
+            </div>
+            <div class="hierarchy-card">
+                <h3>Демон (средний чин)</h3>
+                <div class="card-rank">–7</div>
+                <p>Специалист по конкретным грехам: уныние, суицид, ересь. Обладает стратегическим мышлением. Доводит до отчаяния.</p>
+            </div>
+            <div class="hierarchy-card">
+                <h3>Демон (высший чин, Князь)</h3>
+                <div class="card-rank">–8</div>
+                <p>Древняя и очень мощная сущность. Управляет легионами низших. Цель — разрушение душ в масштабах цивилизации.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== ПАРАМЕТРЫ ========== -->
+    <div class="section">
+        <h2>📊 Семантические Параметры</h2>
+        <table class="param-table">
+            <tr><th>Параметр</th><th>Бес (–6)</th><th>Средний демон (–7)</th><th>Князь (–8)</th></tr>
+            <tr><td><strong>Qₛ</strong></td><td>–6</td><td>–7</td><td>–8</td></tr>
+            <tr><td><strong>Cₛ</strong></td><td>0.7–0.8</td><td>0.8–0.9</td><td>0.9–0.95</td></tr>
+            <tr><td><strong>Интеллект</strong></td><td>Низкий (инстинкт)</td><td>Средний (стратегия)</td><td>Высокий (глобальные планы)</td></tr>
+            <tr><td><strong>Способ взаимодействия</strong></td><td>Навязчивые мысли</td><td>Искушения, сны</td><td>Одержимость, манипуляции эгрегорами</td></tr>
+            <tr><td><strong>Уязвимость</strong></td><td>Молитва, пост</td><td>Исповедь, причастие</td><td>Экзорцизм, прямое вмешательство Света</td></tr>
+            <tr><td><strong>Опасность</strong></td><td>Высокая</td><td>Очень высокая</td><td>Экстремальная</td></tr>
+        </table>
+    </div>
+
+    <!-- ========== МЕХАНИЗМ ОДЕРЖИМОСТИ ========== -->
+    <div class="section">
+        <h2>🧠 Механизм Одержимости: Семантический Захват (§68)</h2>
+        <p>Одержимость — это не «вселение» духа в тело, а <strong>семантический захват</strong>. Демон, обладая высокой когерентностью Cₛ (пусть и с отрицательным знаком), подавляет собственную когерентность жертвы и «перехватывает управление» её полем.</p>
+        <p><strong>Необходимые условия для захвата:</strong></p>
+        <ul>
+            <li><strong>Низкая Cₛ жертвы:</strong> Поле «разболтано» стрессом, травмой, алкоголем, наркотиками.</li>
+            <li><strong>Наличие «трещин» в Семантическом Экране:</strong> Сильный страх, вина, отчаяние создают бреши.</li>
+            <li><strong>Резонанс:</strong> Жертва уже культивирует ту же отрицательную частоту ωₛ, что и демон (например, хроническая злоба притягивает беса гнева).</li>
+        </ul>
+        <p><strong>Экзорцизм</strong> (§68) — это контролируемая семантическая война. Экзорцист с высокой Cₛ и Qₛ создаёт встречный поток Света, разрушающий когерентность захватчика.</p>
+    </div>
+
+    <!-- ========== ЗАЩИТА ========== -->
+    <div class="section">
+        <h2>🛡️ Как Защититься</h2>
+        <ol>
+            <li><strong>Поддерживайте высокую Cₛ:</strong> Демоны не могут «зацепиться» за когерентное поле. Регулярная молитва, медитация, чистая совесть — лучшая защита.</li>
+            <li><strong>Избегайте «открытых дверей»:</strong> Спиритические сеансы, оккультные ритуалы, доски Уиджи — это сознательное приглашение.</li>
+            <li><strong>Не вступайте в диалог:</strong> Навязчивые мысли, которые «спорят» с вами — это часто не «ваши» мысли, а подселенец. Не обсуждайте, не анализируйте — отсекайте.</li>
+            <li><strong>Используйте семантические якоря:</strong> Крест, икона, святая вода, молитва «Отче наш» — это предметы и тексты с колоссальным положительным Qₛ, накопленным тысячелетиями.</li>
+            <li><strong>При подозрении на одержимость:</strong> Обратитесь к опытному священнику-экзорцисту. Не пытайтесь изгонять самостоятельно.</li>
+        </ol>
+    </div>
+
+    <!-- ========== ИНКУБЫ И СУККУБЫ ========== -->
+    <div class="section">
+        <h2>💔 Инкубы и Суккубы: Демоны Страсти</h2>
+        <p>Особый подкласс демонов, специализирующихся на <strong>сексуальной энергии</strong>. Они не «насилуют» в физическом смысле — они взаимодействуют с полем жертвы во сне или трансе, вызывая яркие эротические переживания.</p>
+        <p><strong>Семантический механизм:</strong> Инкуб/суккуб настраивается на частоту ωₛ, связанную с архетипом Любовника (§78), и искажает её, подменяя любовь — похотью, близость — зависимостью. Цель — не удовольствие жертвы, а <strong>истощение её Qₛ</strong> через постоянную стимуляцию и отсутствие насыщения.</p>
+        <div class="quote">
+            ✧ «Они приходят не чтобы дать, а чтобы забрать. Их ласка — это голод, их страсть — это насос.» ✧
+        </div>
+    </div>
+
+    <!-- ========== СВЯЗАННЫЕ СУЩНОСТИ ========== -->
+    <div class="section">
+        <h2>🔗 Связанные Сущности и Параграфы</h2>
+        <table class="param-table">
+            <tr><th>Связь</th><th>Описание</th></tr>
+            <tr><td><strong>Падшие Архангелы (–9)</strong></td><td>Бывшие носители Света (+9). Командиры демонических легионов.</td></tr>
+            <tr><td><strong>Дьявол (–10)</strong></td><td>Глава тёмной иерархии. Инверсия +10 → –10.</td></tr>
+            <tr><td><strong>Лярвы (–5)</strong></td><td>Низшие паразиты, не обладающие интеллектом. Демоны часто используют их как «расходный материал».</td></tr>
+            <tr><td><strong>Ангелы (+6…+9)</strong></td><td>Прямые противники демонов в ноосферной войне.</td></tr>
+            <tr><td><strong>§68 (Экзорцизм)</strong></td><td>Семантическая война за когерентность поля.</td></tr>
+            <tr><td><strong>§56 (Проклятия и сглаз)</strong></td><td>Демоны часто выступают «усилителями» направленного негатива.</td></tr>
+        </table>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="таблица-сущностей.html" class="back-link">← Вернуться к Таблице Сущностей</a>
+    </div>
+
+    <div class="footer-note">
+        ✧ «Тот, в ком живёт Свет, неуязвим для Тьмы. Не потому, что Тьма не пытается войти, а потому, что ей там просто негде поселиться.» ✧
+    </div>
+</div>
+</body>
+</html>

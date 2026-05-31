@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container {
+            max-width: 700px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            background: rgba(30, 40, 60, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #f3e7c0;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #c0b090;
+            font-style: italic;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #5d4a3a;
+            padding-bottom: 1rem;
+        }
+        .content {
+            color: #d0c8b8;
+            line-height: 1.8;
+        }
+        .content p {
+            margin-bottom: 1.2rem;
+        }
+        .contact-method {
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            border: 1px solid #5d4a3a;
+        }
+        .contact-method h3 {
+            color: #e3b87c;
+            margin-bottom: 1rem;
+        }
+        .contact-link {
+            display: inline-block;
+            color: #e3b87c;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border: 1px solid #e3b87c;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .contact-link:hover { background: #e3b87c; color: #1a1a2e; }
+        .note {
+            color: #a09080;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .quote {
+            background: rgba(0,0,0,0.2);
+            border-left: 3px solid #e3b87c;
+            padding: 1.2rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: #c0b090;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #e3b87c;
+            text-decoration: none;
+            border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover { background: #e3b87c; color: #1a1a2e; }
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>📬 КОНТАКТЫ</h1>
+    <div class="subtitle">Связь с авторами и сообществом</div>
+    
+    <div class="content">
+        <p>Идеатоника — это <strong>открытый проект</strong>. Мы приветствуем вопросы, предложения, идеи для новых экспериментов и параграфов, а также сообщения о найденных ошибках.</p>
+        
+        <div class="quote">
+            «Один в поле не воин. Наука растёт только в диалоге.»
+        </div>
+        
+        <div class="contact-method">
+            <h3>🐙 GitHub (основной канал)</h3>
+            <p style="margin-bottom: 1rem;">Здесь находится репозиторий с исходными текстами, версионирование и баг-трекер.</p>
+            <a href="#" class="contact-link" onclick="alert('Ссылка на GitHub появится позже. Следите за обновлениями!')">github.com/ideatonika</a>
+            <p class="note">Вы можете создавать Issues с предложениями и Pull Requests с исправлениями.</p>
+        </div>
+        
+        <div class="contact-method">
+            <h3>📧 Электронная почта</h3>
+            <p style="margin-bottom: 1rem;">Для личных и непубличных обращений.</p>
+            <a href="#" class="contact-link" onclick="alert('Почта появится позже. Спасибо за интерес!')">ideatonika@proton.me</a>
+            <!-- <a href="mailto:ideatonika@proton.me?subject=Вопрос%20по%20Идеатонике" class="contact-link">ideatonika@proton.me</a> -->
+            <p class="note">Мы читаем все письма, но не гарантируем быстрый ответ.</p>
+        </div>
+        
+        <div class="contact-method">
+    <h3>💬 Telegram-канал</h3>
+    <p style="margin-bottom: 1rem;">Новости, обсуждения, эксперименты сообщества.</p>
+    <a href="https://t.me/ideatonika" class="contact-link" target="_blank" rel="noopener">📱 Подписаться на канал</a>
+    <p class="note">Присоединяйтесь, чтобы общаться с единомышленниками.</p>
+</div>
+        
+        <h2 style="color: #e3b87c; margin-top: 2rem;">🤝 Как внести вклад</h2>
+        <ul style="margin-left: 1.5rem;">
+            <li>Проведите эксперименты из Практикума и поделитесь результатами.</li>
+            <li>Предложите новый материал для Великой Таблицы (с обоснованием).</li>
+            <li>Нашли опечатку или ошибку в формуле? Сообщите нам.</li>
+            <li>Переведите учебник на другой язык.</li>
+            <li>Просто расскажите об Идеатонике тем, кому это может быть интересно.</li>
+        </ul>
+    </div>
+    
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Мы открыты к диалогу</p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Эксперимент с ГСЧ • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 2rem;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            position: relative; z-index: 1; max-width: 600px; width: 100%;
+            background: rgba(30,40,60,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center;
+        }
+        h1 { font-size: 2rem; color: #f3e7c0; margin-bottom: 1rem; font-weight: 400; letter-spacing: 2px; }
+        .subtitle { color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .card-row { display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; margin-bottom: 2rem; }
+        .card {
+            background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 20px;
+            padding: 2rem 1.5rem; cursor: pointer; transition: 0.3s; text-align: center;
+            min-width: 200px; flex: 1; text-decoration: none; color: inherit; display: block;
+        }
+        .card:hover { border-color: #e3b87c; box-shadow: 0 0 20px rgba(227,184,124,0.3); transform: translateY(-3px); }
+        .card-icon { font-size: 3rem; margin-bottom: 1rem; }
+        .card h2 { color: #f3e7c0; font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .card p { color: #a09080; font-size: 0.9rem; line-height: 1.4; }
+        .card .badge { display: inline-block; background: #e3b87c; color: #1a1a2e; padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-top: 0.8rem; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #e3b87c; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    <h1>🎲 Эксперимент с ГСЧ</h1>
+    <div class="subtitle">Выберите режим</div>
+    <div class="card-row">
+        <a href="experiment-gsCh.html" class="card">
+            <div class="card-icon">🧪</div>
+            <h2>100 попыток</h2>
+            <p>Базовый режим. Три фазы по 100 нажатий.</p>
+            <span class="badge">~2 минуты</span>
+        </a>
+        <a href="experiment-gsc-1000.html" class="card">
+            <div class="card-icon">🔬</div>
+            <h2>1000 попыток</h2>
+            <p>Продвинутый режим. Три фазы по 1000 нажатий. Автокликер.</p>
+            <span class="badge">~3 минуты</span>
+        </a>
+        <a href="experiment-gsc-5000.html" class="card">
+           <div class="card-icon">🔥</div>
+           <h2>5000 попыток</h2>
+           <p>Режим «Большая статистика». Три фазы по 5000 автоматических генераций. В 5 раз быстрее.</p>
+           <span class="badge">~3 минуты</span>
+       </a>
+       <a href="experiment-gsc-10000.html" class="card">
+          <div class="card-icon">🔥</div>
+          <h2>10 000 попыток</h2>
+          <p>Профессиональный режим. Три фазы по 10 000 автоматических генераций. Погрешность ±1%.</p>
+          <span class="badge">~3 минуты</span>
+      </a>
+      <a href="experiment-gsc-50000.html" class="card">
+    <div class="card-icon">🔬</div>
+    <h2>50 000 попыток</h2>
+    <p>Лабораторный режим. Три фазы по 50 000 автоматических генераций. Погрешность ±0.45%.</p>
+    <span class="badge">~6 минут</span>
+</a>
+    </div>
+    <a href="практикум-идеатоники.html?page=3" class="back-link">← Вернуться в Практикум</a>
+</div>
+</body>
+</html>

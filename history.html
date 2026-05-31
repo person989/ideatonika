@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #1a1a2e;
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 1rem;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .main-container {
+            max-width: 750px; width: 100%;
+            background: rgba(20, 25, 40, 0.95);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 28px;
+            padding: 1.5rem 1.5rem 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { text-align: center; color: #f3e7c0; font-size: 1.8rem; font-weight: 400; margin-bottom: 0.2rem; }
+        .subtitle { text-align: center; color: #706858; font-size: 0.85rem; margin-bottom: 1.5rem; font-style: italic; }
+
+        /* График */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        canvas { display: block; width: 100%; height: auto; }
+
+        /* Масштаб */
+        .scale-buttons {
+            display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem;
+        }
+        .scale-btn {
+            padding: 0.5rem 1.5rem; border: 1px solid rgba(255,255,255,0.2);
+            background: transparent; color: #706858; border-radius: 25px;
+            cursor: pointer; font-family: inherit; font-size: 0.85rem; transition: all 0.3s;
+        }
+        .scale-btn.active { background: rgba(255,255,255,0.1); color: #f3e7c0; border-color: rgba(255,255,255,0.4); }
+
+        /* Таблица */
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .history-table th {
+            text-align: left; padding: 0.8rem; color: #706858; font-size: 0.8rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: normal;
+        }
+        .history-table td {
+            padding: 1rem 0.8rem; color: #d0c8b8; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .rank-positive { color: #81c784; font-weight: bold; }
+        .rank-negative { color: #ef5350; font-weight: bold; }
+        .view-btn {
+            background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #d0c8b8;
+            padding: 0.4rem 1rem; border-radius: 20px; cursor: pointer; font-family: inherit;
+            font-size: 0.8rem; transition: all 0.2s;
+        }
+        .view-btn:hover { background: rgba(255,255,255,0.1); border-color: #f3e7c0; color: #f3e7c0; }
+        .delete-btn {
+            background: transparent; border: 1px solid #ef5350; color: #ef5350;
+            padding: 0.4rem 0.8rem; border-radius: 20px; cursor: pointer; font-family: inherit;
+            font-size: 0.8rem; margin-left: 0.5rem; transition: all 0.2s;
+        }
+        .delete-btn:hover { background: #ef5350; color: white; }
+        .empty-state { text-align: center; color: #706858; font-style: italic; padding: 3rem; }
+
+        .back-link {
+            display: block; text-align: center; margin-top: 1.5rem; color: #706858;
+            text-decoration: none; font-size: 0.85rem; transition: color 0.3s;
+        }
+        .back-link:hover { color: #f3e7c0; }
+
+        @media (max-width: 500px) {
+            .main-container { padding: 1rem; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="main-container">
+    <h1>📈 История</h1>
+    <p class="subtitle">Динамика Интегрального Ранга</p>
+
+    <div class="chart-container">
+        <canvas id="historyChart"></canvas>
+    </div>
+    <div class="empty-state" id="emptyMsg" style="display:none;">📭 История пуста. Сохраните Паспорт, чтобы увидеть записи.</div>
+
+    <div class="scale-buttons">
+        <button class="scale-btn active" data-scale="day">День</button>
+        <button class="scale-btn" data-scale="week">Неделя</button>
+        <button class="scale-btn" data-scale="month">Месяц</button>
+    </div>
+
+    <table class="history-table" id="historyTable">
+        <thead>
+            <tr><th>Дата</th><th>Интегральный Ранг</th><th></th></tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+    </table>
+
+    <a href="account.html" class="back-link">← Вернуться в Аккаунт</a>
+</div>
+
+<script>
+(function() {
+    const STORAGE_KEY = 'ideatonika_user_profile';
+    const HISTORY_KEY = 'passportHistory';
+    let currentScale = 'day';
+
+    // ========== ЗАГРУЗКА ПРОФИЛЯ И ИСТОРИИ ==========
+    function loadProfile() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : null;
+    }
+
+    function loadHistory() {
+        const profile = loadProfile();
+        if (!profile || !profile[HISTORY_KEY]) return [];
+        return profile[HISTORY_KEY];
+    }
+
+    function saveHistory(history) {
+        const profile = loadProfile();
+        if (profile) {
+            profile[HISTORY_KEY] = history;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+        }
+    }
+
+    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+    function calculateIntegralRank(passportData) {
+        const testKeys = [
+            'ideatonika_test_qs', 'ideatonika_test_cs', 'ideatonika_test_ts',
+            'ideatonika_test_chi', 'ideatonika_test_env',
+            'ideatonika_test_food', 'ideatonika_test_chrono', 'ideatonika_test_shield',
+            'ideatonika_test_dream', 'ideatonika_test_egregor', 'ideatonika_test_water',
+            'ideatonika_test_material', 'ideatonika_test_color', 'ideatonika_test_sound',
+            'ideatonika_test_ritual', 'ideatonika_test_archetype', 'ideatonika_test_circle',
+            'ideatonika_test_path'
+        ];
+        let sum = 0, count = 0;
+        testKeys.forEach(k => {
+            const val = passportData[k];
+            if (val !== undefined && val !== null) {
+                const num = parseFloat(val);
+                if (!isNaN(num)) { sum += num; count++; }
+            }
+        });
+        return count > 0 ? Math.round((sum / count) * 10) / 10 : null;
+    }
+
+    function aggregateHistory(data, scale) {
+        if (!data.length) return [];
+        const sorted = [...data].sort((a, b) => a.date.localeCompare(b.date));
+        if (scale === 'day') return sorted;
+
+        const groups = {};
+        sorted.forEach(d => {
+            let bucket;
+            const date = new Date(d.date);
+            if (scale === 'week') {
+                const startOfYear = new Date(date.getFullYear(), 0, 1);
+                const weekNum = Math.floor(((date - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+                bucket = `${date.getFullYear()}-W${weekNum}`;
+            } else if (scale === 'month') {
+                bucket = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+            }
+            if (!groups[bucket]) groups[bucket] = [];
+            groups[bucket].push(d.rank);
+        });
+        const result = [];
+        for (const [bucket, ranks] of Object.entries(groups)) {
+            const avg = ranks.reduce((a, b) => a + b, 0) / ranks.length;
+            result.push({ date: bucket, rank: Math.round(avg * 10) / 10, label: bucket });
+        }
+        return result.sort((a, b) => a.date.localeCompare(b.date));
+    }
+
+    // ========== ТАБЛИЦА ==========
+    function renderTable() {
+        const history = loadHistory();
+        const tbody = document.getElementById('historyBody');
+        const emptyMsg = document.getElementById('emptyMsg');
+        const table = document.getElementById('historyTable');
+
+        if (!history.length) {
+            table.style.display = 'none';
+            emptyMsg.style.display = 'block';
+            return;
+        }
+        table.style.display = '';
+        emptyMsg.style.display = 'none';
+
+        // Сортируем от новых к старым
+        const sorted = [...history].sort((a, b) => b.date.localeCompare(a.date));
+        let html = '';
+        sorted.forEach((entry, i) => {
+            const rank = entry.rank;
+            const rankClass = rank >= 0 ? 'rank-positive' : 'rank-negative';
+            const rankStr = (rank >= 0 ? '+' : '') + rank.toFixed(1);
+            const originalIndex = history.indexOf(entry); // индекс в оригинальном массиве
+            html += `
+                <tr>
+                    <td>${new Date(entry.date).toLocaleDateString('ru-RU')}</td>
+                    <td><span class="${rankClass}">${rankStr}</span></td>
+                    <td style="text-align:right;">
+                        <button class="view-btn" data-idx="${originalIndex}">👁️ Посмотреть</button>
+                        <button class="delete-btn" data-idx="${originalIndex}">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        });
+        tbody.innerHTML = html;
+
+        // Обработчики кнопок
+        tbody.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                const entry = history[idx];
+                if (entry && entry.passportData) {
+                    // Сохраняем данные паспорта во временный ключ
+                    localStorage.setItem('ideatonika_temp_passport', JSON.stringify(entry.passportData));
+                    // Перенаправляем на страницу паспорта с флагом "история"
+                    window.location.href = 'semantic-passport.html?mode=history';
+                }
+            });
+        });
+
+        tbody.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx);
+                if (confirm('Удалить эту запись из истории?')) {
+                    const hist = loadHistory();
+                    hist.splice(idx, 1);
+                    saveHistory(hist);
+                    renderTable();
+                    drawChart();
+                }
+            });
+        });
+    }
+
+    // ========== ГРАФИК ==========
+    const canvas = document.getElementById('historyChart');
+    const ctx = canvas.getContext('2d');
+
+    function drawChart() {
+        const history = loadHistory();
+        const data = aggregateHistory(history, currentScale);
+
+        if (!data.length) {
+            canvas.style.display = 'none';
+            return;
+        }
+        canvas.style.display = 'block';
+
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.parentElement.getBoundingClientRect();
+        const W = rect.width - 16;
+        const H = 250;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        const padLeft = 50, padRight = 20, padTop = 20, padBottom = 40;
+        const plotW = W - padLeft - padRight;
+        const plotH = H - padTop - padBottom;
+
+        ctx.clearRect(0, 0, W, H);
+        const yMin = -10, yMax = 10, yRange = 20;
+
+        // Сетка
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        ctx.lineWidth = 1;
+        for (let v = yMin; v <= yMax; v += 5) {
+            const y = padTop + plotH - ((v - yMin) / yRange) * plotH;
+            ctx.beginPath(); ctx.moveTo(padLeft, y); ctx.lineTo(W - padRight, y); ctx.stroke();
+        }
+        // Ноль
+        const y0 = padTop + plotH - ((0 - yMin) / yRange) * plotH;
+        ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath(); ctx.moveTo(padLeft, y0); ctx.lineTo(W - padRight, y0); ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Подписи Y
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        ctx.font = `${Math.round(11 * dpr)}px Georgia`;
+        ctx.textAlign = 'right';
+        for (let v = yMin; v <= yMax; v += 5) {
+            const y = padTop + plotH - ((v - yMin) / yRange) * plotH;
+            ctx.fillText(v, padLeft - 8, y + 4);
+        }
+
+        // Подписи X
+        ctx.textAlign = 'center';
+        ctx.font = `${Math.round(10 * dpr)}px Georgia`;
+        const maxLabels = Math.min(data.length, 8);
+        const step = Math.max(1, Math.floor(data.length / maxLabels));
+        for (let i = 0; i < data.length; i += step) {
+            const x = padLeft + (i / (data.length - 1 || 1)) * plotW;
+            ctx.fillText(data[i].label, x, padTop + plotH + 18);
+        }
+
+        if (data.length < 2) {
+            const x = padLeft + plotW / 2;
+            const v = data[0].rank;
+            const y = padTop + plotH - ((Math.min(yMax, Math.max(yMin, v)) - yMin) / yRange) * plotH;
+            ctx.fillStyle = '#ffd54f';
+            ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+            return;
+        }
+
+        const points = data.map((d, i) => {
+            const x = padLeft + (i / (data.length - 1)) * plotW;
+            const v = Math.min(yMax, Math.max(yMin, d.rank));
+            const y = padTop + plotH - ((v - yMin) / yRange) * plotH;
+            return { x, y };
+        });
+
+        // Волна
+        ctx.strokeStyle = '#ffd54f';
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+            const cp1x = points[i - 1].x + (points[i].x - points[i - 1].x) / 3;
+            const cp1y = points[i - 1].y;
+            const cp2x = points[i].x - (points[i].x - points[i - 1].x) / 3;
+            const cp2y = points[i].y;
+            ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, points[i].x, points[i].y);
+        }
+        ctx.stroke();
+
+        // Точки
+        ctx.fillStyle = '#ffd54f';
+        points.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, 3.5, 0, Math.PI * 2); ctx.fill(); });
+    }
+
+    // ========== КНОПКИ МАСШТАБА ==========
+    document.querySelectorAll('.scale-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentScale = btn.dataset.scale;
+            drawChart();
+        });
+    });
+
+    // ========== ЗАПУСК ==========
+    renderTable();
+    drawChart();
+    window.addEventListener('resize', drawChart);
+})();
+</script>
+
+</body>
+</html>

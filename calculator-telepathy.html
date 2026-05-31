@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор Дальности Телепатии • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🔮 Дальность Телепатии</h1>
+    <div class="subtitle">На каком расстоянии вы «слышите» другого человека? (§55, §104, §129)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваши параметры</div>
+
+        <!-- χ — чувствительность -->
+        <div class="input-group">
+            <label>🔮 Ваша чувствительность (χ): <span id="chiValue">5.0</span> из 10</label>
+            <input type="range" id="chiSlider" min="0" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>0 (глухарь)</span><span>5 (сенситив)</span><span>10 (медиум)</span></div>
+        </div>
+
+        <!-- Cₛ — когерентность -->
+        <div class="input-group">
+            <label>🎯 Ваша когерентность (Cₛ): <span id="csValue">0.60</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.6" step="0.01">
+            <div class="range-labels"><span>0.1 (рассеян)</span><span>1.0 (лазер)</span></div>
+        </div>
+
+        <!-- Тип связи -->
+        <div class="input-group">
+            <label>👥 Степень близости с «целью»:</label>
+            <select id="bondSelect">
+                <option value="10">Мать и дитя / близнецы (K₀ = 10)</option>
+                <option value="7">Супруги, лучшие друзья (K₀ = 7)</option>
+                <option value="5" selected>Хорошие знакомые (K₀ = 5)</option>
+                <option value="2">Коллеги, соседи (K₀ = 2)</option>
+                <option value="0.5">Незнакомец (K₀ = 0.5)</option>
+            </select>
+        </div>
+
+        <!-- Среда -->
+        <div class="input-group">
+            <label>🌐 Среда между вами:</label>
+            <select id="mediumSelect">
+                <option value="0.01">Чистый воздух, прямая видимость (α = 0.01)</option>
+                <option value="0.1">Воздух, город (α = 0.1)</option>
+                <option value="0.5" selected>Деревянные стены (α = 0.5)</option>
+                <option value="2.0">Каменные/бетонные стены (α = 2.0)</option>
+                <option value="5.0">Железобетон, подвал (α = 5.0)</option>
+            </select>
+        </div>
+
+        <!-- Эмоциональный фон -->
+        <div class="input-group">
+            <label>💗 Эмоциональный накал (важность сообщения): <span id="emotionValue">5</span> из 10</label>
+            <input type="range" id="emotionSlider" min="1" max="10" value="5" step="0.5">
+            <div class="range-labels"><span>1 (бытовая мысль)</span><span>10 (крик о помощи)</span></div>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Максимальная дальность</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const chiSlider = document.getElementById('chiSlider');
+    const csSlider = document.getElementById('csSlider');
+    const bondSelect = document.getElementById('bondSelect');
+    const mediumSelect = document.getElementById('mediumSelect');
+    const emotionSlider = document.getElementById('emotionSlider');
+    const chiValue = document.getElementById('chiValue');
+    const csValue = document.getElementById('csValue');
+    const emotionValue = document.getElementById('emotionValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    chiSlider.addEventListener('input', () => { chiValue.textContent = parseFloat(chiSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    emotionSlider.addEventListener('input', () => { emotionValue.textContent = parseFloat(emotionSlider.value).toFixed(1); calculate(); });
+    bondSelect.addEventListener('change', calculate);
+    mediumSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const chi = parseFloat(chiSlider.value);
+        const C = parseFloat(csSlider.value);
+        const K0 = parseFloat(bondSelect.value);
+        const alpha = parseFloat(mediumSelect.value);
+        const Qemotion = parseFloat(emotionSlider.value);
+
+        // Эффективная запутанность с учётом эмоций
+        const Keff = K0 * (0.3 + 0.7 * (Qemotion / 10));
+
+        // Максимальная сила «передатчика» (условная)
+        const signalStrength = chi * C * Keff;
+
+        // Порог слышимости (минимальный сигнал, который можно различить)
+        const threshold = 0.1;
+
+        // Дальность из закона затухания: signalStrength * e^(-α * R) = threshold
+        // R = ln(signalStrength / threshold) / α
+        let Rmax;
+        if (signalStrength <= threshold) {
+            Rmax = 0;
+        } else {
+            Rmax = Math.log(signalStrength / threshold) / alpha;
+        }
+
+        // Округление
+        let displayDistance;
+        if (Rmax < 0.001) {
+            displayDistance = (Rmax * 1000).toFixed(1) + ' м';
+        } else if (Rmax < 1) {
+            displayDistance = (Rmax * 1000).toFixed(0) + ' м';
+        } else if (Rmax < 1000) {
+            displayDistance = Rmax.toFixed(1) + ' км';
+        } else {
+            displayDistance = (Rmax / 1000).toFixed(0) + ' тыс. км';
+        }
+
+        resultNumber.textContent = displayDistance;
+        resultLabel.textContent = 'Максимальная дальность';
+
+        let interpretation = '';
+        if (Rmax < 0.01) interpretation = '📏 Связь возможна только в одной комнате.';
+        else if (Rmax < 0.1) interpretation = '🏠 В пределах дома или квартиры.';
+        else if (Rmax < 1) interpretation = '🏙️ В пределах одного района или города.';
+        else if (Rmax < 100) interpretation = '🌍 В пределах страны или континента.';
+        else if (Rmax < 10000) interpretation = '🌎 В любой точке Земли!';
+        else interpretation = '🚀 Межпланетная связь! Ваша мысль долетит до Луны и дальше.';
+        resultExtra.textContent = interpretation;
+
+        const bondName = bondSelect.options[bondSelect.selectedIndex].text.split(' (')[0];
+        const mediumName = mediumSelect.options[mediumSelect.selectedIndex].text.split(' (')[0];
+        resultFormula.textContent = `Сигнал = ${chi.toFixed(1)} · ${C.toFixed(2)} · ${Keff.toFixed(1)} = ${signalStrength.toFixed(2)} | R = ln(${signalStrength.toFixed(2)} / 0.1) / ${alpha.toFixed(2)} = ${Rmax.toFixed(2)} км`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

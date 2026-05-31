@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🩺 Хаб Диагностики • Идеатоника</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cosmic-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%);
+            pointer-events: none; z-index: 0;
+        }
+        .main-container {
+            max-width: 1200px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Заголовок */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 400;
+            letter-spacing: 4px;
+            color: #f3e7c0;
+            text-shadow: 0 0 20px rgba(255,215,150,0.5), 0 4px 10px rgba(0,0,0,0.5);
+            margin-bottom: 0.5rem;
+            font-family: 'Times New Roman', serif;
+        }
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #c0b090;
+            font-style: italic;
+            border-bottom: 1px solid #c0b090;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        .hero .epigraph {
+            margin-top: 1.5rem;
+            color: #a09080;
+            font-size: 1rem;
+        }
+        
+        /* Сетка карточек */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .card {
+            background: rgba(30, 40, 60, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(227, 184, 124, 0.3);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,245,215,0.1);
+            transition: transform 0.2s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 0 1px #e3b87c;
+            border-color: #e3b87c;
+        }
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .card h2 {
+            color: #f3e7c0;
+            font-size: 1.8rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 1px dashed #8b7355;
+            padding-bottom: 0.8rem;
+        }
+        .card p {
+            color: #d0c8b8;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        .card .meta {
+            color: #a09080;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            background: transparent;
+            border: 1.5px solid #e3b87c;
+            color: #e3b87c;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 40px;
+            text-align: center;
+            transition: 0.2s;
+            letter-spacing: 1px;
+            margin-top: auto;
+        }
+        .btn:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+            box-shadow: 0 0 15px rgba(227,184,124,0.5);
+        }
+        .btn-disabled {
+            border-color: #5d4a3a;
+            color: #706858;
+            cursor: not-allowed;
+        }
+        .btn-disabled:hover {
+            background: transparent;
+            color: #706858;
+            box-shadow: none;
+        }
+        
+        /* Подвал */
+        .footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #706858;
+            font-size: 0.8rem;
+            border-top: 1px solid #3a3a4a;
+            padding-top: 2rem;
+        }
+        .footer a {
+            color: #b0a090;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: #e3b87c;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #e3b87c;
+            text-decoration: none;
+            border: 1px solid #e3b87c;
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            background: #e3b87c;
+            color: #1a1a2e;
+        }
+        
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+        
+        /* Стили для карточки Семантического Паспорта */
+.passport-card {
+    border: 2px solid #ffd54f !important;
+    background: linear-gradient(135deg, rgba(255, 215, 80, 0.1), rgba(30, 40, 60, 0.7)) !important;
+    position: relative;
+    overflow: hidden;
+}
+.passport-card::before {
+    content: "🪪";
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-size: 6rem;
+    opacity: 0.15;
+    pointer-events: none;
+}
+.passport-badge {
+    display: inline-block;
+    background: #ffd54f;
+    color: #1a1a2e;
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+}
+.passport-status {
+    font-size: 0.85rem;
+    color: #a09080;
+    margin-bottom: 1rem;
+}
+.passport-status span {
+    color: #ffd54f;
+    font-weight: bold;
+}
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+    
+    <div class="hero">
+        <h1>🩺 ДИАГНОСТИКА</h1>
+        <div class="subtitle">Познай своё семантическое поле</div>
+        <div class="epigraph">✧ «Чтобы управлять Смыслом, нужно сначала измерить себя» ✧</div>
+    </div>
+    
+    <div class="grid">
+        
+        <!-- Карточка 1: Тест Qₛ -->
+        <div class="card">
+            <div class="card-icon">☀️</div>
+            <h2>Ваш Qₛ</h2>
+            <p>Семантический заряд. Узнайте, являетесь ли вы источником Света или поглощаете Тьму. Оценка вашего текущего позитива/негатива.</p>
+            <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+            <a href="test-qs.html" class="btn">☀️ Пройти тест</a>
+        </div>
+        
+        <!-- Карточка 2: Тест Cₛ -->
+        <div class="card">
+            <div class="card-icon">🎯</div>
+            <h2>Ваш Cₛ</h2>
+            <p>Когерентность. Лазер или лампочка? Оцените свою способность концентрироваться и удерживать фокус.</p>
+            <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+            <a href="test-cs.html" class="btn">🎯 Пройти тест</a>
+        </div>
+        
+        <!-- Карточка 3: Тест Tₛ -->
+        <div class="card">
+            <div class="card-icon">🌡️</div>
+            <h2>Ваш Tₛ</h2>
+            <p>Семантическая температура. Лёд или пламя? Узнайте, склонны ли вы к тревоге или к ступору.</p>
+            <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+            <a href="test-ts.html" class="btn">🌡️ Пройти тест</a>
+        </div>
+        
+        <!-- Карточка 4: Тест χ -->
+        <div class="card">
+            <div class="card-icon">🔮</div>
+            <h2>Ваш χ (Хи)</h2>
+            <p>Семантическая чувствительность. Насколько сильно вы ощущаете «невидимое» — интуицию, эмпатию, предчувствия.</p>
+            <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+            <a href="test-chi.html" class="btn">🔮 Пройти тест</a>
+        </div>
+        
+        <!-- Карточка 5: Ранг окружения -->
+        <div class="card">
+            <div class="card-icon">🏠</div>
+            <h2>Ранг окружения</h2>
+            <p>Оцените Qₛ вашего дома, вещей и материалов, которые вас окружают. Где вы живёте — в Храме или в Бункере?</p>
+            <div class="meta">🧪 10 вопросов • ~3 минуты</div>
+            <a href="test-env.html" class="btn">🏠 Пройти тест</a>
+        </div>
+        
+        <!-- КАРТОЧКА 6: ТЕСТ НА ЕДУ (НОВАЯ) -->
+<div class="card">
+    <div class="card-icon">🍽️</div>
+    <h2>Светлая или Тёмная еда?</h2>
+    <p>Узнайте, на каком уровне гастрономической шкалы вы находитесь. Анализ ваших пищевых привычек по Таблице Еды.</p>
+    <div class="meta">🧪 10 вопросов • ~3 минуты</div>
+    <a href="test-food.html" class="btn">🍎 Пройти тест</a>
+</div>
+
+<!-- Карточка 7: Тест на хронотип -->
+<div class="card">
+    <div class="card-icon">⏰</div>
+    <h2>Ваш ритм</h2>
+    <p>Жаворонок или Сова? Узнайте свой семантический хронотип и то, как ваше внутреннее время τ соотносится с реальным.</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-chrono.html" class="btn">⏳ Пройти тест</a>
+</div>
+
+<!-- Карточка 8: Тест на семантическую защиту -->
+<div class="card">
+    <div class="card-icon">🛡️</div>
+    <h2>Ваш щит</h2>
+    <p>Насколько вы защищены от внешних воздействий? Узнайте свою уязвимость к вампиризму, сглазу и эмоциональному заражению.</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-shield.html" class="btn">🛡️ Пройти тест</a>
+</div>
+
+<!-- Карточка 9: Тест на качество сновидений -->
+<div class="card">
+    <div class="card-icon">🌙</div>
+    <h2>Ваш сон</h2>
+    <p>Портал или Яма? Узнайте, насколько ваш сон восстанавливает Qₛ, и есть ли у вас склонность к осознанным сновидениям.</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-dream.html" class="btn">💤 Пройти тест</a>
+</div>
+
+<!-- Карточка 10: Тест на Эгрегор -->
+<div class="card">
+    <div class="card-icon">🏛️</div>
+    <h2>Ваш Эгрегор</h2>
+    <p>Узнайте, насколько вы склонны подключаться к коллективным полям. Одиночка или Часть Целого?</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-egregor.html" class="btn">🏛️ Пройти тест</a>
+</div>
+
+<!-- Карточка 11: Тест Воды (НОВАЯ) -->
+<div class="card">
+    <div class="card-icon">💧</div>
+    <h2>Ваша Вода</h2>
+    <p>Живая или Мёртвая? Узнайте, какую воду вы пьёте и как она влияет на ваше семантическое поле.</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-water.html" class="btn">💧 Пройти тест</a>
+</div>
+
+<!-- Карточка 12: Тест «Ваш материал» -->
+<div class="card">
+    <div class="card-icon">🧥</div>
+    <h2>Ваш материал</h2>
+    <p>Из чего вы сделаны? Оцените материалы вашей одежды, аксессуаров и быта. Их ранг влияет на ваше поле.</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-materials.html" class="btn">🧵 Пройти тест</a>
+</div>
+
+<!-- Карточка 13: Тест на цвет -->
+<div class="card">
+    <div class="card-icon">🎨</div>
+    <h2>Ваш цвет</h2>
+    <p>Спектр вашей души. Узнайте, какой цвет доминирует в вашем семантическом поле и что это говорит о вас.</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-color.html" class="btn">🎨 Пройти тест</a>
+</div>
+
+<!-- Карточка 14: Тест на Звук -->
+<div class="card">
+    <div class="card-icon">🎵</div>
+    <h2>Ваш Звук</h2>
+    <p>Частота вашей души. Какая музыка резонирует с вами и что это говорит о вашем семантическом поле.</p>
+    <div class="meta">🎼 7 вопросов • ~2 минуты</div>
+    <a href="test-sound.html" class="btn">🎧 Пройти тест</a>
+</div>
+
+<!-- Карточка 15: Тест на ритуалы -->
+<div class="card">
+    <div class="card-icon">🕯️</div>
+    <h2>Ваш ритуал</h2>
+    <p>Хаос или Порядок? Оцените наличие и качество ежедневных ритуалов. Как ваши привычки влияют на Cₛ и Tₛ.</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-ritual.html" class="btn">🕯️ Пройти тест</a>
+</div>
+
+<!-- Карточка 16: Тест на Архетип -->
+<div class="card">
+    <div class="card-icon">🎭</div>
+    <h2>Ваш Дар</h2>
+    <p>Определите свой доминирующий архетип (§78). Кто вы — Творец, Мудрец, Воин, Хранитель или Любовник?</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-archetype.html" class="btn">🎭 Пройти тест</a>
+</div>
+
+<!-- Карточка 17: Тест "Ваш круг" -->
+<div class="card">
+    <div class="card-icon">👥</div>
+    <h2>Ваш круг</h2>
+    <p>Кто вокруг вас? Оцените Qₛ вашего ближайшего окружения — семьи, друзей, знакомых. Они питают вас или истощают?</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-circle.html" class="btn">👥 Пройти тест</a>
+</div>
+
+<!-- Карточка 18: Тест «Ваш путь» -->
+<div class="card">
+    <div class="card-icon">🧭</div>
+    <h2>Ваш путь</h2>
+    <p>Куда вы идёте? Оцените свой вектор внимания θₜ, наличие цели и отношение к будущему.</p>
+    <div class="meta">🧪 7 вопросов • ~2 минуты</div>
+    <a href="test-path.html" class="btn">🧭 Пройти тест</a>
+</div>
+
+<!-- Карточка: Семантический Паспорт -->
+<div class="card passport-card" id="passportCard">
+    <div class="card-icon">🪪</div>
+    <span class="passport-badge">НОВОЕ</span>
+    <h2>Семантический Паспорт</h2>
+    <p>Соберите все результаты тестов в единый документ. Ваш персональный «паспорт души» с интегральным рангом и рекомендациями.</p>
+    <div class="passport-status" id="passportStatus">
+        Пройдено тестов: <span id="testsCompleted">0</span> из 18
+    </div>
+    <a href="semantic-passport.html" class="btn" id="passportLink">🪪 Открыть Паспорт</a>
+</div>
+        
+    </div>
+    
+    <div style="text-align: center; margin-top: 2rem;">
+    <a href="hidden-tests.html" class="back-link">🔬 Пройти точные тесты (30 вопросов) →</a>
+</div>
+    
+    <div style="text-align: center;">
+        <a href="index.html" class="back-link">← Вернуться на Портал</a>
+    </div>
+    
+    <div class="footer">
+        <p>© 2026 Идеатоника • Диагностика семантического поля</p>
+        <p>🌐 <a href="about.html">О проекте</a> • <a href="contacts.html">Контакты</a> • <a href="license.html">Лицензия</a></p>
+        <p style="margin-top: 1rem;">✧ «Познай себя — и ты познаешь Вселенную» ✧</p>
+    </div>
+    
+</div>
+
+<script>
+(function() {
+    // Список всех ключей тестов, которые мы сохраняем
+    const testKeys = [
+        'ideatonika_test_qs',
+        'ideatonika_test_cs',
+        'ideatonika_test_ts',
+        'ideatonika_test_chi',
+        'ideatonika_test_env',
+        'ideatonika_test_food',
+        'ideatonika_test_chrono',
+        'ideatonika_test_shield',
+        'ideatonika_test_dream',
+        'ideatonika_test_egregor',
+        'ideatonika_test_water',
+        'ideatonika_test_material',
+        'ideatonika_test_color',
+        'ideatonika_test_sound',
+        'ideatonika_test_ritual',
+        'ideatonika_test_archetype',
+        'ideatonika_test_circle',
+        'ideatonika_test_path'
+    ];
+
+    // Считаем, сколько тестов уже пройдено (сохранено)
+    let completed = 0;
+    testKeys.forEach(key => {
+        if (localStorage.getItem(key) !== null) {
+            completed++;
+        }
+    });
+
+    // Обновляем счётчик в карточке
+    const span = document.getElementById('testsCompleted');
+    if (span) {
+        span.textContent = completed;
+    }
+
+    // Если не пройдено ни одного теста — делаем кнопку неактивной
+    const link = document.getElementById('passportLink');
+    if (completed === 0 && link) {
+        link.classList.add('btn-disabled');
+        link.style.pointerEvents = 'none';
+        link.title = 'Пройдите хотя бы один тест, чтобы открыть Паспорт';
+    }
+})();
+</script>
+
+</body>
+</html>

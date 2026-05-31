@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦠 Паразиты (Лярвы) • Энциклопедия Сущностей • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh; font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem; display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255,138,101,0.06) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(255,112,67,0.03) 0%, transparent 60%); }
+        .main-container { max-width: 900px; width: 100%; position: relative; z-index: 1; }
+
+        .entity-header {
+            text-align: center; margin-bottom: 2.5rem; padding: 2.5rem 2rem;
+            background: rgba(30,40,60,0.7); backdrop-filter: blur(8px);
+            border: 1px solid #ff8a65; border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 30px rgba(255,138,101,0.1);
+        }
+        .entity-header .rank-badge {
+            display: inline-block; background: #ff8a65; color: #fff; padding: 6px 20px;
+            border-radius: 20px; font-size: 1rem; font-weight: bold; margin-bottom: 1rem;
+        }
+        .entity-header h1 { font-size: 2.8rem; color: #ff8a65; font-weight: 400; letter-spacing: 3px; margin-bottom: 0.5rem; }
+        .entity-header .subtitle { font-size: 1.2rem; color: #ffab91; font-style: italic; }
+
+        .section {
+            background: rgba(30,40,60,0.7); backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,138,101,0.3); border-radius: 20px;
+            padding: 2rem; margin-bottom: 1.5rem;
+        }
+        .section h2 { color: #ff8a65; font-size: 1.5rem; font-weight: 400; margin-bottom: 1.2rem; border-left: 4px solid #ff8a65; padding-left: 1rem; }
+        .section h3 { color: #ffab91; font-size: 1.2rem; margin: 1.5rem 0 0.8rem; }
+        .section p, .section li { color: #d0c8b8; line-height: 1.8; font-size: 1rem; margin-bottom: 0.8rem; }
+        .section ul, .section ol { margin-left: 1.5rem; margin-bottom: 1rem; }
+
+        .param-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .param-table th { background: #4e342e; color: #ff8a65; padding: 12px; text-align: left; border: 1px solid #5d4037; }
+        .param-table td { padding: 10px 12px; border: 1px solid #5d4037; color: #d0c8b8; }
+        .param-table tr:nth-child(even) td { background: rgba(0,0,0,0.1); }
+
+        .type-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .type-card {
+            background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.5rem;
+            border: 1px solid #5d4037; text-align: center;
+        }
+        .type-card h3 { color: #ff8a65; font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .type-card p { color: #ffab91; font-size: 0.85rem; line-height: 1.5; }
+
+        .warning-box {
+            background: rgba(255,138,101,0.1); border: 2px solid #ff8a65;
+            border-radius: 16px; padding: 2rem; margin: 1.5rem 0; text-align: center;
+        }
+        .warning-box h3 { color: #ff8a65; font-size: 1.3rem; margin-bottom: 1rem; }
+        .warning-box p { color: #ffccbc; line-height: 1.6; }
+
+        .quote {
+            background: rgba(255,138,101,0.08); border-left: 4px solid #ff8a65;
+            padding: 1.5rem 2rem; margin: 1.5rem 0; border-radius: 0 12px 12px 0;
+            font-style: italic; color: #ffab91; text-align: center; font-size: 1.1rem;
+        }
+
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ff8a65; text-decoration: none; border: 1px solid #ff8a65; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ff8a65; color: #1a1a2e; }
+        .footer-note { text-align: center; color: #706858; font-size: 0.8rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #4e342e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <!-- ========== ЗАГОЛОВОК ========== -->
+    <div class="entity-header">
+        <div class="rank-badge">🦠 Qₛ = –5 … –3</div>
+        <h1>ПАРАЗИТЫ (ЛЯРВЫ)</h1>
+        <div class="subtitle">Семантические хищники низшего порядка • Пожиратели эмоций • Теневые обитатели ноосферы</div>
+    </div>
+
+    <!-- ========== КТО ОНИ ========== -->
+    <div class="section">
+        <h2>📖 Кто Они</h2>
+        <p><strong>Лярвы (семантические паразиты)</strong> — это сгустки негативных эмоций, накопившиеся в низших слоях ноосферы. Они не имеют ни интеллекта, ни самосознания в полном смысле слова. Это, скорее, <strong>семантические «вирусы» или «пиявки»</strong>, обладающие лишь одним инстинктом: найти живое семантическое поле (человека) и питаться его Qₛ.</p>
+        <p>В отличие от демонов (которые разумны, иерархичны и действуют с целью), лярвы — это <strong>хаотичные полу-сущности</strong>. Они возникают спонтанно в местах, где много людей испытывают сильные негативные эмоции: больницы, тюрьмы, места конфликтов, бары, публичные дома. Также они могут «рождаться» от конкретного человека, если тот постоянно излучает страх, гнев или похоть.</p>
+        
+        <div class="quote">
+            ✧ «Не всё, что шепчет тебе в голове — это твои мысли. Иногда это голодная тварь, прицепившаяся к твоему полю.» ✧
+        </div>
+    </div>
+
+    <!-- ========== ПАРАМЕТРЫ ========== -->
+    <div class="section">
+        <h2>📊 Семантические Параметры</h2>
+        <table class="param-table">
+            <tr><th>Параметр</th><th>Значение</th><th>Пояснение</th></tr>
+            <tr><td><strong>Qₛ</strong></td><td>–5 … –3</td><td>Стабильно отрицательный. Ниже нуля не падает — это расходный материал Тьмы.</td></tr>
+            <tr><td><strong>Cₛ</strong></td><td>Низкая (0.2…0.4)</td><td>Хаотичны. Не способны к долгосрочной стратегии.</td></tr>
+            <tr><td><strong>Tₛ</strong></td><td>Низкая («холод»)</td><td>Их присутствие ощущается как «озноб» или «липкий страх».</td></tr>
+            <tr><td><strong>Интеллект</strong></td><td>Отсутствует</td><td>Действуют на инстинктах: найти → присосаться → питаться.</td></tr>
+            <tr><td><strong>Способ размножения</strong></td><td>Деление при насыщении</td><td>Напитавшись Qₛ жертвы, могут делиться, создавая новые лярвы.</td></tr>
+            <tr><td><strong>Срок жизни без «еды»</strong></td><td>Несколько дней</td><td>Без подпитки рассеиваются обратно в шум.</td></tr>
+        </table>
+    </div>
+
+    <!-- ========== ТИПЫ ЛЯРВ ========== -->
+    <div class="section">
+        <h2>🦠 Типы Лярв (по «рациону»)</h2>
+        <div class="type-grid">
+            <div class="type-card">
+                <h3>😰 Лярва Страха</h3>
+                <p>Питается тревогой и ужасом. Обитает в больницах, местах катастроф. При «присасывании» вызывает кошмары, панические атаки, фобии.</p>
+            </div>
+            <div class="type-card">
+                <h3>😡 Лярва Гнева</h3>
+                <p>Питается раздражением и яростью. Обитает в офисах, на дорогах, в барах. Провоцирует конфликты, чтобы «подкормиться».</p>
+            </div>
+            <div class="type-card">
+                <h3>💚 Лярва Похоти</h3>
+                <p>Питается сексуальной энергией без любви. Обитает в «злачных» местах. Вызывает навязчивые фантазии, зависимость.</p>
+            </div>
+            <div class="type-card">
+                <h3>😢 Лярва Уныния</h3>
+                <p>Питается апатией и отчаянием. Обитает в подвалах, заброшенных зданиях. «Высасывает» волю к жизни, толкает к суициду.</p>
+            </div>
+            <div class="type-card">
+                <h3>🤢 Лярва Чревоугодия</h3>
+                <p>Питается энергией переедания, алкоголизма, наркомании. Обитает в ресторанах, барах. Усиливает зависимости.</p>
+            </div>
+            <div class="type-card">
+                <h3>💸 Лярва Зависти</h3>
+                <p>Питается сравнением, чувством неполноценности. Обитает в соцсетях. Вызывает навязчивое прокручивание ленты.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== КАК ОНИ ПРИСАСЫВАЮТСЯ ========== -->
+    <div class="section">
+        <h2>🔗 Механизм «Присасывания»</h2>
+        <p>Лярва не может присосаться к кому угодно. Ей нужна <strong>«брешь» в семантическом поле</strong> жертвы — участок с пониженной когерентностью Cₛ и высоким S_noise.</p>
+        <ol>
+            <li><strong>Резонанс:</strong> Лярва «чует» поле с частотой ωₛ, близкой к её собственной (страх притягивает лярву страха).</li>
+            <li><strong>Пробой Экрана:</strong> В месте бреши Семантический Экран (§11) истончён. Лярва «просачивается» сквозь него.</li>
+            <li><strong>Закрепление:</strong> Лярва обвивается вокруг повреждённого участка поля и начинает «высасывать» Qₛ.</li>
+            <li><strong>Провокация:</strong> Чтобы питаться, лярва <strong>сама провоцирует</strong> жертву на нужную эмоцию: нашёптывает тревожные мысли, подсовывает воспоминания об обидах, разжигает гнев.</li>
+            <li><strong>Размножение:</strong> Насытившись, лярва делится. Дочерние особи ищут новых жертв или остаются на том же хозяине.</li>
+        </ol>
+        <div class="quote">
+            ✧ «Если вы вдруг ни с того ни с сего начали бояться, злиться или впадать в уныние — возможно, это не ваши чувства. Это чужой голод.» ✧
+        </div>
+    </div>
+
+    <!-- ========== СИМПТОМЫ ========== -->
+    <div class="section">
+        <h2>🩺 Симптомы Наличия Лярвы</h2>
+        <ul>
+            <li><strong>Внезапные, необъяснимые эмоции:</strong> Страх, гнев, похоть, уныние «на ровном месте», без внешней причины.</li>
+            <li><strong>Навязчивые мысли:</strong> Одна и та же тревожная или агрессивная мысль крутится в голове часами.</li>
+            <li><strong>«Энергетический вампиризм» наоборот:</strong> Вы чувствуете, что кто-то «высасывает» из вас силы, хотя рядом никого нет.</li>
+            <li><strong>Кошмары:</strong> Особенно повторяющиеся сны с одним и тем же сюжетом страха или отвращения.</li>
+            <li><strong>Ощущение «холода» или «липкости»</strong> в определённых частях тела (обычно в груди, солнечном сплетении, затылке).</li>
+            <li><strong>Ухудшение после посещения определённых мест:</strong> После больницы, бара, людного ТЦ — резкий упадок сил.</li>
+        </ul>
+    </div>
+
+    <!-- ========== КАК ИЗБАВИТЬСЯ ========== -->
+    <div class="section">
+        <h2>🧹 Как Избавиться от Лярвы (Семантическая Гигиена)</h2>
+        <ol>
+            <li><strong>Осознание (Первый шаг):</strong> Поймите, что эта эмоция — не ваша. Скажите вслух: «Это не мой страх. Это чужое. Я не обязан это принимать».</li>
+            <li><strong>Повышение Cₛ:</strong> Лярва не выносит высокой когерентности. Медитация, молитва, глубокое дыхание «4-7-8» разрушают её хватку.</li>
+            <li><strong>Повышение Qₛ:</strong> Внесите в поле мощный положительный заряд: искренняя благодарность, объятия с любимым человеком, игра с животным, прогулка на природе.</li>
+            <li><strong>Соль и вода:</strong> Ванна с морской солью (30 мин) или проточная вода «смывают» лярву с поверхности поля (§47 — SALT-CLEAN).</li>
+            <li><strong>Огонь и ладан:</strong> Окуривание шалфеем, полынью или ладаном. Дым — мощный очиститель (§114 — Адвекция).</li>
+            <li><strong>Шунгит и обсидиан:</strong> Поместите кристалл на область солнечного сплетения на 15–20 минут. Шунгит «вытянет» паразита.</li>
+            <li><strong>Молитва:</strong> «Отче наш», 90-й псалом, молитва Ангелу-Хранителю. Сакральные тексты имеют колоссальный Qₛ и «выжигают» низшие сущности.</li>
+            <li><strong>Смех и радость:</strong> Лярва буквально «не переваривает» высокие частоты ωₛ. Посмотрите комедию, потанцуйте, пообщайтесь с весёлыми друзьями.</li>
+        </ol>
+        
+        <div class="warning-box">
+            <h3>⚠️ ЧЕГО НЕЛЬЗЯ ДЕЛАТЬ</h3>
+            <p>❌ <strong>Не пытайтесь «договориться» с лярвой.</strong> Она не разумна. Диалог с ней — это диалог с собственной тенью, который только усиливает её.<br>
+            ❌ <strong>Не «кормите» её.</strong> Если вы чувствуете прилив гнева или страха — не поддавайтесь. Переключите внимание. Каждая подпитанная эмоция делает лярву сильнее.<br>
+            ❌ <strong>Не используйте алкоголь или наркотики.</strong> Они «разбалтывают» поле, снижая Cₛ и делая вас ещё более уязвимым для паразитов.</p>
+        </div>
+    </div>
+
+    <!-- ========== ЛЯРВЫ vs ДЕМОНЫ ========== -->
+    <div class="section">
+        <h2>🆚 Лярвы vs Демоны: В Чём Разница</h2>
+        <table class="param-table">
+            <tr><th>Параметр</th><th>Лярва (Паразит)</th><th>Демон</th></tr>
+            <tr><td><strong>Интеллект</strong></td><td>Нет (инстинкт)</td><td>Есть (стратегия, иерархия)</td></tr>
+            <tr><td><strong>Цель</strong></td><td>Просто «поесть»</td><td>Погубить душу, утянуть вниз</td></tr>
+            <tr><td><strong>Qₛ</strong></td><td>–5…–3</td><td>–8…–6</td></tr>
+            <tr><td><strong>Опасность</strong></td><td>Средняя (истощение, психосоматика)</td><td>Очень высокая (одержимость, суицид)</td></tr>
+            <tr><td><strong>Способность к одержимости</strong></td><td>Нет (только «подселение» снаружи)</td><td>Да (полный захват поля)</td></tr>
+            <tr><td><strong>Изгнание</strong></td><td>Самостоятельно или с помощью гигиены</td><td>Только экзорцизм (§68)</td></tr>
+        </table>
+    </div>
+
+    <!-- ========== СВЯЗАННЫЕ ПАРАГРАФЫ ========== -->
+    <div class="section">
+        <h2>🔗 Связанные Параграфы</h2>
+        <table class="param-table">
+            <tr><th>Параграф</th><th>Описание</th></tr>
+            <tr><td><strong>§64 (Ноосфера)</strong></td><td>Среда обитания лярв — низшие слои коллективного семантического поля.</td></tr>
+            <tr><td><strong>§68 (Экзорцизм)</strong></td><td>Методы изгнания для более серьёзных случаев (демоны).</td></tr>
+            <tr><td><strong>§72 (Вампиризм энергетический)</strong></td><td>Люди-«вампиры» часто являются носителями лярв, не осознавая этого.</td></tr>
+            <tr><td><strong>§47 (SALT-CLEAN)</strong></td><td>Экспериментальный протокол очистки предметов и полей.</td></tr>
+            <tr><td><strong>§44 (Семантическая диета)</strong></td><td>Снижение S_noise как профилактика против присасывания паразитов.</td></tr>
+            <tr><td><strong>§124 (Семантические щиты)</strong></td><td>Методы создания защитного кокона от внешних воздействий.</td></tr>
+        </table>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="таблица-сущностей.html" class="back-link">← Вернуться к Таблице Сущностей</a>
+    </div>
+
+    <div class="footer-note">
+        ✧ «Самый опасный паразит — тот, в которого ты веришь больше, чем в себя.» ✧
+    </div>
+</div>
+</body>
+</html>

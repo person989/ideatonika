@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скорость семантической волны • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%); min-height: 100vh; font-family: 'Georgia', serif; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container { max-width: 800px; width: 100%; position: relative; z-index: 1; background: rgba(30,40,60,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(227,184,124,0.4); border-radius: 32px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>🌊 Скорость семантической волны</h1>
+    <div class="subtitle">Калькулятор распространения Qₛ в разных средах (§118, §81)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Параметры среды</div>
+
+        <!-- Среда распространения -->
+        <div class="input-group">
+            <label>🌐 Среда распространения:</label>
+            <select id="mediumSelect">
+                <option value="air">Чистый воздух</option>
+                <option value="water">Вода (жидкая)</option>
+                <option value="wood">Дерево (вдоль волокон)</option>
+                <option value="stone">Гранит / Камень</option>
+                <option value="metal">Серебро / Металл</option>
+                <option value="concrete">Бетон</option>
+                <option value="vacuum">Вакуум (гипотеза)</option>
+                <option value="custom">Особые условия (настроить)</option>
+            </select>
+        </div>
+
+        <!-- Когерентность среды (для custom) -->
+        <div class="input-group" id="coherenceGroup">
+            <label>🎯 Когерентность среды (Cₛ): <span id="csValue">0.5</span></label>
+            <input type="range" id="csSlider" min="0.1" max="1" value="0.5" step="0.01">
+            <div class="range-labels"><span>0.1 (хаос, вокзал)</span><span>1.0 (лазер, храм)</span></div>
+        </div>
+
+        <!-- Плотность Qₛ в среде (для custom) -->
+        <div class="input-group" id="densityGroup">
+            <label>📊 Плотность Qₛ в среде (ρ_Q): <span id="densityValue">5</span> усл. ед.</label>
+            <input type="range" id="densitySlider" min="1" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>1 (вакуум)</span><span>10 (толпа, шторм)</span></div>
+        </div>
+
+        <!-- Частота сигнала -->
+        <div class="input-group">
+            <label>🎵 Частота Qₛ-сигнала (f): <span id="freqValue">7.83</span> Гц</label>
+            <input type="range" id="freqSlider" min="0.1" max="100" value="7.83" step="0.01">
+            <div class="range-labels"><span>0.1 Гц (дельта)</span><span>7.83 Гц (Шуман)</span><span>100 Гц (гамма)</span></div>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <!-- Результат -->
+<div class="result-box" id="resultBox">
+    <div class="result-number" id="resultNumber">—</div>
+    <div class="result-label" id="resultLabel">Скорость волны</div>
+    <div class="result-number" id="lambdaNumber" style="font-size: 2.5rem; margin-top: 0.5rem;">—</div>
+    <div class="result-label" id="lambdaLabel">Длина волны</div>
+    <div class="result-extra" id="resultExtra"></div>
+    <div class="result-formula" id="resultFormula"></div>
+</div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const mediumSelect = document.getElementById('mediumSelect');
+    const csSlider = document.getElementById('csSlider');
+    const densitySlider = document.getElementById('densitySlider');
+    const freqSlider = document.getElementById('freqSlider');
+    const csValue = document.getElementById('csValue');
+    const densityValue = document.getElementById('densityValue');
+    const freqValue = document.getElementById('freqValue');
+    const coherenceGroup = document.getElementById('coherenceGroup');
+    const densityGroup = document.getElementById('densityGroup');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    // База сред (K_sense — упругость, ρ_Q — плотность)
+    const mediaDB = {
+        air:      { K: 50,   rho: 1.2,  name: 'Чистый воздух' },
+        water:    { K: 200,  rho: 5.0,  name: 'Вода' },
+        wood:     { K: 400,  rho: 3.5,  name: 'Дерево' },
+        stone:    { K: 900,  rho: 7.0,  name: 'Гранит / Камень' },
+        metal:    { K: 2000, rho: 9.0,  name: 'Серебро / Металл' },
+        concrete: { K: 150,  rho: 8.0,  name: 'Бетон' },
+        vacuum:   { K: 0.1,  rho: 0.1,  name: 'Вакуум (гипотеза)' }
+    };
+
+    mediumSelect.addEventListener('change', function() {
+        const isCustom = this.value === 'custom';
+        coherenceGroup.style.display = isCustom ? 'block' : 'none';
+        densityGroup.style.display = isCustom ? 'block' : 'none';
+        calculate();
+    });
+
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    densitySlider.addEventListener('input', () => { densityValue.textContent = parseFloat(densitySlider.value).toFixed(1); calculate(); });
+    freqSlider.addEventListener('input', () => { freqValue.textContent = parseFloat(freqSlider.value).toFixed(2); calculate(); });
+
+    function calculate() {
+        const medium = mediumSelect.value;
+        const f = parseFloat(freqSlider.value);
+
+        let K, rho, mediumName;
+
+        if (medium === 'custom') {
+            K = 500 * parseFloat(csSlider.value);
+            rho = parseFloat(densitySlider.value);
+            mediumName = 'Особые условия';
+        } else {
+            const data = mediaDB[medium];
+            K = data.K;
+            rho = data.rho;
+            mediumName = data.name;
+        }
+
+        // Скорость семантической волны: c_sense = √(K / ρ_Q)  [в условных единицах]
+        const c_sense = Math.sqrt(K / rho);
+
+        // Длина волны: λ = c / f
+        const lambda = c_sense / f;
+        // Обновление длины волны на экране
+document.getElementById('lambdaNumber').textContent = lambda.toFixed(2) + ' усл. ед.';
+document.getElementById('lambdaLabel').textContent = 'Длина волны (λ = c / f)';
+
+        // Перевод в «человеческие» единицы (условно: 1 ед. = 10 м/с)
+        const c_human = c_sense * 10;
+
+        resultNumber.textContent = c_human.toFixed(1) + ' м/с';
+        resultLabel.textContent = 'Скорость в среде: ' + mediumName;
+
+        let extra = '';
+        if (c_human < 25) extra = '🐌 Очень медленно. Смысл «вязнет». Как в бетоне или хаотичной толпе.';
+        else if (c_human < 50) extra = '🚶 Средняя скорость. Как в обычном воздухе или дереве.';
+        else if (c_human < 200) extra = '🚀 Высокая скорость! Смысл летит. Как в воде или камне.';
+        else if (c_human < 1000) extra = '⚡ Очень высокая скорость! Почти мгновенная передача. Как в серебре.';
+        else extra = '🌌 Сверхсветовая? В вакууме Qₛ может распространяться почти мгновенно.';
+        resultExtra.textContent = extra;
+
+        resultFormula.textContent = `c = √(${K.toFixed(1)} / ${rho.toFixed(1)}) = ${c_sense.toFixed(2)} усл. ед. (≈ ${c_human.toFixed(1)} м/с) | λ = c / f = ${lambda.toFixed(2)} усл. ед.`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>

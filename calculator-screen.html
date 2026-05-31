@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пробой Семантического Экрана • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30,40,60,0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227,184,124,0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid #5d4a3a; padding-bottom: 1rem; }
+        .calc-section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.4rem; color: #ffd54f; margin-bottom: 1.5rem; }
+        .input-group { margin-bottom: 1.5rem; }
+        .input-group label { display: flex; justify-content: space-between; align-items: center; color: #d0c8b8; font-size: 1rem; margin-bottom: 0.5rem; }
+        .input-group label span { color: #ffd54f; font-weight: bold; font-size: 1.2rem; }
+        .input-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #5d4a3a; border-radius: 4px; outline: none; cursor: pointer; }
+        .input-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: #ffd54f; border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px rgba(255,215,80,0.5); }
+        .input-group .range-labels { display: flex; justify-content: space-between; color: #706858; font-size: 0.8rem; margin-top: 0.3rem; }
+        .input-group select { width: 100%; padding: 0.8rem 1rem; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; border-radius: 10px; color: #f3e7c0; font-family: 'Georgia', serif; font-size: 1rem; }
+        .input-group select option { background: #1a1a2e; color: #f3e7c0; }
+        .result-box { background: rgba(255,215,80,0.1); border: 2px solid #ffd54f; border-radius: 20px; padding: 2rem; text-align: center; margin-top: 2rem; }
+        .result-number { font-size: 4rem; font-weight: bold; color: #ffd54f; line-height: 1; }
+        .result-label { color: #c0b090; font-size: 1.2rem; margin-top: 0.5rem; }
+        .result-extra { color: #d0c8b8; font-size: 1rem; margin-top: 1rem; font-style: italic; }
+        .result-formula { color: #a09080; font-style: italic; font-size: 0.9rem; margin-top: 1rem; font-family: 'Courier New', monospace; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ffd54f; text-decoration: none; border: 1px solid #ffd54f; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ffd54f; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>⚡ Пробой Семантического Экрана</h1>
+    <div class="subtitle">Способны ли вы на телекинез? (§11, §29, §53, §118)</div>
+
+    <div class="calc-section">
+        <div class="section-title">📐 Ваши параметры</div>
+
+        <!-- Qₛ -->
+        <div class="input-group">
+            <label>🌟 Семантический заряд (Qₛ): <span id="qsValue">5</span> / 10</label>
+            <input type="range" id="qsSlider" min="0" max="10" value="5" step="0.1">
+            <div class="range-labels"><span>0 (пустота)</span><span>5 (энтузиазм)</span><span>10 (экстаз)</span></div>
+        </div>
+
+        <!-- Cₛ -->
+        <div class="input-group">
+            <label>🎯 Когерентность (Cₛ): <span id="csValue">0.70</span></label>
+            <input type="range" id="csSlider" min="0" max="1" value="0.7" step="0.01">
+            <div class="range-labels"><span>0 (хаос)</span><span>0.5 (обычная)</span><span>1 (лазер)</span></div>
+        </div>
+
+        <!-- Поправка на расстояние -->
+        <div class="input-group">
+            <label>📏 Расстояние до цели: <span id="distValue">1</span> метр</label>
+            <input type="range" id="distSlider" min="0.1" max="10" value="1" step="0.1">
+            <div class="range-labels"><span>0.1 м (касание)</span><span>5 м (комната)</span><span>10 м (улица)</span></div>
+        </div>
+
+        <!-- Состояние -->
+        <div class="input-group">
+            <label>🧘 Особое состояние:</label>
+            <select id="stateSelect">
+                <option value="1">Обычное состояние</option>
+                <option value="2">Глубокая медитация</option>
+                <option value="5">Самадхи / экстаз</option>
+                <option value="10">Состояние святого (обожение)</option>
+            </select>
+        </div>
+
+        <!-- Тренировка -->
+        <div class="input-group">
+            <label>🏋️ Стаж тренировок:</label>
+            <select id="trainingSelect">
+                <option value="1">Нет (0 лет)</option>
+                <option value="2">Любитель (1-3 года)</option>
+                <option value="5">Практик (5-10 лет)</option>
+                <option value="10">Монах / мастер (20+ лет)</option>
+                <option value="50">Святой (вся жизнь)</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Результат -->
+    <div class="result-box" id="resultBox">
+        <div class="result-number" id="resultNumber">—</div>
+        <div class="result-label" id="resultLabel">Вероятность пробоя</div>
+        <div class="result-extra" id="resultExtra"></div>
+        <div class="result-formula" id="resultFormula"></div>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="semantic-calculators.html" class="back-link">← К списку калькуляторов</a>
+    </div>
+
+</div>
+
+<script>
+    const qsSlider = document.getElementById('qsSlider');
+    const csSlider = document.getElementById('csSlider');
+    const distSlider = document.getElementById('distSlider');
+    const stateSelect = document.getElementById('stateSelect');
+    const trainingSelect = document.getElementById('trainingSelect');
+    const qsValue = document.getElementById('qsValue');
+    const csValue = document.getElementById('csValue');
+    const distValue = document.getElementById('distValue');
+    const resultNumber = document.getElementById('resultNumber');
+    const resultLabel = document.getElementById('resultLabel');
+    const resultExtra = document.getElementById('resultExtra');
+    const resultFormula = document.getElementById('resultFormula');
+
+    qsSlider.addEventListener('input', () => { qsValue.textContent = parseFloat(qsSlider.value).toFixed(1); calculate(); });
+    csSlider.addEventListener('input', () => { csValue.textContent = parseFloat(csSlider.value).toFixed(2); calculate(); });
+    distSlider.addEventListener('input', () => { distValue.textContent = parseFloat(distSlider.value).toFixed(1); calculate(); });
+    stateSelect.addEventListener('change', calculate);
+    trainingSelect.addEventListener('change', calculate);
+
+    function calculate() {
+        const Q = parseFloat(qsSlider.value);
+        const C = parseFloat(csSlider.value);
+        const dist = parseFloat(distSlider.value);
+        const stateK = parseFloat(stateSelect.value);
+        const trainingK = parseFloat(trainingSelect.value);
+
+        // Эффективная «энергия» E = Q · C · stateK · trainingK
+        const E = Q * C * stateK * trainingK;
+
+        // «Высота» барьера U₀ (константа, очень высокая)
+        const U0 = 1000;
+
+        // Затухание с расстоянием
+        const distanceFactor = Math.exp(-dist / 2);
+
+        // Прозрачность экрана T = exp(-2/ħ · √(2m(U₀ - E)) · d)
+        // Упрощённо: T = exp(-(U₀ - E) / (E + 1)) · distanceFactor
+        let T;
+        if (E >= U0) {
+            T = 1.0; // Полный пробой! (святой)
+        } else {
+            T = Math.exp(-(U0 - E) / (E + 1)) * distanceFactor;
+        }
+
+        // Ограничение
+        T = Math.max(0, Math.min(1, T));
+
+        // В проценты
+        const percent = T * 100;
+
+        resultNumber.textContent = percent < 0.01 ? '< 0.01%' : percent.toFixed(4) + '%';
+        resultLabel.textContent = 'Вероятность пробоя';
+
+        let extra = '';
+        if (percent >= 50) extra = '🌟 ВЫ СПОСОБНЫ НА ТЕЛЕКИНЕЗ! Двигайте предметы силой мысли. Вы — святой или великий мастер.';
+        else if (percent >= 1) extra = '🔥 Очень высокая вероятность! Ложка может дрогнуть. Вы на уровне продвинутого монаха.';
+        else if (percent >= 0.01) extra = '📡 Слабая, но измеримая вероятность. Возможны микро-флуктуации (дрожание пылинок).';
+        else if (percent >= 0.0001) extra = '🔬 Теоретически возможно. Нужны годы тренировок или экстатическое состояние.';
+        else if (percent >= 1e-8) extra = '💫 Почти невозможно. Даже сильное желание не сдвинет предмет. Но молитва — да.';
+        else extra = '🛡️ Абсолютно невозможно. Семантический Экран непробиваем в обычном состоянии. Это дар эволюции.';
+        resultExtra.textContent = extra;
+
+        const Eeff = Q * C * stateK;
+        resultFormula.textContent = `E_eff = ${Q.toFixed(1)} · ${C.toFixed(2)} · ${stateK} · ${trainingK} = ${E.toFixed(1)} | U₀ = 1000 | T = exp(-(1000-${E.toFixed(1)})/(${E.toFixed(1)}+1)) · e^(-${dist.toFixed(1)}/2)`;
+    }
+
+    calculate();
+</script>
+
+</body>
+</html>
