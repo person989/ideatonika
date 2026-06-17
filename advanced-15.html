@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>§A15. Проблема масштабирования Qₛ • Передовой учебник • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(180,130,255,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,200,255,0.05) 0%, transparent 60%); }
+        .main-container {
+            max-width: 900px; width: 100%; position: relative; z-index: 1;
+            background: rgba(20, 25, 50, 0.9); backdrop-filter: blur(12px);
+            border: 1px solid rgba(180, 130, 255, 0.5); border-radius: 32px;
+            padding: 3rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2rem; color: #e1bee7; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { color: #b0a0c0; font-style: italic; margin-bottom: 2rem; border-bottom: 1px solid rgba(180,130,255,0.3); padding-bottom: 1rem; }
+        h2 { font-size: 1.4rem; color: #ce93d8; margin: 2rem 0 1rem; border-left: 4px solid #ce93d8; padding-left: 1rem; }
+        h3 { font-size: 1.2rem; color: #d0c0e0; margin: 1.5rem 0 0.8rem; }
+        p { color: #d0c8e0; line-height: 1.8; margin-bottom: 1.2rem; }
+        ul, ol { color: #d0c8e0; line-height: 1.8; margin-bottom: 1.2rem; margin-left: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.85rem; }
+        th { background: rgba(180,130,255,0.2); color: #e1bee7; padding: 10px; border: 1px solid rgba(180,130,255,0.3); text-align: left; }
+        td { padding: 10px; border: 1px solid rgba(180,130,255,0.2); color: #d0c8e0; vertical-align: top; }
+        .formula { background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 12px; font-family: 'Courier New', monospace; text-align: center; margin: 1.5rem 0; color: #e1bee7; border: 1px solid rgba(180,130,255,0.3); }
+        .highlight { color: #e1bee7; font-weight: bold; }
+        .verdict-box { background: rgba(129,199,132,0.1); border: 1px solid #81c784; border-radius: 16px; padding: 1.5rem; margin: 1.5rem 0; }
+        .verdict-box p { color: #d0c8e0; }
+        .back-link { display: inline-block; margin-top: 2rem; color: #ce93d8; text-decoration: none; border: 1px solid #ce93d8; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ce93d8; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container">
+
+    <h1>§A15. Проблема масштабирования Qₛ: от нейрона к ноосфере</h1>
+    <div class="subtitle">Передовой учебник Идеатоники • Продвинутый уровень</div>
+
+    <p><strong>Статус:</strong> Теоретическая глава. Предлагает решение фундаментальной проблемы масштабирования семантического сигнала.</p>
+
+    <!-- 1. ПРОБЛЕМА -->
+    <h2>1. Формулировка проблемы</h2>
+    <p>Согласно §129 (Семантическая радиация), Qₛ затухает экспоненциально с расстоянием:</p>
+    <div class="formula">Q_принятый = Q_отправленный · e^(-r/λ)</div>
+    <p>Где λ — длина семантической когерентности. Для обычного человека λ ≈ 1–10 метров. Это означает, что на расстоянии 100 метров сигнал ослабевает в e^10 ≈ 22 000 раз, а на расстоянии 1000 км — практически исчезает.</p>
+    <p><strong>Парадокс:</strong> При этом Идеатоника утверждает, что:</p>
+    <ul>
+        <li>Молитва матери за ребёнка в другом городе «работает» (§104).</li>
+        <li>Коллективные молитвы влияют на глобальные события (§75, §123).</li>
+        <li>Эгрегоры существуют как планетарные поля (§79).</li>
+    </ul>
+    <p><strong>Как слабый сигнал одного человека преодолевает тысячи километров?</strong></p>
+
+    <!-- 2. ТРИ ГИПОТЕЗЫ -->
+    <h2>2. Три гипотезы масштабирования</h2>
+    <table>
+        <tr><th>Гипотеза</th><th>Суть</th><th>Проблема</th></tr>
+        <tr>
+            <td><strong>1. Дальнодействие (λ → ∞)</strong></td>
+            <td>Qₛ не затухает с расстоянием. Формула e^(-r/λ) неверна для запутанных полей.</td>
+            <td>Противоречит экспериментам: эффект ГСЧ сильнее вблизи оператора.</td>
+        </tr>
+        <tr>
+            <td><strong>2. Квантовая нелокальность</strong></td>
+            <td>Qₛ передаётся мгновенно через запутанность (§104). Расстояние не имеет значения.</td>
+            <td>Запутанность требует предварительного контакта. Не объясняет влияние на незнакомцев.</td>
+        </tr>
+        <tr>
+            <td><strong>3. Семантические ретрансляторы (рекомендована)</strong></td>
+            <td>Qₛ распространяется через цепочку промежуточных «узлов» — других людей, места силы, эгрегоры. Каждый узел усиливает сигнал.</td>
+            <td>Требует доказательства существования ретрансляторов.</td>
+        </tr>
+    </table>
+
+    <!-- 3. РЕТРАНСЛЯТОРЫ -->
+    <h2>3. Теория Семантических Ретрансляторов</h2>
+    
+    <h3>3.1. Принцип</h3>
+    <p>Семантическое поле не распространяется в вакууме. Оно распространяется <span class="highlight">через сеть сознаний</span>. Каждый человек, каждое животное, каждое «место силы» является одновременно приёмником и передатчиком Qₛ. Сигнал не летит сквозь пустоту — он <span class="highlight">ретранслируется</span> от узла к узлу, подобно тому, как интернет-пакет проходит через множество маршрутизаторов.</p>
+    
+    <h3>3.2. Механизм ретрансляции</h3>
+    <p>Когда Qₛ достигает человека (даже очень слабый), происходит следующее:</p>
+    <ol>
+        <li><strong>Резонанс:</strong> Если частота ω входящего Qₛ близка к собственной частоте человека, возникает резонанс.</li>
+        <li><strong>Усиление:</strong> Человек, сам того не осознавая, «подстраивается» под входящий сигнал и начинает излучать его на своей, значительно большей, мощности.</li>
+        <li><strong>Передача:</strong> Усиленный сигнал распространяется дальше до следующего узла.</li>
+    </ol>
+    <div class="formula">Q_вых = Q_вх · (1 + χ · Cₛ · K_резонанса)</div>
+    <p>Где χ — чувствительность, Cₛ — когерентность, K_резонанса — коэффициент совпадения частот.</p>
+
+    <h3>3.3. Типы ретрансляторов</h3>
+    <table>
+        <tr><th>Тип</th><th>Коэффициент усиления</th><th>Пример</th></tr>
+        <tr><td><strong>Человек (пассивный)</strong></td><td>1.1–1.5</td><td>Прохожий, «заразившийся» эмоцией толпы (§37)</td></tr>
+        <tr><td><strong>Человек (активный, Cₛ > 0.7)</strong></td><td>2–10</td><td>Молящийся, медитирующий, оператор SEC-1</td></tr>
+        <tr><td><strong>Место силы</strong></td><td>5–50</td><td>Храм, намоленная икона, древний лес (§64)</td></tr>
+        <tr><td><strong>Эгрегор</strong></td><td>100–10 000</td><td>Религиозный эгрегор, национальное поле (§79)</td></tr>
+        <tr><td><strong>Ноосфера (коллективное поле)</strong></td><td>10 000+</td><td>Глобальное поле человечества (§64)</td></tr>
+    </table>
+
+    <!-- 4. МАТЕМАТИКА -->
+    <h2>4. Математическая модель ретрансляции</h2>
+    <p>Вместо экспоненциального затухания e^(-r/λ), для сети с ретрансляторами работает <span class="highlight">степенной закон</span>:</p>
+    <div class="formula">Q_принятый ≈ Q_отправленный · N_узлов^α / r^β</div>
+    <p>Где <span class="highlight">α ≈ 0.5–1.0</span> (коэффициент усиления сети), <span class="highlight">β ≈ 1.5–2.0</span> (затухание в пространстве).</p>
+    <p>Это означает, что:</p>
+    <ul>
+        <li>В густонаселённом городе (много узлов) сигнал распространяется дальше.</li>
+        <li>В пустыне (мало узлов) сигнал затухает быстрее.</li>
+        <li>Молитва за человека, о котором думают многие (например, за больного, за которого молится вся церковь), доходит гораздо сильнее.</li>
+    </ul>
+
+    <!-- 5. ПРОВЕРКА -->
+    <h2>5. Экспериментальная проверка</h2>
+    <table>
+        <tr><th>Эксперимент</th><th>Что проверяет</th></tr>
+        <tr><td><strong>DREAM-LINK (§34)</strong></td><td>Передача Qₛ между двумя запутанными людьми на расстоянии</td></tr>
+        <tr><td><strong>SYNC-TEST (§45)</strong></td><td>Усиление сигнала группой (Nᵏ-эффект)</td></tr>
+        <tr><td><strong>EGREGOR-METER (§26)</strong></td><td>Измерение поля эгрегора и его радиуса действия</td></tr>
+        <tr><td><strong>SEC-5 (§23)</strong></td><td>Распространение Qₛ в вакууме (без ретрансляторов)</td></tr>
+        <tr><td><strong>Предлагаемый: RETRANS-TEST</strong></td><td>Измерение Qₛ на разном расстоянии от источника в городе и в пустыне. Если теория верна, в городе сигнал затухает медленнее.</td></tr>
+    </table>
+
+    <!-- 6. ЗАКЛЮЧЕНИЕ -->
+    <h2>6. Заключение</h2>
+    <div class="verdict-box">
+        <p><strong>Теория Семантических Ретрансляторов</strong> — наиболее непротиворечивое решение проблемы масштабирования. Она:</p>
+        <p>✅ <strong>Не нарушает</strong> закон затухания e^(-r/λ) на малых расстояниях.</p>
+        <p>✅ <strong>Объясняет</strong> дальнодействие через сеть узлов.</p>
+        <p>✅ <strong>Связывает</strong> индивидуальное поле (Φₛ) с коллективным (ноосфера) через единый механизм.</p>
+        <p>✅ <strong>Предсказывает</strong>, что в густонаселённых районах Qₛ распространяется дальше — это можно проверить.</p>
+        <p>✅ <strong>Объясняет</strong>, почему молитва за близкого (запутанного) человека работает лучше, чем за незнакомца: запутанность — это «выделенный канал» с минимальными потерями.</p>
+    </div>
+    <p style="font-style: italic; color: #b0a0c0;">Версия 1.0, июнь 2026. Открыто для экспериментальной проверки.</p>
+
+    <div style="text-align: center;">
+        <a href="advanced-textbook.html" class="back-link">← К оглавлению передового учебника</a>
+    </div>
+
+</div>
+</body>
+</html>
