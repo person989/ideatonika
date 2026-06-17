@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Семантический Гороскоп • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .main-container {
+            max-width: 800px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.9); backdrop-filter: blur(12px);
+            border: 1px solid rgba(206, 147, 216, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 2.5rem; color: #f3e7c0; text-align: center; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { text-align: center; color: #c0b090; font-style: italic; margin-bottom: 2rem; }
+        .profile-header { text-align: center; margin-bottom: 2rem; padding: 1.5rem; background: rgba(206,147,216,0.1); border-radius: 20px; border: 1px solid rgba(206,147,216,0.3); }
+        .profile-header .name { font-size: 2rem; color: #e1bee7; font-weight: bold; }
+        .profile-header .details { color: #b0a0c0; font-size: 1rem; margin-top: 0.5rem; }
+
+        .section { background: rgba(0,0,0,0.2); border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem; border: 1px solid #5d4a3a; }
+        .section-title { font-size: 1.3rem; color: #ce93d8; margin-bottom: 1rem; border-left: 4px solid #ce93d8; padding-left: 1rem; }
+        .section p { color: #d0c8b8; line-height: 1.6; margin-bottom: 0.8rem; }
+        .highlight { color: #e1bee7; font-weight: bold; }
+        .result-row { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid #3a3a4a; }
+        .result-label { color: #b0a0c0; }
+        .result-value { color: #e1bee7; font-weight: bold; font-size: 1.1rem; }
+
+        .archetype-badge { display: inline-block; background: rgba(206,147,216,0.2); padding: 0.5rem 1.2rem; border-radius: 20px; color: #e1bee7; font-weight: bold; margin: 0.5rem; border: 1px solid rgba(206,147,216,0.4); }
+
+        .not-logged { text-align: center; padding: 3rem; }
+        .not-logged p { color: #b0a0c0; font-size: 1.2rem; margin-bottom: 2rem; }
+        .btn {
+            display: inline-block; padding: 1rem 2.5rem; font-size: 1.1rem; font-weight: bold;
+            border-radius: 40px; cursor: pointer; font-family: inherit; text-decoration: none;
+            transition: 0.3s; border: 1.5px solid #ce93d8; background: #ce93d8; color: #1a1a2e;
+        }
+        .btn:hover { background: #ab47bc; box-shadow: 0 0 20px rgba(206,147,216,0.5); }
+        .btn-outline { background: transparent; color: #ce93d8; }
+        .btn-outline:hover { background: rgba(206,147,216,0.1); }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; border: 1px solid #ce93d8; padding: 0.6rem 1.5rem; border-radius: 30px; transition: 0.2s; }
+        .back-link:hover { background: #ce93d8; color: #1a1a2e; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="main-container" id="mainContainer">
+    <!-- Содержимое будет динамически отрисовано -->
+</div>
+
+<script>
+(function() {
+    const container = document.getElementById('mainContainer');
+    const STORAGE_KEY = 'ideatonika_user_profile';
+
+    // ========== ЗАГРУЗКА ПРОФИЛЯ ==========
+    const savedProfile = localStorage.getItem(STORAGE_KEY);
+    if (!savedProfile) {
+        renderNotLogged();
+        return;
+    }
+
+    const profile = JSON.parse(savedProfile);
+    renderHoroscope(profile);
+
+    // ========== ЕСЛИ НЕТ АККАУНТА ==========
+    function renderNotLogged() {
+        container.innerHTML = `
+            <div class="not-logged">
+                <div style="font-size: 5rem; margin-bottom: 1rem;">🔮</div>
+                <p>Для просмотра Семантического Гороскопа<br>необходимо создать аккаунт.</p>
+                <a href="account.html" class="btn">✨ Создать аккаунт</a>
+            </div>
+        `;
+    }
+
+    // ========== ОСНОВНАЯ ЛОГИКА ==========
+    function renderHoroscope(profile) {
+        const { name, surname, gender, birthdate } = profile;
+        const fullName = name + ' ' + surname;
+
+        // --- НУМЕРОЛОГИЯ ИМЕНИ ---
+        const numerology = calculateNumerology(fullName);
+
+        // --- АСТРОЛОГИЧЕСКАЯ СИГНАТУРА ---
+        const astrology = calculateAstrology(birthdate);
+
+        // --- СИНТЕЗ: ИНТЕГРАЛЬНЫЙ ПРОФИЛЬ ---
+        const synthesis = synthesizeProfile(numerology, astrology, gender);
+
+        // --- РЕНДЕРИНГ ---
+        let html = `
+            <h1>🔮 Семантический Гороскоп</h1>
+            <div class="subtitle">Ваш уникальный семантический профиль по законам Идеатоники</div>
+
+            <div class="profile-header">
+                <div class="name">${fullName}</div>
+                <div class="details">${gender === 'male' ? 'Мужчина' : (gender === 'female' ? 'Женщина' : '')} • ${birthdate} • ${astrology.zodiacName}</div>
+            </div>
+
+            <!-- Секция 1: Нумерология имени -->
+            <div class="section">
+                <div class="section-title">🔢 Нумерология имени</div>
+                <div class="result-row"><span class="result-label">Число Судьбы (полное имя)</span><span class="result-value">${numerology.destinyNumber}</span></div>
+                <div class="result-row"><span class="result-label">Число Души (гласные)</span><span class="result-value">${numerology.soulNumber}</span></div>
+                <div class="result-row"><span class="result-label">Число Личности (согласные)</span><span class="result-value">${numerology.personalityNumber}</span></div>
+                <p style="margin-top: 1rem;">${numerology.interpretation}</p>
+            </div>
+
+            <!-- Секция 2: Астрология -->
+            <div class="section">
+                <div class="section-title">🌌 Астрологическая сигнатура</div>
+                <div class="result-row"><span class="result-label">Знак зодиака</span><span class="result-value">${astrology.zodiacName} ${astrology.zodiacEmoji}</span></div>
+                <div class="result-row"><span class="result-label">Стихия</span><span class="result-value">${astrology.element}</span></div>
+                <div class="result-row"><span class="result-label">Планета-покровитель</span><span class="result-value">${astrology.planet}</span></div>
+                <div class="result-row"><span class="result-label">Ранг Qₛ знака</span><span class="result-value">${astrology.rank >= 0 ? '+' : ''}${astrology.rank}</span></div>
+                <p style="margin-top: 1rem;">${astrology.interpretation}</p>
+            </div>
+
+            <!-- Секция 3: Синтез -->
+            <div class="section">
+                <div class="section-title">🧬 Семантический профиль</div>
+                <div class="result-row"><span class="result-label">Интегральный ранг Qₛ</span><span class="result-value">${synthesis.rank >= 0 ? '+' : ''}${synthesis.rank}</span></div>
+                <div class="result-row"><span class="result-label">Доминирующий архетип</span><span class="result-value">${synthesis.archetype}</span></div>
+                <div class="result-row"><span class="result-label">Предрасположенность Cₛ</span><span class="result-value">${synthesis.cPredisposition}</span></div>
+                <div class="result-row"><span class="result-label">Рекомендуемый резонатор (камень)</span><span class="result-value">${synthesis.stone}</span></div>
+                <p style="margin-top: 1rem;">${synthesis.advice}</p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="account.html" class="back-link">← В личный кабинет</a>
+            </div>
+        `;
+
+        container.innerHTML = html;
+    }
+
+    // ========== НУМЕРОЛОГИЯ ==========
+    function calculateNumerology(fullName) {
+        // Таблица соответствия букв числам (русский алфавит)
+        const letterMap = {
+            'а':1,'б':2,'в':3,'г':4,'д':5,'е':6,'ё':7,'ж':8,'з':9,
+            'и':1,'й':2,'к':3,'л':4,'м':5,'н':6,'о':7,'п':8,'р':9,
+            'с':1,'т':2,'у':3,'ф':4,'х':5,'ц':6,'ч':7,'ш':8,'щ':9,
+            'ъ':1,'ы':2,'ь':3,'э':4,'ю':5,'я':6
+        };
+
+        const vowels = 'аеёиоуыэюя';
+        let destinySum = 0, soulSum = 0, personalitySum = 0;
+
+        const cleaned = fullName.toLowerCase().replace(/[^а-яё]/g, '');
+
+        for (let ch of cleaned) {
+            const val = letterMap[ch] || 0;
+            destinySum += val;
+            if (vowels.includes(ch)) soulSum += val;
+            else personalitySum += val;
+        }
+
+        const reduce = (num) => {
+            while (num > 22) num -= 22; // В классической нумерологии до 22 (старшие арканы)
+            return num;
+        };
+
+        const destinyNumber = reduce(destinySum);
+        const soulNumber = reduce(soulSum);
+        const personalityNumber = reduce(personalitySum);
+
+        // Интерпретация
+        const interpretations = {
+            1: 'Число Лидера. Вы — генератор новых идей. Ваш Qₛ склонен к высоким значениям, когда вы действуете самостоятельно.',
+            2: 'Число Гармонии. Ваша сила — в партнёрстве и эмпатии. Cₛ повышается в коллективе.',
+            3: 'Число Творца. Созидание и радость — ваши ключи к высокому Qₛ. Архетип Творца (§78).',
+            4: 'Число Строителя. Стабильность, структура, терпение. Ваш Tₛ обычно низок и стабилен.',
+            5: 'Число Искателя. Свобода, перемены, любопытство. Ваш вектор θₜ часто направлен в будущее.',
+            6: 'Число Наставника. Ответственность, любовь к ближнему. Высокая χ (чувствительность).',
+            7: 'Число Мудреца. Духовный поиск, аналитика. Предрасположенность к высокой Cₛ.',
+            8: 'Число Правителя. Власть, изобилие, материализация. Высокий Qₛ в деловой сфере.',
+            9: 'Число Служителя. Гуманизм, прощение, завершение циклов. Архетип Мудреца.',
+            11: 'Мастер-число. Духовный лидер, пророк. Очень высокая χ и потенциал Cₛ.',
+            22: 'Мастер-число. Архитектор реальности. Способность к семантической инженерии.'
+        };
+
+        return {
+            destinyNumber,
+            soulNumber,
+            personalityNumber,
+            interpretation: interpretations[destinyNumber] || 'Уникальная семантическая сигнатура. Изучайте свой путь через тесты и практики.'
+        };
+    }
+
+    // ========== АСТРОЛОГИЯ ==========
+    function calculateAstrology(birthdate) {
+        const date = new Date(birthdate + 'T00:00:00');
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+
+        // Определение знака зодиака
+        const zodiacData = [
+            { name: 'Козерог', emoji: '♑', element: 'Земля', planet: 'Сатурн', rank: 4, start: [12,22], end: [1,19] },
+            { name: 'Водолей', emoji: '♒', element: 'Воздух', planet: 'Уран', rank: 6, start: [1,20], end: [2,18] },
+            { name: 'Рыбы', emoji: '♓', element: 'Вода', planet: 'Нептун', rank: 7, start: [2,19], end: [3,20] },
+            { name: 'Овен', emoji: '♈', element: 'Огонь', planet: 'Марс', rank: 3, start: [3,21], end: [4,19] },
+            { name: 'Телец', emoji: '♉', element: 'Земля', planet: 'Венера', rank: 5, start: [4,20], end: [5,20] },
+            { name: 'Близнецы', emoji: '♊', element: 'Воздух', planet: 'Меркурий', rank: 2, start: [5,21], end: [6,20] },
+            { name: 'Рак', emoji: '♋', element: 'Вода', planet: 'Луна', rank: 5, start: [6,21], end: [7,22] },
+            { name: 'Лев', emoji: '♌', element: 'Огонь', planet: 'Солнце', rank: 7, start: [7,23], end: [8,22] },
+            { name: 'Дева', emoji: '♍', element: 'Земля', planet: 'Меркурий', rank: 2, start: [8,23], end: [9,22] },
+            { name: 'Весы', emoji: '♎', element: 'Воздух', planet: 'Венера', rank: 5, start: [9,23], end: [10,22] },
+            { name: 'Скорпион', emoji: '♏', element: 'Вода', planet: 'Плутон', rank: 5, start: [10,23], end: [11,21] },
+            { name: 'Стрелец', emoji: '♐', element: 'Огонь', planet: 'Юпитер', rank: 6, start: [11,22], end: [12,21] }
+        ];
+
+        let zodiac = zodiacData[0];
+        for (let z of zodiacData) {
+            const startMonth = z.start[0], startDay = z.start[1];
+            const endMonth = z.end[0], endDay = z.end[1];
+
+            if (startMonth === 12 && endMonth === 1) {
+                // Особый случай: Козерог (дек-янв)
+                if ((month === 12 && day >= startDay) || (month === 1 && day <= endDay)) {
+                    zodiac = z; break;
+                }
+            } else {
+                if ((month === startMonth && day >= startDay) || (month === endMonth && day <= endDay)) {
+                    zodiac = z; break;
+                }
+            }
+        }
+
+        const elementInterpretations = {
+            'Огонь': 'Огненные знаки — генераторы Qₛ. Высокая Tₛ, склонность к лидерству и творчеству.',
+            'Земля': 'Земные знаки — накопители Qₛ. Высокая C_sense, стабильность, практичность.',
+            'Воздух': 'Воздушные знаки — проводники Qₛ. Высокая σ_sense, интеллект, коммуникабельность.',
+            'Вода': 'Водные знаки — модуляторы Qₛ. Высокая χ, эмпатия, интуиция.'
+        };
+
+        return {
+            zodiacName: zodiac.name,
+            zodiacEmoji: zodiac.emoji,
+            element: zodiac.element,
+            planet: zodiac.planet,
+            rank: zodiac.rank,
+            interpretation: elementInterpretations[zodiac.element] + ` Планета-покровитель ${zodiac.planet} задаёт вашу базовую семантическую частоту (§135).`
+        };
+    }
+
+    // ========== СИНТЕЗ ==========
+    function synthesizeProfile(numerology, astrology, gender) {
+        // Интегральный ранг: среднее между нумерологическим и астрологическим
+        const destinyNorm = Math.min(numerology.destinyNumber, 10) / 10; // 0..1
+        const zodiacNorm = (astrology.rank + 2) / 12; // примерно 0..1
+        const rawRank = (destinyNorm * 0.5 + zodiacNorm * 0.5) * 10;
+        const rank = Math.round(rawRank * 10) / 10;
+
+        // Архетип по числу судьбы
+        const archetypes = {
+    1: 'Маг (Qₛ +4, Cₛ 0.8) — Творец реальности. Высокая способность к семантическому влиянию.',
+    2: 'Жрица (χ 8.0, Tₛ низкая) — Интуиция, тайна. Вы считываете Qₛ других людей.',
+    3: 'Императрица (Qₛ +5) — Плодородие, изобилие. Генератор Света.',
+    4: 'Император (Qₛ +6, Cₛ 0.7) — Структура, власть. Строитель систем.',
+    5: 'Иерофант (Qₛ +4) — Знание, традиция. Проводник учений.',
+    6: 'Влюблённые (Qₛ +3, χ 7.0) — Выбор, любовь. Высокая эмпатия.',
+    7: 'Колесница (Qₛ +5, Cₛ 0.8) — Прорыв, победа. Вектор θₜ в будущее.',
+    8: 'Сила (Qₛ +6, Tₛ высокая) — Энергия, страсть. Мощный генератор.',
+    9: 'Отшельник (Cₛ 0.9, χ 9.0) — Мудрость, уединение. Предрасположенность к медитации.',
+    10: 'Колесо Фортуны (Qₛ ±5) — Цикличность, удача. Ваш Qₛ сильно зависит от фазы цикла.',
+    11: 'Справедливость (Qₛ +5, Cₛ 0.8) — Честность, карма. Высокая семантическая инерция.',
+    12: 'Повешенный (Qₛ ±3, Tₛ низкая) — Пауза, жертва. Глубокое понимание через остановку.',
+    13: 'Смерть (Qₛ ±6) — Трансформация. Вы разрушаете старые семантические структуры.',
+    14: 'Умеренность (Qₛ +4, Tₛ оптим.) — Баланс. Идеальная семантическая температура.',
+    15: 'Дьявол (Qₛ -4, Tₛ высокая) — Искушение, тень. Необходима работа с Тенью.',
+    16: 'Башня (Qₛ -3, Cₛ 0.3) — Разрушение, прозрение. Внезапные семантические удары.',
+    17: 'Звезда (Qₛ +6, χ 8.0) — Надежда, вдохновение. Высокая связь с ноосферой.',
+    18: 'Луна (χ 9.0, Qₛ ±4) — Подсознание, иллюзии. Глубокие сны и интуиция.',
+    19: 'Солнце (Qₛ +8, Cₛ 0.9) — Радость, успех. Мощный генератор Света.',
+    20: 'Суд (Qₛ +7, Cₛ 0.8) — Пробуждение, призвание. Семантическое возрождение.',
+    21: 'Мир (Qₛ +10, Cₛ 1.0) — Завершение, целостность. Полная интеграция.',
+    22: 'Шут (Qₛ 0, Cₛ 0.5) — Начало пути, свобода. Бесконечный потенциал.'
+};
+        const archetype = archetypes[numerology.destinyNumber] || 'Уникальный архетип';
+
+        // Предрасположенность Cₛ
+        const cPredisposition = numerology.destinyNumber >= 7 ? 'Высокая (предрасположенность к концентрации)' :
+                               (numerology.destinyNumber >= 4 ? 'Средняя (требует тренировки)' : 'Низкая (рекомендованы практики медитации)');
+
+        // Камень-резонатор
+        const stones = ['Аметист', 'Горный хрусталь', 'Розовый кварц', 'Лазурит', 'Цитрин',
+                        'Малахит', 'Обсидиан', 'Янтарь', 'Нефрит', 'Шунгит', 'Селенит', 'Гранат'];
+        const stoneIndex = (numerology.destinyNumber + astrology.rank) % stones.length;
+        const stone = stones[stoneIndex];
+
+        // Совет
+        const advice = `Ваш путь — путь архетипа «${archetype.split(' (')[0]}». ${cPredisposition}. Рекомендуем носить с собой ${stone} как личный семантический якорь. Для повышения Qₛ практикуйте осознанность в дни ${astrology.planet} (ваша планета-покровитель).`;
+
+        return { rank, archetype, cPredisposition, stone, advice };
+    }
+
+})();
+</script>
+
+</body>
+</html>
