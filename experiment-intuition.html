@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Эксперимент №4. Интуитивный выбор • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%); }
+        .exp-container {
+            max-width: 750px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(206, 147, 216, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center;
+        }
+        h1 { font-size: 2rem; color: #f3e7c0; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { color: #a09080; font-size: 0.9rem; margin-bottom: 2rem; }
+        .card { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem; text-align: left; }
+        .card h3 { color: #ce93d8; margin-bottom: 1rem; }
+        .card p, .card li { color: #d0c8b8; line-height: 1.6; }
+        .phase-title { font-size: 1.3rem; color: #ce93d8; margin-bottom: 1.5rem; }
+        .instruction { color: #d0c8b8; margin-bottom: 1.5rem; line-height: 1.6; }
+        .progress { color: #a09080; font-size: 0.9rem; margin-bottom: 1rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ce93d8; border-radius: 3px; width: 0%; transition: width 0.3s ease; }
+        .cups-row { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin: 2rem 0; }
+        .cup-btn {
+            width: 100px; height: 100px; border-radius: 50%;
+            border: 3px solid #5d4a3a; background: rgba(0,0,0,0.3);
+            font-size: 2.5rem; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            color: #d0c8b8;
+        }
+        .cup-btn:hover { border-color: #ce93d8; background: rgba(206,147,216,0.2); transform: scale(1.05); }
+        .cup-btn.selected { border-color: #ce93d8; background: rgba(206,147,216,0.3); box-shadow: 0 0 20px rgba(206,147,216,0.5); }
+        .cup-btn.correct { border-color: #81c784; background: rgba(129,199,132,0.3); }
+        .cup-btn.wrong { border-color: #ef5350; background: rgba(239,83,80,0.3); }
+        .stats { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .stat-box { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1rem 1.5rem; text-align: center; }
+        .stat-label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; }
+        .btn {
+            background: transparent; border: 1.5px solid #ce93d8; color: #ce93d8;
+            padding: 0.8rem 2rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0.3rem;
+        }
+        .btn:hover { background: #ce93d8; color: #1a1a2e; }
+        .btn-primary { background: #ce93d8; color: #1a1a2e; font-size: 1.2rem; padding: 1rem 3rem; }
+        .btn-primary:hover { background: #ab47bc; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ce93d8; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+        .result-row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+        .result-item { text-align: center; }
+        .result-item .label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .result-item .value { font-size: 1.5rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="exp-container" id="expContainer">
+    <h1>🔮 Эксперимент «Интуитивный выбор»</h1>
+    <div class="subtitle">Проверьте свою семантическую чувствительность χ</div>
+
+    <!-- СТАРТОВЫЙ ЭКРАН -->
+    <div id="startScreen">
+        <div class="card">
+            <h3>🔧 Оборудование</h3>
+            <ul style="margin-left: 1.5rem; color: #d0c8b8;">
+                <li>Помощник (человек, который будет прятать предмет)</li>
+                <li>5 одинаковых непрозрачных стаканчиков или коробочек</li>
+                <li>Небольшой предмет (монетка, ключ, шарик)</li>
+                <li>Этот телефон / компьютер для записи результатов</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>📋 Протокол</h3>
+            <ol style="margin-left: 1.5rem; color: #d0c8b8; line-height: 1.8;">
+                <li>Помощник в ваше отсутствие прячет предмет под <strong>один</strong> из пяти стаканчиков.</li>
+                <li>Вы входите, успокаиваетесь (Cₛ ↑, S_noise ↓). <strong>Не пытайтесь угадать логически.</strong></li>
+                <li>Доверьтесь интуиции — к какому стаканчику вас «тянет»?</li>
+                <li>Нажмите на выбранный стаканчик в программе.</li>
+                <li>Помощник поднимает стаканчик и сообщает результат. Запишите его кнопкой «Верно» или «Мимо».</li>
+                <li>Повторите 25–50 раз. Случайная вероятность = 20% (1 из 5).</li>
+            </ol>
+        </div>
+        <p style="color: #a09080; font-style: italic;">Ожидаемое превышение: 5–15% при χ > среднего.</p>
+        <button class="btn btn-primary" id="startBtn" style="margin-top: 1.5rem;">🔮 Начать эксперимент</button>
+    </div>
+
+    <!-- ЭКРАН ВЫБОРА -->
+    <div id="choiceScreen" class="hidden">
+        <div class="phase-title" id="phaseTitle">Попытка 1 из 25</div>
+        <p class="instruction">Выберите стаканчик, под которым, как вам кажется, находится предмет:</p>
+
+        <div class="cups-row" id="cupsRow">
+            <div class="cup-btn" data-cup="1">🥤</div>
+            <div class="cup-btn" data-cup="2">🥤</div>
+            <div class="cup-btn" data-cup="3">🥤</div>
+            <div class="cup-btn" data-cup="4">🥤</div>
+            <div class="cup-btn" data-cup="5">🥤</div>
+        </div>
+
+        <p style="color: #a09080; margin-top: 1rem;" id="selectedText">Вы выбрали стаканчик №—</p>
+
+        <div style="margin-top: 1.5rem;">
+            <button class="btn" id="correctBtn" disabled>✅ Верно (угадали)</button>
+            <button class="btn" id="wrongBtn" disabled>❌ Мимо (не угадали)</button>
+        </div>
+
+        <div class="progress" style="margin-top: 1.5rem;" id="progressText">Попыток: 0 / 25</div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <!-- ЭКРАН РЕЗУЛЬТАТОВ -->
+    <div id="resultScreen" class="hidden">
+        <h2 style="color: #ce93d8; margin-bottom: 1.5rem;">📊 ИТОГИ ЭКСПЕРИМЕНТА</h2>
+
+        <div class="result-row">
+            <div class="result-item">
+                <div class="label">Всего попыток</div>
+                <div class="value" style="color: #f3e7c0;" id="resultTotal">0</div>
+            </div>
+            <div class="result-item">
+                <div class="label">Верных угадываний</div>
+                <div class="value" style="color: #81c784;" id="resultCorrect">0</div>
+            </div>
+            <div class="result-item">
+                <div class="label">Процент успеха</div>
+                <div class="value" style="color: #ffd54f;" id="resultPercent">0%</div>
+            </div>
+        </div>
+
+        <div id="interpretation" style="margin-top: 2rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 16px; text-align: left; color: #d0c8b8; line-height: 1.6;"></div>
+        <button class="btn btn-primary" id="restartBtn" style="margin-top: 2rem;">🔄 Пройти заново</button>
+    </div>
+
+    <a href="практикум-идеатоники.html?page=5" class="back-link">← Вернуться в Практикум</a>
+</div>
+
+<script>
+    (function() {
+        const TOTAL_TRIALS = 25;
+        let currentTrial = 0;
+        let selectedCup = null;
+        let correctCount = 0;
+        let trialsDone = 0;
+
+        const startScreen = document.getElementById('startScreen');
+        const choiceScreen = document.getElementById('choiceScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const phaseTitle = document.getElementById('phaseTitle');
+        const progressText = document.getElementById('progressText');
+        const progressFill = document.getElementById('progressFill');
+        const selectedText = document.getElementById('selectedText');
+        const correctBtn = document.getElementById('correctBtn');
+        const wrongBtn = document.getElementById('wrongBtn');
+        const cups = document.querySelectorAll('.cup-btn');
+
+        function startExperiment() {
+            currentTrial = 0;
+            correctCount = 0;
+            trialsDone = 0;
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            choiceScreen.classList.remove('hidden');
+            resetCups();
+            updateUI();
+        }
+
+        function resetCups() {
+            cups.forEach(c => {
+                c.classList.remove('selected', 'correct', 'wrong');
+            });
+            selectedCup = null;
+            correctBtn.disabled = true;
+            wrongBtn.disabled = true;
+            selectedText.textContent = 'Вы выбрали стаканчик №—';
+        }
+
+        function updateUI() {
+            phaseTitle.textContent = `Попытка ${currentTrial + 1} из ${TOTAL_TRIALS}`;
+            progressText.textContent = `Попыток: ${trialsDone} / ${TOTAL_TRIALS}`;
+            progressFill.style.width = (trialsDone / TOTAL_TRIALS * 100) + '%';
+        }
+
+        // Выбор стаканчика
+        cups.forEach(cup => {
+            cup.addEventListener('click', () => {
+                if (trialsDone >= TOTAL_TRIALS) return;
+                cups.forEach(c => c.classList.remove('selected'));
+                cup.classList.add('selected');
+                selectedCup = cup.dataset.cup;
+                selectedText.textContent = `Вы выбрали стаканчик №${selectedCup}`;
+                correctBtn.disabled = false;
+                wrongBtn.disabled = false;
+            });
+        });
+
+        correctBtn.addEventListener('click', () => {
+            if (!selectedCup) return;
+            correctCount++;
+            trialsDone++;
+            currentTrial++;
+            highlightCup(true);
+            finishTrial();
+        });
+
+        wrongBtn.addEventListener('click', () => {
+            if (!selectedCup) return;
+            trialsDone++;
+            currentTrial++;
+            highlightCup(false);
+            finishTrial();
+        });
+
+        function highlightCup(wasCorrect) {
+            cups.forEach(c => {
+                if (c.dataset.cup === selectedCup) {
+                    c.classList.add(wasCorrect ? 'correct' : 'wrong');
+                }
+            });
+        }
+
+        function finishTrial() {
+            correctBtn.disabled = true;
+            wrongBtn.disabled = true;
+            updateUI();
+
+            if (trialsDone >= TOTAL_TRIALS) {
+                setTimeout(() => showResults(), 1200);
+            } else {
+                setTimeout(() => {
+                    resetCups();
+                    updateUI();
+                }, 1000);
+            }
+        }
+
+        function showResults() {
+            choiceScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const pct = trialsDone > 0 ? Math.round((correctCount / trialsDone) * 100) : 0;
+            document.getElementById('resultTotal').textContent = trialsDone;
+            document.getElementById('resultCorrect').textContent = correctCount;
+            document.getElementById('resultPercent').textContent = pct + '%';
+
+            const EXPECTED = 20; // Случайная вероятность = 1/5
+            const diff = pct - EXPECTED;
+            let html = '<p><strong>📊 Анализ:</strong></p>';
+            html += `<p>Случайная вероятность угадывания: <strong>20%</strong> (1 из 5).</p>`;
+            html += `<p>Ваш результат: <strong>${pct}%</strong> (${correctCount} из ${trialsDone}).</p>`;
+
+            if (pct >= 35) {
+                html += `<p style="color: #ce93d8;">🌟 <strong>Отличный результат!</strong> Ваша интуиция (χ) значительно выше среднего. Вы — прирождённый сенситив.</p>`;
+            } else if (pct >= 25) {
+                html += `<p style="color: #81c784;">👍 <strong>Хороший результат.</strong> Вы угадываете чаще случайного. Продолжайте тренировать интуицию.</p>`;
+            } else if (pct >= 15) {
+                html += `<p style="color: #ffb74d;">🟰 <strong>Средний результат.</strong> Ваша интуиция работает на уровне статистической погрешности.</p>`;
+            } else {
+                html += `<p style="color: #ef5350;">📉 <strong>Ниже случайного.</strong> Возможно, вы слишком старались, и сработал «Закон подлости» (§77). Попробуйте расслабиться.</p>`;
+            }
+
+            html += '<p style="margin-top:1rem;font-style:italic;color:#a09080;">Для статистической значимости нужно 50–100 попыток. Повторите эксперимент несколько раз.</p>';
+            document.getElementById('interpretation').innerHTML = html;
+        }
+
+        document.getElementById('startBtn').addEventListener('click', startExperiment);
+        document.getElementById('restartBtn').addEventListener('click', startExperiment);
+    })();
+</script>
+</body>
+</html>

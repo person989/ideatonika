@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Эксперимент №5. Гигиена сна • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%); }
+        .exp-container {
+            max-width: 750px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(100, 181, 246, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center;
+        }
+        h1 { font-size: 2rem; color: #f3e7c0; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { color: #a09080; font-size: 0.9rem; margin-bottom: 2rem; }
+        .card { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem; text-align: left; }
+        .card h3 { color: #64b5f6; margin-bottom: 1rem; }
+        .card p, .card li { color: #d0c8b8; line-height: 1.6; }
+        .phase-title { font-size: 1.3rem; color: #64b5f6; margin-bottom: 1.5rem; }
+        .instruction { color: #d0c8b8; margin-bottom: 1.5rem; line-height: 1.6; }
+        .input-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+        .input-row label { color: #d0c8b8; min-width: 120px; }
+        .input-row input, .input-row select { padding: 0.5rem; border-radius: 8px; border: 1px solid #5d4a3a; background: rgba(0,0,0,0.3); color: #f3e7c0; font-family: inherit; width: 100px; text-align: center; }
+        .input-row select { width: auto; }
+        .btn {
+            background: transparent; border: 1.5px solid #64b5f6; color: #64b5f6;
+            padding: 0.8rem 2rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0.3rem;
+        }
+        .btn:hover { background: #64b5f6; color: #1a1a2e; }
+        .btn-primary { background: #64b5f6; color: #1a1a2e; font-size: 1.2rem; padding: 1rem 3rem; }
+        .btn-primary:hover { background: #42a5f5; }
+        .btn-danger { border-color: #ef5350; color: #ef5350; }
+        .btn-danger:hover { background: #ef5350; color: white; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #64b5f6; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+        .table-wrapper { overflow-x: auto; margin: 1rem 0; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th { background: #2a2a4a; color: #f3e7c0; padding: 10px; border: 1px solid #5d4a3a; }
+        td { padding: 10px; border: 1px solid #5d4a3a; color: #d0c8b8; text-align: center; }
+        .result-row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+        .result-item { text-align: center; }
+        .result-item .label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .result-item .value { font-size: 1.5rem; font-weight: bold; }
+        .phase-indicator { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .phase-badge { padding: 0.5rem 1.5rem; border-radius: 20px; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; color: #706858; font-weight: bold; }
+        .phase-badge.active { border-color: #64b5f6; color: #64b5f6; background: rgba(100,181,246,0.1); box-shadow: 0 0 10px rgba(100,181,246,0.3); }
+        .phase-badge.done { border-color: #81c784; color: #81c784; }
+        .delete-btn { background: transparent; border: 1px solid #ef5350; color: #ef5350; padding: 0.3rem 0.8rem; border-radius: 15px; cursor: pointer; font-size: 0.8rem; }
+        .delete-btn:hover { background: #ef5350; color: white; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="exp-container" id="expContainer">
+    <h1>😴 Эксперимент «Гигиена сна»</h1>
+    <div class="subtitle">Дневник качества сна • Две недели наблюдений</div>
+
+    <!-- СТАРТОВЫЙ ЭКРАН -->
+    <div id="startScreen">
+        <div class="card">
+            <h3>🔧 Оборудование</h3>
+            <ul style="margin-left: 1.5rem; color: #d0c8b8;">
+                <li>Этот дневник (данные сохраняются в браузере)</li>
+                <li>Будильник или телефон для подъёма</li>
+                <li>Тихое место для вечерней медитации (активная неделя)</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>📋 Протокол</h3>
+            <ol style="margin-left: 1.5rem; color: #d0c8b8; line-height: 1.8;">
+                <li><strong style="color: #81c784;">Неделя 1 (Контроль):</strong> Живите как обычно. Каждое утро оценивайте качество сна (1–10), эмоции от снов и записывайте.</li>
+                <li><strong style="color: #64b5f6;">Неделя 2 (Актив):</strong> За 1 час до сна — отказ от экранов, 15 минут тишины или медитации. Намерение на чистый сон. Так же оценивайте утром.</li>
+                <li>Сравните средние оценки двух недель. Ожидаемое улучшение: 20–40%.</li>
+            </ol>
+        </div>
+        <p style="color: #a09080; font-style: italic;">Формула: S_noise ↓ → Качество сна ↑</p>
+        <button class="btn btn-primary" id="startBtn" style="margin-top: 1.5rem;">🌙 Начать вести дневник</button>
+    </div>
+
+    <!-- ЭКРАН ДНЕВНИКА -->
+    <div id="diaryScreen" class="hidden">
+        <div class="phase-indicator">
+            <div class="phase-badge active" id="badgeControl">🟢 Неделя 1: Контроль</div>
+            <div class="phase-badge" id="badgeActive">🔵 Неделя 2: Актив</div>
+        </div>
+
+        <div class="card">
+            <h3 id="entryTitle">➕ Запись за сегодня (Неделя 1)</h3>
+            <div class="input-row">
+                <label>📅 День (1–14):</label>
+                <input type="number" id="dayInput" min="1" max="14" placeholder="1">
+            </div>
+            <div class="input-row">
+                <label>⭐ Качество сна (1–10):</label>
+                <input type="number" id="qualityInput" min="1" max="10" placeholder="7">
+            </div>
+            <div class="input-row">
+                <label>😊 Эмоции от снов:</label>
+                <select id="emotionSelect">
+                    <option value="3">😊 Приятные</option>
+                    <option value="0" selected>😐 Нейтральные</option>
+                    <option value="-3">😰 Тревожные / Кошмары</option>
+                    <option value="none">🤔 Не помню снов</option>
+                </select>
+            </div>
+            <button class="btn" id="addEntryBtn" style="margin-top: 0.5rem;">💾 Сохранить / Обновить</button>
+            <span style="color: #a09080; font-size: 0.8rem; margin-left: 1rem;">(если день уже есть — обновится)</span>
+        </div>
+
+        <div class="card">
+            <h3>📊 Таблица наблюдений</h3>
+            <div class="table-wrapper">
+                <table id="dataTable">
+                    <thead>
+                        <tr><th>День</th><th>Неделя</th><th>Качество (1–10)</th><th>Эмоции</th><th>Действие</th></tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="5" style="color: #706858;">Пока нет записей.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card hidden" id="analysisCard">
+            <h3>📈 Анализ</h3>
+            <p id="analysisText" style="color: #d0c8b8;"></p>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+            <button class="btn btn-danger" id="resetBtn">🗑️ Сбросить все данные</button>
+        </div>
+    </div>
+
+    <a href="практикум-идеатоники.html?page=6" class="back-link">← Вернуться в Практикум</a>
+</div>
+
+<script>
+    (function() {
+        const STORAGE_KEY = 'ideatonika_exp5_sleep';
+        const startScreen = document.getElementById('startScreen');
+        const diaryScreen = document.getElementById('diaryScreen');
+        const tableBody = document.getElementById('tableBody');
+        const analysisCard = document.getElementById('analysisCard');
+        const analysisText = document.getElementById('analysisText');
+        const dayInput = document.getElementById('dayInput');
+        const qualityInput = document.getElementById('qualityInput');
+        const emotionSelect = document.getElementById('emotionSelect');
+        const badgeControl = document.getElementById('badgeControl');
+        const badgeActive = document.getElementById('badgeActive');
+        const entryTitle = document.getElementById('entryTitle');
+
+        let sleepData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+        function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(sleepData)); }
+
+        function getWeek(day) { return day <= 7 ? 1 : 2; }
+
+        function renderTable() {
+            if (sleepData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="color: #706858;">Пока нет записей.</td></tr>';
+                analysisCard.classList.add('hidden');
+                return;
+            }
+            sleepData.sort((a, b) => a.day - b.day);
+            let html = '';
+            sleepData.forEach((entry, index) => {
+                const week = getWeek(entry.day);
+                const emoMap = {3: '😊 Приятные', 0: '😐 Нейтральные', '-3': '😰 Тревожные', 'none': '🤔 Не помню'};
+                html += `<tr>
+                    <td>${entry.day}</td>
+                    <td style="color:${week === 1 ? '#81c784' : '#64b5f6'}">${week === 1 ? 'Контроль' : 'Актив'}</td>
+                    <td><strong>${entry.quality}</strong></td>
+                    <td>${emoMap[entry.emotion] || '—'}</td>
+                    <td><button class="delete-btn" onclick="window._deleteSleep(${index})">✕</button></td>
+                </tr>`;
+            });
+            tableBody.innerHTML = html;
+
+            // Анализ
+            const controlDays = sleepData.filter(e => getWeek(e.day) === 1);
+            const activeDays = sleepData.filter(e => getWeek(e.day) === 2);
+            if (controlDays.length > 0 && activeDays.length > 0) {
+                const avgControl = controlDays.reduce((s, e) => s + e.quality, 0) / controlDays.length;
+                const avgActive = activeDays.reduce((s, e) => s + e.quality, 0) / activeDays.length;
+                const diff = avgActive - avgControl;
+                const pct = avgControl > 0 ? ((diff / avgControl) * 100) : 0;
+
+                let html2 = `<p>🧘 <strong>Контрольная неделя:</strong> среднее качество = <strong>${avgControl.toFixed(1)}</strong></p>`;
+                html2 += `<p>🧹 <strong>Активная неделя (с гигиеной):</strong> среднее качество = <strong>${avgActive.toFixed(1)}</strong></p>`;
+                if (pct > 10) html2 += `<p style="color:#81c784;">🌟 Улучшение на <strong>+${pct.toFixed(0)}%</strong>! Семантическая гигиена сна работает!</p>`;
+                else if (pct > 0) html2 += `<p style="color:#64b5f6;">📈 Небольшое улучшение (+${pct.toFixed(0)}%). Продолжайте практику.</p>`;
+                else html2 += `<p style="color:#ffb74d;">🟰 Пока без изменений. Возможно, нужно больше дней или более строгая гигиена.</p>`;
+                analysisText.innerHTML = html2;
+                analysisCard.classList.remove('hidden');
+            }
+        }
+
+        function addOrUpdateEntry() {
+            const day = parseInt(dayInput.value);
+            const quality = parseInt(qualityInput.value);
+            const emotion = emotionSelect.value;
+            if (isNaN(day) || day < 1 || day > 14) { alert('Введите день от 1 до 14.'); return; }
+            if (isNaN(quality) || quality < 1 || quality > 10) { alert('Введите качество от 1 до 10.'); return; }
+
+            const existing = sleepData.findIndex(e => e.day === day);
+            if (existing >= 0) sleepData[existing] = { day, quality, emotion };
+            else sleepData.push({ day, quality, emotion });
+
+            saveData();
+            renderTable();
+            dayInput.value = sleepData.length > 0 ? Math.max(...sleepData.map(e => e.day)) + 1 : 1;
+            qualityInput.value = '';
+            updatePhaseUI();
+        }
+
+        function deleteEntry(index) {
+            if (confirm('Удалить эту запись?')) {
+                sleepData.splice(index, 1);
+                saveData();
+                renderTable();
+                updatePhaseUI();
+            }
+        }
+        window._deleteSleep = deleteEntry;
+
+        function resetAll() {
+            if (confirm('Вы уверены, что хотите удалить ВСЕ записи? Это действие нельзя отменить.')) {
+                sleepData = [];
+                saveData();
+                renderTable();
+                updatePhaseUI();
+            }
+        }
+
+        function updatePhaseUI() {
+            const lastDay = sleepData.length > 0 ? Math.max(...sleepData.map(e => e.day)) : 0;
+            const currentWeek = lastDay < 7 ? 1 : 2;
+            badgeControl.classList.toggle('active', currentWeek === 1);
+            badgeControl.classList.toggle('done', lastDay >= 7);
+            badgeActive.classList.toggle('active', currentWeek === 2);
+            badgeActive.classList.toggle('done', lastDay >= 14);
+            entryTitle.textContent = `➕ Запись за сегодня (Неделя ${currentWeek})`;
+        }
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            startScreen.classList.add('hidden');
+            diaryScreen.classList.remove('hidden');
+            if (sleepData.length > 0) dayInput.value = Math.max(...sleepData.map(e => e.day)) + 1;
+            else dayInput.value = 1;
+            renderTable();
+            updatePhaseUI();
+        });
+        document.getElementById('addEntryBtn').addEventListener('click', addOrUpdateEntry);
+        document.getElementById('resetBtn').addEventListener('click', resetAll);
+    })();
+</script>
+</body>
+</html>

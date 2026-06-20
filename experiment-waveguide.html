@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Эксперимент №8. Семантический волновод • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%); }
+        .exp-container {
+            max-width: 750px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 112, 67, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center;
+        }
+        h1 { font-size: 2rem; color: #f3e7c0; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { color: #a09080; font-size: 0.9rem; margin-bottom: 2rem; }
+        .card { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem; text-align: left; }
+        .card h3 { color: #ff7043; margin-bottom: 1rem; }
+        .card p, .card li { color: #d0c8b8; line-height: 1.6; }
+        .phase-title { font-size: 1.3rem; color: #ff7043; margin-bottom: 1.5rem; }
+        .instruction { color: #d0c8b8; margin-bottom: 1.5rem; line-height: 1.6; }
+        .timer-display { font-size: 5rem; font-weight: bold; color: #ffd54f; margin: 1rem 0; font-family: 'Courier New', monospace; }
+        .btn {
+            background: transparent; border: 1.5px solid #ff7043; color: #ff7043;
+            padding: 0.8rem 2rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0.3rem;
+        }
+        .btn:hover { background: #ff7043; color: #1a1a2e; }
+        .btn-primary { background: #ff7043; color: #1a1a2e; font-size: 1.2rem; padding: 1rem 3rem; }
+        .btn-primary:hover { background: #e64a19; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #ff7043; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+        .checkbox-group { margin: 1rem 0; text-align: left; color: #d0c8b8; }
+        .checkbox-group label { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.5rem; cursor: pointer; }
+        .checkbox-group input[type="checkbox"] { width: 18px; height: 18px; accent-color: #ff7043; cursor: pointer; }
+        .result-row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+        .result-item { text-align: center; }
+        .result-item .label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .result-item .value { font-size: 1.3rem; font-weight: bold; }
+        .phase-indicator { display: flex; justify-content: center; gap: 1rem; margin-bottom: 1.5rem; }
+        .phase-badge { padding: 0.5rem 1.5rem; border-radius: 20px; background: rgba(0,0,0,0.3); border: 1px solid #5d4a3a; color: #706858; font-weight: bold; }
+        .phase-badge.active { border-color: #ff7043; color: #ff7043; background: rgba(255,112,67,0.1); box-shadow: 0 0 10px rgba(255,112,67,0.3); }
+        .phase-badge.done { border-color: #81c784; color: #81c784; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="exp-container" id="expContainer">
+    <h1>🔌 Эксперимент «Семантический волновод»</h1>
+    <div class="subtitle">Передайте Qₛ по медной проволоке</div>
+
+    <!-- СТАРТОВЫЙ ЭКРАН -->
+    <div id="startScreen">
+        <div class="card">
+            <h3>🔧 Оборудование</h3>
+            <ul style="margin-left: 1.5rem; color: #d0c8b8;">
+                <li>Медная проволока длиной 1–2 метра (очищенная от изоляции на концах)</li>
+                <li>Два человека: «передатчик» и «приёмник»</li>
+                <li>Тихое место</li>
+                <li>Этот протокол для записи ощущений</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>📋 Протокол</h3>
+            <ol style="margin-left: 1.5rem; color: #d0c8b8; line-height: 1.8;">
+                <li><strong style="color: #ff7043;">Раунд 1 (С проволокой):</strong> Передатчик держит один конец проволоки, визуализирует яркий свет. Приёмник держит другой конец, глаза закрыты, Cₛ → max. <strong>3 минуты.</strong></li>
+                <li>Приёмник описывает ощущения (тепло, покалывание, изменение настроения).</li>
+                <li><strong style="color: #81c784;">Раунд 2 (Контроль, без проволоки):</strong> То же самое, но проволока убирается. Передатчик визуализирует, приёмник пытается почувствовать. <strong>3 минуты.</strong></li>
+                <li>Сравните ощущения в двух раундах.</li>
+            </ol>
+        </div>
+        <p style="color: #a09080; font-style: italic;">Формула: I_Q = U_sense / R_sense (медь: R_sense ≈ 0.125 Ω)</p>
+        <button class="btn btn-primary" id="startBtn" style="margin-top: 1.5rem;">🔌 Начать эксперимент</button>
+    </div>
+
+    <!-- ЭКРАН РАУНДА -->
+    <div id="roundScreen" class="hidden">
+        <div class="phase-indicator">
+            <div class="phase-badge active" id="badgeRound1">🔌 Раунд 1: С проволокой</div>
+            <div class="phase-badge" id="badgeRound2">🟢 Раунд 2: Контроль</div>
+        </div>
+        <div class="phase-title" id="roundTitle"></div>
+        <p class="instruction" id="roundInstruction"></p>
+        <div class="timer-display" id="timerDisplay">03:00</div>
+        <button class="btn btn-primary" id="timerBtn">▶️ Начать раунд (3 мин)</button>
+        <p style="color: #a09080; margin-top: 1rem;">После завершения таймера запишите ощущения приёмника.</p>
+    </div>
+
+    <!-- ЭКРАН ОЦЕНКИ -->
+    <div id="evalScreen" class="hidden">
+        <h2 style="color: #f3e7c0; margin-bottom: 0.5rem;">📝 Ощущения приёмника</h2>
+        <p style="color: #a09080; margin-bottom: 1.5rem;" id="evalRoundLabel"></p>
+
+        <div class="checkbox-group">
+            <label><input type="checkbox" class="sensation" value="warmth"> 🔥 Тепло</label>
+            <label><input type="checkbox" class="sensation" value="tingle"> ⚡ Покалывание / вибрация</label>
+            <label><input type="checkbox" class="sensation" value="mood"> 😊 Изменение настроения (в лучшую сторону)</label>
+            <label><input type="checkbox" class="sensation" value="calm"> 🧘 Спокойствие, умиротворение</label>
+            <label><input type="checkbox" class="sensation" value="energy"> 💪 Прилив энергии</label>
+            <label><input type="checkbox" class="sensation" value="nothing"> 🫥 Ничего не почувствовал</label>
+        </div>
+
+        <button class="btn btn-primary" id="saveEvalBtn" style="margin-top: 1rem;">💾 Сохранить и продолжить</button>
+    </div>
+
+    <!-- ЭКРАН РЕЗУЛЬТАТОВ -->
+    <div id="resultScreen" class="hidden">
+        <h2 style="color: #ffd54f; margin-bottom: 1.5rem;">📊 РЕЗУЛЬТАТЫ ЭКСПЕРИМЕНТА</h2>
+
+        <div class="result-row">
+            <div class="result-item">
+                <div class="label">🔌 С проволокой</div>
+                <div class="value" style="color: #ff7043;" id="resultWith">0 ощущений</div>
+            </div>
+            <div class="result-item">
+                <div class="label">🟢 Без проволоки (контроль)</div>
+                <div class="value" style="color: #81c784;" id="resultWithout">0 ощущений</div>
+            </div>
+        </div>
+
+        <div id="interpretation" style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 16px; text-align: left; color: #d0c8b8; line-height: 1.6;"></div>
+        <button class="btn btn-primary" id="restartBtn" style="margin-top: 2rem;">🔄 Пройти заново</button>
+    </div>
+
+    <a href="практикум-идеатоники.html?page=9" class="back-link">← Вернуться в Практикум</a>
+</div>
+
+<script>
+    (function() {
+        const startScreen = document.getElementById('startScreen');
+        const roundScreen = document.getElementById('roundScreen');
+        const evalScreen = document.getElementById('evalScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const roundTitle = document.getElementById('roundTitle');
+        const roundInstruction = document.getElementById('roundInstruction');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timerBtn = document.getElementById('timerBtn');
+        const evalRoundLabel = document.getElementById('evalRoundLabel');
+        const badgeRound1 = document.getElementById('badgeRound1');
+        const badgeRound2 = document.getElementById('badgeRound2');
+
+        let currentRound = 0; // 0 = раунд 1 (с проволокой), 1 = раунд 2 (контроль)
+        let timerInterval = null;
+        let timeLeft = 0;
+        let isRunning = false;
+        let results = { with: [], without: [] };
+
+        const rounds = [
+            {
+                title: '🔌 Раунд 1: С медной проволокой',
+                instruction: '<strong>Передатчик:</strong> держите один конец проволоки. Визуализируйте яркий золотой свет, текущий по проволоке.<br><strong>Приёмник:</strong> держите другой конец. Глаза закрыты. Cₛ → max. Просто наблюдайте.',
+                duration: 3 * 60,
+                label: 'Раунд 1 (с проволокой)'
+            },
+            {
+                title: '🟢 Раунд 2: Контроль (без проволоки)',
+                instruction: '<strong>Уберите проволоку.</strong> Передатчик визуализирует свет так же. Приёмник сидит с закрытыми глазами, <strong>без проволоки</strong>, на том же расстоянии.',
+                duration: 3 * 60,
+                label: 'Раунд 2 (контроль, без проволоки)'
+            }
+        ];
+
+        function startExperiment() {
+            currentRound = 0;
+            results = { with: [], without: [] };
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            evalScreen.classList.add('hidden');
+            roundScreen.classList.remove('hidden');
+            updateBadges();
+            loadRound();
+        }
+
+        function updateBadges() {
+            badgeRound1.classList.toggle('active', currentRound === 0);
+            badgeRound1.classList.toggle('done', currentRound > 0);
+            badgeRound2.classList.toggle('active', currentRound === 1);
+            badgeRound2.classList.toggle('done', currentRound > 1);
+        }
+
+        function loadRound() {
+            const round = rounds[currentRound];
+            roundTitle.textContent = round.title;
+            roundInstruction.innerHTML = round.instruction;
+            timeLeft = round.duration;
+            updateTimerDisplay();
+            timerBtn.textContent = '▶️ Начать раунд (3 мин)';
+            timerBtn.disabled = false;
+            isRunning = false;
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function updateTimerDisplay() {
+            const min = Math.floor(timeLeft / 60);
+            const sec = timeLeft % 60;
+            timerDisplay.textContent = String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            timerBtn.textContent = '⏳ Идёт сеанс...';
+            timerBtn.disabled = true;
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    timerDisplay.textContent = '00:00';
+                    roundComplete();
+                }
+            }, 1000);
+        }
+
+        function roundComplete() {
+            roundScreen.classList.add('hidden');
+            evalScreen.classList.remove('hidden');
+            evalRoundLabel.textContent = rounds[currentRound].label;
+            // Сброс чекбоксов
+            document.querySelectorAll('.sensation').forEach(cb => cb.checked = false);
+        }
+
+        document.getElementById('saveEvalBtn').addEventListener('click', () => {
+            const checked = [];
+            document.querySelectorAll('.sensation:checked').forEach(cb => checked.push(cb.value));
+
+            if (currentRound === 0) {
+                results.with = checked;
+                currentRound = 1;
+                updateBadges();
+                evalScreen.classList.add('hidden');
+                roundScreen.classList.remove('hidden');
+                loadRound();
+            } else {
+                results.without = checked;
+                showResults();
+            }
+        });
+
+        function showResults() {
+            evalScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const withCount = results.with.length;
+            const withoutCount = results.without.length;
+            document.getElementById('resultWith').textContent = withCount + ' ощущ.';
+            document.getElementById('resultWithout').textContent = withoutCount + ' ощущ.';
+
+            let html = '<p><strong>📊 Анализ:</strong></p>';
+            const diff = withCount - withoutCount;
+
+            if (diff >= 3) {
+                html += '<p style="color:#ff7043;">🔌 <strong>Сильный эффект волновода!</strong> Разница очевидна. Медная проволока действительно проводит Qₛ лучше воздуха.</p>';
+            } else if (diff >= 1) {
+                html += '<p style="color:#ffb74d;">👍 <strong>Заметный эффект.</strong> Проволока усилила передачу ощущений. Есть над чем работать.</p>';
+            } else if (diff === 0 && withCount > 0) {
+                html += '<p style="color:#64b5f6;">🟰 Ощущения одинаковы в обоих раундах. Возможно, передатчик и приёмник хорошо чувствуют друг друга без проволоки.</p>';
+            } else if (withCount === 0 && withoutCount === 0) {
+                html += '<p style="color:#a09080;">🤔 Никаких ощущений в обоих раундах. Попробуйте повысить Cₛ, использовать более длинную проволоку или другой материал.</p>';
+            } else {
+                html += '<p style="color:#81c784;">🟢 Любопытно: контрольный раунд дал больше ощущений! Возможно, сработал эффект ожидания или «Закон подлости» (§77).</p>';
+            }
+
+            document.getElementById('interpretation').innerHTML = html;
+        }
+
+        document.getElementById('startBtn').addEventListener('click', startExperiment);
+        document.getElementById('restartBtn').addEventListener('click', startExperiment);
+        timerBtn.addEventListener('click', startTimer);
+    })();
+</script>
+</body>
+</html>

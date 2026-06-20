@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Эксперимент №6. Резонанс Шумана • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(121,134,203,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%); }
+        .exp-container {
+            max-width: 700px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(121, 134, 203, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center;
+        }
+        h1 { font-size: 2rem; color: #f3e7c0; margin-bottom: 0.5rem; font-weight: 400; }
+        .subtitle { color: #a09080; font-size: 0.9rem; margin-bottom: 2rem; }
+        .card { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem; text-align: left; }
+        .card h3 { color: #7986cb; margin-bottom: 1rem; }
+        .card p, .card li { color: #d0c8b8; line-height: 1.6; }
+        .phase-title { font-size: 1.3rem; color: #7986cb; margin-bottom: 1.5rem; }
+        .instruction { color: #d0c8b8; margin-bottom: 1.5rem; line-height: 1.6; }
+        .timer-display { font-size: 4rem; font-weight: bold; color: #f3e7c0; margin: 1.5rem 0; font-family: 'Courier New', monospace; }
+        .slider-group { margin-bottom: 1.5rem; }
+        .slider-group label { display: flex; justify-content: space-between; color: #d0c8b8; margin-bottom: 0.5rem; }
+        .slider-group label span { color: #7986cb; font-weight: bold; font-size: 1.2rem; }
+        .slider-group input[type="range"] { width: 100%; -webkit-appearance: none; height: 8px; background: #3a3a4a; border-radius: 4px; outline: none; }
+        .slider-group input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; background: #7986cb; border-radius: 50%; cursor: pointer; }
+        .result-row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1.5rem; margin: 1.5rem 0; }
+        .result-item { text-align: center; }
+        .result-item .label { color: #a09080; font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .result-item .value { font-size: 2rem; font-weight: bold; }
+        .btn {
+            background: transparent; border: 1.5px solid #7986cb; color: #7986cb;
+            padding: 0.8rem 2rem; font-size: 1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0.5rem;
+        }
+        .btn:hover { background: #7986cb; color: #1a1a2e; }
+        .btn-primary { background: #7986cb; color: #1a1a2e; font-size: 1.2rem; padding: 1rem 3rem; }
+        .btn-primary:hover { background: #5c6bc0; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #7986cb; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+        .phase-indicator { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .phase-dot { width: 12px; height: 12px; border-radius: 50%; background: #3a3a4a; }
+        .phase-dot.active { background: #7986cb; box-shadow: 0 0 8px #7986cb; }
+        .phase-dot.done { background: #81c784; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="exp-container" id="expContainer">
+    <h1>🎵 Эксперимент «Резонанс Шумана»</h1>
+    <div class="subtitle">Проверка влияния частоты 7.83 Гц на когерентность Cₛ</div>
+
+    <!-- СТАРТОВЫЙ ЭКРАН -->
+    <div id="startScreen">
+        <div class="card">
+            <h3>🔧 Оборудование</h3>
+            <ul style="margin-left: 1.5rem; color: #d0c8b8;">
+                <li>Наушники (желательно закрытые, для изоляции)</li>
+                <li>Приложение-генератор частот на телефоне (например, «Frequency Generator»)</li>
+                <li>Тихое место, где вас не побеспокоят 20 минут</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>📋 Протокол</h3>
+            <ol style="margin-left: 1.5rem; color: #d0c8b8; line-height: 1.8;">
+                <li>Сядьте в тишине. Оцените свою ясность ума (Cₛ) по шкале 1–10.</li>
+                <li>Включите в наушниках чистый тон <strong>7.83 Гц</strong> (или бинауральные ритмы на этой частоте).</li>
+                <li>Слушайте ровно <strong>15 минут</strong>. Дышите ровно, смотрите в одну точку.</li>
+                <li>Сразу после сигнала снова оцените Cₛ.</li>
+                <li>Сравните ощущения.</li>
+            </ol>
+        </div>
+        <p style="color: #a09080; font-style: italic;">Ожидаемый эффект: повышение Cₛ на 1–2 пункта, спокойствие.</p>
+        <button class="btn btn-primary" id="startBtn" style="margin-top: 1.5rem;">🎵 Начать эксперимент</button>
+    </div>
+
+    <!-- ЭКРАН ЭКСПЕРИМЕНТА -->
+    <div id="experimentScreen" class="hidden">
+        <div class="phase-indicator">
+            <div class="phase-dot active" id="dot1"></div>
+            <div class="phase-dot" id="dot2"></div>
+        </div>
+
+        <!-- Фаза 1: Оценка ДО -->
+        <div id="phaseBefore">
+            <div class="phase-title">🔍 Фаза 1: Оценка ДО</div>
+            <p class="instruction">Посидите в тишине 1–2 минуты. Оцените свою <strong>ясность ума</strong> по шкале от 1 до 10.</p>
+            <div class="slider-group">
+                <label>🧠 Ваша ясность (Cₛ) сейчас: <span id="beforeValue">5</span> / 10</label>
+                <input type="range" id="beforeSlider" min="1" max="10" value="5" step="1">
+            </div>
+            <button class="btn btn-primary" id="confirmBeforeBtn">✅ Подтвердить и перейти к прослушиванию</button>
+        </div>
+
+        <!-- Фаза 2: Таймер -->
+        <div id="phaseTimer" class="hidden">
+            <div class="phase-title">🎧 Фаза 2: Прослушивание 7.83 Гц</div>
+            <p class="instruction">Включите в наушниках тон <strong>7.83 Гц</strong>. Закройте глаза. Дышите ровно.</p>
+            <div class="timer-display" id="timerDisplay">15:00</div>
+            <button class="btn btn-primary hidden" id="finishTimerBtn">⏩ Завершить (если уже прослушали)</button>
+        </div>
+
+        <!-- Фаза 3: Оценка ПОСЛЕ -->
+        <div id="phaseAfter" class="hidden">
+            <div class="phase-title">🌟 Фаза 3: Оценка ПОСЛЕ</div>
+            <p class="instruction">Тон закончился. Как вы себя чувствуете? Оцените <strong>ясность ума</strong> ещё раз.</p>
+            <div class="slider-group">
+                <label>🧠 Ваша ясность (Cₛ) сейчас: <span id="afterValue">5</span> / 10</label>
+                <input type="range" id="afterSlider" min="1" max="10" value="5" step="1">
+            </div>
+            <button class="btn btn-primary" id="showResultBtn">📊 Показать результат</button>
+        </div>
+    </div>
+
+    <!-- ЭКРАН РЕЗУЛЬТАТОВ -->
+    <div id="resultScreen" class="hidden">
+        <h2 style="color: #7986cb; margin-bottom: 1.5rem;">📊 РЕЗУЛЬТАТ ЭКСПЕРИМЕНТА</h2>
+        <div class="result-row">
+            <div class="result-item">
+                <div class="label">До прослушивания</div>
+                <div class="value" style="color: #ffb74d;" id="resultBefore">5</div>
+            </div>
+            <div class="result-item">
+                <div class="label">После прослушивания</div>
+                <div class="value" style="color: #81c784;" id="resultAfter">5</div>
+            </div>
+        </div>
+        <div id="interpretation" style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 16px; text-align: left; color: #d0c8b8; line-height: 1.6;"></div>
+        <button class="btn btn-primary" id="restartBtn" style="margin-top: 1.5rem;">🔄 Пройти заново</button>
+    </div>
+
+    <a href="практикум-идеатоники.html?page=7" class="back-link">← Вернуться в Практикум</a>
+</div>
+
+<script>
+    (function() {
+        const TOTAL_SECONDS = 15 * 60; // 15 минут
+        let beforeScore = 5;
+        let afterScore = 5;
+        let timerInterval = null;
+        let secondsLeft = TOTAL_SECONDS;
+
+        const startScreen = document.getElementById('startScreen');
+        const experimentScreen = document.getElementById('experimentScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const phaseBefore = document.getElementById('phaseBefore');
+        const phaseTimer = document.getElementById('phaseTimer');
+        const phaseAfter = document.getElementById('phaseAfter');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const finishTimerBtn = document.getElementById('finishTimerBtn');
+        const beforeSlider = document.getElementById('beforeSlider');
+        const afterSlider = document.getElementById('afterSlider');
+        const beforeValue = document.getElementById('beforeValue');
+        const afterValue = document.getElementById('afterValue');
+        const dot1 = document.getElementById('dot1');
+        const dot2 = document.getElementById('dot2');
+
+        beforeSlider.addEventListener('input', () => {
+            beforeValue.textContent = beforeSlider.value;
+            beforeScore = parseInt(beforeSlider.value);
+        });
+
+        afterSlider.addEventListener('input', () => {
+            afterValue.textContent = afterSlider.value;
+            afterScore = parseInt(afterSlider.value);
+        });
+
+        function startExperiment() {
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            experimentScreen.classList.remove('hidden');
+            phaseBefore.classList.remove('hidden');
+            phaseTimer.classList.add('hidden');
+            phaseAfter.classList.add('hidden');
+            dot1.classList.add('active');
+            dot1.classList.remove('done');
+            dot2.classList.remove('active', 'done');
+        }
+
+        document.getElementById('confirmBeforeBtn').addEventListener('click', () => {
+            beforeScore = parseInt(beforeSlider.value);
+            phaseBefore.classList.add('hidden');
+            phaseTimer.classList.remove('hidden');
+            dot1.classList.remove('active');
+            dot1.classList.add('done');
+            dot2.classList.add('active');
+            secondsLeft = TOTAL_SECONDS;
+            updateTimerDisplay();
+            finishTimerBtn.classList.remove('hidden');
+            timerInterval = setInterval(tick, 1000);
+        });
+
+        function tick() {
+            secondsLeft--;
+            updateTimerDisplay();
+            if (secondsLeft <= 0) {
+                clearInterval(timerInterval);
+                finishTimer();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const min = Math.floor(secondsLeft / 60);
+            const sec = secondsLeft % 60;
+            timerDisplay.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+        }
+
+        function finishTimer() {
+            clearInterval(timerInterval);
+            phaseTimer.classList.add('hidden');
+            phaseAfter.classList.remove('hidden');
+            finishTimerBtn.classList.add('hidden');
+            dot2.classList.remove('active');
+            dot2.classList.add('done');
+        }
+
+        finishTimerBtn.addEventListener('click', finishTimer);
+
+        document.getElementById('showResultBtn').addEventListener('click', () => {
+            afterScore = parseInt(afterSlider.value);
+            experimentScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            document.getElementById('resultBefore').textContent = beforeScore + ' / 10';
+            document.getElementById('resultAfter').textContent = afterScore + ' / 10';
+
+            const diff = afterScore - beforeScore;
+            let html = '';
+            if (diff > 1) {
+                html = `🌟 <strong>Значительное улучшение (+${diff} пункта)!</strong> Резонанс Шумана сработал. Ваша когерентность Cₛ повысилась. Рекомендуем практиковать регулярно.`;
+            } else if (diff === 1) {
+                html = `👍 <strong>Небольшое улучшение (+1 пункт).</strong> Эффект заметен. Возможно, при регулярной практике он усилится.`;
+            } else if (diff === 0) {
+                html = `🟰 <strong>Без изменений.</strong> Возможно, частота 7.83 Гц не является вашей личной резонансной частотой. Попробуйте другие частоты из Таблицы Частот (§96).`;
+            } else {
+                html = `⚠️ <strong>Ухудшение (${diff} пункта).</strong> Возможно, вы переволновались или тон был слишком громким. Попробуйте в другое время суток.`;
+            }
+            document.getElementById('interpretation').innerHTML = html;
+        });
+
+        document.getElementById('startBtn').addEventListener('click', startExperiment);
+        document.getElementById('restartBtn').addEventListener('click', startExperiment);
+    })();
+</script>
+</body>
+</html>

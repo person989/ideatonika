@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Эксперимент №1. Монетка • Идеатоника</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            padding: 2rem;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .cosmic-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255,215,150,0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(100,150,255,0.05) 0%, transparent 60%); }
+        .exp-container {
+            max-width: 750px; width: 100%; position: relative; z-index: 1;
+            background: rgba(30, 40, 60, 0.85); backdrop-filter: blur(12px);
+            border: 1px solid rgba(227, 184, 124, 0.4); border-radius: 32px;
+            padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: center;
+        }
+        h1 { font-size: 2rem; color: #f3e7c0; margin-bottom: 1rem; font-weight: 400; letter-spacing: 2px; }
+        .phase-title { font-size: 1.3rem; color: #e3b87c; margin-bottom: 1.5rem; }
+        .instruction { color: #d0c8b8; margin-bottom: 2rem; line-height: 1.6; }
+        .progress { color: #a09080; font-size: 0.9rem; margin-bottom: 1rem; }
+        .progress-bar { width: 100%; height: 6px; background: rgba(0,0,0,0.3); border-radius: 3px; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: #ffd54f; border-radius: 3px; width: 0%; transition: width 0.3s ease; }
+        .btn-row { display: flex; justify-content: center; gap: 1.5rem; margin: 1.5rem 0; flex-wrap: wrap; }
+        .btn {
+            background: transparent; border: 1.5px solid #e3b87c; color: #e3b87c;
+            padding: 0.8rem 2rem; font-size: 1.1rem; font-weight: bold; border-radius: 40px;
+            cursor: pointer; transition: 0.2s; font-family: inherit; margin: 0.5rem;
+        }
+        .btn:hover { background: #e3b87c; color: #1a1a2e; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-eagle { border-color: #ffb74d; color: #ffb74d; font-size: 1.3rem; padding: 1rem 3rem; }
+        .btn-eagle:hover { background: #ffb74d; color: #1a1a2e; }
+        .btn-tails { border-color: #64b5f6; color: #64b5f6; font-size: 1.3rem; padding: 1rem 3rem; }
+        .btn-tails:hover { background: #64b5f6; color: #1a1a2e; }
+        .stats { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .stat-box { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 1rem 1.5rem; text-align: center; }
+        .stat-label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .stat-value { font-size: 1.5rem; font-weight: bold; }
+        .history { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; margin: 1rem 0; max-height: 150px; overflow-y: auto; padding: 0.5rem; }
+        .history-item { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: pointer; position: relative; }
+        .history-eagle { background: rgba(255,183,77,0.3); border: 1px solid #ffb74d; color: #ffb74d; }
+        .history-tails { background: rgba(100,181,246,0.3); border: 1px solid #64b5f6; color: #64b5f6; }
+        .history-item:hover { transform: scale(1.2); }
+        .history-item .delete-x { position: absolute; top: -8px; right: -8px; width: 16px; height: 16px; border-radius: 50%; background: #ef5350; color: white; font-size: 10px; display: none; align-items: center; justify-content: center; cursor: pointer; }
+        .history-item:hover .delete-x { display: flex; }
+        .final-results { margin-top: 2rem; background: rgba(0,0,0,0.3); border-radius: 20px; padding: 1.5rem; }
+        .result-row { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; margin: 1rem 0; }
+        .result-item { text-align: center; }
+        .result-item .label { color: #a09080; font-size: 0.8rem; margin-bottom: 0.3rem; }
+        .result-item .value { font-size: 1.3rem; font-weight: bold; }
+        .hidden { display: none !important; }
+        .back-link { display: inline-block; margin-top: 1.5rem; color: #e3b87c; text-decoration: none; font-size: 0.9rem; }
+        .back-link:hover { text-decoration: underline; }
+        .phase-indicator { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .phase-dot { width: 12px; height: 12px; border-radius: 50%; background: #5d4a3a; }
+        .phase-dot.active { background: #ffd54f; box-shadow: 0 0 8px #ffd54f; }
+        .phase-dot.done { background: #81c784; }
+    </style>
+</head>
+<body>
+<div class="cosmic-bg"></div>
+<div class="exp-container" id="expContainer">
+    <h1>🪙 Эксперимент с Монеткой</h1>
+    
+    <!-- СТАРТОВЫЙ ЭКРАН -->
+    <div id="startScreen">
+        <p class="instruction" style="font-size: 1.1rem; margin-bottom: 2rem;">
+            Этот эксперимент проверит, можете ли вы своим намерением влиять на выпадение орла или решки.<br>
+            Вам предстоит три фазы по 100 бросков.
+        </p>
+        
+        <div style="text-align: left; background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem;">
+            <p style="color: #e3b87c; font-weight: bold; margin-bottom: 1rem;">🔧 Оборудование:</p>
+            <ul style="color: #d0c8b8; margin-left: 1.5rem; line-height: 1.8;">
+                <li>Обычная монета (любого номинала)</li>
+                <li>Ровная поверхность для бросков</li>
+                <li>Этот телефон / компьютер для записи результатов</li>
+            </ul>
+        </div>
+        
+        <p class="instruction" style="color: #a09080;">
+            📋 <strong>Протокол:</strong><br>
+            <span style="color: #81c784;">🟢 Фаза 1 (Контроль):</span> Бросайте монету, <strong>ни о чём не думая</strong>. Фиксируйте результат.<br>
+            <span style="color: #ffb74d;">🟠 Фаза 2 (Актив «Орёл»):</span> Перед каждым броском визуализируйте орла. Желайте, чтобы выпал орёл.<br>
+            <span style="color: #64b5f6;">🔵 Фаза 3 (Актив «Решка»):</span> Перед каждым броском визуализируйте решку. Желайте, чтобы выпала решка.<br>
+        </p>
+        
+        <p style="color: #a09080; font-style: italic; margin-top: 1rem; font-size: 0.9rem;">
+            ⚠️ Важно: бросайте монету физически (в реальном мире), а здесь только фиксируйте результат нажатием кнопки.
+        </p>
+        
+        <button class="btn" id="startBtn" style="margin-top: 2rem; font-size: 1.3rem; padding: 1rem 3rem;">
+            🚀 Начать эксперимент
+        </button>
+    </div>
+    
+    <!-- ЭКРАН БРОСКОВ -->
+    <div id="phaseScreen" class="hidden">
+        <div class="phase-indicator" id="phaseIndicator">
+            <div class="phase-dot active" id="dot1"></div>
+            <div class="phase-dot" id="dot2"></div>
+            <div class="phase-dot" id="dot3"></div>
+        </div>
+        <div class="phase-title" id="phaseTitle"></div>
+        <p class="instruction" id="phaseInstruction"></p>
+        <div class="progress" id="progressText"></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-label">🦅 Орлы</div>
+                <div class="stat-value" style="color: #ffb74d;" id="statEagle">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">🪙 Решки</div>
+                <div class="stat-value" style="color: #64b5f6;" id="statTails">0</div>
+            </div>
+        </div>
+        
+        <p class="instruction" style="margin-top: 0.5rem; color: #a09080;">
+            Бросьте монету и нажмите, что выпало:
+        </p>
+        
+        <div class="btn-row">
+            <button class="btn btn-eagle" id="btnEagle">🦅 Орёл</button>
+            <button class="btn btn-tails" id="btnTails">🪙 Решка</button>
+        </div>
+        
+        <p class="instruction" style="margin-top: 0.5rem; color: #a09080;">
+            Осталось бросков: <span id="remainCount" style="color: #f3e7c0;">100</span>
+        </p>
+        
+        <div class="history" id="historyContainer"></div>
+        
+        <button class="btn" id="undoBtn" style="font-size: 0.9rem; padding: 0.5rem 1.5rem; margin-top: 0.5rem;">
+            ↩️ Отменить последний бросок
+        </button>
+    </div>
+    
+    <!-- ЭКРАН РЕЗУЛЬТАТОВ -->
+    <div id="resultScreen" class="hidden">
+        <h2 style="color: #e3b87c; margin-bottom: 1.5rem;">📊 ИТОГИ ЭКСПЕРИМЕНТА</h2>
+        
+        <div class="result-row">
+            <div class="result-item">
+                <div class="label">🧘 Контроль<br>(без мыслей)</div>
+                <div class="value" style="color: #81c784;" id="resultNeutral"></div>
+                <div class="label" style="margin-top:0.3rem;">% орлов</div>
+            </div>
+            <div class="result-item">
+                <div class="label">🦅 Актив «Орёл»</div>
+                <div class="value" style="color: #ffb74d;" id="resultEagle"></div>
+                <div class="label" style="margin-top:0.3rem;">% орлов</div>
+            </div>
+            <div class="result-item">
+                <div class="label">🪙 Актив «Решка»</div>
+                <div class="value" style="color: #64b5f6;" id="resultTails"></div>
+                <div class="label" style="margin-top:0.3rem;">% решек</div>
+            </div>
+        </div>
+        
+        <div id="interpretation" style="margin-top: 2rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 16px; text-align: left; color: #d0c8b8; line-height: 1.6;"></div>
+        
+        <button class="btn" id="restartBtn" style="margin-top: 2rem;">🔄 Пройти заново</button>
+    </div>
+    
+    <a href="практикум-идеатоники.html?page=2" class="back-link">← Вернуться в Практикум</a>
+</div>
+
+<script>
+    (function() {
+        const TOTAL_TRIALS = 100;
+        const phases = [
+            { name: '🟢 Фаза 1: Контроль', instruction: 'Бросайте монету, <strong>ни о чём не думая</strong>. Фиксируйте результат.', key: 'neutral', color: '#81c784' },
+            { name: '🟠 Фаза 2: Актив «Орёл»', instruction: '<strong>Визуализируйте орла.</strong> Представляйте, как монета падает орлом вверх.', key: 'eagle', color: '#ffb74d' },
+            { name: '🔵 Фаза 3: Актив «Решка»', instruction: '<strong>Визуализируйте решку.</strong> Представляйте, как монета падает решкой вверх.', key: 'tails', color: '#64b5f6' }
+        ];
+        
+        let currentPhase = 0;
+        let trialInPhase = 0;
+        let phaseHistory = []; // Массив для текущей фазы: 'eagle' или 'tails'
+        let results = {
+            neutral: { eagle: 0, tails: 0, total: 0 },
+            eagle: { eagle: 0, tails: 0, total: 0 },
+            tails: { eagle: 0, tails: 0, total: 0 }
+        };
+        
+        const startScreen = document.getElementById('startScreen');
+        const phaseScreen = document.getElementById('phaseScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const phaseTitle = document.getElementById('phaseTitle');
+        const phaseInstruction = document.getElementById('phaseInstruction');
+        const progressText = document.getElementById('progressText');
+        const progressFill = document.getElementById('progressFill');
+        const statEagle = document.getElementById('statEagle');
+        const statTails = document.getElementById('statTails');
+        const remainCount = document.getElementById('remainCount');
+        const historyContainer = document.getElementById('historyContainer');
+        const btnEagle = document.getElementById('btnEagle');
+        const btnTails = document.getElementById('btnTails');
+        const undoBtn = document.getElementById('undoBtn');
+        
+        function startExperiment() {
+            currentPhase = 0;
+            trialInPhase = 0;
+            phaseHistory = [];
+            results = {
+                neutral: { eagle: 0, tails: 0, total: 0 },
+                eagle: { eagle: 0, tails: 0, total: 0 },
+                tails: { eagle: 0, tails: 0, total: 0 }
+            };
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            phaseScreen.classList.remove('hidden');
+            updatePhaseDots();
+            loadPhase();
+        }
+        
+        function updatePhaseDots() {
+            ['dot1','dot2','dot3'].forEach((id, i) => {
+                const dot = document.getElementById(id);
+                dot.classList.remove('active', 'done');
+                if (i < currentPhase) dot.classList.add('done');
+                if (i === currentPhase) dot.classList.add('active');
+            });
+        }
+        
+        function loadPhase() {
+            const phase = phases[currentPhase];
+            phaseTitle.textContent = phase.name;
+            phaseTitle.style.color = phase.color;
+            phaseInstruction.innerHTML = phase.instruction;
+            trialInPhase = 0;
+            phaseHistory = [];
+            updateStatsDisplay();
+            updateRemainDisplay();
+            updateProgressBar();
+            renderHistory();
+            btnEagle.disabled = false;
+            btnTails.disabled = false;
+            undoBtn.disabled = true;
+        }
+        
+        function recordResult(type) {
+            phaseHistory.push(type);
+            
+            const phaseKey = phases[currentPhase].key;
+            results[phaseKey].total++;
+            if (type === 'eagle') results[phaseKey].eagle++;
+            else results[phaseKey].tails++;
+            
+            trialInPhase++;
+            updateStatsDisplay();
+            updateRemainDisplay();
+            updateProgressBar();
+            renderHistory();
+            undoBtn.disabled = false;
+            
+            if (trialInPhase >= TOTAL_TRIALS) {
+                btnEagle.disabled = true;
+                btnTails.disabled = true;
+                if (currentPhase < phases.length - 1) {
+                    currentPhase++;
+                    updatePhaseDots();
+                    setTimeout(() => loadPhase(), 1500);
+                } else {
+                    setTimeout(() => showResults(), 1500);
+                }
+            }
+        }
+        
+        function undoLast() {
+            if (phaseHistory.length === 0) return;
+            const lastType = phaseHistory.pop();
+            const phaseKey = phases[currentPhase].key;
+            results[phaseKey].total--;
+            if (lastType === 'eagle') results[phaseKey].eagle--;
+            else results[phaseKey].tails--;
+            trialInPhase--;
+            updateStatsDisplay();
+            updateRemainDisplay();
+            updateProgressBar();
+            renderHistory();
+            btnEagle.disabled = false;
+            btnTails.disabled = false;
+            if (phaseHistory.length === 0) undoBtn.disabled = true;
+        }
+        
+        function deleteSpecific(index) {
+            const type = phaseHistory[index];
+            phaseHistory.splice(index, 1);
+            const phaseKey = phases[currentPhase].key;
+            results[phaseKey].total--;
+            if (type === 'eagle') results[phaseKey].eagle--;
+            else results[phaseKey].tails--;
+            trialInPhase--;
+            updateStatsDisplay();
+            updateRemainDisplay();
+            updateProgressBar();
+            renderHistory();
+            btnEagle.disabled = false;
+            btnTails.disabled = false;
+            if (phaseHistory.length === 0) undoBtn.disabled = true;
+        }
+        
+        function updateStatsDisplay() {
+            const phaseKey = phases[currentPhase].key;
+            const data = results[phaseKey];
+            statEagle.textContent = data.eagle;
+            statTails.textContent = data.tails;
+        }
+        
+        function updateRemainDisplay() {
+            remainCount.textContent = TOTAL_TRIALS - trialInPhase;
+        }
+        
+        function updateProgressBar() {
+            const pct = (trialInPhase / TOTAL_TRIALS) * 100;
+            progressFill.style.width = pct + '%';
+        }
+        
+        function renderHistory() {
+            let html = '';
+            phaseHistory.forEach((type, i) => {
+                const cls = type === 'eagle' ? 'history-eagle' : 'history-tails';
+                const symbol = type === 'eagle' ? '🦅' : '🪙';
+                html += `<div class="history-item ${cls}" onclick="window._deleteSpecific(${i})">${symbol}<span class="delete-x">✕</span></div>`;
+            });
+            historyContainer.innerHTML = html;
+        }
+        window._deleteSpecific = deleteSpecific;
+        
+        function getInterpretation(neutralPctEagle, eaglePctEagle, tailsPctTails) {
+            const EXPECTED = 50;
+            let html = '<p><strong>📊 Анализ результатов:</strong></p>';
+            
+            // Контроль
+            html += `<p>🧘 <strong>Контроль (без мыслей):</strong> ${neutralPctEagle}% орлов. `;
+            const neutralDiff = neutralPctEagle - EXPECTED;
+            if (Math.abs(neutralDiff) <= 5) html += 'В пределах статистической нормы (45–55%).</p>';
+            else html += `Небольшое отклонение (${neutralDiff > 0 ? '+' : ''}${neutralDiff}%). Возможно, случайная флуктуация.</p>`;
+            
+            // Актив «Орёл»
+            html += `<p>🦅 <strong>Актив «Орёл»:</strong> ${eaglePctEagle}% орлов. `;
+            const eagleDiff = eaglePctEagle - EXPECTED;
+            if (Math.abs(eagleDiff) <= 5) html += 'Отклонение в пределах статистической нормы. Эффект не обнаружен.</p>';
+            else if (eagleDiff > 0) html += `<span style="color:#ffb74d;">Значительное отклонение (+${eagleDiff}%)! Ваше намерение, возможно, повлияло на результат.</span></p>`;
+            else html += `<span style="color:#e3b87c;">Значительная инверсия (${eagleDiff}%)! Возможно, сработал «Закон подлости» (§77) — слишком сильное желание вызвало противоположный результат.</span></p>`;
+            
+            // Актив «Решка» — процент решек
+            html += `<p>🪙 <strong>Актив «Решка»:</strong> ${tailsPctTails}% решек. `;
+            const tailsDiff = tailsPctTails - EXPECTED;
+            if (Math.abs(tailsDiff) <= 5) html += 'Отклонение в пределах статистической нормы. Эффект не обнаружен.</p>';
+            else if (tailsDiff > 0) html += `<span style="color:#64b5f6;">Значительное отклонение (+${tailsDiff}%)! Ваше намерение, возможно, повлияло на результат.</span></p>`;
+            else html += `<span style="color:#e3b87c;">Значительная инверсия (${tailsDiff}%)! Возможно, сработал «Закон подлости» (§77).</span></p>`;
+            
+            html += '<p style="margin-top:1rem;font-style:italic;color:#a09080;">Помните: для статистической значимости нужно 1000+ бросков. Этот тест — лишь индикатор, а не строгое доказательство. Рекомендуем повторить эксперимент несколько раз и усреднить результаты.</p>';
+            return html;
+        }
+        
+        function showResults() {
+            phaseScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            
+            const neutralPctEagle = results.neutral.total > 0 ? Math.round((results.neutral.eagle / results.neutral.total) * 100) : 0;
+            const eaglePctEagle = results.eagle.total > 0 ? Math.round((results.eagle.eagle / results.eagle.total) * 100) : 0;
+            const tailsPctTails = results.tails.total > 0 ? Math.round((results.tails.tails / results.tails.total) * 100) : 0;
+            
+            document.getElementById('resultNeutral').textContent = neutralPctEagle + '%';
+            document.getElementById('resultEagle').textContent = eaglePctEagle + '%';
+            document.getElementById('resultTails').textContent = tailsPctTails + '%';
+            
+            document.getElementById('interpretation').innerHTML = getInterpretation(neutralPctEagle, eaglePctEagle, tailsPctTails);
+        }
+        
+        document.getElementById('startBtn').addEventListener('click', startExperiment);
+        document.getElementById('restartBtn').addEventListener('click', startExperiment);
+        btnEagle.addEventListener('click', () => { if (!btnEagle.disabled) recordResult('eagle'); });
+        btnTails.addEventListener('click', () => { if (!btnTails.disabled) recordResult('tails'); });
+        undoBtn.addEventListener('click', undoLast);
+        document.addEventListener('keydown', (e) => {
+            if (phaseScreen.classList.contains('hidden')) return;
+            if (btnEagle.disabled) return;
+            if (e.key === 'ArrowLeft' || e.key === '1') recordResult('eagle');
+            if (e.key === 'ArrowRight' || e.key === '2') recordResult('tails');
+            if (e.key === 'Backspace' || e.key === 'z') undoLast();
+        });
+    })();
+</script>
+</body>
+</html>
