@@ -282,45 +282,44 @@
 
     // Функция расчёта
     function calculate() {
-        const Q = parseFloat(qsSlider.value);
-        const C = parseFloat(csSlider.value);
-        const P0 = parseFloat(physSlider.value);
-        const useInversion = inversionCheck.checked;
+    const Q = parseFloat(qsSlider.value);
+    const C = parseFloat(csSlider.value);
+    const P0 = parseFloat(physSlider.value);
+    const useInversion = inversionCheck.checked;
 
-        // Коэффициент связи ε (очень мал, константа)
-        const epsilon = 0.05;
+    let P_final;
+    const Q_eff = Q * C;
+    const A = 0.06;
+    const peak = 3.75;
+    const B = A / (2 * peak); // 0.008
 
-        // Базовая вероятность влияния
-        let P_influence = epsilon * Q * C * P0;
-
-        // Если включена инверсия
-        if (useInversion) {
-            const Q_critical = 7.0; // Критический порог
-            if (Q > Q_critical) {
-                const alpha = 0.01; // Коэффициент инверсии
-                const excess = Q - Q_critical;
-                P_influence = P0 - alpha * excess * excess;
-                // Вероятность не может быть ниже 0
-                if (P_influence < 0) P_influence = 0;
-            }
-        }
-
-        // Итоговая вероятность события = базовая + добавка от влияния
-        let P_final = P0 + P_influence;
-        if (P_final > 1) P_final = 1;
-        if (P_final < 0) P_final = 0;
-
-        // Отображение результата
-        resultNumber.textContent = (P_final * 100).toFixed(1) + '%';
-        resultLabel.textContent = 'Итоговая вероятность события';
-
-        // Формула с подставленными значениями
-        if (useInversion && Q > 7.0) {
-            resultFormula.textContent = `P = ${P0.toFixed(2)} — 0.01 · (${Q.toFixed(1)} — 7.0)² = ${P_final.toFixed(3)} (инверсия!)`;
-        } else {
-            resultFormula.textContent = `P = ${P0.toFixed(2)} + 0.05 · ${Q.toFixed(1)} · ${C.toFixed(2)} · ${P0.toFixed(2)} = ${P_final.toFixed(3)}`;
-        }
+    if (useInversion && Q_eff > peak) {
+        // ЗАКОН ПОДЛОСТИ: после пика — колокол (парабола вниз)
+        const deltaAtPeak = A * peak;
+        const excess = Q_eff - peak;
+        // Инверсия ослабляется для почти гарантированных событий
+        const inversionStrength = B * (1 - P0);
+        const delta = deltaAtPeak - inversionStrength * excess * excess;
+        P_final = P0 + delta;
+    } else {
+        // ОБЫЧНОЕ ВЛИЯНИЕ или ЗАКОН ПОДЛОСТИ ДО ПИКА: прямая
+        const delta = A * Q_eff;
+        P_final = P0 + delta;
     }
+
+    if (P_final > 1) P_final = 1;
+    if (P_final < 0) P_final = 0;
+
+    resultNumber.textContent = (P_final * 100).toFixed(1) + '%';
+    resultLabel.textContent = 'Итоговая вероятность события';
+
+    if (useInversion && Q_eff > peak) {
+        const excess = Q_eff - peak;
+        resultFormula.textContent = `Qэфф = ${Q_eff.toFixed(2)} > ${peak.toFixed(1)} → ИНВЕРСИЯ! P = ${P_final.toFixed(3)}`;
+    } else {
+        resultFormula.textContent = `Qэфф = ${Q_eff.toFixed(2)} → P = ${P_final.toFixed(3)}`;
+    }
+}
 
     // Автоматический расчёт при изменении любого параметра
     qsSlider.addEventListener('input', calculate);
